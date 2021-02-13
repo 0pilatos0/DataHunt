@@ -1,4 +1,4 @@
-const http = require('http').createServer()//requestHandler
+const http = require('http').createServer()
 const io = require('socket.io')(http, {
   cors: {
     origin: "*"
@@ -20,15 +20,12 @@ io.on('connection', (socket) => {
     })
 })
 
-// function requestHandler(request, response) {
-//   response.setHeader('Access-Control-Allow-Origin', '*');
-//   response.write("Hi")
-//   response.end()
-// }
-
 http.listen(`${process.env.PORT || 3000}`, () => {
   try{
-    console.log(`listening on http://localhost:${process.env.PORT || 3000}`)
+    if(!process.env.PORT)
+      console.log(`listening on http://localhost:3000`)
+    else
+      console.log(`listening on https://datahuntserver.herokuapp.com${process.env.PORT}`)
   }
   catch(e){
     quit()

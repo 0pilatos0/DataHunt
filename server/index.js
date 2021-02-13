@@ -1,4 +1,4 @@
-const http = require('http').createServer(requestHandler)
+const http = require('http').createServer()//requestHandler
 const io = require('socket.io')(http, {
   cors: {
     origin: "*"
@@ -20,11 +20,11 @@ io.on('connection', (socket) => {
     })
 })
 
-function requestHandler(request, response) {
-  response.setHeader('Access-Control-Allow-Origin', '*');
-  response.write("Hi")
-  response.end()
-}
+// function requestHandler(request, response) {
+//   response.setHeader('Access-Control-Allow-Origin', '*');
+//   response.write("Hi")
+//   response.end()
+// }
 
 http.listen(`${process.env.PORT || 3000}`, () => {
   try{

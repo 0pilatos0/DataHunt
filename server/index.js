@@ -4,13 +4,13 @@ const io = require('socket.io')(http, {
     origin: "*"
   }
 })
-// const sql = require('./sql/sql.js')
-// sql.connect.then((e) => {
-//   console.log(e)
-// })
-// sql.users.then((e) => {
-//   console.log(e)
-// })
+const sql = require('./sql/sql.js')
+sql.connect.then((e) => {
+  console.log(e)
+})
+sql.users.then((e) => {
+  console.log(e)
+})
 
 io.on('connection', (socket) => {
     console.log("\x1b[32m", `+${socket.id}`)

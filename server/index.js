@@ -25,7 +25,7 @@ http.listen(`${process.env.PORT || 3000}`, () => {
     if(!process.env.PORT)
       console.log(`listening on http://localhost:3000`)
     else
-      console.log(`listening on https://datahuntserver.herokuapp.com${process.env.PORT}`)
+      console.log(`listening on https://datahuntserver.herokuapp.com`)
   }
   catch(e){
     quit()

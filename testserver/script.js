@@ -1,4 +1,4 @@
-let socket = io("http://localhost:3000")
+let socket = io("https://datahuntserver.herokuapp.com")
 
 socket.on('connect', () => {
     console.log("connected")

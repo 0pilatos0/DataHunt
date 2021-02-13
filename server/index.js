@@ -20,9 +20,9 @@ io.on('connection', (socket) => {
     })
 })
 
-http.listen(3000, () => {
+http.listen(process.env.PORT || 3000, () => {
   try{
-    console.log("listening on http://localhost:3000")
+    console.log(`listening on http://localhost:${process.env.PORT || 3000}`)
   }
   catch(e){
     quit()

@@ -4,6 +4,8 @@ const io = require('socket.io')(http, {
     origin: "*"
   }
 })
+require('dotenv').config()
+
 const sql = require('./sql/sql.js')
 sql.connect.then((e) => {
   console.log(e)

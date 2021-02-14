@@ -4,16 +4,6 @@ const io = require('socket.io')(http, {
     origin: "*"
   }
 })
-<<<<<<< Updated upstream
-const postgreSQL = require('./sql/postgres.js')
-// const sql = require('./sql/sql.js')
-// sql.connect.then((e) => {
-//   console.log(e)
-// })
-// sql.users.then((e) => {
-//   console.log(e)
-// })
-=======
 const sql = require('./sql/sql.js')
 sql.connect.then((e) => {
   console.log(e)
@@ -21,7 +11,6 @@ sql.connect.then((e) => {
 sql.users.then((e) => {
   console.log(e)
 })
->>>>>>> Stashed changes
 
 io.on('connection', (socket) => {
     console.log("\x1b[32m", `+${socket.id}`)

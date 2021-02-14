@@ -4,6 +4,7 @@ const io = require('socket.io')(http, {
     origin: "*"
   }
 })
+const postgreSQL = require('./sql/postgres.js')
 // const sql = require('./sql/sql.js')
 // sql.connect.then((e) => {
 //   console.log(e)

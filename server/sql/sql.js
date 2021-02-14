@@ -1,10 +1,10 @@
 const sql = require('mysql')
 
 const sqlCon = sql.createConnection({
-  host: "localhost",
-  user: "root",
-  password: "",
-  database: "teamproject"
+  host: process.env.MYSQLHOST,
+  user: process.env.MYSQLUSER,
+  password: process.env.MYSQLPASSWORD,
+  database: process.env.MYSQLDATABASE
 })
 
 module.exports.connect = new Promise((resolve, reject) => {

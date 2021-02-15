@@ -3,7 +3,6 @@ const bot = new discord.Client()
 require('dotenv').config()
 const fs = require('fs')
 let data = JSON.parse(fs.readFileSync('data.json', 'utf-8'))
-console.log(data.emojis)
 let emojis = data.emojis
 
 //const sql = require('./sql/sql.js')
@@ -30,6 +29,9 @@ bot.once('ready', async () => {
         }
     });
     let d = new Date()
+    setInterval(() => {
+        d = new Date()
+    }, 3600000);
     if(validDays[d.getDay()]){
         setInterval(() => {
             d = new Date()

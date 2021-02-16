@@ -25,7 +25,7 @@ bot.once('ready', async () => {
         status: "dnd",  // You can show online, idle... Do not disturb is dnd
         game: {
             name: `${process.env.PREFIX}help`,  // The message shown
-            type: "PLAYING" // PLAYING, WATCHING, LISTENING, STREAMING,
+            type: 'PLAYING' // PLAYING, WATCHING, LISTENING, STREAMING,
         }
     });
     let d = new Date()
@@ -45,7 +45,7 @@ bot.once('ready', async () => {
                 presentTimer = null
                 presentSecondsPassed = 0
                 presentPeople = []
-                const channel = bot.channels.cache.get('809448369700601917')
+                const channel = bot.channels.cache.get('809349869151322172')
                 presentEmbed = new discord.MessageEmbed()
                 .setTitle(`Presentie ${validDays[d.getDay()]}`)
                 .setColor("0xff0000")

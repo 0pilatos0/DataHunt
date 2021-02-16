@@ -4,18 +4,56 @@ const io = require('socket.io')(http, {
     origin: "*"
   }
 })
+const md5 = require('md5')
+const sha256 = require('sha256')
 require('dotenv').config()
+const sql = require('./sql/connection.js')
+sql.connect().then(e => {
+  console.log(e)
+})
 
-const sql = require('./sql/sql.js')
-sql.connect.then((e) => {
-  console.log(e)
-})
-sql.users.then((e) => {
-  console.log(e)
-})
+const users = require('./sql/users.js')
+const stats = require('./sql/stats.js')
+// users.getAll().then(e => {
+//   console.log(e)
+// })
+// users.getByUsername("Pizza").then(e => {
+//   console.log(e)
+// })
+// users.create({name:"Emile Mol",username:"Pizza",email:"test@pizza.nl",phone:"06-123456",password:hashPassword("Test")}).then(e => {
+//   console.log(e)
+// })
+//users.deleteByUsername("Pizza")
+// users.updateByUsername("Henk", {username:"Pizza"}).then(e => {
+//   console.log(e)
+// })
+// stats.getAll().then(e => {
+//   console.log(e)
+// })
+// stats.create().then(e => {
+//   console.log(e)
+// })
+//stats.getByUsername("Pizza")
+//stats.updateByUsername("Pizza", {coins:100})
 
 io.on('connection', (socket) => {
     console.log("\x1b[32m", `+${socket.id}`)
+
+    socket.on('login', (data) => {
+      console.log(data)
+    })
+
+    socket.on('register', (data) => {
+      console.log(data)
+    })
+
+    socket.on('logout', (data) => {
+      console.log(data)
+    })
+    
+    socket.on('autosave', (data) => {
+      console.log(data)
+    })
 
     socket.on('disconnect', () => {
         console.log("\x1b[31m", `-${socket.id}`)
@@ -43,3 +81,7 @@ quit = () => {
 process.on('SIGINT', () => {
   quit()
 })
+
+function hashPassword(password){
+  return sha256(md5(password))
+}

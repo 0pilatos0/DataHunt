@@ -36,7 +36,7 @@ http.listen(`${process.env.PORT || 3000}`, () => {
 })
 
 quit = () => {
-  //sql.disconnect()
+  sql.disconnect()
   http.close()
 }
 

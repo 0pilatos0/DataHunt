@@ -31,42 +31,31 @@ bot.once('ready', async () => {
     let d = new Date()
     setInterval(() => {
         d = new Date()
-    }, 3600000);
-    if(validDays[d.getDay()]){
-        setInterval(() => {
-            d = new Date()
-            if(d.getHours() == startHour && d.getMinutes() <= startMinute + maxSeconds / 60){
-                presentSecondsPassed++
+        if(validDays[d.getDay()]){
+            if(d.getHours() == startHour){
+                if(d.getMinutes() <= startMinute + maxSeconds / 60)
+                    presentSecondsPassed++
+                if(d.getMinutes() == startMinute){
+                    if(d.getSeconds() == startSecond){
+                        currentPresentEmbedID = ""
+                        presentEmbed = null
+                        clearInterval(presentTimer)
+                        presentTimer = null
+                        presentSecondsPassed = 0
+                        presentPeople = []
+                        const channel = bot.channels.cache.get('809349869151322172')
+                        presentEmbed = new discord.MessageEmbed()
+                        .setTitle(`Presentie ${validDays[d.getDay()]}`)
+                        .setColor("0xff0000")
+                        .setDescription("Presente mensen:")
+                        .setFooter(`${presentSecondsPassed} / ${maxSeconds}`)
+                        .setTimestamp()
+                        channel.send(presentEmbed)
+                    }   
+                }
             }
-            if(d.getHours() == startHour && d.getMinutes() == startMinute && d.getSeconds() == startSecond){
-                currentPresentEmbedID = ""
-                presentEmbed = null
-                clearInterval(presentTimer)
-                presentTimer = null
-                presentSecondsPassed = 0
-                presentPeople = []
-                const channel = bot.channels.cache.get('809349869151322172')
-                presentEmbed = new discord.MessageEmbed()
-                .setTitle(`Presentie ${validDays[d.getDay()]}`)
-                .setColor("0xff0000")
-                .setDescription("Presente mensen:")
-                .setFooter(`${presentSecondsPassed} / ${maxSeconds}`)
-                .setTimestamp()
-                channel.send(presentEmbed)
-            }
-        }, 1000);
-        // setInterval(() => {
-        //     presentSecondsPassed++
-        // }, 1000);
-        // const channel = bot.channels.cache.get('809448369700601917')
-        //         presentEmbed = new discord.MessageEmbed()
-        //         .setTitle(`Presentie ${validDays[d.getDay()]}`)
-        //         .setColor("0xff0000")
-        //         .setDescription("Presente mensen:")
-        //         .setFooter(`${presentSecondsPassed} / ${maxSeconds}`)
-        //         .setTimestamp()
-        //         channel.send(presentEmbed)
-    }
+        }
+    }, 1000)
 })
 
 bot.on('messageDelete', async message => {

@@ -1,12 +1,3 @@
-/*
-
-Tiled Map JSON loader
-
-Stephen Orr
-storr@storrdev.com
-
-*/
-
 (function() {
 
 	var tilesets = [];
@@ -21,7 +12,6 @@ storr@storrdev.com
 			var xhr = new XMLHttpRequest();
 			xhr.onreadystatechange = function() {
 				if (xhr.readyState == 4 && xhr.status == 200) {
-					// Call function for next step in process
 					tmxJSON.parse(xhr.responseText);
 				}
 			}
@@ -110,7 +100,7 @@ storr@storrdev.com
 						
 						
 						if (map.layers[l].data[d] != 0) {
-							context.drawImage(tiles[map.layers[l].data[d]], x, y);
+							context.drawImage(tiles[map.layers[l].data[d]], x * 2, y*2, 64, 64);
 						}
 						x += map.tilewidth;
 					}

@@ -12,12 +12,14 @@ module.exports.login = (data) => {
 
 module.exports.register = (data) => {
     if(!(data.name && data.username && data.email && data.password && data.verificationPassword)) return "All of them must be filled in"
-    if(!nameRegex.match(data.name)) return "Name does not match regex"
-    if(!usernameRegex.match(data.username)) return "Username does not match regex"
-    if(!emailRegex.match(data.email)) return "Email does not match regex"
-    if(!passwordRegex.match(data.password)) return "Password does not match regex"
+    if(!nameRegex.exec(data.name)) return "Name does not match regex"
+    if(!usernameRegex.exec(data.username)) return "Username does not match regex"
+    if(!emailRegex.exec(data.email)) return "Email does not match regex"
+    if(!passwordRegex.exec(data.password)) return "Password does not match regex"
     if(!data.password == data.verificationPassword) return "Passwords doesn't match"
-    else data.splice(data.indexOf(data.verificationPassword), 1)
+    data.splice(data.indexOf(data.verificationPassword), 1)
+    data.password = hashPassword(data.password)
+    data.verifytoken = "bekijk het met je token"
     users.create(data)
 }
 

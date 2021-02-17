@@ -5,7 +5,6 @@ const io = require('socket.io')(http, {
   }
 })
 const sha256 = require('sha256')
-const sha512 = require('sha512')
 require('dotenv').config()
 const sql = require('./sql/connection.js')
 sql.connect().then(e => {

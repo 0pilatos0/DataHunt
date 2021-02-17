@@ -1,5 +1,5 @@
 const users = require('../sql/users.js')
-const sha512 = require('sha512')
+const sha256 = require('sha256')
 
 const nameRegex = new RegExp(/^[a-z ,.'-]+$/i)
 const usernameRegex = new RegExp(/\w{5,29}/i)
@@ -24,5 +24,5 @@ module.exports.register = (data) => {
 }
 
 function hashPassword(password){
-    return sha512(password)
+    return sha256(password)
 }

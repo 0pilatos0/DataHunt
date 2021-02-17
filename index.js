@@ -4,8 +4,8 @@ const io = require('socket.io')(http, {
     origin: "*"
   }
 })
-const md5 = require('md5')
 const sha256 = require('sha256')
+const sha512 = require('sha512')
 require('dotenv').config()
 const sql = require('./sql/connection.js')
 sql.connect().then(e => {
@@ -83,5 +83,5 @@ process.on('SIGINT', () => {
 })
 
 function hashPassword(password){
-  return sha256(md5(password))
+  return sha512(password)
 }

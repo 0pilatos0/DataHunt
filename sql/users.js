@@ -63,7 +63,7 @@ module.exports.existsByUsername = (username) => {
     return new Promise((resolve, reject) => {
         connection.sqlCon.query(`SELECT id users WHERE username = '${username}'`, (err, result, fields) => {
             if(err) throw err
-            (result ? resolve(true) : resolve(false))
+            result ? resolve(true) : resolve(false)
         })
     })
 }

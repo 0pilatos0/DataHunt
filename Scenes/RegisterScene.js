@@ -22,8 +22,10 @@ function init(instance){
     let phoneInputField = new InputField(new Vector2(0, window.innerHeight / 2), new Vector2(250, 15))
     let passwordLabel = new Label(new Vector2(0, window.innerHeight / 2 + 50), new Vector2(250, 15), "PasswordRegisterLabel", "Password:")
     let passwordInputField = new InputField(new Vector2(0, window.innerHeight / 2 + 100), new Vector2(250, 15))
-    let submitButton = new Button(new Vector2(0, window.innerHeight / 2 + 150), new Vector2(250, 30), "SubmitRegisterButton", "Register")
-    let loginPageButton = new Button(new Vector2(300, window.innerHeight / 2 + 150), new Vector2(250, 30), "OpenLoginButton", "Login")
+    let verifyPasswordLabel = new Label(new Vector2(0, window.innerHeight / 2 + 150), new Vector2(250, 15), "VerifyPasswordRegisterLabel", "Verify Password:")
+    let verifyPasswordInputField = new InputField(new Vector2(0, window.innerHeight / 2 + 200), new Vector2(250, 15))
+    let submitButton = new Button(new Vector2(0, window.innerHeight / 2 + 250), new Vector2(250, 30), "SubmitRegisterButton", "Register")
+    let loginPageButton = new Button(new Vector2(300, window.innerHeight / 2 + 250), new Vector2(250, 30), "OpenLoginButton", "Login")
     nameLabel.centerX = true
     nameInputField.centerX = true
     passwordLabel.centerX = true
@@ -36,8 +38,10 @@ function init(instance){
     phoneLabel.centerX = true
     phoneInputField.centerX = true
     loginPageButton.centerX = true
+    verifyPasswordLabel.centerX = true
+    verifyPasswordInputField.centerX = true
     submitButton.element.onclick = () => {
-        window.socket.emit("register", {name:nameInputField.element.value, username:usernameInputField.element.value, email:emailInputField.element.value, phone:phoneInputField.element.value, password:passwordInputField.element.value})
+        window.socket.emit("register", {name:nameInputField.element.value, username:usernameInputField.element.value, email:emailInputField.element.value, phone:phoneInputField.element.value, password:passwordInputField.element.value, verificationPassword:verifyPasswordInputField.element.value})
     }
     loginPageButton.element.onclick = () => {
         window.scenes[1].visible = false
@@ -55,4 +59,6 @@ function init(instance){
     instance.addElement(phoneLabel)
     instance.addElement(phoneInputField)
     instance.addElement(loginPageButton)
+    instance.addElement(verifyPasswordLabel)
+    instance.addElement(verifyPasswordInputField)
 }

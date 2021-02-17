@@ -33,14 +33,20 @@ module.exports.updateByUsername = (username, data) => {
 
 module.exports.create = (data) => {
     return new Promise((resolve, reject) => {
-        connection.sqlCon.query(`INSERT INTO users (${Object.keys(data)}) VALUES ('${Object.values(data).join("','")}')`, (err, result, fields) => {
-            if(err) throw err
-            // connection.sqlCon.query(`INSERT INTO stats (user_id, coins, skin, exp, level, health, attack_id, class_id, speed) VALUES ('${result.insertId}', '0', '0', '0', '0', '0', '0', '0', '0')`, (err, result) => {
-            //     if(err) throw err
-            //     console.log(result.insertId)
-            // })
-            resolve(true)
+        this.existsByUsername(data.username).then(exists => {
+            if(exists) resolve("Username already exists")
+            else{
+                connection.sqlCon.query(`INSERT INTO users (${Object.keys(data)}) VALUES ('${Object.values(data).join("','")}')`, (err, result, fields) => {
+                    if(err) throw err
+                    // connection.sqlCon.query(`INSERT INTO stats (user_id, coins, skin, exp, level, health, attack_id, class_id, speed) VALUES ('${result.insertId}', '0', '0', '0', '0', '0', '0', '0', '0')`, (err, result) => {
+                    //     if(err) throw err
+                    //     console.log(result.insertId)
+                    // })
+                    resolve(true)
+                })
+            }
         })
+       
     })
 }
 
@@ -49,6 +55,15 @@ module.exports.deleteByUsername = (username) => {
         connection.sqlCon.query(`DELETE FROM users WHERE username = '${username}'`, (err, result, fields) => {
             if(err) throw err
             resolve(true)
+        })
+    })
+}
+
+module.exports.existsByUsername = (username) => {
+    return new Promise((resolve, reject) => {
+        connection.sqlCon.query(`SELECT id users WHERE username = '${username}'`, (err, result, fields) => {
+            if(err) throw err
+            (result ? resolve(true) : resolve(false))
         })
     })
 }

@@ -20,9 +20,7 @@ module.exports.getByUsername = (username) => {
 module.exports.getIdByUsername = (username) => {
     return new Promise((resolve, reject) => {
         connection.sqlCon.query(`SELECT user_id FROM users INNER JOIN stats ON users.id = stats.user_id WHERE users.username = '${username}'`, (err, result, fields) => {
-            for (let i = 0; i < result.length; i++) {
-                result[i] = result[i]["user_id"]
-            }
+            result[0] = result[0]["user_id"]
             resolve(result)
         })
     })

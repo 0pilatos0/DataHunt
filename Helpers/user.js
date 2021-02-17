@@ -7,20 +7,34 @@ const emailRegex = new RegExp(/(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'
 const passwordRegex = new RegExp(/^.*(?=.{8,})(?=.*[a-zA-Z])(?=.*\d)(?=.*[!#$%&?@"])(?!.*\s).*$/)
 
 module.exports.login = (data) => {
-
+    return new Promise((resolve, reject) => {
+        if(!(data.username && data.password)) return resolve("All of them must be filled in")
+        users.getByUsername(data.username).then(e => {
+            if(e.length <= 0) return resolve("Username doesn't exist")
+            if(e.password != hashPassword(data.password)) return resolve("Wrong password")
+            //login
+        })
+    })
 }
 
 module.exports.register = (data) => {
-    if(!(data.name && data.username && data.email && data.password && data.verificationPassword)) return "All of them must be filled in"
-    if(!nameRegex.exec(data.name)) return "Name does not match regex"
-    if(!usernameRegex.exec(data.username)) return "Username does not match regex"
-    if(!emailRegex.exec(data.email)) return "Email does not match regex"
-    if(!passwordRegex.exec(data.password)) return "Password does not match regex"
-    if(data.password != data.verificationPassword) return "Passwords doesn't match"
-    delete data.verificationPassword
-    data.password = hashPassword(data.password)
-    data.verifytoken = "bekijk het met je token"
-    users.create(data)
+    return new Promise((resolve, reject) => {
+        if(!(data.name && data.username && data.email && data.password && data.verificationPassword)) return resolve("All of them must be filled in")
+        if(!nameRegex.exec(data.name)) return resolve("Name does not match regex")
+        if(!usernameRegex.exec(data.username)) return resolve("Username does not match regex")
+        if(!emailRegex.exec(data.email)) return resolve("Email does not match regex")
+        if(!passwordRegex.exec(data.password)) return resolve("Password does not match regex")
+        if(data.password != data.verificationPassword) return resolve("Passwords doesn't match")
+        delete data.verificationPassword
+        data.password = hashPassword(data.password)
+        data.verifytoken = sha256(Math.floor(Math.random() * 1000000).toString())
+        users.create(data).then(e => {
+            if(e == true){
+                //send mail to the user
+            }
+            else return resolve(e)
+        })
+    })
 }
 
 function hashPassword(password){

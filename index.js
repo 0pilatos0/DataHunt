@@ -8,7 +8,7 @@ const sha256 = require('sha256')
 require('dotenv').config()
 const sql = require('./sql/connection.js')
 sql.connect().then(e => {
-  console.log(e)
+  //console.log(e)
 })
 
 //const users = require('./sql/users.js')
@@ -40,12 +40,21 @@ io.on('connection', (socket) => {
     console.log("\x1b[32m", `+${socket.id}`)
 
     socket.on('login', (data) => {
-      console.log(data)
+      user.login(data).then(e => {
+        socket.emit('loginFailed', e)
+      })
     })
 
     socket.on('register', (data) => {
-      console.log(data)
-      console.log(user.register(data))
+      user.register(data).then(e => {
+        if(e == true){
+          //probably not here
+          //log it automaticly in and redirect to game
+        }
+        else{
+          socket.emit('registerFailed', e)
+        }
+      })
     })
 
     socket.on('logout', (data) => {

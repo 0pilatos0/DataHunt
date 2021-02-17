@@ -12,7 +12,7 @@ module.exports.getAll = () => {
 module.exports.getByUsername = (username) => {
     return new Promise((resolve, reject) => {
         connection.sqlCon.query(`SELECT * FROM users INNER JOIN stats ON users.id = stats.user_id WHERE users.username = '${username}'`, (err, result, fields) => {
-            resolve(result)
+            return resolve(result)
         })
     })
 }
@@ -21,7 +21,7 @@ module.exports.getIdByUsername = (username) => {
     return new Promise((resolve, reject) => {
         connection.sqlCon.query(`SELECT user_id FROM users INNER JOIN stats ON users.id = stats.user_id WHERE users.username = '${username}'`, (err, result, fields) => {
             result[0] = result[0]["user_id"]
-            resolve(result)
+            return resolve(result)
         })
     })
 }
@@ -34,7 +34,7 @@ module.exports.updateByUsername = (username, data) => {
     return this.getIdByUsername(username).then(id => {
         return new Promise((resolve, reject) => {
             connection.sqlCon.query(`UPDATE stats SET ${setString} WHERE user_id = ${id[0]}`, (err, result, fields) => {
-                resolve(true)
+                return resolve(true)
             })
         })
     })

@@ -26,6 +26,10 @@ loginScene.visible = false
 scenes.push(loginScene)
 scenes.push(registerScene)
 
+// console.log(window.sessionStorage)
+// window.sessionStorage.setItem("username", "Pizza")
+// console.log(window.sessionStorage.getItem("username"))
+
 document.onreadystatechange = () => {
     setCanvasSize()
     ctx.imageSmoothingEnabled = false

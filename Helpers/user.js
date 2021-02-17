@@ -1,6 +1,5 @@
 const users = require('../sql/users.js')
 const sha512 = require('sha512')
-const { delete } = require('got')
 
 const nameRegex = new RegExp(/^[a-z ,.'-]+$/i)
 const usernameRegex = new RegExp(/\w{5,29}/i)

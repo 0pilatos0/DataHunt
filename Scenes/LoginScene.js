@@ -12,6 +12,7 @@ export class LoginScene extends Scene{
 }
 
 function init(instance){
+    let errorLabel = new Label(new Vector2(0, window.innerHeight / 2 - 300), new Vector2(250, 15), "ErrorRegisterLabel", "Error:")
     let usernameLabel = new Label(new Vector2(0, window.innerHeight / 2 - 250), new Vector2(250, 15), "UsernameLoginLabel", "Username:")
     let usernameInputField = new InputField(new Vector2(0, window.innerHeight / 2 - 200), new Vector2(250, 15))
     let passwordLabel = new Label(new Vector2(0, window.innerHeight / 2 - 150), new Vector2(250, 15), "PasswordLoginLabel", "Password:")
@@ -24,7 +25,9 @@ function init(instance){
     registerPageButton.centerX = true
     usernameLabel.centerX = true
     submitButton.centerX = true
+    errorLabel.centerX = true
     submitButton.element.onclick = () => {
+        errorLabel.element.innerHTML = `Error:`
         window.socket.emit("login", {username:usernameInputField.element.value, password:passwordInputField.element.value})
     }
     registerPageButton.element.onclick = () => {
@@ -37,4 +40,7 @@ function init(instance){
     instance.addElement(passwordInputField)
     instance.addElement(submitButton)
     instance.addElement(registerPageButton)
+    window.socket.on('loginFailed', (data) => {
+        errorLabel.element.innerHTML = `Error: ${data}`
+    })
 }

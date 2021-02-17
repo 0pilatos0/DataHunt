@@ -12,6 +12,7 @@ export class RegisterScene extends Scene{
 }
 
 function init(instance){
+    let errorLabel = new Label(new Vector2(0, window.innerHeight / 2 - 400), new Vector2(250, 15), "ErrorRegisterLabel", "Error:")
     let nameLabel = new Label(new Vector2(0, window.innerHeight / 2 - 350), new Vector2(250, 15), "NameRegisterLabel", "Name:")
     let nameInputField = new InputField(new Vector2(0, window.innerHeight / 2 - 300), new Vector2(250, 15))
     let usernameLabel = new Label(new Vector2(0, window.innerHeight / 2 - 250), new Vector2(250, 15), "UsernameRegisterLabel", "Username:")
@@ -40,7 +41,9 @@ function init(instance){
     loginPageButton.centerX = true
     verifyPasswordLabel.centerX = true
     verifyPasswordInputField.centerX = true
+    errorLabel.centerX = true
     submitButton.element.onclick = () => {
+        errorLabel.element.innerHTML = `Error:`
         window.socket.emit("register", {name:nameInputField.element.value, username:usernameInputField.element.value, email:emailInputField.element.value, phone:phoneInputField.element.value, password:passwordInputField.element.value, verificationPassword:verifyPasswordInputField.element.value})
     }
     loginPageButton.element.onclick = () => {
@@ -61,4 +64,8 @@ function init(instance){
     instance.addElement(loginPageButton)
     instance.addElement(verifyPasswordLabel)
     instance.addElement(verifyPasswordInputField)
+    instance.addElement(errorLabel)
+    window.socket.on('registerFailed', (data) => {
+        errorLabel.element.innerHTML = `Error: ${data}`
+    })
 }

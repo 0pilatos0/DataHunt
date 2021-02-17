@@ -1,4 +1,4 @@
-let socket = io("https://datahuntserver.herokuapp.com")
+let socket = io("localhost:3000")//https://datahuntserver.herokuapp.com
 window.socket = socket
 import {Vector2} from './Helpers/Vector2.js'
 import {drawText} from './Helpers/Draw.js'

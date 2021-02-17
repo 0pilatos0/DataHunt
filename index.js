@@ -12,8 +12,8 @@ sql.connect().then(e => {
   console.log(e)
 })
 
-const users = require('./sql/users.js')
-const stats = require('./sql/stats.js')
+//const users = require('./sql/users.js')
+//const stats = require('./sql/stats.js')
 // users.getAll().then(e => {
 //   console.log(e)
 // })
@@ -35,6 +35,7 @@ const stats = require('./sql/stats.js')
 // })
 //stats.getByUsername("Pizza")
 //stats.updateByUsername("Pizza", {coins:100})
+const user = require('./Helpers/user.js')
 
 io.on('connection', (socket) => {
     console.log("\x1b[32m", `+${socket.id}`)
@@ -45,6 +46,7 @@ io.on('connection', (socket) => {
 
     socket.on('register', (data) => {
       console.log(data)
+      user.register(data)
     })
 
     socket.on('logout', (data) => {
@@ -81,7 +83,3 @@ quit = () => {
 process.on('SIGINT', () => {
   quit()
 })
-
-function hashPassword(password){
-  return sha512(password)
-}

@@ -35,10 +35,10 @@ module.exports.create = (data) => {
     return new Promise((resolve, reject) => {
         connection.sqlCon.query(`INSERT INTO users (${Object.keys(data)}) VALUES ('${Object.values(data).join("','")}')`, (err, result, fields) => {
             if(err) throw err
-            connection.sqlCon.query(`INSERT INTO stats (user_id, coins, skin, exp, level, health, attack_id, class_id, speed) VALUES ('${result.insertId}', '0', '0', '0', '0', '0', '0', '0', '0')`, (err, result) => {
-                if(err) throw err
-                console.log(result.insertId)
-            })
+            // connection.sqlCon.query(`INSERT INTO stats (user_id, coins, skin, exp, level, health, attack_id, class_id, speed) VALUES ('${result.insertId}', '0', '0', '0', '0', '0', '0', '0', '0')`, (err, result) => {
+            //     if(err) throw err
+            //     console.log(result.insertId)
+            // })
             resolve(true)
         })
     })

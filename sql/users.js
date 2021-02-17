@@ -36,6 +36,7 @@ module.exports.create = (data) => {
         this.existsByUsername(data.username).then(exists => {
             if(exists) resolve("Username already exists")
             else{
+                console.log(data)
                 connection.sqlCon.query(`INSERT INTO users (${Object.keys(data)}) VALUES ('${Object.values(data).join("','")}')`, (err, result, fields) => {
                     if(err) throw err
                     // connection.sqlCon.query(`INSERT INTO stats (user_id, coins, skin, exp, level, health, attack_id, class_id, speed) VALUES ('${result.insertId}', '0', '0', '0', '0', '0', '0', '0', '0')`, (err, result) => {

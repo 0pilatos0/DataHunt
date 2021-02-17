@@ -45,7 +45,7 @@ io.on('connection', (socket) => {
 
     socket.on('register', (data) => {
       console.log(data)
-      user.register(data)
+      console.log(user.register(data))
     })
 
     socket.on('logout', (data) => {

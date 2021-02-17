@@ -16,7 +16,7 @@ module.exports.register = (data) => {
     if(!usernameRegex.exec(data.username)) return "Username does not match regex"
     if(!emailRegex.exec(data.email)) return "Email does not match regex"
     if(!passwordRegex.exec(data.password)) return "Password does not match regex"
-    if(!data.password == data.verificationPassword) return "Passwords doesn't match"
+    if(data.password != data.verificationPassword) return "Passwords doesn't match"
     delete data.verificationPassword
     data.password = hashPassword(data.password)
     data.verifytoken = "bekijk het met je token"

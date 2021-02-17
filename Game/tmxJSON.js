@@ -10,9 +10,11 @@
 	
 		load: function(jsonFile) {
 			var xhr = new XMLHttpRequest();
+			window.addEventListener('resize', resizeCanvas, false);
 			xhr.onreadystatechange = function() {
 				if (xhr.readyState == 4 && xhr.status == 200) {
 					tmxJSON.parse(xhr.responseText);
+					console.log(xhr.responseText)
 				}
 			}
 			xhr.open("GET", jsonFile, true);
@@ -88,8 +90,15 @@
 		drawTiles: function() {
 		
 			for (var l = 0; l < map.layers.length; l++) {
-				var x = 0;
-				var y = 0;
+
+				//Enge public stuff die ook ergens anders vandaan kan komen
+				var PlayerX = 0;
+				var PlayerY = 0;
+				var drawScale = 1;
+
+				var x = 0 + PlayerX;
+				var y = 0 + PlayerY;
+
 				if (map.layers[l].type === "tilelayer") {
 					for (var d = 0; d < map.layers[l].data.length; d++) {
 						
@@ -100,7 +109,7 @@
 						
 						
 						if (map.layers[l].data[d] != 0) {
-							context.drawImage(tiles[map.layers[l].data[d]], x * 2, y*2, 64, 64);
+							context.drawImage(tiles[map.layers[l].data[d]], x * drawScale, y * drawScale, 32 * drawScale, 32 * drawScale);
 						}
 						x += map.tilewidth;
 					}
@@ -110,5 +119,17 @@
 		
 		}
 	};
+	function resizeCanvas() {
+		var tileCanvas = document.getElementById('display');
+		tileCanvas.width = window.innerWidth;
+		tileCanvas.height = window.innerHeight;
+		tmxJSON.drawTiles();
+	}
+
+
+
+
+
 
 }());
+

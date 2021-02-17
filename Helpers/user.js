@@ -1,5 +1,6 @@
 const users = require('../sql/users.js')
 const sha512 = require('sha512')
+const { delete } = require('got')
 
 const nameRegex = new RegExp(/^[a-z ,.'-]+$/i)
 const usernameRegex = new RegExp(/\w{5,29}/i)
@@ -17,7 +18,7 @@ module.exports.register = (data) => {
     if(!emailRegex.exec(data.email)) return "Email does not match regex"
     if(!passwordRegex.exec(data.password)) return "Password does not match regex"
     if(!data.password == data.verificationPassword) return "Passwords doesn't match"
-    data.splice(data.indexOf(data.verificationPassword), 1)
+    delete data.verificationPassword
     data.password = hashPassword(data.password)
     data.verifytoken = "bekijk het met je token"
     users.create(data)

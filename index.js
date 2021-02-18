@@ -34,14 +34,26 @@ sql.connect().then(e => {
 // })
 //stats.getByUsername("Pizza")
 //stats.updateByUsername("Pizza", {coins:100})
-const user = require('./Helpers/user.js')
+const user = require('./Handlers/user.js')
+const { generateRandomToken } = require('./Helpers/tokenGenerator.js')
+
+let players = []
 
 io.on('connection', (socket) => {
     console.log("\x1b[32m", `+${socket.id}`)
-
+    
     socket.on('login', (data) => {
       user.login(data).then(e => {
-        socket.emit('loginFailed', e)
+        if(e == true){
+          let token = generateRandomToken()
+          socket.username = data.username
+          socket.token = token
+          players.push(socket)
+          socket.emit('loginSucceeded', {username:socket.username, token:socket.token})
+          console.log(`${socket.username} logged in`)
+          //console.log(players)
+        }
+        else socket.emit('loginFailed', e)
       })
     })
 
@@ -50,10 +62,13 @@ io.on('connection', (socket) => {
         if(e == true){
           //probably not here
           //log it automaticly in and redirect to game
+          let token = generateRandomToken()
+          socket.username = data.username
+          socket.token = token
+          players.push(socket)
+          socket.emit('loginSucceeded', {username:socket.username, token:socket.token})
         }
-        else{
-          socket.emit('registerFailed', e)
-        }
+        else socket.emit('registerFailed', e)
       })
     })
 
@@ -67,6 +82,12 @@ io.on('connection', (socket) => {
 
     socket.on('disconnect', () => {
         console.log("\x1b[31m", `-${socket.id}`)
+        let index = players.indexOf(socket)
+        if(index > -1){
+          players.splice(players.indexOf(socket), 1)
+          console.log(`${socket.username} logged off`)
+        }
+        
     })
 })
 

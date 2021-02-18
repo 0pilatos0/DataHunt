@@ -1,5 +1,7 @@
 const users = require('../sql/users.js')
+const mail = require('../mail/connection.js')
 const sha256 = require('sha256')
+const { generateRandomToken } = require('../Helpers/tokenGenerator.js')
 
 const nameRegex = new RegExp(/^[a-z ,.'-]+$/i)
 const usernameRegex = new RegExp(/\w{5,29}/i)
@@ -11,8 +13,8 @@ module.exports.login = (data) => {
         if(!(data.username && data.password)) return resolve("All of them must be filled in")
         users.getByUsername(data.username).then(e => {
             if(e.length <= 0) return resolve("Username doesn't exist")
-            if(e.password != hashPassword(data.password)) return resolve("Wrong password")
-            //login
+            if(e[0].password != hashPassword(data.password)) return resolve("Wrong password")
+            return resolve(true)
         })
     })
 }
@@ -27,10 +29,12 @@ module.exports.register = (data) => {
         if(data.password != data.verificationPassword) return resolve("Passwords doesn't match")
         delete data.verificationPassword
         data.password = hashPassword(data.password)
-        data.verifytoken = sha256(Math.floor(Math.random() * 1000000).toString())
+        data.verifytoken = generateRandomToken()
         users.create(data).then(e => {
             if(e == true){
-                //send mail to the user
+                mail.sendMail({to:data.email, subject:data.username, text:"That wasn't that hard, was it?"}).then(e => {
+                    return resolve(e)
+                })
             }
             else return resolve(e)
         })

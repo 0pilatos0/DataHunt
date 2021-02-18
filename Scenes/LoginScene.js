@@ -3,6 +3,7 @@ import {InputField} from '../Elements/InputField.js'
 import { Button } from '../Elements/Button.js'
 import { Label } from '../Elements/Label.js'
 import { Vector2 } from '../Helpers/Vector2.js'
+import { setDataCookie, setDataSocket, setDataWindow } from '../Helpers/Data.js'
 
 export class LoginScene extends Scene{
     constructor(){
@@ -40,7 +41,13 @@ function init(instance){
     instance.addElement(passwordInputField)
     instance.addElement(submitButton)
     instance.addElement(registerPageButton)
+    instance.addElement(errorLabel)
     window.socket.on('loginFailed', (data) => {
         errorLabel.element.innerHTML = `Error: ${data}`
+    })
+    window.socket.on('loginSucceeded', (data) => {
+        setDataSocket("token", data.token)
+        setDataCookie("token", data.token)
+        setDataSocket("username", data.username)
     })
 }

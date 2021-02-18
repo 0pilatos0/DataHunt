@@ -8,6 +8,7 @@ import { Label } from './Elements/Label.js'
 import { Scene } from './Helpers/Scene.js'
 import { LoginScene } from './Scenes/loginScene.js'
 import { RegisterScene } from './Scenes/registerScene.js'
+import { deleteDataCookie, getDataCookie, setDataCookie } from './Helpers/Data.js'
 
 socket.on('connect', () => {
     console.log("connected")
@@ -79,6 +80,8 @@ function gameLoop(){
     // for (let i = 0; i < window.inputFields.length; i++) {
     //     window.inputFields[i].reDraw()
     // }
-    registerScene.render()
+    for (let i = 0; i < scenes.length; i++) {
+        if(scenes[i].visible) scenes[i].render()
+    }
     window.requestAnimationFrame(gameLoop)
 }

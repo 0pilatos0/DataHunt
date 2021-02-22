@@ -20,7 +20,6 @@ module.exports.sendMail = (mailOptions) => {
         mailOptions.from = process.env.GMAILUSER
         transporter.sendMail(mailOptions, (err, info) => {
             if(err) throw err
-            console.log(info)
             return resolve(true)
         })
     })

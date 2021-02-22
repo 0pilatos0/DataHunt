@@ -4,69 +4,68 @@ const io = require('socket.io')(http, {
     origin: "*"
   }
 })
-const sha256 = require('sha256')
+
 require('dotenv').config()
 const sql = require('./sql/connection.js')
 sql.connect().then(e => {
   //console.log(e)
 })
 
-//const users = require('./sql/users.js')
-//const stats = require('./sql/stats.js')
-// users.getAll().then(e => {
-//   console.log(e)
-// })
-// users.getByUsername("Pizza").then(e => {
-//   console.log(e)
-// })
-// users.create({name:"Emile Mol",username:"Pizza",email:"test@pizza.nl",phone:"06-123456",password:hashPassword("Test")}).then(e => {
-//   console.log(e)
-// })
-//users.deleteByUsername("Pizza")
-// users.updateByUsername("Henk", {username:"Pizza"}).then(e => {
-//   console.log(e)
-// })
-// stats.getAll().then(e => {
-//   console.log(e)
-// })
-// stats.create().then(e => {
-//   console.log(e)
-// })
-//stats.getByUsername("Pizza")
-//stats.updateByUsername("Pizza", {coins:100})
 const user = require('./Handlers/user.js')
-const { generateRandomToken } = require('./Helpers/tokenGenerator.js')
+const { generateRandomToken } = require('./Helpers/security.js')
+const { getUsernameByLoginToken, getLoginTokenByUsername, deleteLoginToken, addLoginToken } = require('./sql/users.js')
 
 let players = []
 
-io.on('connection', (socket) => {
+setInterval(() => {
+  sql.sqlCon.query("DELETE FROM logintokens WHERE creationdate < NOW() - INTERVAL 30 DAY", (err, result, fields) => {
+    if(err) throw err
+  })
+}, 1000 * 60 * 60 * 24);
+
+io.on('connection', async (socket) => {
     console.log("\x1b[32m", `+${socket.id}`)
-    
-    socket.on('login', (data) => {
+    //create something for deleting token when it isn;t used for real long time 
+    //if older than 30 days remove
+    socket.on('login', async (data) => {
+      if(data.token){
+        if(!data.rememberMe) return socket.emit('logout')
+        let token = generateRandomToken()
+        let username = await getUsernameByLoginToken(data.token)
+        if(!username) return socket.emit('logout')
+        deleteLoginToken(username, data.token)
+        addLoginToken(username, token)
+        socket.username = username
+        players.push(socket)
+        socket.emit('loginSucceeded', {username, token})
+        console.log(`${socket.username} logged in`)
+      }
+      if(players.indexOf(socket) != -1) return
       user.login(data).then(e => {
         if(e == true){
-          let token = generateRandomToken()
           socket.username = data.username
-          socket.token = token
           players.push(socket)
           socket.emit('loginSucceeded', {username:socket.username, token:socket.token})
           console.log(`${socket.username} logged in`)
-          //console.log(players)
         }
         else socket.emit('loginFailed', e)
       })
     })
 
-    socket.on('register', (data) => {
-      user.register(data).then(e => {
+    socket.on('register', async (data) => {
+      let rememberMe = data.rememberMe
+      user.register(data).then(async e => {
         if(e == true){
+          //create new login token in DB
           //probably not here
           //log it automaticly in and redirect to game
-          let token = generateRandomToken()
+          let returnData = {}
+          if(rememberMe) await getLoginTokenByUsername(data.username).then(t => {returnData.token = t})
           socket.username = data.username
-          socket.token = token
+          returnData.username = socket.username
           players.push(socket)
-          socket.emit('loginSucceeded', {username:socket.username, token:socket.token})
+          socket.emit('registerSucceeded', returnData)
+          console.log(`${socket.username} registered`)
         }
         else socket.emit('registerFailed', e)
       })
@@ -87,7 +86,6 @@ io.on('connection', (socket) => {
           players.splice(players.indexOf(socket), 1)
           console.log(`${socket.username} logged off`)
         }
-        
     })
 })
 

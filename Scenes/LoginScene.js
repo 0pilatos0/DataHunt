@@ -18,18 +18,24 @@ function init(instance){
     let usernameInputField = new InputField(new Vector2(0, window.innerHeight / 2 - 200), new Vector2(250, 15))
     let passwordLabel = new Label(new Vector2(0, window.innerHeight / 2 - 150), new Vector2(250, 15), "PasswordLoginLabel", "Password:")
     let passwordInputField = new InputField(new Vector2(0, window.innerHeight / 2 - 100), new Vector2(250, 15))
-    let submitButton = new Button(new Vector2(0, window.innerHeight / 2 - 50), new Vector2(250, 30), "SubmitLoginButton", "Login")
-    let registerPageButton = new Button(new Vector2(300, window.innerHeight / 2 - 50), new Vector2(250, 30), "OpenRegisterButton", "Register")
+    let rememberMeCheckbox = new Button(new Vector2(0, window.innerHeight / 2 - 50), new Vector2(250, 30), "RememberMeButton", "Remember Me")
+    let submitButton = new Button(new Vector2(0, window.innerHeight / 2), new Vector2(250, 30), "SubmitLoginButton", "Login")
+    let registerPageButton = new Button(new Vector2(300, window.innerHeight / 2), new Vector2(250, 30), "OpenRegisterButton", "Register")
     passwordLabel.centerX = true
     usernameInputField.centerX = true
     passwordInputField.centerX = true
     registerPageButton.centerX = true
     usernameLabel.centerX = true
     submitButton.centerX = true
+    rememberMeCheckbox.centerX = true
     errorLabel.centerX = true
+    rememberMeCheckbox.element.style.backgroundColor = "red"
     submitButton.element.onclick = () => {
         errorLabel.element.innerHTML = `Error:`
-        window.socket.emit("login", {username:usernameInputField.element.value, password:passwordInputField.element.value})
+        window.socket.emit("login", {username:usernameInputField.element.value, password:passwordInputField.element.value, rememberMe:rememberMeCheckbox.element.style.backgroundColor == "green" ? true : false})
+    }
+    rememberMeCheckbox.element.onclick = () => {
+        rememberMeCheckbox.element.style.backgroundColor = rememberMeCheckbox.element.style.backgroundColor == "green" ? "red" : "green" 
     }
     registerPageButton.element.onclick = () => {
         window.scenes[0].visible = false
@@ -42,12 +48,14 @@ function init(instance){
     instance.addElement(submitButton)
     instance.addElement(registerPageButton)
     instance.addElement(errorLabel)
+    instance.addElement(rememberMeCheckbox)
     window.socket.on('loginFailed', (data) => {
         errorLabel.element.innerHTML = `Error: ${data}`
     })
     window.socket.on('loginSucceeded', (data) => {
-        setDataSocket("token", data.token)
         setDataCookie("token", data.token)
         setDataSocket("username", data.username)
+        window.scenes[0].visible = false
+        window.scenes[2].visible = true
     })
 }

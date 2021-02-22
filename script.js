@@ -8,10 +8,17 @@ import { Label } from './Elements/Label.js'
 import { Scene } from './Helpers/Scene.js'
 import { LoginScene } from './Scenes/loginScene.js'
 import { RegisterScene } from './Scenes/registerScene.js'
+import {GameScene} from './Scenes/GameScene.js'
 import { deleteDataCookie, getDataCookie, setDataCookie } from './Helpers/Data.js'
 
 socket.on('connect', () => {
     console.log("connected")
+    if(getDataCookie('token')) socket.emit('login', {token:getDataCookie('token'), rememberMe:getDataCookie('rememberMe')})
+})
+
+socket.on('logout', () => {
+    deleteDataCookie('token')
+    deleteDataCookie('rememberMe')
 })
 
 let frames = 0, displayFrames = 0
@@ -23,7 +30,9 @@ window.ctx = ctx
 let scenes = []
 let loginScene = new LoginScene()
 let registerScene = new RegisterScene()
-loginScene.visible = false
+let gameScene = new GameScene()
+registerScene.visible = false
+gameScene.visible = false
 scenes.push(loginScene)
 scenes.push(registerScene)
 

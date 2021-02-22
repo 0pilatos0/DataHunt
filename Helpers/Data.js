@@ -44,6 +44,6 @@ export function getDataCookie(name){
     let cookies = document.cookie.split(';')
     for (let i = 0; i < cookies.length; i++) {
         if(cookies[i].includes(name))
-            return cookies[i].replace(`${name}=`, "")
+            return cookies[i].replace(`${name}=`, "").trim()
     }
 }

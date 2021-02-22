@@ -11,7 +11,7 @@ module.exports.connect = () => {
   return new Promise((resolve, reject) => {
     this.sqlCon.connect((err) => {
       if(err) throw err
-      resolve(true)
+      return resolve(true)
     })
   })
 }

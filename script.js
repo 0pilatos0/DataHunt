@@ -1,4 +1,4 @@
-let socket = io("localhost:3000")//https://datahuntserver.herokuapp.com
+let socket = io("localhost:3000", {'reconnection': false, 'reconnectionDelay': 1000, 'reconnectionDelayMax': 2000})//https://datahuntserver.herokuapp.com
 window.socket = socket
 import {Vector2} from './Helpers/Vector2.js'
 import {drawText} from './Helpers/Draw.js'
@@ -16,10 +16,22 @@ socket.on('connect', () => {
     if(getDataCookie('token')) socket.emit('login', {token:getDataCookie('token'), rememberMe:getDataCookie('rememberMe')})
 })
 
+socket.on('connect_error', (err) => {
+    console.log("connection error")
+})
+
 socket.on('logout', () => {
     deleteDataCookie('token')
     deleteDataCookie('rememberMe')
 })
+
+socket.on('disconnect', () => {
+    console.log("disconnected")
+})
+
+setInterval(() => {
+    if(socket.disconnected) socket.connect()
+}, 1000)
 
 let frames = 0, displayFrames = 0
 let secondsPassed = 0

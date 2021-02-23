@@ -4,7 +4,6 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node index.js"
   },
   "author": "",
@@ -17,9 +16,8 @@
     "nodemailer": "^6.4.18",
     "nodemon": "^2.0.7",
     "pg": "^8.5.1",
-    "sha256": "^0.2.0",
-    "sha512": "^0.0.1",
     "socket.io": "^3.1.1",
+    "socket.io-redis": "^6.0.1",
     "uninstall": "^0.0.0"
   }
 }

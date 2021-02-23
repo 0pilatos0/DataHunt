@@ -11,6 +11,7 @@
   "license": "ISC",
   "dependencies": {
     "bcrypt": "^5.0.0",
+    "discord.js": "^12.5.1",
     "dotenv": "^8.2.0",
     "mysql": "^2.18.1",
     "nodemailer": "^6.4.18",

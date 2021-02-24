@@ -30,37 +30,52 @@ module.exports.Server = class {
     }
 
     async start(){
-        if(cluster.isMaster){
-            console.log(`Master ${process.pid} is running`)
+        return new Promise((resolve, reject) => {
+            if(cluster.isMaster){
+                let amountOfWorkersStarted = 0
+                console.log(`Master ${process.pid} is running`)
+    
+                setupMaster(this.#http, {
+                    loadBalancingMethod: "least-connection",
+                })
+                this.#http.listen(this.#port, async () => {
+                    console.log(`Listening on http://localhost:${this.#port}`)
+                })
+    
+                for (let i = 0; i < numCPUs; i++) {
+                    let worker = cluster.fork()
+                    worker.on('message', (data) => {
+                        if(data.msg == 'ready'){
+                            amountOfWorkersStarted++
+                            if(amountOfWorkersStarted == numCPUs) resolve(true)
+                        } 
+                    })
+                }
+                
+                process.on('message', (data) => {
+                    console.log(data)
+                })
 
-            setupMaster(this.#http, {
-                loadBalancingMethod: "least-connection",
-            })
-            this.#http.listen(this.#port, async () => {
-                console.log(`Listening on http://localhost:${this.#port}`)
-            })
-
-            for (let i = 0; i < numCPUs; i++) {
-                cluster.fork()
+                cluster.on('exit', (worker) => {
+                    console.log(`Worker ${worker.process.pid} died`)
+                    cluster.fork()
+                })
             }
-
-            cluster.on('exit', (worker) => {
-                console.log(`Worker ${worker.process.pid} died`)
-                cluster.fork()
-            })
-        }
-        else if(cluster.isWorker){
-            console.log(`Worker ${process.pid} started`)
-
-            this.#http = http.createServer()
-            this.#io.attach(this.#http, ioConfig)
-            this.#io.adapter(redisAdapter(redisConfig))
-            setupWorker(this.#io)
-            
-            this.#io.on('connection', async (socket) => {
-                console.log(socket.id)
-            })
-        }
+            else if(cluster.isWorker){
+                console.log(`Worker ${process.pid} started`)
+                process.send({msg:'ready'})
+    
+                this.#http = http.createServer()
+                this.#io.attach(this.#http, ioConfig)
+                this.#io.adapter(redisAdapter(redisConfig))
+                setupWorker(this.#io)
+                
+                this.#io.on('connection', async (socket) => {
+                    console.log(socket.id)
+                })
+            }
+        })
+        
         // this.#http.listen(`${this.#port}`, async () => {
         //     this.#io.attach(this.#http, ioConfig)
         //     this.#io.adapter(redisAdapter(redisConfig))

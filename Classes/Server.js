@@ -14,6 +14,9 @@ const redisConfig = {
 const http = require('http')
 const io = require('socket.io')
 const redisAdapter = require('socket.io-redis')
+const cluster = require('cluster')
+const numCPUs = require('os').cpus().length
+const { setupMaster, setupWorker } = require('@socket.io/sticky')
 
 module.exports.Server = class {
     #http
@@ -27,15 +30,46 @@ module.exports.Server = class {
     }
 
     async start(){
-        this.#http.listen(`${this.#port}`, async () => {
+        if(cluster.isMaster){
+            console.log(`Master ${process.pid} is running`)
+
+            setupMaster(this.#http, {
+                loadBalancingMethod: "least-connection",
+            })
+            this.#http.listen(this.#port, async () => {
+                console.log(`Listening on http://localhost:${this.#port}`)
+            })
+
+            for (let i = 0; i < numCPUs; i++) {
+                cluster.fork()
+            }
+
+            cluster.on('exit', (worker) => {
+                console.log(`Worker ${worker.process.pid} died`)
+                cluster.fork()
+            })
+        }
+        else if(cluster.isWorker){
+            console.log(`Worker ${process.pid} started`)
+
+            this.#http = http.createServer()
             this.#io.attach(this.#http, ioConfig)
             this.#io.adapter(redisAdapter(redisConfig))
-            console.log(`Listening on http://localhost:${this.#port}`)
-        })
+            setupWorker(this.#io)
+            
+            this.#io.on('connection', async (socket) => {
+                console.log(socket.id)
+            })
+        }
+        // this.#http.listen(`${this.#port}`, async () => {
+        //     this.#io.attach(this.#http, ioConfig)
+        //     this.#io.adapter(redisAdapter(redisConfig))
+        //     console.log(`Listening on http://localhost:${this.#port}`)
+        // })
 
-        this.#io.on('connection', async (socket) => {
-            console.log(socket.id)
-        })
+        // this.#io.on('connection', async (socket) => {
+        //     console.log(socket.id)
+        // })
     }
 
     get playerCount(){

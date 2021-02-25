@@ -14,8 +14,8 @@ sql.connect().then(e => {
 const user = require('./Handlers/user.js')
 const { generateRandomToken } = require('./Helpers/security.js')
 const { getUsernameByLoginToken, getLoginTokenByUsername, deleteLoginToken, addLoginToken } = require('./sql/users.js')
-const { start, sendMessage } = require('./Helpers/discord.js')
-require('./Helpers/discord.js')
+// const { start, sendMessage } = require('./Helpers/discord.js')
+// require('./Helpers/discord.js')
 
 initEvents = () => {
   io.attach(http, {
@@ -41,7 +41,7 @@ initEvents = () => {
         players.push(socket)
         socket.emit('loginSucceeded', {username, token})
         console.log(`${socket.username} logged in`)
-        sendMessage(`✅ ${socket.username}`)
+        // sendMessage(`✅ ${socket.username}`)
       }
       if(players.indexOf(socket) != -1) return
       user.login(data).then(e => {
@@ -50,7 +50,7 @@ initEvents = () => {
           players.push(socket)
           socket.emit('loginSucceeded', {username:socket.username, token:socket.token})
           console.log(`${socket.username} logged in`)
-          sendMessage(`✅ ${socket.username}`)
+          // sendMessage(`✅ ${socket.username}`)
         }
         else socket.emit('loginFailed', e)
       })
@@ -71,7 +71,7 @@ initEvents = () => {
           socket.emit('registerSucceeded', returnData)
           console.log(`${socket.username} registered`)
           //user gotta verifiy first and when done verifying, reload page to play! :D
-          sendMessage(`✅ ${socket.username}`)
+          // sendMessage(`✅ ${socket.username}`)
         }
         else socket.emit('registerFailed', e)
       })
@@ -91,7 +91,7 @@ initEvents = () => {
         if(index > -1){
           players.splice(players.indexOf(socket), 1)
           console.log(`${socket.username} logged off`)
-          sendMessage(`❌ ${socket.username}`)
+          // sendMessage(`❌ ${socket.username}`)
         }
     })
   })
@@ -108,8 +108,8 @@ setInterval(() => {
 http.listen(`${process.env.PORT || 3000}`, async () => {
   try{
     if(!process.env.PORT){
-      await start()
-      await sendMessage(`✅ server online`)
+      // await start()
+      // await sendMessage(`✅ server online`)
       initEvents()
       console.log(`listening on http://localhost:3000`)
     }
@@ -123,7 +123,7 @@ http.listen(`${process.env.PORT || 3000}`, async () => {
 })
 
 quit = async () => {
-  await sendMessage(`❌ server offline`)
+  // await sendMessage(`❌ server offline`)
   sql.disconnect()
   http.close()
   //io.close()
@@ -131,5 +131,5 @@ quit = async () => {
 }
 
 process.on('SIGINT', async () => {
-  await quit() 
+  await quit()
 })

@@ -16,7 +16,8 @@ module.exports.Proxy = class{
         this.#port = port
         this.#proxyServers = addresses.map(function (target) {
             return new httpProxy.createProxyServer({
-                target: target
+                target: target,
+                ws: true
             })
         })
     }
@@ -28,6 +29,8 @@ module.exports.Proxy = class{
                 proxy.web(req, res)
                 this.#proxyServers.push(proxy)
             }).listen(this.#port, () => {
+                console.log("Proxy is running")
+                console.log(`Listening on http://localhost:${this.#port}`)
                 return resolve(true)
             })
         })

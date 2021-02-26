@@ -5,9 +5,8 @@ use PHPMailer\PHPMailer\Exception;
 use PHPMailer\PHPMailer\SMTP;
 
 require "../env.php";
-require '../PHPMailer/src/Exception.php';
-require '../PHPMailer/src/PHPMailer.php';
-require '../PHPMailer/src/SMTP.php';
+require '../../vendor/autoload.php';
+
 
 function sendVerificationMail($receiver, $person, $veritoken)
 {
@@ -17,8 +16,8 @@ function sendVerificationMail($receiver, $person, $veritoken)
         $mail->isSMTP();
         $mail->Host = 'smtp.gmail.com';
         $mail->SMTPAuth = true;
-        $mail->Username = getenv("MYSQLUSERNAME");
-        $mail->Password = getenv("MYSQLPASSWORD");
+        $mail->Username = getenv("GMAILUSERNAME");
+        $mail->Password = getenv("GMAILPASSWORD");
         $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
         $mail->Port = 587;
 

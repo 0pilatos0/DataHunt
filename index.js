@@ -30,27 +30,52 @@ initEvents = () => {
     console.log("\x1b[32m", `+${socket.id}`)
   
     socket.on('login', async (data) => {
-      if(data.token){
-        if(!data.rememberMe) return socket.emit('logout')
-        let token = generateRandomToken()
+      console.log('login attempt started')
+      console.log(data);
+      // If a token already exists.
+      if(data.token) {
+        if(!data.rememberMe) {
+          console.log('emitting logout for no remember token');
+          return socket.emit('logout')
+        }
+
+        // Get the username by previously known token.
         let username = await getUsernameByLoginToken(data.token)
-        if(!username) return socket.emit('logout')
+        // Create a new token.
+        let token = generateRandomToken()
+
+        // If we cannot find the username, logout the user.
+        if(!username) {
+          console.log('returning logout for not having username')
+          return socket.emit('logout')
+        }
+
+        // Delete the old login token if present.
         deleteLoginToken(username, data.token)
         addLoginToken(username, token)
+
+        // Set the username in the socket so the socket knows who we are
         socket.username = username
+
         players.push(socket)
         socket.emit('loginSucceeded', {username, token})
-        console.log(`${socket.username} logged in`)
-        // sendMessage(`✅ ${socket.username}`)
       }
-      if(players.indexOf(socket) != -1) return
+
+      // If an active player session already exists.
+      if(players.indexOf(socket) !== -1) {
+        console.log('returning because socket of player already exists')
+        return
+      }
+
+      // If no token exists we create a new user.
       user.login(data).then(e => {
-        if(e == true){
+        console.log('no token or previous session existed create new user session')
+        if(e === true){
+          console.log(data)
           socket.username = data.username
           players.push(socket)
+          console.log('login is successfull')
           socket.emit('loginSucceeded', {username:socket.username, token:socket.token})
-          console.log(`${socket.username} logged in`)
-          // sendMessage(`✅ ${socket.username}`)
         }
         else socket.emit('loginFailed', e)
       })
@@ -69,7 +94,6 @@ initEvents = () => {
           returnData.username = socket.username
           players.push(socket)
           socket.emit('registerSucceeded', returnData)
-          console.log(`${socket.username} registered`)
           //user gotta verifiy first and when done verifying, reload page to play! :D
           // sendMessage(`✅ ${socket.username}`)
         }
@@ -78,7 +102,11 @@ initEvents = () => {
     })
   
     socket.on('logout', (data) => {
-      console.log(data)
+      let token = getLoginTokenByUsername(socket.username)
+      console.log(token)
+      deleteLoginToken(socket.username, token)
+
+      socket.emit('logoutSucceeded')
     })
     
     socket.on('autosave', (data) => {

@@ -106,3 +106,8 @@ dist
 .idea/
 
 Website/env.php
+
+composer.phar
+/vendor/
+
+.htaccess

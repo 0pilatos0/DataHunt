@@ -12,6 +12,9 @@ module.exports.Proxy = class{
     #port
     #proxyServers
 
+    /**
+     Create new proxy for redirecting clients to different servers
+    **/
     constructor(port){
         this.#port = port
         this.#proxyServers = addresses.map(function (target) {
@@ -22,6 +25,10 @@ module.exports.Proxy = class{
         })
     }
 
+    /**
+     Start the proxy
+     await it for synchronous 
+    **/
     start(){
         return new Promise((resolve, reject) => {
             http.createServer((req, res) => {

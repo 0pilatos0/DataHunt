@@ -23,12 +23,19 @@ module.exports.Server = class {
     #io
     #port
 
+    /**
+     Create new all threads taking server
+    **/
     constructor(port){
         this.#http = new http.createServer()
         this.#io = io()
         this.#port = port
     }
 
+    /**
+     Start the server
+     await it for synchronous 
+    **/
     async start(){
         return new Promise((resolve, reject) => {
             if(cluster.isMaster){
@@ -75,22 +82,18 @@ module.exports.Server = class {
                 })
             }
         })
-        
-        // this.#http.listen(`${this.#port}`, async () => {
-        //     this.#io.attach(this.#http, ioConfig)
-        //     this.#io.adapter(redisAdapter(redisConfig))
-        //     console.log(`Listening on http://localhost:${this.#port}`)
-        // })
-
-        // this.#io.on('connection', async (socket) => {
-        //     console.log(socket.id)
-        // })
     }
 
+    /**
+     get player count on the server only
+    **/
     get playerCount(){
         return this.#io.sockets.sockets.size
     }
 
+    /**
+     get all rooms from all servers
+    **/
     get rooms(){
         return new Promise(async (resolve, reject) => {
             let rooms = await this.#io.sockets.adapter.allRooms()
@@ -98,6 +101,9 @@ module.exports.Server = class {
         })
     }
 
+    /**
+     get player count from all the servers
+    **/
     get globalPlayerCount(){
         return new Promise(async (resolve, reject) => {
             let rooms = await this.#io.sockets.adapter.allRooms()
@@ -106,6 +112,10 @@ module.exports.Server = class {
         })
     }
 
+    /**
+     get player count based on room
+     @param {String} room name of room
+    **/
     playerCountByRoom(room){
         return new Promise(async (resolve, reject) => {
             let sockets = await this.#io.sockets.adapter.sockets(new Set([room]))

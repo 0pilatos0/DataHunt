@@ -4,6 +4,9 @@ require('dotenv').config()
 module.exports.SQL = class {
     #con
 
+    /**
+     SQL database connector
+    **/
     constructor(){
         this.#con = sql.createConnection({
             host: process.env.MYSQLHOST,
@@ -17,6 +20,10 @@ module.exports.SQL = class {
         return this.#con
     }
 
+    /**
+     Connect to database
+     await it for synchronous 
+    **/
     connect(){
         return new Promise((resolve, reject) => {
             this.#con.connect((err) => {
@@ -27,11 +34,19 @@ module.exports.SQL = class {
         })
     }
 
+    /**
+     Disconnect from database
+    **/
     disconnect(){
         this.#con.end()
         return true
     }
 
+    /**
+     Execute a query to the database
+     await it for synchronous
+     returns only the item if it has 1 entry, false if it has nothing and the whole array if it has more than 1 entry
+    **/
     query(query){
         return new Promise((resolve, reject) => {
             this.#con.query(query, (err, result, fields) => {

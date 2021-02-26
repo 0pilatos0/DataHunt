@@ -31,7 +31,6 @@ initEvents = () => {
   
     socket.on('login', async (data) => {
       console.log('login attempt started')
-      console.log(data);
       // If a token already exists.
       if(data.token) {
         if(!data.rememberMe) {
@@ -70,8 +69,7 @@ initEvents = () => {
       // If no token exists we create a new user.
       user.login(data).then(e => {
         console.log('no token or previous session existed create new user session')
-        if(e === true){
-          console.log(data)
+        if (e === true) {
           socket.username = data.username
           players.push(socket)
           console.log('login is successfull')

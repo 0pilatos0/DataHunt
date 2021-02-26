@@ -1,4 +1,4 @@
-<h1>REGISTER</h1>
+p<h1>REGISTER</h1>
 <form method="post">
     <p>Your irl name: </p>
     <input type="text" name="AccName"><br>
@@ -9,7 +9,7 @@
     <p>Your phone number: </p>
     <input type="text" name="AccPhone"><br>
     <p>Your password, make it strong: </p>
-    <input type="text" name="AccPassword"><br>
+    <input type="password" name="AccPassword"><br>
     <input type="submit">
 </form>
 <?php

@@ -1,0 +1,15 @@
+<?php
+
+$user = $_SESSION['user'];
+
+?>
+
+<h1>Welkom, <?php echo $user['username'] ?> </h1>
+
+<form method="post" action="?action=account" />
+
+</form>
+
+<a href="?action=logout">
+    Uitloggen
+</a>

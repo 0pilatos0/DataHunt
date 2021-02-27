@@ -17,11 +17,16 @@ const redisAdapter = require('socket.io-redis')
 const cluster = require('cluster')
 const numCPUs = require('os').cpus().length
 const { setupMaster, setupWorker } = require('@socket.io/sticky')
+const { DiscordBot } = require('./DiscordBot')
+const { SQL } = require('./SQL')
+const { login, register, disconnect } = require('../Handlers/HandleUser')
 
 module.exports.Server = class {
     #http
     #io
     #port
+    #bot
+    #sql
 
     /**
      Create new all threads taking server
@@ -30,16 +35,23 @@ module.exports.Server = class {
         this.#http = new http.createServer()
         this.#io = io()
         this.#port = port
+        this.#bot = new DiscordBot(process.env.token)
+        this.#sql = new SQL()
     }
 
     /**
      Start the server
      await it for synchronous 
     **/
-    async start(){
-        return new Promise((resolve, reject) => {
+    start(){
+        return new Promise(async (resolve, reject) => {
             if(cluster.isMaster){
                 let amountOfWorkersStarted = 0
+                await this.#bot.start()
+                await this.#sql.connect()
+                setInterval(() => {
+                    this.#sql.query("DELETE FROM logintokens WHERE creationdate < NOW() - INTERVAL 30 DAY")
+                }, 1000 * 60 * 60 * 24)
                 console.log(`Master ${process.pid} is running`)
     
                 setupMaster(this.#http, {
@@ -51,10 +63,13 @@ module.exports.Server = class {
     
                 for (let i = 0; i < numCPUs; i++) {
                     let worker = cluster.fork()
-                    worker.on('message', (data) => {
+                    worker.on('message', async (data) => {
                         if(data.msg == 'ready'){
                             amountOfWorkersStarted++
-                            if(amountOfWorkersStarted == numCPUs) resolve(true)
+                            if(amountOfWorkersStarted == numCPUs) {
+                                await this.#bot.sendMessage(`✅ server online`)
+                                resolve(true)
+                            }
                         } 
                     })
                 }
@@ -69,16 +84,32 @@ module.exports.Server = class {
                 })
             }
             else if(cluster.isWorker){
-                console.log(`Worker ${process.pid} started`)
-                process.send({msg:'ready'})
-    
                 this.#http = http.createServer()
                 this.#io.attach(this.#http, ioConfig)
                 this.#io.adapter(redisAdapter(redisConfig))
                 setupWorker(this.#io)
+
+                console.log(`Worker ${process.pid} started`)
+                process.send({msg:'ready'})
                 
+                let players = []
+
                 this.#io.on('connection', async (socket) => {
-                    console.log(socket.id)
+                    console.log("\x1b[32m", `+${socket.id}`)
+
+                    socket.on('login', async (data) => { login(data, socket, players, this.#bot, this.#sql) })
+
+                    socket.on('register', async (data) => { register(data, socket, players, this.#bot, this.#sql) })
+
+                    socket.on('logout', (data) => {
+
+                    })
+
+                    socket.on('autosave', (data) => {
+
+                    })
+
+                    socket.on('disconnect', () => { disconnect(socket, players, this.#bot) })
                 })
             }
         })
@@ -121,5 +152,10 @@ module.exports.Server = class {
             let sockets = await this.#io.sockets.adapter.sockets(new Set([room]))
             return resolve(sockets.size)
         })
+    }
+
+    async stop(){
+        await this.#bot.sendMessage(`❌ server offline`)
+        await this.#sql.disconnect()
     }
 }

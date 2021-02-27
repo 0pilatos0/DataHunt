@@ -51,10 +51,19 @@ module.exports.SQL = class {
         return new Promise((resolve, reject) => {
             this.#con.query(query, (err, result, fields) => {
                 if(err) throw err
+                if(query.includes("UPDATE") || query.includes("DELETE") || query.includes("INSERT")) return resolve(true)
                 if(result.length <= 0) return resolve(false)
                 if(result.length == 1) return resolve(result[0])
                 return resolve(result)
             })
         })
+    }
+
+    createSetString(data){
+        let setString = ""
+        for (let i = 0; i < Object.keys(data).length; i++) {
+            setString += `${Object.keys(data)[i]} = '${Object.values(data)[i]}'${i != Object.keys(data).length - 1 ? "," : ""}`
+        }
+        return setString
     }
 }

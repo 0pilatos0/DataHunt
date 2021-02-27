@@ -16,7 +16,7 @@ module.exports.Salter = class {
      Hashes the password from string and returns hashedpassword as string
      @param {String} password
     **/
-    static hasPassword(password){
+    static hashPassword(password){
         return bcrypt.hashSync(password, 12)
     }
 

@@ -25,8 +25,8 @@ module.exports.Server = class {
     #http
     #io
     #port
-    #bot
     #sql
+    #bot
 
     /**
      Create new all threads taking server
@@ -35,7 +35,7 @@ module.exports.Server = class {
         this.#http = new http.createServer()
         this.#io = io()
         this.#port = port
-        this.#bot = new DiscordBot(process.env.token)
+        this.#bot = new DiscordBot()
         this.#sql = new SQL()
     }
 
@@ -43,35 +43,40 @@ module.exports.Server = class {
      Start the server
      await it for synchronous 
     **/
-    start(){
+    async start(){
         return new Promise(async (resolve, reject) => {
             if(cluster.isMaster){
                 let amountOfWorkersStarted = 0
+                
                 await this.#bot.start()
                 await this.#sql.connect()
+
                 setInterval(() => {
                     this.#sql.query("DELETE FROM logintokens WHERE creationdate < NOW() - INTERVAL 30 DAY")
                 }, 1000 * 60 * 60 * 24)
+
                 console.log(`Master ${process.pid} is running`)
     
                 setupMaster(this.#http, {
                     loadBalancingMethod: "least-connection",
                 })
+                
                 this.#http.listen(this.#port, async () => {
                     console.log(`Listening on http://localhost:${this.#port}`)
                 })
     
                 for (let i = 0; i < numCPUs; i++) {
-                    let worker = cluster.fork()
+                    const worker = cluster.fork()
                     worker.on('message', async (data) => {
                         if(data.msg == 'ready'){
                             amountOfWorkersStarted++
                             if(amountOfWorkersStarted == numCPUs) {
-                                await this.#bot.sendMessage(`✅ server online`)
+                                await this.#bot.sendEmergencyMessage(`✅ server online`)
                                 resolve(true)
                             }
                         } 
                     })
+                    //worker.send({msg:'ready', data:{bot:this.#bot, sql:this.#sql}})
                 }
                 
                 process.on('message', (data) => {
@@ -80,10 +85,11 @@ module.exports.Server = class {
 
                 cluster.on('exit', (worker) => {
                     console.log(`Worker ${worker.process.pid} died`)
-                    cluster.fork()
                 })
             }
             else if(cluster.isWorker){
+                this.#bot.start()
+                await this.#sql.connect()
                 this.#http = http.createServer()
                 this.#io.attach(this.#http, ioConfig)
                 this.#io.adapter(redisAdapter(redisConfig))
@@ -91,6 +97,12 @@ module.exports.Server = class {
 
                 console.log(`Worker ${process.pid} started`)
                 process.send({msg:'ready'})
+
+                process.on('message', (msg) => {
+                    if(msg.msg == "ready"){
+                        
+                    }
+                })
                 
                 let players = []
 
@@ -155,7 +167,7 @@ module.exports.Server = class {
     }
 
     async stop(){
-        await this.#bot.sendMessage(`❌ server offline`)
+        if(cluster.isMaster) await this.#bot.sendEmergencyMessage(`❌ server offline`)
         await this.#sql.disconnect()
     }
 }

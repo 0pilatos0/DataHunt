@@ -7,9 +7,44 @@ $user = $_SESSION['user'];
 <h1>Welkom, <?php echo $user['username'] ?> </h1>
 
 <form method="post" action="?action=account" />
+    <label for="name">Naam</label>
+    <input type="text" name="name" id="name" value="<?php echo $user['name'] ?>">
+    <br />
 
+    <label for="username">Gebruikersnaam</label>
+    <input type="text" name="username" id="username" value="<?php echo $user['username'] ?>">
+    <br />
+
+    <label for="email">Email</label>
+    <input type="text" name="email" id="email" value="<?php echo $user['email'] ?>">
+    <br />
+
+    <label for="phone">Telefoon nummer</label>
+    <input type="text" name="phone" id="email" value="<?php echo $user['phone'] ?>">
+    <br />
+
+    <label for="password-new">Nieuw wachtwoord</label>
+    <input type="password" name="password-new" id="password-new" value="">
+    <br />
+
+    <label for="password-new-confirmation">Nieuw wachtwoord herhalen</label>
+    <input type="password" name="password-new-confirmation" id="password-new-confirmation" value="">
+    <br />
+
+    <label for="password-current">Huidig wachtwoord</label>
+    <input type="password" name="password-current" id="password-current" value="">
+    <br />
+
+    <button type="submit">Account gegevens bijwerken</button>
 </form>
 
+<br /><br />
 <a href="?action=logout">
     Uitloggen
+</a>
+
+<br /><br />
+
+<a href="?action=delete">
+    Verwijder je account
 </a>

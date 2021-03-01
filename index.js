@@ -1,6 +1,6 @@
 require('dotenv').config()
-const { Proxy } = require("./Classes/Proxy")
-const { Server } = require("./Classes/Server")
+const { Proxy } = require("./Server/Classes/Proxy")
+const { Server } = require("./Server/Classes/Server")
 
 const proxy = new Proxy(3000)
 const server = new Server(3001)

@@ -32,7 +32,7 @@ function ResetVerification($id)
         $stmt->execute();
         $dbh = null;
         echo "you are verified!";
-        header('Location: ../user');
+        header('Location: ../../index.php');
     } catch (PDOException $e) {
         print "Error!: " . $e->getMessage() . "<br/>";
         die();

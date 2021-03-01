@@ -111,3 +111,4 @@ composer.phar
 /vendor/
 
 .htaccess
+env.php

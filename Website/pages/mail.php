@@ -4,7 +4,7 @@ use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 use PHPMailer\PHPMailer\SMTP;
 
-require "../env.php";
+require "../../env.php";
 require '../../vendor/autoload.php';
 
 
@@ -21,7 +21,7 @@ function sendVerificationMail($receiver, $person, $veritoken)
         $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
         $mail->Port = 587;
 
-        $mail->setFrom('DatahuntRpg@gmail.com', 'Datahunt team');;
+        $mail->setFrom(getenv("GMAILUSERNAME"), 'Datahunt team');;
         $mail->addAddress($receiver, $person);
 
         $mail->isHTML(true);

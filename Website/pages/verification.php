@@ -1,6 +1,6 @@
 <h1>Please wait...</h1>
 <?php
-require "../env.php";
+require "../../env.php";
 
 $verificationtoken = $_GET["veri"];
 $id;

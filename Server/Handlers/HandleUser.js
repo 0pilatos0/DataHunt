@@ -1,6 +1,6 @@
 const { Mailer } = require("../Classes/Mailer")
 const { Salter } = require("../Classes/Salter")
-const { getLoginTokenByUsername, create, getUsernameByLoginToken, deleteLoginToken, addLoginToken, getByUsername, getVerifiedByUsername, getEnabledByUsername } = require("./HandleUserQueries.js")
+const { getVerifiedByToken, getEnabledByToken, create, getUsernameByLoginToken, deleteLoginToken, addLoginToken, getByUsername, getVerifiedByUsername, getEnabledByUsername } = require("./HandleUserQueries.js")
 
 const nameRegex = new RegExp(/^[a-z ,.'-]+$/i)
 const usernameRegex = new RegExp(/\w{5,29}/i)
@@ -13,6 +13,10 @@ module.exports.login = async (data, socket, players, bot, sql) => {
             if(!data.rememberMe) return socket.emit('logout')
             let username = await getUsernameByLoginToken(sql, data.token)
             if(!username) return socket.emit('logout')
+            let verified = await getVerifiedByToken(sql, data.token)
+            if(!verified) return socket.emit('loginFailed', "Your account hasn't been verified")
+            let enabled = await getEnabledByToken(sql, data.token)
+            if(!enabled) return socket.emit('loginFailed', "Your account is disabled")
             deleteLoginToken(sql, username, data.token)
             let token = Salter.generateRandomToken()
             addLoginToken(sql, username, token)
@@ -56,17 +60,49 @@ module.exports.register = async (data, socket, players, bot, sql) => {
         data.verifytoken = Salter.generateRandomToken()
         let createdUser = await create(sql, data)
         if(createdUser != true) return socket.emit('registerFailed', createdUser)
-        if(rememberMe) await addLoginToken(sql, data.username, Salter.generateRandomToken())
-        let sendMail = await Mailer.sendMail({to:data.email, subject:data.username, text:"That wasn't that hard, was it?"})
+        let token = Salter.generateRandomToken()
+        if(rememberMe) await addLoginToken(sql, data.username, token)
+        let url = `http://datahunt.duckdns.org/Website/pages/verification?veri=${data.verifytoken}`
+        let sendMail = await Mailer.sendMail({to:data.email, subject:'Verify email Datahunt', html:`
+            <style>
+                *{user-select: none;}
+                body{
+                    margin: 0;
+                    text-align: center;
+                }
+                #verify{
+                    color: black;
+                    text-decoration: none;
+                    border: 25px solid blue;
+                    background: blue;
+                }
+                #verify:hover{
+                    background: lightblue;
+                    border-color: lightblue;
+                }
+            </style>
+            <h2>Datahunt</h2>
+            <p>
+                Hi ${data.username},<br>
+                <br>
+                Thanks for joining us! :D <br>
+                You can verify your email using the button below or by copying the following link: ${url}<br>
+                <br><br>
+                <a id="verify" href="${url}">Verify email</a>
+            </p>
+            <script>
+            
+            </script>`
+        })
         if(sendMail != true) return socket.emit('registerFailed', 'Sending mail failed')
         let returnData = {}
-        if(rememberMe) await getLoginTokenByUsername(sql, data.username).then(t => {returnData.token = t})
+        if(rememberMe) returnData.token = token //await getLoginTokenByUsername(sql, data.username).then(t => {returnData.token = t})
         socket.username = data.username
         returnData.username = socket.username
-        players.push(socket)
+        //players.push(socket)
         socket.emit('registerSucceeded', returnData)
-        await bot.sendMessage(`✅ ${socket.username}`)
-        console.log(`${socket.username} registered`)
+        //await bot.sendMessage(`✅ ${socket.username}`)
+            console.log(`${socket.username} registered`)
         //user gotta verifiy first and when done verifying, reload page to play! :D
         
     //})

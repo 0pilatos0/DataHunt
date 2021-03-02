@@ -55,9 +55,13 @@ module.exports.deleteLoginToken = (sql, username, token) => {
     })
 }
 
-module.exports.getLoginTokenByUsername = (sql, username) => {
-    return new Promise(async (resolve, reject) => {
-        let result = await sql.query(`SELECT logintokens.token FROM users INNER JOIN logintokens ON users.id = logintokens.user_id WHERE users.username = '${username}'`)
-        return resolve(Object.keys(result).includes('token') ? result.token : false)
-    })
-}
+// module.exports.getLoginTokenByUsername = (sql, username) => {
+//     return new Promise(async (resolve, reject) => {
+//         let result = await sql.query(`SELECT logintokens.token FROM users INNER JOIN logintokens ON users.id = logintokens.user_id WHERE users.username = '${username}'`)
+//         return resolve(Object.keys(result).includes('token') ? result.token : false)
+//     })
+// }
+
+module.exports.getVerifiedByToken = (sql, token) => { return new Promise(async (resolve, reject) => { return resolve(await sql.query(`SELECT users.id FROM users INNER JOIN logintokens ON users.id = logintokens.user_id WHERE logintokens.token = '${token}' AND users.verified = '1'`)) }) }
+
+module.exports.getEnabledByToken = (sql, token) => { return new Promise(async (resolve, reject) => { return resolve(await sql.query(`SELECT users.id FROM users INNER JOIN logintokens ON users.id = logintokens.user_id WHERE logintokens.token = '${token}' AND users.enabled = '1'`)) }) }

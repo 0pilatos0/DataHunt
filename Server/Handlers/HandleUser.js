@@ -108,12 +108,16 @@ module.exports.register = async (data, socket, players, bot, sql) => {
     //})
 }
 
+module.exports.logout = async (socket,players, bot) => {
+    this.disconnect(socket, players, bot)
+}
+
 module.exports.disconnect = async (socket, players, bot) => {
     console.log("\x1b[31m", `-${socket.id}`)
     let index = players.indexOf(socket)
     if(index > -1){
         players.splice(players.indexOf(socket), 1)
-        console.log(`${socket.username} logged off`)
-        await bot.sendMessage(`❌ ${socket.username}`)
+        console.log(`${socket.username} disconnected`)
+        bot.sendMessage(`❌ ${socket.username}`)
     }
 }

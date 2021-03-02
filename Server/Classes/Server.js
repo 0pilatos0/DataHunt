@@ -19,7 +19,7 @@ const numCPUs = require('os').cpus().length
 const { setupMaster, setupWorker } = require('@socket.io/sticky')
 const { DiscordBot } = require('./DiscordBot')
 const { SQL } = require('./SQL')
-const { login, register, disconnect } = require('../Handlers/HandleUser')
+const { login, register, disconnect, logout } = require('../Handlers/HandleUser')
 
 module.exports.Server = class {
     #http
@@ -113,8 +113,8 @@ module.exports.Server = class {
 
                     socket.on('register', async (data) => { register(data, socket, players, this.#bot, this.#sql) })
 
-                    socket.on('logout', (data) => {
-
+                    socket.on('logout', async () => {
+                        logout(socket, players, this.#bot)
                     })
 
                     socket.on('autosave', (data) => {

@@ -26,7 +26,17 @@ function sendVerificationMail($receiver, $person, $veritoken)
 
         $mail->isHTML(true);
         $mail->Subject = 'Thanks for joining us';
-        $mail->Body = "We are happy to hear that you joined us. \n We hope you will enjoy your time spent on our game. \n Please verify your account by pressing the button below.<br> http://localhost/sites/DataHunt/Website/pages/verification.php/?veri=$veritoken";
+        $email_vars = array(
+            'token' => $veritoken
+            //hier kunnen meer email variables
+        );
+        $body = file_get_contents('htmlmail.html');
+
+        if(isset($email_vars)){
+            foreach($email_vars as $k=>$v){
+                $mail->Body = str_replace('{'.strtoupper($k).'}', $v, $body);
+            }
+        }
         $mail->AltBody = 'Our mails use HTML which this mail box doens\'t support';
 
         $mail->send();

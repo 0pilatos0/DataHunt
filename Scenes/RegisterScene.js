@@ -81,7 +81,8 @@ function init(instance){
     window.socket.on('registerSucceeded', (data) => {
         setDataCookie("token", data.token)
         setDataSocket("username", data.username)
-        window.scenes[1].visible = false
-        window.scenes[2].visible = true
+        location.reload()
+        // window.scenes[1].visible = false
+        // window.scenes[2].visible = true
     })
 }

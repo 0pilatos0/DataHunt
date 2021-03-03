@@ -26,7 +26,7 @@ function init(instance){
     let passwordInputField = new InputField(new Vector2(0, window.innerHeight / 2), new Vector2(250, 15))
     let verifyPasswordLabel = new Label(new Vector2(0, window.innerHeight / 2 + 50), new Vector2(250, 15), "VerifyPasswordRegisterLabel", "Verify Password:")
     let verifyPasswordInputField = new InputField(new Vector2(0, window.innerHeight / 2 + 100), new Vector2(250, 15))
-    let rememberMeCheckbox = new Button(new Vector2(0, window.innerHeight / 2 + 150), new Vector2(250, 30), "RememberMeButton", "Remember Me")
+    //let rememberMeCheckbox = new Button(new Vector2(0, window.innerHeight / 2 + 150), new Vector2(250, 30), "RememberMeButton", "Remember Me")
     let submitButton = new Button(new Vector2(0, window.innerHeight / 2 + 200), new Vector2(250, 30), "SubmitRegisterButton", "Register")
     let loginPageButton = new Button(new Vector2(300, window.innerHeight / 2 + 200), new Vector2(250, 30), "OpenLoginButton", "Login")
     nameLabel.centerX = true
@@ -43,22 +43,22 @@ function init(instance){
     loginPageButton.centerX = true
     verifyPasswordLabel.centerX = true
     verifyPasswordInputField.centerX = true
-    rememberMeCheckbox.centerX = true
+    //rememberMeCheckbox.centerX = true
     errorLabel.centerX = true
-    rememberMeCheckbox.element.style.backgroundColor = "red"
+    //rememberMeCheckbox.element.style.backgroundColor = "red"
     submitButton.element.onclick = () => {
         errorLabel.element.innerHTML = `Error:`
         //, phone:phoneInputField.element.value
-        window.socket.emit("register", {name:nameInputField.element.value, username:usernameInputField.element.value, email:emailInputField.element.value, password:passwordInputField.element.value, verificationPassword:verifyPasswordInputField.element.value, rememberMe:rememberMeCheckbox.element.style.backgroundColor == "green" ? true : false})
-        setDataCookie('rememberMe', rememberMeCheckbox.element.style.backgroundColor == "green" ? true : false)
+        window.socket.emit("register", {name:nameInputField.element.value, username:usernameInputField.element.value, email:emailInputField.element.value, password:passwordInputField.element.value, verificationPassword:verifyPasswordInputField.element.value})//, rememberMe:rememberMeCheckbox.element.style.backgroundColor == "green" ? true : false})
+        //setDataCookie('rememberMe', rememberMeCheckbox.element.style.backgroundColor == "green" ? true : false)
     }
     loginPageButton.element.onclick = () => {
         window.scenes[1].visible = false
         window.scenes[0].visible = true
     }
-    rememberMeCheckbox.element.onclick = () => {
-        rememberMeCheckbox.element.style.backgroundColor = rememberMeCheckbox.element.style.backgroundColor == "green" ? "red" : "green" 
-    }
+    // rememberMeCheckbox.element.onclick = () => {
+    //     rememberMeCheckbox.element.style.backgroundColor = rememberMeCheckbox.element.style.backgroundColor == "green" ? "red" : "green" 
+    // }
     instance.addElement(nameLabel)
     instance.addElement(nameInputField)
     instance.addElement(usernameLabel)
@@ -74,7 +74,7 @@ function init(instance){
     instance.addElement(verifyPasswordLabel)
     instance.addElement(verifyPasswordInputField)
     instance.addElement(errorLabel)
-    instance.addElement(rememberMeCheckbox)
+    //instance.addElement(rememberMeCheckbox)
     window.socket.on('registerFailed', (data) => {
         errorLabel.element.innerHTML = `Error: ${data}`
     })

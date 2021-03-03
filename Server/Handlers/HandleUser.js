@@ -53,15 +53,15 @@ module.exports.register = async (data, socket, players, bot, sql) => {
         if(!emailRegex.exec(data.email)) return socket.emit('registerFailed', "Email does not match regex")
         if(!passwordRegex.exec(data.password)) return socket.emit('registerFailed', "Password does not match regex")
         if(data.password != data.verificationPassword) return socket.emit('registerFailed', "Passwords doesn't match")
-        let rememberMe = data.rememberMe
-        delete data.rememberMe
+        //let rememberMe = data.rememberMe
+        //delete data.rememberMe
         delete data.verificationPassword
         data.password = Salter.hashPassword(data.password)
         data.verifytoken = Salter.generateRandomToken()
         let createdUser = await create(sql, data)
         if(createdUser != true) return socket.emit('registerFailed', createdUser)
         let token = Salter.generateRandomToken()
-        if(rememberMe) await addLoginToken(sql, data.username, token)
+        //if(rememberMe) await addLoginToken(sql, data.username, token)
         let url = `http://datahunt.duckdns.org/Website/pages/verification?veri=${data.verifytoken}`
         let sendMail = await Mailer.sendMail({to:data.email, subject:'Verify email Datahunt', html:`
             <style>
@@ -95,14 +95,13 @@ module.exports.register = async (data, socket, players, bot, sql) => {
             </script>`
         })
         if(sendMail != true) return socket.emit('registerFailed', 'Sending mail failed')
-        let returnData = {}
-        if(rememberMe) returnData.token = token //await getLoginTokenByUsername(sql, data.username).then(t => {returnData.token = t})
+        //let returnData = {}
+        //if(rememberMe) returnData.token = token //await getLoginTokenByUsername(sql, data.username).then(t => {returnData.token = t})
         socket.username = data.username
-        returnData.username = socket.username
         //players.push(socket)
-        socket.emit('registerSucceeded', returnData)
+        socket.emit('registerSucceeded', {username:socket.username})
         //await bot.sendMessage(`✅ ${socket.username}`)
-            console.log(`${socket.username} registered`)
+        console.log(`${socket.username} registered`)
         //user gotta verifiy first and when done verifying, reload page to play! :D
         
     //})

@@ -6,14 +6,14 @@ export class Rectangle extends BaseShape{
      * @param {Vector2} size
      * @param {String} color
      */
-    constructor(width, height, color){
-        super(width, height, color)
+    constructor(position, size, color){
+        super(position, size, color)
     }
 
     render(ctx){
         let color = ctx.fillStyle
         ctx.fillStyle = this.color
-        ctx.fillRect(this.position.x, this.position.y, this.size.x, this.size.y)
+        ctx.fillRect(0, 0, this.size.x, this.size.y)
         ctx.fillStyle = color
     }
 }

@@ -46,6 +46,9 @@ class AudioPlayer {
             this.isPlaying = false;
         }
     }
+    restart() {
+        this.audio.currentTime = 0
+    }
     audioUP() {
         if (this.audio.volume != 1) {
             this.audio.volume += 0.1;
@@ -62,6 +65,7 @@ class AudioPlayer {
     Setaudiolevel(audiolevel) {
         this.audio.volume = audiolevel;
     }
+
 }
 
 (function () {

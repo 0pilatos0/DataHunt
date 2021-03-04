@@ -6,12 +6,23 @@ class AudioPlayer {
         this.audio.volume = 1;
         this.loop = false;
         this.isPlaying = false;
+        this.logging = false
     }
 
     setSource(source) {
         this.audio.src = source;
     }
+    enablelogging(bool) {
+        console.log(bool)
+        if (bool == true) {
+            this.logging = true;
+            console.log("Debugging enabled")
+        } else {
+            this.logging = false;
+            console.log("Debugging disabled")
+        }
 
+    }
     toggleLoop() {
         if (this.audio.loop) {
             this.audio.loop = false;
@@ -33,7 +44,7 @@ class AudioPlayer {
                     this.audio.play();
                     this.isPlaying = true;
                 } else {
-                    console.log('is playing');
+                    console.log('is already playing');
                 }
             } else {
                 console.log('no source. Use setSource() method.')
@@ -55,23 +66,35 @@ class AudioPlayer {
         } else {
             this.audio.muted = true
         }
+        this.Log("muted");
 
     }
     audioUP() {
         if (this.audio.volume != 1) {
             this.audio.volume += 0.1;
-            console.log(this.audio.volume);
+            this.Log("audio");
         }
 
     }
     audioDown() {
         if (this.audio.volume >= 0.1) {
             this.audio.volume -= 0.1;
-            console.log(this.audio.volume);
+            this.Log("audio");
         }
     }
     Setaudiolevel(audiolevel) {
         this.audio.volume = audiolevel;
+        this.Log("audio");
+    }
+    Log(debug) {
+        if (this.logging == true) {
+            if (debug == "audio") {
+                console.log("volume = " + this.audio.volume.toFixed(1));
+            } else if (debug == "muted") {
+                console.log("Muted  = " + this.audio.muted)
+            }
+        }
+
     }
 
 }

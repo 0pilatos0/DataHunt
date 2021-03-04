@@ -9,15 +9,23 @@
 </head>
 
 <body>
-    <button id="play">Play</button>
-    <button id="pause">Pause</button>
-    <button id="Restart">restart</button>
-    <button id="Mute">Mute</button>
-    <button id="up">audio Up</button>
-    <button id="down">audio Down</button>
-    <button id="een">audio op 1</button>
-    <button id="twee">audio op 0.5</button>
-    <button id="drie">audio op 0</button>
+    <H1>Demo Voor de Audio Class</H1>
+    <div class="buttons">
+        <button id="play">Play</button>
+        <button id="pause">Pause</button>
+        <button id="Restart">restart</button>
+        <button id="Mute">Mute</button>
+        <button id="up">audio Up</button>
+        <button id="down">audio Down</button>
+        <button id="een">audio op 1</button>
+        <button id="twee">audio op 0.5</button>
+        <button id="drie">audio op 0</button>
+        <button id="on">Debug on</button>
+        <button id="off">Debug off</button>
+
+    </div>
+
+    <img src="https://thumbs.gfycat.com/AcrobaticClearGoldfish-size_restricted.gif" alt="">
     <script>
         audioPlayer.setSource("./BackgroundMusic.mp3");
         var qs = function (selector) {
@@ -50,6 +58,12 @@
         }
         qs('#drie').onclick = function () {
             audioPlayer.Setaudiolevel(0);
+        }
+        qs('#on').onclick = function () {
+            audioPlayer.enablelogging(true);
+        }
+        qs('#off').onclick = function () {
+            audioPlayer.enablelogging(false);
         }
     </script>
 </body>

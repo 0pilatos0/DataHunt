@@ -49,6 +49,14 @@ class AudioPlayer {
     restart() {
         this.audio.currentTime = 0
     }
+    mute() {
+        if (this.audio.muted) {
+            this.audio.muted = false;
+        } else {
+            this.audio.muted = true
+        }
+
+    }
     audioUP() {
         if (this.audio.volume != 1) {
             this.audio.volume += 0.1;

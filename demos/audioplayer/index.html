@@ -12,6 +12,7 @@
     <button id="play">Play</button>
     <button id="pause">Pause</button>
     <button id="Restart">restart</button>
+    <button id="Mute">Mute</button>
     <button id="up">audio Up</button>
     <button id="down">audio Down</button>
     <button id="een">audio op 1</button>
@@ -31,6 +32,9 @@
         }
         qs('#Restart').onclick = function () {
             audioPlayer.restart();
+        }
+        qs('#Mute').onclick = function () {
+            audioPlayer.mute();
         }
         qs('#up').onclick = function () {
             audioPlayer.audioUP();

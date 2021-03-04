@@ -59,6 +59,9 @@ class AudioPlayer {
             console.log(this.audio.volume);
         }
     }
+    Setaudiolevel(audiolevel) {
+        this.audio.volume = audiolevel;
+    }
 }
 
 (function () {

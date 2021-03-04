@@ -13,6 +13,9 @@
     <button id="pause">Pause</button>
     <button id="up">audio Up</button>
     <button id="down">audio Down</button>
+    <button id="een">audio op 1</button>
+    <button id="twee">audio op 0.5</button>
+    <button id="drie">audio op 0</button>
     <script>
         audioPlayer.setSource("./BackgroundMusic.mp3");
         var qs = function (selector) {
@@ -30,6 +33,15 @@
         }
         qs('#down').onclick = function () {
             audioPlayer.audioDown();
+        }
+        qs('#een').onclick = function () {
+            audioPlayer.Setaudiolevel(1);
+        }
+        qs('#twee').onclick = function () {
+            audioPlayer.Setaudiolevel(0.5);
+        }
+        qs('#drie').onclick = function () {
+            audioPlayer.Setaudiolevel(0);
         }
     </script>
 </body>

@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>AudioPlayer demo</title>
+    <script src="../../Engine/Core/audio-player.js"></script>
+
+</head>
+
+<body>
+    <button id="play">Play</button>
+    <button id="pause">Pause</button>
+    <button id="up">audio Up</button>
+    <button id="down">audio Down</button>
+    <script>
+        audioPlayer.setSource("./BackgroundMusic.mp3");
+        var qs = function (selector) {
+            return document.querySelector(selector);
+        };
+
+        qs('#play').onclick = function () {
+            audioPlayer.play();
+        }
+        qs('#pause').onclick = function () {
+            audioPlayer.pause();
+        }
+        qs('#up').onclick = function () {
+            audioPlayer.audioUP();
+        }
+        qs('#down').onclick = function () {
+            audioPlayer.audioDown();
+        }
+    </script>
+</body>
+
+</html>

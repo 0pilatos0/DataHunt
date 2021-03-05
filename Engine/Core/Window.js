@@ -8,24 +8,17 @@ export class Window{
     #canvas
     #ctx
     #elements = []
-    #fps = 0
     #bounds
     #map
     #x
     #y
 
-    //{
-    // renderPos: new Vector2(16, 16),
-    // pos: new Vector2(0, 0),
-    // size: new Vector2(window.spriteSize, window.spriteSize)
-    // bounds: 
-    //}
-    
     constructor(){
         this.#canvas = document.createElement('canvas')
         this.#ctx = this.#canvas.getContext('2d')
         window.windows.push(this)
         this.#map = new Map('testmap.json')
+        this.playerPos = new Vector2(0, 0)
     }
 
     init(){
@@ -43,38 +36,43 @@ export class Window{
                 this.#resize()
             }
             setInterval(() => {
-                console.log(this.#fps)
-                this.#fps = 0
-                this.#x += 100
-                this.#y += 100
-                this.#elements[0].position = new Vector2(this.#x, this.#y)
-            }, 1000)
+                this.playerPos.x += 0.2
+                this.playerPos.y += 0.2
+                this.#elements[0].position = this.playerPos
+            }, 100)
             return resolve(true)
         })
     }
 
     update(){
+        this.#map.update(this.playerPos)
         for (let i = 0; i < this.#elements.length; i++) {
             this.#elements[i].update()
         }
     }
 
     render(){
-        //this.#ctx.clearRect(0, 0, window.innerWidth, window.innerHeight)
+        this.#ctx.clearRect(-window.innerWidth, -window.innerHeight, window.innerWidth * 2, window.innerHeight * 2)
 
-        this.#map.render(this.#elements[0].position)
+        this.#map.render(this.#ctx)
 
         for (let i = 0; i < this.#elements.length; i++) {
-            //this.#elements[i].render(this.#ctx)
+            this.#elements[i].render(this.#ctx)
         }
-        this.#fps++
     }
 
     #resize = () => {
-        let scaleFitNative = Math.min(window.innerWidth / 1920, window.innerHeight / 1080)//, 
+        
 
         this.#canvas.width = window.innerWidth
         this.#canvas.height = window.innerHeight
+
+        
+
+        let scaleFitNative = Math.min(window.innerWidth / 1920, window.innerHeight / 1080) 
+
+        window.deviceDisplayWidth = window.innerWidth/scaleFitNative
+        window.deviceDisplayHeight = window.innerHeight/scaleFitNative 
 
         this.#ctx.setTransform(scaleFitNative, 0, 0, scaleFitNative, Math.floor(window.innerWidth/2), Math.floor(window.innerHeight/2))
         
@@ -82,10 +80,12 @@ export class Window{
 
         this.#bounds = this.#recreateBounds()
 
-        this.#map.resize()
+        //this.#map.resize()
 
-        //deviceDisplayWidth = window.innerWidth/scaleFitNative, 
-        //deviceDisplayHeight = window.innerHeight/scaleFitNative 
+       
+        
+
+        
         //window.maxTilesX = Math.ceil(deviceDisplayWidth/window.spriteSize)+2
         //window.maxTilesY = Math.ceil(deviceDisplayHeight/window.spriteSize)+2
     }

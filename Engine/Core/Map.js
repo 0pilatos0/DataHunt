@@ -4,15 +4,9 @@ export class Map{
     #map
     #tilesets = []
     #tiles = [null]
-    #tileWidth
-    #tileHeight
     #customMap
-    //#scale = 3
     #canvasses = []
-    #lowestX = 0
-    #highestX = 0
-    #lowestY = 0
-    #highestY = 0
+    #mapAreaToDraw = []
 
     constructor(path){
         let xhr = new XMLHttpRequest()
@@ -45,8 +39,6 @@ export class Map{
     }
 
     #seperateTiles = async() => {
-        this.#tileWidth = this.#map.tilewidth
-        this.#tileHeight = this.#map.tileheight
         for (let i = 0; i < this.#tilesets.length; i++) {
             let tileColumns = this.#tilesets[i].width / this.#map.tilewidth
             let tileRows = this.#tilesets[i].height / this.#map.tileheight
@@ -80,14 +72,14 @@ export class Map{
         for (let i = 0; i < this.#canvasses.length; i++) {
             document.body.removeChild(this.#canvasses[i].canvas)
         }
-        this.#canvasses = []
+        //this.#canvasses = []
         for (let i = 0; i < this.#map.layers.length; i++) {
             if(this.#map.layers[i].type !== 'tilelayer') return
             //console.log(this.#map)
-            let canvas = document.createElement('canvas')
-            this.#canvasses.push({canvas:canvas,ctx:canvas.getContext('2d')})
-            canvas.style.position = "absolute"
-            document.body.appendChild(canvas)
+            // let canvas = document.createElement('canvas')
+            // this.#canvasses.push({canvas:canvas,ctx:canvas.getContext('2d')})
+            // canvas.style.position = "absolute"
+            // document.body.appendChild(canvas)
             //x = 0
             //y = 0
             tMap.push({layer:this.#map.layers[i].type, tiles:new Array})
@@ -132,141 +124,47 @@ export class Map{
         }
         
         this.#customMap = tMap
-        console.log(this.#customMap)
         this.resize()
-        this.initRender()
+        //this.initRender()
     }
 
-    render(playerPos){
+    render(ctx){
+        if(this.#mapAreaToDraw.length > 0)
+     
+        for (let i = 0; i < this.#mapAreaToDraw.length; i++) {
+            for (let y = 0; y < this.#mapAreaToDraw[i].length; y++) {
+                for (let x = 0; x < this.#mapAreaToDraw[i][y].length; x++) {
+                    ctx.drawImage(this.#mapAreaToDraw[i][y][x], x * window.spriteSize - Math.round(window.deviceDisplayWidth / 2), y * window.spriteSize - Math.round(window.deviceDisplayHeight / 2), window.spriteSize, window.spriteSize)
+                }
+            }
+        }
+    }
+
+    update(playerPos){
         if(!this.#customMap) return
-        //let posX = Math.floor(1200 / 2 / this.#tileWidth) * this.#tileWidth
-        //let posY = Math.floor(1600 / 2 / this.#tileHeight) * this.#tileHeight
-
-         
-        // let amount = 0
-        // let pPosX = 32
-        // let pPosY = 32
-        // for (let i = 0; i < this.#customMap.length; i++) {//this.#customMap.length
-        //     this.#canvasses[i].ctx.clearRect(-window.innerWidth / 2, -window.innerHeight / 2, window.innerWidth, window.innerHeight)
-        //     for (let j = 0; j < this.#customMap[i].tiles.length; j++) {
-        //         let tileX = this.#customMap[i].tiles[j].pos.x
-        //         let tileY = this.#customMap[i].tiles[j].pos.y
-        //         //console.log(-(window.innerWidth / 2))
-        //         //console.log(-(window.innerHeight / 2))
-        //         //console.log(`${tileX} ${tileY}`)
-        //         if(tileX - pPosX >= 0 && 
-        //         tileX < window.innerWidth + pPosX && 
-        //         tileY - pPosY >= 0 && 
-        //         tileY < window.innerHeight + pPosY){
-        //             this.#canvasses[i].ctx.drawImage(this.#customMap[i].tiles[j].tile, (tileX - window.innerWidth / 2) * window.spriteSize, (tileY - window.innerHeight / 2) * window.spriteSize)//, this.#tileWidth, this.#tileHeight)//, this.#tileWidth, this.#tileHeight
-        //             //this.#canvasses[i].ctx.fillText(amount, (this.#customMap[i].tiles[j].pos.x - posX) * this.#scale, (this.#customMap[i].tiles[j].pos.y - posY) * this.#scale)
-        //             amount++
-        //         }
-        //     }
-        // }
-        // console.log(amount)
-
-        let amount = 0
-
-        let tilesX = Math.ceil(window.deviceDisplayWidth / 96 + 3)
-        let tilesY = Math.ceil(window.deviceDisplayHeight / 96 + 3)
-
+        let tilesX = Math.ceil(window.deviceDisplayWidth / window.spriteSize)
+        let tilesY = Math.ceil(window.deviceDisplayHeight / window.spriteSize)
         for (let i = 0; i < this.#customMap.length; i++) {
-            this.#canvasses[i].ctx.clearRect(-(tilesX * 96 / 2), -(tilesY * 96 / 2), tilesX * 96, tilesY * 96)
-            //math.ceil amount of viewable x and y pieces and than draw based on player pos which map pieces to draw
-            
-            for (let y = 0; y < this.#customMap[i].tiles.length; y++) {
-                // let mapY = y + Math.floor(playerPos.y / 96)
-                // let posY = y * 96 - playerPos.y // + 1// + (playerPos.y - Math.trunc(playerPos.y)) / 96
-                for (let x = 0; x < this.#customMap[i].tiles[y].length; x++) {
-                    // let mapX = x + Math.floor(playerPos.x / 96)
-                    // let posX = x * 96 - playerPos.x // - Math.floor(playerPos.x / 96)// + (playerPos.x - Math.trunc(playerPos.x)) / 96
-                    // //console.log(`${mapX} ${mapY}`)
-                    
-                    // //console.log(this.#customMap[i].tiles[mapY][mapX])
-                    
-                    // //console.log(`${mapX} ${mapY}`)
-                    
-                    
-                    // // if(mapY < 0) return //mapY = 0
-                    // // if(mapX < 0) return //mapX = 0
-                    // // if(mapX >= this.#customMap[i].tiles[mapY][mapX].length) return
-                    // // if(mapY >= this.#customMap[i].tiles[mapY].length) return
-                    
-                    // // && mapX < this.#customMap[i].tiles[mapY][mapX].length && mapY < this.#customMap[i].tiles[mapY].length
-                    // if(mapY >= 0 && mapX >= 0){
-                    //     //console.log(`${mapX} ${mapY}`)
-                    //     amount++
-                    //     
-                    // }
-                    //this.#canvasses[i].ctx.drawImage(this.#customMap[i].tiles[y][x] || new Image(), x * 96, y * 96, 96, 96)
-                }
-            }
-
-
-            // for (let y = 0; y < this.#customMap[i].tiles.length; y++) {
-            //     for (let x = 0; x < this.#customMap[i].tiles[y].length; x++) {
-            //         if(this.#customMap[i].tiles[y][x]){
-            //             let tX = 96 * x
-            //             let tY = 96 * y
-            //             let tPosX = Math.floor(playerPos.x / 96) * 96
-            //             let tPosY = Math.floor(playerPos.y / 96) * 96 
-            //             if(tX - tPosX >= 0 && 
-            //                 tX - tPosX < window.innerWidth &&
-            //                 tY - tPosY >= 0 &&
-            //                 tY - tPosY < window.innerHeight){
-            //                     amount++
-            //                     if(i == 0){
-            //                         //this.#lowestX > x || this.#lowestX == 0 ? this.#lowestX = x : false
-            //                         this.#highestX < x ? this.#highestX = x : false
-            //                         //this.#lowestY > y || this.#lowestY == 0 ? this.#lowestY = y : false
-            //                         this.#highestY < y ? this.#highestY = y : false
-            //                     }
-            //                     this.#canvasses[i].ctx.drawImage(this.#customMap[i].tiles[y][x], tX - tPosX, tY - tPosY, 96, 96)
-            //                 }
-            //         }
-                        
-            //     }
-            //     //resize drawed canvas too?
-            // }
-        }
-        //console.log(amount)
-        //console.log(this.#highestX - Math.floor(window.innerWidth / 96))
-        //console.log(this.#highestX)
-        
-        //console.log(this.#highestY - Math.floor(window.innerHeight / 96))
-        //console.log(this.#highestY)
-    }
-
-    initRender(){
-        for (let i = 0; i < this.#customMap.length; i++) {
-            this.#canvasses[i].canvas.width = this.#customMap[i].tiles[0].length * 96
-            this.#canvasses[i].canvas.height = this.#customMap[i].tiles.length * 96
-            for (let y = 0; y < this.#customMap[i].tiles.length; y++) {
-                for (let x = 0; x < this.#customMap[i].tiles[y].length; x++) {
-                    this.#canvasses[i].ctx.drawImage(this.#customMap[i].tiles[y][x] || new Image(), x * 96, y * 96, 96, 96)
+            if(!this.#mapAreaToDraw[i]) this.#mapAreaToDraw.push(new Array)
+            for (let y = 0; y < tilesY; y++) {
+                let posY = y + Math.trunc(playerPos.y)
+                if(posY >= this.#customMap[i].tiles.length) return
+                window.offsetY = playerPos.y - Math.trunc(playerPos.y)
+                if(y == 0) window.mapY = posY
+                if(!this.#mapAreaToDraw[i][y]) this.#mapAreaToDraw[i].push(new Array)
+                for (let x = 0; x < tilesX; x++) {
+                    let posX = x + Math.trunc(playerPos.x)
+                    if(posX >= this.#customMap[i].tiles[posY].length) return
+                    window.offsetX = playerPos.x - Math.trunc(playerPos.x)
+                    if(x == 0) window.mapX = posX
+                    this.#mapAreaToDraw[i][y][x] = this.#customMap[i].tiles[posY][posX] || new Image()
                 }
             }
         }
-    }
-
-    update(){
-
     }
 
     resize(){
-        for (let i = 0; i < this.#canvasses.length; i++) {
-            let canvas = this.#canvasses[i].canvas
-            let ctx = this.#canvasses[i].ctx
-            canvas.width = window.innerWidth
-            canvas.height = window.innerHeight
-            let scaleFitNative = Math.min(window.innerWidth / 1920, window.innerHeight / 1080)
-            window.deviceDisplayWidth = window.innerWidth / scaleFitNative
-            window.deviceDisplayHeight = window.innerHeight / scaleFitNative
-
-            ctx.setTransform(scaleFitNative, 0, 0, scaleFitNative, Math.floor(window.innerWidth/2), Math.floor(window.innerHeight/2))
-            ctx.imageSmoothingEnabled = scaleFitNative < 1 ?  true : false
-        }
+        
     }
 }
 

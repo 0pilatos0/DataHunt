@@ -4,7 +4,6 @@ export default class GameObject{
     #position
     #size
     //#renderPosition
-    #bounds
 
     /**
      * 
@@ -15,7 +14,6 @@ export default class GameObject{
         this.#position = position //center of element
         //this.#renderPosition = new Vector2(position.x - size.x / 2, position.y - size.y / 2) //top left of element
         this.#size = size
-        this.#bounds = this.#createBounds()
     }
 
     /**
@@ -24,7 +22,6 @@ export default class GameObject{
     set position(position){
         this.#position = position
         //this.#renderPosition = new Vector2(this.#position.x - this.#size.x / 2, this.#position.y - this.#size.y / 2)
-        this.#bounds = this.#createBounds()
     }
 
     get position(){
@@ -37,23 +34,22 @@ export default class GameObject{
     set size(size){
         this.#size = size
         //this.#renderPosition = new Vector2(this.#position.x - this.#size.x / 2, this.#position.y - this.#size.y / 2)
-        this.#bounds = this.#createBounds()
     }
 
     get size(){
         return this.#size
     }
 
+    get bounds(){
+        return {
+            left: this.#position.x,
+            top: this.#position.y,
+            right: this.#position.x + this.#size.x,
+            bottom: this.#position.y + this.#size.y,
+        }
+    }
+
     // get renderPosition(){
     //     return this.#renderPosition
     // }
-
-    #createBounds = () => {
-        return {
-            left: this.#position.x - this.#size.x / 2,
-            top: this.#position.y - this.#size.y / 2,
-            right: this.#position.x + this.#size.x / 2,
-            bottom: this.#position.y + this.#size.y / 2
-        }
-    }
 }

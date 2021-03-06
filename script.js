@@ -1,15 +1,15 @@
-let socket = io("localhost:3000", {'reconnection': false, 'reconnectionDelay': 1000, 'reconnectionDelayMax': 2000})//https://datahuntserver.herokuapp.com
+let socket = io("localhost:3001", {'reconnection': false, 'reconnectionDelay': 1000, 'reconnectionDelayMax': 2000})//https://datahuntserver.herokuapp.com
 window.socket = socket
-import {Vector2} from './Helpers/Vector2.js'
-import {drawText} from './Helpers/Draw.js'
-import {InputField} from './Elements/InputField.js'
-import { Button } from './Elements/Button.js'
-import { Label } from './Elements/Label.js'
-import { Scene } from './Helpers/Scene.js'
-import { LoginScene } from './Scenes/loginScene.js'
-import { RegisterScene } from './Scenes/registerScene.js'
-import {GameScene} from './Scenes/GameScene.js'
-import { deleteDataCookie, getDataCookie, setDataCookie } from './Helpers/Data.js'
+import {Vector2} from './Client/Helpers/Vector2.js'
+import {drawText} from './Client/Helpers/Draw.js'
+import {InputField} from './Client/Elements/InputField.js'
+import { Button } from './Client/Elements/Button.js'
+import { Label } from './Client/Elements/Label.js'
+import { Scene } from './Client/Helpers/Scene.js'
+import { LoginScene } from './Client/Scenes/loginScene.js'
+import { RegisterScene } from './Client/Scenes/registerScene.js'
+import {GameScene} from './Client/Scenes/GameScene.js'
+import { deleteDataCookie, getDataCookie, setDataCookie } from './Client/Helpers/Data.js'
 
 socket.on('connect', () => {
     console.log("connected")
@@ -71,16 +71,6 @@ document.onreadystatechange = () => {
         secondsPassed++
     }, 1000);
 }
-
-
-function getRandomColor() {
-    var letters = '0123456789ABCDEF';
-    var color = '#';
-    for (var i = 0; i < 6; i++) {
-      color += letters[Math.floor(Math.random() * 16)];
-    }
-    return color;
-  }
 
 function setCanvasSize(){
     ctx.canvas.width = window.innerWidth

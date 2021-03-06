@@ -1,12 +1,15 @@
-import { Vector2 } from "./Vector2.js"
+window.mapX = 0
+window.mapY = 0
+window.playerOffsetX = 0
+window.playerOffsetY = 0
 
 export class Map{
     #map
     #tilesets = []
     #tiles = [null]
     #customMap
-    #canvasses = []
     #mapAreaToDraw = []
+    #bounds = {}
 
     constructor(path){
         let xhr = new XMLHttpRequest()
@@ -66,22 +69,11 @@ export class Map{
     }
 
     #createMap = () => {
-        //let x = 0
-        //let y = 0
         let tMap = []
-        for (let i = 0; i < this.#canvasses.length; i++) {
-            document.body.removeChild(this.#canvasses[i].canvas)
-        }
-        //this.#canvasses = []
+        this.#bounds.left = 0
+        this.#bounds.top = 0
         for (let i = 0; i < this.#map.layers.length; i++) {
             if(this.#map.layers[i].type !== 'tilelayer') return
-            //console.log(this.#map)
-            // let canvas = document.createElement('canvas')
-            // this.#canvasses.push({canvas:canvas,ctx:canvas.getContext('2d')})
-            // canvas.style.position = "absolute"
-            // document.body.appendChild(canvas)
-            //x = 0
-            //y = 0
             tMap.push({layer:this.#map.layers[i].type, tiles:new Array})
             for (let j = 0; j < this.#map.layers[i].data.length; j++) {
                 let row = this.#map.layers[i].data.splice(0, this.#map.width)
@@ -97,40 +89,20 @@ export class Map{
                     }
                 }
                 tMap[i].tiles.push(row)
-                // for (let x = 0; x < this.#map.width; x++) {
-                //     for (let y = 0; y < this.#map.height; y++) {
-                //         if(this.#map.layers[i].data[j]){
-
-                //         }
-                //     }
-                // }
-                // if(j % this.#map.width == 0 && j != 0) {
-                //     y += this.#map.tileheight
-                //     x = 0
-                // }
-
-                // if(this.#map.layers[i].data[j]){
-                //     let tile = this.#tiles[this.#map.layers[i].data[j]-1]
-                //     let tileCanvas = document.createElement('canvas')
-                //     tileCanvas.width = window.spriteSize
-                //     tileCanvas.height = window.spriteSize
-                //     let ctx = tileCanvas.getContext('2d')
-                //     ctx.drawImage(tile, 0, 0, window.spriteSize, window.spriteSize)
-                //     tMap[i].tiles.push({tile:tileCanvas, pos:new Vector2(x, y)})
-                // }
-
-                // x += this.#map.tilewidth
             }
         }
-        
+        this.#bounds.bottom = tMap[0].tiles.length * window.spriteSize
+        this.#bounds.right = tMap[0].tiles[0].length * window.spriteSize
+        console.log(tMap)
+        console.log(this.#bounds)
         this.#customMap = tMap
-        this.resize()
-        //this.initRender()
     }
 
+    get map(){
+        return this.#customMap
+    }
+    
     render(ctx){
-        if(this.#mapAreaToDraw.length > 0)
-     
         for (let i = 0; i < this.#mapAreaToDraw.length; i++) {
             for (let y = 0; y < this.#mapAreaToDraw[i].length; y++) {
                 for (let x = 0; x < this.#mapAreaToDraw[i][y].length; x++) {
@@ -138,33 +110,46 @@ export class Map{
                 }
             }
         }
+        ctx.fillText(window.player.position.x, -window.innerWidth / 2, 0)
+        ctx.fillText(window.player.position.y, -window.innerWidth / 2, 30)
+        ctx.fillText(window.deviceDisplayWidth/2, -window.innerWidth / 2, 60)
+        ctx.fillText(window.deviceDisplayHeight/2, -window.innerWidth / 2, 90)
     }
 
-    update(playerPos){
+    update(){
         if(!this.#customMap) return
-        let tilesX = Math.ceil(window.deviceDisplayWidth / window.spriteSize)
-        let tilesY = Math.ceil(window.deviceDisplayHeight / window.spriteSize)
         for (let i = 0; i < this.#customMap.length; i++) {
             if(!this.#mapAreaToDraw[i]) this.#mapAreaToDraw.push(new Array)
-            for (let y = 0; y < tilesY; y++) {
-                let posY = y + Math.trunc(playerPos.y)
-                if(posY >= this.#customMap[i].tiles.length) return
-                window.offsetY = playerPos.y - Math.trunc(playerPos.y)
-                if(y == 0) window.mapY = posY
+            for (let y = 0; y < window.maxTilesY; y++) {
                 if(!this.#mapAreaToDraw[i][y]) this.#mapAreaToDraw[i].push(new Array)
-                for (let x = 0; x < tilesX; x++) {
-                    let posX = x + Math.trunc(playerPos.x)
-                    if(posX >= this.#customMap[i].tiles[posY].length) return
-                    window.offsetX = playerPos.x - Math.trunc(playerPos.x)
+                let posY = y// + Math.round(window.player.position.y / window.spriteSize)
+                window.playerOffsetY = 0
+                if(window.player.position.y >= window.deviceDisplayHeight / 2 && window.player.position.y <= this.#bounds.bottom - window.deviceDisplayHeight / 2) {
+                    posY += Math.ceil((window.player.position.y - window.player.position.y % window.spriteSize - window.deviceDisplayHeight / 2) / window.spriteSize)
+                    window.playerOffsetY = window.player.position.y % window.spriteSize
+                    //fix bug gotta remove SOMEWHERE half of spritesize both on x and y probably window.deviceDisplayHeight
+                }
+                // if(window.player.position.y >= this.#bounds.bottom - window.deviceDisplayHeight / 2){
+                //     if(y == 0) window.mapY = y
+                // }
+                if(y == 0) window.mapY = posY
+                for (let x = 0; x < window.maxTilesX; x++) {
+                    let posX = x// + Math.round(window.player.position.x / window.spriteSize)
+                    window.playerOffsetX = 0
+                    if(window.player.position.x >= window.deviceDisplayWidth / 2 && window.player.position.x <= this.#bounds.right - window.deviceDisplayWidth / 2){
+                        posX += Math.ceil((window.player.position.x - window.player.position.x % window.spriteSize - window.deviceDisplayWidth / 2) / window.spriteSize)
+                        window.playerOffsetX = window.player.position.x % window.spriteSize
+                        //fix bug gotta remove SOMEWHERE half of spritesize both on x and y probably window.deviceDisplayWidth
+                    }
                     if(x == 0) window.mapX = posX
+                    // if(window.player.position.x >= this.#bounds.right - window.deviceDisplayWidth / 2){
+                    //     if(x == 0) window.mapX = x
+                    // }
+                    
                     this.#mapAreaToDraw[i][y][x] = this.#customMap[i].tiles[posY][posX] || new Image()
                 }
             }
         }
-    }
-
-    resize(){
-        
     }
 }
 

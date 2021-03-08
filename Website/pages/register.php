@@ -16,27 +16,27 @@
             <ul class="list-group list-group-flush">
                 <li class="list-group-item"><label for="AccName" class="col-sm-1 col-form-label">Name</label>
                     <div class="col-sm-10">
-                        <input type="text" name="AccName"><br>
+                        <input type="text" name="AccName" id="irlname" class="input form-control"><br>
                     </div>
                 </li>
                 <li class="list-group-item"><label for="AccUsername" class="col-sm-1 col-form-label">Username</label>
                     <div class="col-sm-10">
-                        <input type="text" name="AccUsername"><br>
+                        <input type="text" name="AccUsername" id="username" class="input form-control"><br>
                     </div>
                 <li class="list-group-item"><label for="AccEmail" class="col-sm-1 col-form-label">Email</label>
                     <div class="col-sm-10">
-                        <input type="text" name="AccEmail"><br>
+                        <input type="text" name="AccEmail" id="mail" class="input form-control"><br>
                     </div>
                 </li>
                 <li class="list-group-item"><label for="AccPassword" class="col-sm-1 col-form-label">Password</label>
                     <div class="col-sm-10">
-                        <input type="password" name="AccPassword"><br>
+                        <input type="password" name="AccPassword" id="password" class="input form-control"><br>
                     </div>
                 </li>
                 <li class="list-group-item"><label for="AccPasswordCheck" class="col-sm-1 col-form-label">Password
                         check</label>
                     <div class="col-sm-10">
-                        <input type="password" name="AccPasswordCheck"><br>
+                        <input type="password" name="AccPasswordCheck" id="passwordCheck" class="input form-control"><br>
                     </div>
                 </li>
                 <li class="list-group-item">
@@ -125,6 +125,7 @@
 
     ?>
 </div>
+<script src="../functions.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-b5kHyXgcpbZJO/tY9Ul7kGkf1S0CWuKcCD38l8YkeH8z8QjE0GmW1gYU5S9FOnJ0"
         crossorigin="anonymous"></script>

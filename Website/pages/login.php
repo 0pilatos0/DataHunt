@@ -18,13 +18,13 @@
                 <li class="list-group-item">
                     <label for="AccUsername" class="col-sm-1 col-form-label">Username</label>
                     <div class="col-sm-10">
-                        <input type="text" name="AccUsername" class="form-control" id="username"><br>
+                        <input type="text" name="AccUsername" class="input form-control" id="username"><br>
                     </div>
                 </li>
                 <li class="list-group-item">
                     <label for="AccPassword" class="col-sm-1 col-form-label">Password</label>
                     <div class="col-sm-10">
-                        <input type="password" class="form-control" name="AccPassword" id="password"><br>
+                        <input type="password" name="AccPassword" class="input form-control" id="password"><br>
                     </div>
                 </li>
                 <li class="list-group-item">

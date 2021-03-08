@@ -107,6 +107,7 @@
             $dbh = null;
             echo "<p id='succesMessage'>added to the database</p>";
             sendVerificationMail($email, $name, $verificationtoken);
+            echo "<script>location = \"http://datahunt.duckdns.org\";</script>";
         } catch (PDOException $e) {
             print "Error!: " . $e->getMessage() . "<br/>";
             die();

@@ -1,4 +1,4 @@
-import { Rectangle } from "../Shapes/Rectangle.js"
+//import { Rectangle } from "../Shapes/Rectangle.js"
 import { Camera } from "./Camera.js"
 import { Map } from "./Map.js"
 import { Player } from "./Player.js"

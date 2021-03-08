@@ -1,19 +1,32 @@
+import { Sprite } from "./Sprite.js"
 import { Vector2 } from "./Vector2.js"
 
 export default class GameObject{
     #position
     #size
-    //#renderPosition
+    #sprite
 
     /**
      * 
      * @param {Vector2} position 
      * @param {Vector2} size 
+     * @param {Sprite} sprite
      */
-    constructor(position, size){
-        this.#position = position //center of element
-        //this.#renderPosition = new Vector2(position.x - size.x / 2, position.y - size.y / 2) //top left of element
+    constructor(position, size, path){
+        this.#position = position
         this.#size = size
+        this.#sprite = new Sprite(path)
+        this.#init()
+    }
+
+    #init = async () => {
+        await this.#sprite.init()
+        this.#sprite = this.#sprite.get()
+        console.log("?")
+    }
+
+    get sprite(){
+        if(typeof this.#sprite == 'canvas') return this.#sprite
     }
 
     /**

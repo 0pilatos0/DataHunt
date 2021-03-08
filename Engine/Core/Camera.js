@@ -14,7 +14,7 @@ export class Camera{
     }
 
     update(){
-        window.gameMap.update()
         window.player.update()
+        window.gameMap.update()
     }
 }

@@ -1,6 +1,6 @@
 <?php
 
-$user = ['name' => 'test']
+$user = $_SESSION["user"]
 
 ?>
 <!DOCTYPE html>

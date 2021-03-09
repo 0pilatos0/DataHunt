@@ -81,7 +81,7 @@
                 <?php 
                     session_start();
                     if(isset($_SESSION['user']) && !empty($_SESSION['user'])) {
-                       echo 'hallo ik doe het';
+                       echo '<li style="float:right"><a href="./Website/pages/logout">Logout</a></li>';
                     }else{
                         echo '                
                         <li style="float:right"><a href="./Website/pages/register">Registration</a></li>

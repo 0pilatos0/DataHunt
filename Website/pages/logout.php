@@ -7,7 +7,8 @@
     include '../elements/footer.php';
 ?>
 <?php 
-session_destroy();
+require "../functions.php";
+resetSession();
 header( "refresh:0.1;url=http://datahunt.duckdns.org" );
 ?>
 

@@ -55,6 +55,7 @@ function init(instance){
     window.socket.on('loginSucceeded', (data) => {
         setDataCookie("token", data.token)
         setDataSocket("username", data.username)
+        setDataCookie("rememberMe", data.rememberMe)
         window.scenes[0].visible = false
         window.scenes[2].visible = true
     })

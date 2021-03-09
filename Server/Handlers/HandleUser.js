@@ -30,7 +30,7 @@ module.exports.login = async (data, socket, players, bot, sql) => {
         if(!(data.username && data.password)) return socket.emit('loginFailed', "All of them must be filled in")
         let userData = await getByUsername(sql, data.username)
         if(!userData) return socket.emit('loginFailed', "Username doesn't exist")
-        if(!verifyPassword(data.password, userData.password)) return socket.emit('loginFailed', "Wrong password")
+        if(!Salter.verifyPassword(data.password, userData.password)) return socket.emit('loginFailed', "Wrong password")
         let verified = await getVerifiedByUsername(sql, data.username)
         if(!verified) return socket.emit('loginFailed', "Your account hasn't been verified")
         let enabled = await getEnabledByUsername(sql, data.username)
@@ -38,7 +38,7 @@ module.exports.login = async (data, socket, players, bot, sql) => {
         socket.username = data.username
         players.push(socket)
         let token = Salter.generateRandomToken()
-        addLoginToken(sql, username, token)
+        addLoginToken(sql, socket.username, token)
         socket.emit('loginSucceeded', {username:socket.username, token})
         await bot.sendMessage(`✅ ${socket.username}`)
         console.log(`${socket.username} logged in`)

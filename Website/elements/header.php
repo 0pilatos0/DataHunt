@@ -78,8 +78,17 @@
             <ul>
                 <li><a class="active" href="">Home</a></li>
                 <li><a href=" #home">Updates</a></li>
+                <?php 
+                    session_start();
+                    if(isset($_SESSION['user']) && !empty($_SESSION['user'])) {
+                       echo 'hallo ik doe het';
+                    }else{
+                        echo '                
+                        <li style="float:right"><a href="./Website/pages/register">Registration</a></li>
+                        <li style="float:right"><a href="./Website/pages/login">Login</a></li>';
+                    }
+                ?>
                 <li style="float:right"><a href="#news">Game</a></li>
-                <li style="float:right"><a href="./Website/pages/register">Registration</a></li>
-                <li style="float:right"><a href="./Website/pages/login">Login</a></li>
+
             </ul>
         </nav>

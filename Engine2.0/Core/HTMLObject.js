@@ -21,8 +21,18 @@ export class HTMLObject{
         this.#init(parent)
     }
 
-    #init = (parent) => { 
-        parent ? parent.element.appendChild(this.#element) : document.body.appendChild(this.#element)
+    #init = (parent) => {
+        if(parent){
+            if(parent.element){
+                parent.element.appendChild(this.#element)
+            }
+            else{
+                parent.appendChild(this.#element)
+            }
+        } 
+        else{
+            document.body.appendChild(this.#element)
+        }
         this.#element.style.position = "absolute"
         if(this.#size.x) this.#element.style.width = `${this.#size.x}`
         if(this.#size.y) this.#element.style.height = `${this.#size.y}`

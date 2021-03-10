@@ -1,6 +1,8 @@
 import { HTMLObject } from "../HTMLObject.js";
+import { ListItem } from "./ListItem.js";
 
 export class List extends HTMLObject{
+    #listItems = []
     constructor(position, size, type, parent = null){
         super(position, size, document.createElement(type), parent)
         this.#init()
@@ -14,15 +16,14 @@ export class List extends HTMLObject{
     }
 
     removeAll(){
+        for (let i = 0; i < this.#listItems.length; i++) {
+            this.#listItems[i].remove()
+            this.#listItems.splice(i, 1)
+        }
         this.element.innerHTML = ""
     }
 
     addElement(text){
-        let item = document.createElement('li')
-        this.element.appendChild(item)
-        item.innerText = text
-        item.style.width = "100%"
-        item.style.height = "auto"
-        item.style.listStyle = "none"
+        this.#listItems.push(new ListItem(text, this))
     }
 }

@@ -1,5 +1,7 @@
 import { Sprite } from "./Sprite.js"
 
+window.gameObjects = []
+
 export class GameObject{
     #position
     #size

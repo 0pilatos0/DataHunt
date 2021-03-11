@@ -35,7 +35,7 @@ export class GameObject{
         return this.#size
     }
 
-    draw(ctx){
+    render(ctx){
         ctx.drawImage(sprite, this.#position.x - window.spriteSize / 2 - window.displayWidth / 2, this.#position.y - window.spriteSize / 2 - window.displayHeight / 2)
     }
 

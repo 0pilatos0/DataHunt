@@ -65,6 +65,7 @@
             session_start();
             setSessionValue("user", $result['id']);
             echo 'Password is valid!';
+            header('location: http://datahunt.duckdns.org');
         } else {
             echo 'Invalid password.';
         }

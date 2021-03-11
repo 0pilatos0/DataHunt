@@ -49,3 +49,12 @@ body{
 .left{
     right: 0;
 }
+
+#objectList{
+    margin: 0;
+    padding: 0;
+}
+
+#objectList li{
+    list-style: none;
+}

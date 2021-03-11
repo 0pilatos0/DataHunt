@@ -13,6 +13,7 @@
     <div class="base" id="editorLeft">
         <div id="dragBarLeft" class="dragBar left"></div>
         <button id="hideButtonLeft" class="hideButton left" style="right:-25px"><</button>
+        <ul id="objectList"></ul>
         <script>
             let draggingLeft = false
             dragBarLeft.addEventListener('mousedown', () => {
@@ -39,12 +40,33 @@
                     hideButtonLeft.innerText = "<"
                 }
             })
+
+            reloadObjectList = () => {
+                objectList.innerHTML = ""
+                for (let i = 0; i < window.htmlObjects.length; i++) {
+                //if(window.htmlObjects[i] != this.#list && window.htmlObjects[i].constructor.name != "ListItem"){
+                    let li = document.createElement('li')
+                    li.innerText = window.htmlObjects[i].constructor.name
+                    
+                    objectList.appendChild(li)
+                    li.addEventListener('click', () => {
+                        let data = window.htmlObjects[i].json
+                        for (let x = 0; x < Object.keys(data).length; x++) {
+                            console.log(Object.keys(data)[x])
+                            console.log(data[Object.keys(data)[x]])
+                            console.log(data[Object.keys(data)[x]].constructor.name)
+                        }
+                    })
+                //} 
+                }
+            }
         </script>
     </div>
 
     <div class="base" id="editorRight">
         <div class="dragBar" id="dragBarRight"></div>
         <button id="hideButtonRight" class="hideButton" style="left:-25px">></button>
+        <div id="inspector"></div>
         <script>
             let draggingRight = false
             dragBarRight.addEventListener('mousedown', () => {

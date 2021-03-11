@@ -26,4 +26,10 @@ export class List extends HTMLObject{
     addElement(text){
         this.#listItems.push(new ListItem(text, this))
     }
+
+    items(i){
+        console.log(i)
+        console.log(this.#listItems[this.#listItems.indexOf(i)])
+        return this.#listItems[this.#listItems.indexOf(i)]
+    }
 }

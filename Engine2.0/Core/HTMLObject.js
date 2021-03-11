@@ -18,6 +18,7 @@ export class HTMLObject{
         this.#position = position
         this.#size = size
         this.#element = element
+        this.#visible = true
         this.#init(parent)
     }
 
@@ -39,6 +40,7 @@ export class HTMLObject{
         this.#element.style.left = `${this.#position.x}`
         this.#element.style.top = `${this.#position.y}`
         window.htmlObjects.push(this)
+        reloadObjectList()
     }
 
     set position(position){
@@ -71,5 +73,13 @@ export class HTMLObject{
 
     get element(){
         return this.#element
+    }
+
+    get json(){
+        return {
+            position: this.position,
+            size: this.size,
+            visible: this.visible
+        }
     }
 }

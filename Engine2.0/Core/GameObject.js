@@ -6,6 +6,8 @@ export class GameObject{
     #position
     #size
     #sprite
+    #positionCallback = () => { this.position = this.#position }
+    #sizeCallback = () => { this.size = this.#size }
 
     /**
      * 
@@ -14,17 +16,13 @@ export class GameObject{
      * @param {Sprite} sprite 
      */
     constructor(position, size, sprite) {
-        this.#position = new Vector2(position.x, position.y, () => {
-            this.position = this.#position
-        })
-        this.#size = new Vector2(size.x, size.y, () => {
-            this.size = this.#size
-        })
+        this.#position = new Vector2(position.x, position.y, this.#positionCallback)
+        this.#size = new Vector2(size.x, size.y, this.#sizeCallback)
         this.#sprite = sprite
     }
 
     set position(position){
-        this.#position = position
+        this.#position = new Vector2(position.x, position.y, this.#positionCallback)
     }
 
     get position(){
@@ -32,7 +30,7 @@ export class GameObject{
     }
 
     set size(size){
-        this.#size = size
+        this.#size = new Vector2(size.x, size.y, this.#sizeCallback)
     }
 
     get size(){

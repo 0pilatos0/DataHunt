@@ -7,6 +7,8 @@ export class HTMLObject{
     #size
     #element
     #visible
+    #positionCallback = () => { this.position = this.#position }
+    #sizeCallback = () => { this.size = this.#size }
 
     /**
      * 
@@ -15,12 +17,8 @@ export class HTMLObject{
      * @param {*} element 
      */
     constructor(position, size, element, parent = null){
-        this.#position = new Vector2(position.x, position.y, () => {
-            this.position = this.#position
-        })
-        this.#size = new Vector2(size.x, size.y, () => {
-            this.size = this.#size
-        })
+        this.#position = new Vector2(position.x, position.y, this.#positionCallback)
+        this.#size = new Vector2(size.x, size.y, this.#sizeCallback)
         this.#element = element
         this.#visible = true
         this.#init(parent)
@@ -48,7 +46,7 @@ export class HTMLObject{
     }
 
     set position(position){
-        this.#position = position
+        this.#position = new Vector2(position.x, position.y, this.#positionCallback)
         this.#element.style.left = `${this.#position.x}`
         this.#element.style.top = `${this.#position.y}`
     }
@@ -58,7 +56,7 @@ export class HTMLObject{
     }
 
     set size(size){
-        this.#size = size
+        this.#size = new Vector2(size.x, size.y, this.#sizeCallback)
         this.#element.style.width = `${this.#size.x}`
         this.#element.style.height = `${this.#size.y}`
     }

@@ -13,7 +13,9 @@
     <div class="base" id="editorLeft">
         <div id="dragBarLeft" class="dragBar left"></div>
         <button id="hideButtonLeft" class="hideButton left" style="right:-25px"><</button>
-        <ul id="objectList"></ul>
+        <div id="holderLeft">
+            <ul id="objectList"></ul>
+        </div>
         <script>
             let draggingLeft = false
             dragBarLeft.addEventListener('mousedown', () => {
@@ -32,11 +34,13 @@
                 if(hideButtonLeft.innerText == "<"){
                     editorLeft.style.minWidth = 0
                     editorLeft.style.width = 0
+                    holderLeft.style.display = "none"
                     hideButtonLeft.innerText = ">"
                 }
                 else{
                     editorLeft.style.minWidth = `250px`
                     editorLeft.style.width = `250px`
+                    holderLeft.style.display = "block"
                     hideButtonLeft.innerText = "<"
                 }
             })
@@ -44,20 +48,30 @@
             reloadObjectList = () => {
                 objectList.innerHTML = ""
                 for (let i = 0; i < window.htmlObjects.length; i++) {
-                //if(window.htmlObjects[i] != this.#list && window.htmlObjects[i].constructor.name != "ListItem"){
                     let li = document.createElement('li')
                     li.innerText = window.htmlObjects[i].constructor.name
                     
                     objectList.appendChild(li)
                     li.addEventListener('click', () => {
-                        let data = window.htmlObjects[i].json
-                        for (let x = 0; x < Object.keys(data).length; x++) {
-                            console.log(Object.keys(data)[x])
-                            console.log(data[Object.keys(data)[x]])
-                            console.log(data[Object.keys(data)[x]].constructor.name)
+                        let properties = window.htmlObjects[i].json
+                        inspector.innerHTML = ''
+                        for (let x = 0; x < Object.entries(properties).length; x++) {
+                            let entry = Object.entries(properties)[x]
+                            let type = entry[1].constructor.name
+                            let name = entry[0]
+                            let value = entry[1]
+                            switch (type) {
+                                case 'Vector2':
+                                    dynamicFieldCreator(type, name, [value.x, value.y], window.htmlObjects[i])
+                                    break;
+                                case 'Boolean':
+                                    dynamicFieldCreator(type, name, value, window.htmlObjects[i])
+                                    break;
+                                default:
+                                    break;
+                            }
                         }
                     })
-                //} 
                 }
             }
         </script>
@@ -95,5 +109,47 @@
             })
         </script>
     </div>
+
+
+    <script>
+        dynamicFieldCreator = (type, name, value, element) => {
+            let holder = document.createElement('div')
+            switch (type) {
+                case 'Vector2':
+                    for (let i = 0; i < value.length; i++) {
+                        let label = document.createElement('label')
+                        label.innerText = `${name} ${i ? 'y' : 'x'}: `
+                        holder.appendChild(label)
+                        let input = document.createElement('input')
+                        input.type = 'number'
+                        input.value = parseInt(value[i])
+                        input.addEventListener('input', () => {
+                            element[name][i ? 'y' : 'x'] = `${input.value}px`
+                        })
+                        holder.appendChild(input)
+                        let text = document.createElement('label')
+                        text.innerText = value[i].replace(/[0-9]/g, '')
+                        holder.appendChild(text)
+                        holder.appendChild(document.createElement('br'))
+                    }
+                    break;
+                case 'Boolean':
+                    let label = document.createElement('label')
+                    label.innerText = `${name}`
+                    holder.appendChild(label)
+                    let input = document.createElement('input')
+                    input.type = 'checkbox'
+                    input.checked = value
+                    input.addEventListener('input', () => {
+                        element[name] = input.checked
+                    })
+                    holder.appendChild(input)
+                    break;
+                default:
+                    break;
+            }
+            inspector.appendChild(holder)
+        }
+    </script>
 </body>
 </html>

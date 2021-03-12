@@ -15,8 +15,12 @@ export class HTMLObject{
      * @param {*} element 
      */
     constructor(position, size, element, parent = null){
-        this.#position = position
-        this.#size = size
+        this.#position = new Vector2(position.x, position.y, () => {
+            this.position = this.#position
+        })
+        this.#size = new Vector2(size.x, size.y, () => {
+            this.size = this.#size
+        })
         this.#element = element
         this.#visible = true
         this.#init(parent)

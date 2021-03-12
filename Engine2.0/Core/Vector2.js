@@ -1,10 +1,12 @@
 export class Vector2{
     #x
     #y
+    #callback
 
-    constructor(x, y){
+    constructor(x, y, callback){
         this.#x = x
         this.#y = y
+        this.#callback = callback
     }
 
     get x(){
@@ -13,6 +15,7 @@ export class Vector2{
 
     set x(x){
         this.#x = x
+        this.#callback()
     }
 
     get y(){
@@ -21,6 +24,7 @@ export class Vector2{
 
     set y(y){
         this.#y = y
+        this.#callback()
     }
 
     toString(){

@@ -8,7 +8,7 @@ export class Button extends HTMLObject{
 
     #init = () => {
         this.element.addEventListener('click', () => {
-            
+
         })
     }
 }

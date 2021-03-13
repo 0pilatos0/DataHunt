@@ -41,7 +41,7 @@
                 else{
                     editorLeft.style.minWidth = `250px`
                     editorLeft.style.width = `250px`
-                    holderLeft.style.display = "block"
+                    holderLeft.style.display = "grid"
                     hideButtonLeft.innerText = "<"
                 }
             })
@@ -77,6 +77,14 @@
 
             let reloadHTMLObjectList = () => { reloadBase(window.htmlObjects, htmlObjectList) }
             let reloadGameObjectList = () => { reloadBase(window.gameObjects, gameObjectList) }
+        
+            htmlObjectList.addEventListener('contextmenu', (e) => {
+                dynamicObjectDisplay(e, window.htmlObjectTypes, htmlObjectDisplay)
+            })
+
+            gameObjectList.addEventListener('contextmenu', (e) => {
+                dynamicObjectDisplay(e, window.gameObjectTypes, gameObjectDisplay)
+            })
         </script>
     </div>
 
@@ -113,9 +121,16 @@
         </script>
     </div>
 
+    <ul id="htmlObjectDisplay" class="baseObjectDisplay">
+        
+    </ul>
+    
+    <ul id="gameObjectDisplay" class="baseObjectDisplay">
+        
+    </ul>
 
     <script>
-        dynamicFieldCreator = (type, name, value, element) => {
+        let dynamicFieldCreator = (type, name, value, element) => {
             let holder = document.createElement('div')
             switch (type) {
                 case 'Vector2':
@@ -127,11 +142,11 @@
                         input.type = 'number'
                         input.value = parseInt(value[i])
                         input.addEventListener('input', () => {
-                            element[name][i ? 'y' : 'x'] = `${input.value}px`
+                            element[name][i ? 'y' : 'x'] = `${input.value}`
                         })
                         holder.appendChild(input)
                         let text = document.createElement('label')
-                        text.innerText = value[i].toString().replace(/[0-9]/g, '')
+                        text.innerText = 'px'//value[i].toString().replace(/[0-9]/g, '')
                         holder.appendChild(text)
                         holder.appendChild(document.createElement('br'))
                     }
@@ -152,6 +167,24 @@
                     break;
             }
             inspector.appendChild(holder)
+        }
+
+        let dynamicObjectDisplay = (e, list, htmlObject) => {
+            e.preventDefault()
+            htmlObject.style.display = "block"
+            htmlObject.style.left = `${e.clientX - 7.5}px`
+            htmlObject.style.top = `${e.clientY - 7.5}px`
+            htmlObject.addEventListener('mouseleave', () => {
+                htmlObject.style.display = "none"
+            })
+            htmlObject.innerHTML = ''
+            for (let i = 0; i < list.length; i++) {
+                let li = document.createElement('li')
+                let button = document.createElement('button')
+                button.innerText = list[i]
+                li.appendChild(button)
+                htmlObject.appendChild(li)
+            }
         }
     </script>
 </body>

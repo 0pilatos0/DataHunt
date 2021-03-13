@@ -6,6 +6,6 @@ import { Window } from "./Core/Window.js";
 
 new Window()
 
-new InputField(new Vector2(`0px`, `0px`), new Vector2(`100px`, `100px`))
-new Button(new Vector2(`0px`, `100px`), new Vector2(`100px`, `100px`))
-new Player(new Vector2(0, 0), new Vector2(96, 96), true)
+//new InputField(new Vector2(0, 0), new Vector2(100, 100))
+//new Button(new Vector2(0, 100), new Vector2(100, 100))
+//new Player(new Vector2(0, 0), new Vector2(96, 96), true)

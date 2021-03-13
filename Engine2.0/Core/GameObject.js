@@ -1,4 +1,5 @@
 import { Sprite } from "./Sprite.js"
+import { Vector2 } from "./Vector2.js"
 
 window.gameObjects = []
 
@@ -19,6 +20,12 @@ export class GameObject{
         this.#position = new Vector2(position.x, position.y, this.#positionCallback)
         this.#size = new Vector2(size.x, size.y, this.#sizeCallback)
         this.#sprite = sprite
+        this.#init()
+    }
+
+    #init = () => {
+        window.gameObjects.push(this)
+        reloadGameObjectList()
     }
 
     set position(position){
@@ -43,5 +50,13 @@ export class GameObject{
 
     update(){
 
+    }
+
+    get json(){
+        return {
+            position: this.position,
+            size: this.size,
+            sprite: this.#sprite
+        }
     }
 }

@@ -2,14 +2,16 @@ import { GameObject } from "../GameObject.js"
 import { Sprite } from "../Sprite.js"
 
 export class Player extends GameObject{
+    #controllable
     #keysPressed = []
     constructor(position, size, controllable = false){
-        super(position, size, new Sprite(''))
-        this.#init(controllable)
+        super(position, size, Sprite(''))
+        this.#controllable = controllable
+        this.#init()
     }
 
-    #init = (controllable) => {
-        if(controllable){
+    #init = () => {
+        if(this.#controllable){
             document.body.addEventListener('keydown', this.#keydown)
             document.body.addEventListener('keyup', this.#keyup)
         }
@@ -44,5 +46,11 @@ export class Player extends GameObject{
 
     #keyup = (e) => {
         this.#keysPressed.splice(this.#keysPressed.indexOf(e.key), 1)
+    }
+
+    get json(){
+        let data = super.json
+        data.controllable = this.#controllable
+        return data
     }
 }

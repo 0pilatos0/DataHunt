@@ -42,7 +42,7 @@ export class HTMLObject{
         this.#element.style.left = `${this.#position.x}`
         this.#element.style.top = `${this.#position.y}`
         window.htmlObjects.push(this)
-        reloadObjectList()
+        reloadHTMLObjectList()
     }
 
     set position(position){

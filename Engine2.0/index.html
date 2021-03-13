@@ -14,7 +14,8 @@
         <div id="dragBarLeft" class="dragBar left"></div>
         <button id="hideButtonLeft" class="hideButton left" style="right:-25px"><</button>
         <div id="holderLeft">
-            <ul id="objectList"></ul>
+            <ul id="htmlObjectList"></ul>
+            <ul id="gameObjectList"></ul>
         </div>
         <script>
             let draggingLeft = false
@@ -45,13 +46,12 @@
                 }
             })
 
-            reloadObjectList = () => {
-                objectList.innerHTML = ""
+            reloadHTMLObjectList = () => {
+                htmlObjectList.innerHTML = ""
                 for (let i = 0; i < window.htmlObjects.length; i++) {
                     let li = document.createElement('li')
                     li.innerText = window.htmlObjects[i].constructor.name
-                    
-                    objectList.appendChild(li)
+                    htmlObjectList.appendChild(li)
                     li.addEventListener('click', () => {
                         let properties = window.htmlObjects[i].json
                         inspector.innerHTML = ''
@@ -66,6 +66,35 @@
                                     break;
                                 case 'Boolean':
                                     dynamicFieldCreator(type, name, value, window.htmlObjects[i])
+                                    break;
+                                default:
+                                    break;
+                            }
+                        }
+                    })
+                }
+            }
+
+            reloadGameObjectList = () => {
+                gameObjectList,innerHTML = ""
+                for (let i = 0; i < window.gameObjects.length; i++) {
+                    let li = document.createElement('li')
+                    li.innerText = window.gameObjects[i].constructor.name
+                    gameObjectList.appendChild(li)
+                    li.addEventListener('click', () => {
+                        let properties = window.gameObjects[i].json
+                        inspector.innerHTML = ''
+                        for (let x = 0; x < Object.entries(properties).length; x++) {
+                            let entry = Object.entries(properties)[x]
+                            let type = entry[1].constructor.name
+                            let name = entry[0]
+                            let value = entry[1]
+                            switch (type) {
+                                case 'Vector2':
+                                    dynamicFieldCreator(type, name, [value.x, value.y], window.gameObjects[i])
+                                    break;
+                                case 'Boolean':
+                                    dynamicFieldCreator(type, name, value, window.gameObjects[i])
                                     break;
                                 default:
                                     break;
@@ -128,7 +157,7 @@
                         })
                         holder.appendChild(input)
                         let text = document.createElement('label')
-                        text.innerText = value[i].replace(/[0-9]/g, '')
+                        text.innerText = value[i].toString().replace(/[0-9]/g, '')
                         holder.appendChild(text)
                         holder.appendChild(document.createElement('br'))
                     }

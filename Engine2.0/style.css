@@ -52,11 +52,17 @@ body{
     right: 0;
 }
 
-#objectList{
+#htmlObjectList, #gameObjectList{
     margin: 0;
     padding: 0;
 }
 
-#objectList li{
+#htmlObjectList li, #gameObjectList li{
     list-style: none;
+}
+
+#holderLeft{
+    display: grid;
+    grid-column: auto;
+    grid-template-columns: repeat(2, auto);
 }

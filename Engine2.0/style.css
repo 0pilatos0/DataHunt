@@ -3,6 +3,10 @@ body{
     overflow: hidden;
 }
 
+*{
+    image-rendering: pixelated;
+}
+
 #editorRight{
     right: 0;
 }

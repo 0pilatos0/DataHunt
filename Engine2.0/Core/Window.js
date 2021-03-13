@@ -1,3 +1,4 @@
+import { Map } from "./Map.js"
 import { Scene } from "./Scene.js"
 
 export class Window{
@@ -7,6 +8,7 @@ export class Window{
 
     constructor(){
         this.#init()
+        this.map = new Map()
     }
 
     #init = () => {
@@ -45,9 +47,11 @@ export class Window{
         this.#ctx.clearRect(-window.displayWidth / 2, -window.displayHeight / 2, window.displayWidth, window.displayHeight)
         this.#ctx.fillRect(-window.displayWidth / 2, -window.displayHeight / 2, window.displayWidth, window.displayHeight)
         this.#scene.render(this.#ctx)
+        this.map.render(this.#ctx)
     }
 
     #update = () => {
         this.#scene.update()
+        this.map.update()
     }
 }

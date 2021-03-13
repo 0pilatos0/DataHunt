@@ -1,4 +1,4 @@
-p<h1>REGISTER</h1>
+<h1>REGISTER</h1>
 <form method="post">
     <p>Your irl name: </p>
     <input type="text" name="AccName"><br>

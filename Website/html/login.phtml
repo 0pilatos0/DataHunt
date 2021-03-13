@@ -1,0 +1,35 @@
+<?php
+
+ // View file voor login formulier.
+
+?>
+
+<html>
+<head>
+    <title>Login</title>
+</head>
+<body>
+
+<?php if(isset($_SESSION['message'])): ?>
+    <div class="message">
+        <?php echo $_SESSION['message']; ?>
+    </div>
+<?php endif ?>
+
+<form method="POST" action="index.php?action=login">
+    <label for="username">Gebruikersnaam</label>
+    <input type="text" name="username" id="username" value="" />
+
+    <label for="password">Wachtwoord</label>
+    <input type="password" name="password" id="password" value="" />
+
+    <label for="remember">Ingelogd blijven</label>
+    <input type="checkbox" name="remember" id="remember"/>
+
+    <button type="submit">Inloggen</button>
+</form>
+
+<a href="index.php?page=forgot_password">Wachtwoord vergeten?</a>
+
+</body>
+</html>

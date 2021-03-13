@@ -10,15 +10,7 @@
 </head>
 <body>
 <div id="container">
-    <div>
-        <p>//Character name // class</p>
-    </div>
-    <div>
-        //looping through stats
-    </div>
-    <div>
-        //this characters achievement list
-    </div>
+    <?php echo $_GET['id']?>
 </div>
 </body>
 </html>

@@ -1,0 +1,21 @@
+{
+    "name": "datahunt/website",
+    "description": "Website for datahunt app",
+    "type": "project",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Aya Mohammad",
+            "email": "ayoshhhh.hadola@gmail.com"
+        }
+    ],
+    "require": {
+        "php": "^7.3|^8.0",
+        "phpmailer/phpmailer": "^6.3"
+    },
+    "autoload": {
+        "psr-4": {
+            "Datahunt\\": "src/"
+        }
+    }
+}

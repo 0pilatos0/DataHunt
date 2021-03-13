@@ -1,21 +1,70 @@
 <?php
-function setSessionValue($index, $value)
+
+/**
+ * @return bool
+ */
+function login()
 {
-    $_SESSION[$index] = $value;
+    return (new \Datahunt\User)->login();
 }
 
-function getSessionValue($index)
+/**
+ * @return null
+ */
+function logout()
 {
-    return $_SESSION[$index];
+    return (new \Datahunt\User)->logout();
 }
 
-function getSessionAll()
+/**
+ * @return bool
+ */
+function account()
 {
-    return print_r($_SESSION);
+    return (new \Datahunt\User)->updateAccount();
 }
 
-// remove all session variables
-function resetSession()
+/**
+ * @return bool
+ */
+function delete()
 {
-    session_unset();
+    return (new \Datahunt\User)->destroy();
+}
+
+/**
+ *
+ */
+function forgotPassword()
+{
+    (new \Datahunt\User)->forgotPassword();
+
+    header('location: index.php?page=forgot_password');
+}
+
+/**
+ * @return bool
+ */
+function canResetPassword()
+{
+    return (new \Datahunt\User)->canResetPassword();
+}
+
+/**
+ *
+ */
+function resetPassword()
+{
+    (new \Datahunt\User)->resetPassword();
+    header('location: index.php');
+}
+
+/**
+ * @return mixed
+ */
+function showMessages()
+{
+    $error = $_SESSION['message'];
+    unset($_SESSION['message']);
+    return $error;
 }

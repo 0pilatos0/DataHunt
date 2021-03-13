@@ -23,13 +23,13 @@ module.exports.login = async (data, socket, players, bot, sql) => {
         socket.username = username
         players.push(socket)
         socket.emit('loginSucceeded', {username, token})
-        await bot.sendMessage(`✅ ${socket.username}`)
+        bot.sendMessage(`✅ ${socket.username}`)
         console.log(`${socket.username} logged in`)
     }
     if(players.indexOf(socket) != -1) return
     if(!(data.username && data.password)) return socket.emit('loginFailed', "All of them must be filled in")
     let userData = await getByUsername(sql, data.username)
-    if(!userData) return socket.emit('loginFailed', "Username doesn't exist")
+    if(!userData) return socket.emit('loginFailed', "Wrong password")//Username doesn't exist
     if(!Salter.verifyPassword(data.password, userData.password)) return socket.emit('loginFailed', "Wrong password")
     let verified = await getVerifiedByUsername(sql, data.username)
     if(!verified) return socket.emit('loginFailed', "Your account hasn't been verified")
@@ -40,7 +40,7 @@ module.exports.login = async (data, socket, players, bot, sql) => {
     let token = Salter.generateRandomToken()
     addLoginToken(sql, socket.username, token)
     socket.emit('loginSucceeded', {username:socket.username, token})
-    await bot.sendMessage(`✅ ${socket.username}`)
+    bot.sendMessage(`✅ ${socket.username}`)
     console.log(`${socket.username} logged in`)
 }
 
@@ -59,10 +59,8 @@ module.exports.register = async (data, socket, players, bot, sql) => {
     let mail = fs.readFileSync(`${__dirname}/../../Mail/htmlmail.html`, {encoding:'utf8', flag:'r'})
     let sendMail = await Mailer.sendMail({to:data.email, subject:'Verify email Datahunt', html:mail.replace('{TOKEN}', data.verifytoken)})
     if(sendMail != true) return socket.emit('registerFailed', 'Sending mail failed')
-    //socket.username = data.username
-    socket.emit('registerSucceeded')//, {username:socket.username}
+    socket.emit('registerSucceeded')
     console.log(`${socket.username} registered`)
-    //user gotta verifiy first and when done verifying, reload page to play! :D
 }
 
 module.exports.logout = async (socket,players, bot) => {

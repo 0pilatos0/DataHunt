@@ -1,28 +1,35 @@
 <?php
 require "../php/database.php";
+require "../php/functions.php";
 include './../elements/header.php';
 
 $userinfo = userInfo($_SESSION["user"]);
-$characters = characters($_SESSION["user"]);
+
 
 
 ?>
 
-        <div id="container">
-            <h1><?php ?></h1>
-            <div id="characters">
-                <?php for ($i = 0; $i < sizeof($characters); $i++){
-                    $c = $characters[$i];
-                    echo "<a href=\"character?id={$c["id"]}\">{$c["char_name"]}</a><br>";
+        <div class="user-container">
+            <div class="user-characters">
+                <div class="card-header">
+                    <h3>Characters</h3>
+                </div>
+                <div>
+                    <ul class="list-group list-group-flush">
 
-                } ?>
+                        <?php showCharacters(characters($_SESSION["user"])); ?>
 
-
+                    </ul>
+                </div>
             </div>
 
+            <div class="user user-feed">
+                <div class="card-header">
+                    <h3>Feed</h3>
+                </div>
+            </div>
 
-
-            <form method="post" style="width: 30rem;">
+            <form class="user user-form" method="post">
                 <div>
                     <div class="card-header">
                         <h3>Change account</h3>
@@ -31,53 +38,51 @@ $characters = characters($_SESSION["user"]);
                         <li class="list-group-item">
                             <label for="username">Username</label>
                             <div class="col-sm-10">
-                                <input name="username" id="username" value="<?php echo $userinfo["username"] ?>"><br>
+                                <input class="input form-control" name="username" id="username" value="<?php echo $userinfo["username"] ?>"><br>
                             </div>
                         </li>
                         <li class="list-group-item">
                             <label for="oldPassword">Old password</label>
                             <div class="col-sm-10">
-                                <input name="oldPassword" id="oldPassword" value="" type="password"><br>
+                                <input class="input form-control" name="oldPassword" id="oldPassword" value="" type="password"><br>
                             </div>
                         </li>
                         <li class="list-group-item">
                             <label for="newPassword1">New password</label>
                             <div class="col-sm-10">
-                                <input name="newPassword1" id="newPassword1" value="" type="password"><br>
+                                <input class="input form-control" name="newPassword1" id="newPassword1" value="" type="password"><br>
                             </div>
                         </li>
                         <li class="list-group-item">
                             <label for="newPassword2">Verify new password</label>
                             <div class="col-sm-10">
-                                <input name="newPassword2" id="newPassword2" value="" type="password"><br>
+                                <input class="input form-control" name="newPassword2" id="newPassword2" value="" type="password"><br>
                             </div>
                         </li>
                         <li class="list-group-item">
                             <label for="email">Email</label>
                             <div class="col-sm-10">
-                                <input name="email" id="email" value="<?php echo $userinfo["email"] ?>"><br>
+                                <input class="input form-control" name="email" id="email" value="<?php echo $userinfo["email"] ?>"><br>
                             </div>
                         </li>
-                        <input type="submit" class="btn btn-primary" value="Log In">
+                        <li class="list-group-item">
+                            <input type="submit" class="btn btn-primary" value="Save changes">
+                            <a class="btn btn-primary" href="#?delete=true">Delete account</a>
+                        </li>
                     </ul>
 
                 </div>
             </form>
-            <div id="delete">
-                <a href="#?delete=true">Delete account</a>
+
+
+
+
+            <div class="user user-friend">
+                <div class="card-header">
+                    <h3>Friends</h3>
+                </div>
             </div>
 
-            <div id="feed">
-            //user achievements or other notable things
-            </div>
-
-            <div id="friendslist">
-                //user friendslist
-            </div>
-
-            <div id="chat">
-                //chat
-            </div>
 
         </div>
 <?php include '../elements/footer.php' ?>

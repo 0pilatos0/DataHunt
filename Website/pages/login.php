@@ -1,30 +1,4 @@
 <?php include '../elements/header.php' ?>
-<style>
-    form{
-        font-family: 'Roboto', sans-serif;
-        margin-left: auto;
-        margin-top: 30px;
-
-    }
-    .list-group{
-        color: black;
-    }
-    .list-group-item{
-        padding: .7rem 1.5rem;
-        background-color: #DBDBDB;
-    }
-    .card-header{
-        background-color: rgb(61, 61, 61);
-    }
-    #container img{
-        float: left;
-        margin-right: 15px;
-    }
-    #container form{
-        display: block;
-    }
-
-</style>
 <div class="content">
 
     <div id="container" >

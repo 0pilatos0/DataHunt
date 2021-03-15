@@ -20,7 +20,7 @@ function userInfo($param){
 function characters($param){
     $dbh = db();
 
-    $stmt = $dbh->prepare("SELECT characters.id, class.name, characters.name as char_name FROM characters INNER JOIN class ON class.id = characters.class_id  where characters.user_id = :id");
+    $stmt = $dbh->prepare("SELECT characters.id, class.name, stats.level, characters.name as char_name FROM characters INNER JOIN class ON class.id = characters.class_id INNER JOIN stats ON stats.id = characters.stats_id  where characters.user_id = :id");
     $stmt->bindParam(':id', $param);
     $stmt->execute();
     $result = $stmt->fetchAll();

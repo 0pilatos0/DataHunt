@@ -1,0 +1,56 @@
+form{
+    font-family: 'Roboto', sans-serif;
+    margin-left: auto;
+    margin-top: 30px;
+
+}
+.list-group{
+    color: black;
+}
+.list-group-item{
+    padding: .7rem 1.5rem;
+    background-color: #DBDBDB;
+}
+.card-header{
+    background-color: rgb(61, 61, 61);
+}
+#container form{
+    display: block;
+}
+.user-container{
+    display: grid;
+    grid-template-areas:
+        "char feed form"
+        "friends feed form";
+    grid-template-rows: auto 1fr;
+    grid-template-columns: 20% 1fr 25%;
+}
+.char-link, .char-li{
+    padding: 0px;
+    margin: 0;
+    text-decoration: none;
+    color: black;
+}
+.char{
+    padding: 10px;
+}
+.char-li:hover, .char-li>a:hover{
+    background-color: #8e8e8e;
+    color: black;
+}
+.user{
+    padding: 0;
+    margin: 0;
+}
+.user-form{
+    grid-area: form;
+}
+.user-characters{
+    grid-area: char;
+}
+.user-feed{
+    grid-area: feed;
+}
+.user-friend{
+    grid-area: friends;
+}

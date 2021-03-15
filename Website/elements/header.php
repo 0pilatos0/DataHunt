@@ -82,13 +82,13 @@
                 <?php 
                     session_start();
                     if(isset($_SESSION['user']) && !empty($_SESSION['user'])) {
-                       echo '<li style="float:right"><a href="./Website/pages/logout">Logout</a></li>';
-                       echo '<li style="float:right"><a href="./Website/pages/user">User</a></li>';
+                       echo '<li style="float:right"><a href="/Website/pages/logout">Logout</a></li>';
+                       echo '<li style="float:right"><a href="/Website/pages/user">User</a></li>';
 
                     }else{
                         echo '                
-                        <li style="float:right"><a href="./Website/pages/register">Registration</a></li>
-                        <li style="float:right"><a href="./Website/pages/login">Login</a></li>';
+                        <li style="float:right"><a href="/Website/pages/register">Registration</a></li>
+                        <li style="float:right"><a href="/Website/pages/login">Login</a></li>';
                     }
                 ?>
                 <li style="float:right"><a href="#news">Game</a></li>

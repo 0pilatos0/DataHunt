@@ -31,7 +31,7 @@
 
     <div id="container" >
         <img src="https://via.placeholder.com/800x427.png?text=Hier+komt+coole+afbeelding+van+game" alt="">
-        <form method="post" style="width: 20rem;">
+        <form method="post" style="width: 30rem;">
             <div>
                 <div class="card-header">
                     <h3>Login</h3>

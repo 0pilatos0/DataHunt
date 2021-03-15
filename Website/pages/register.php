@@ -1,17 +1,39 @@
-<!DOCTYPE html>
-<html lang="eng">
-<head>
-    <title>register</title>
-    <link rel="stylesheet" type="text/css" href="">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet"
-          integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
-</head>
-<body>
-<div id="container" style="width: 18rem;">
-    <form method="post">
-        <div>
+
+<?php include '../elements/header.php' ?>
+<style>
+    form{
+        font-family: 'Roboto', sans-serif;
+        margin-left: auto;
+        margin-top: 30px;
+
+    }
+    .list-group{
+        color: black;
+    }
+    .list-group-item{
+        padding: .2rem 1.5rem;
+        background-color: #DBDBDB;
+    }
+    .card-header{
+        background-color: rgb(61, 61, 61);
+    }
+    #container img{
+        float: left;
+        margin-right: 15px;
+    }
+    #container form{
+        display: block;
+    }
+
+</style>
+<div class="content">
+
+    <div id="container" >
+        <img src="https://via.placeholder.com/800x640.png?text=Hier+komt+coole+afbeelding+van+game" alt="">
+        <form method="post" style="width: 30rem;">
+            <div>
             <div class="card-header">
-                <h3>REGISTER</h3>
+                <h3>Registration</h3>
             </div>
             <ul class="list-group list-group-flush">
                 <li class="list-group-item"><label for="AccName" class="col-sm-1 col-form-label">Name</label>
@@ -33,7 +55,7 @@
                         <input type="password" name="AccPassword" id="password" class="input form-control"><br>
                     </div>
                 </li>
-                <li class="list-group-item"><label for="AccPasswordCheck" class="col-sm-1 col-form-label">Password
+                <li class="list-group-item"><label for="AccPasswordCheck" class="col-sm-6 col-form-label">Password
                         check</label>
                     <div class="col-sm-10">
                         <input type="password" name="AccPasswordCheck" id="passwordCheck" class="input form-control"><br>
@@ -125,9 +147,5 @@
 
     ?>
 </div>
-<script src="../functions.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-b5kHyXgcpbZJO/tY9Ul7kGkf1S0CWuKcCD38l8YkeH8z8QjE0GmW1gYU5S9FOnJ0"
-        crossorigin="anonymous"></script>
-</body>
-</html>
+</div>
+<?php include '../elements/footer.php' ?>

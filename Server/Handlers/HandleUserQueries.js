@@ -4,10 +4,7 @@ module.exports.getByUsername = (sql, username) => { return new Promise(async (re
 
 module.exports.getIDByUsername = (sql, username) => { return new Promise(async (resolve, reject) => { return resolve(await sql.query(`SELECT id FROM users WHERE username = '${username}'`)) }) }
 
-module.exports.updateByUsername = (sql, username, data) => {
-    sql.createSetString(data)
-    return new Promise(async (resolve, reject) => { return resolve(await sql.query(`UPDATE users SET ${setString} WHERE username = '${username}'`)) }) 
-}
+module.exports.updateByUsername = (sql, username, data) => { return new Promise(async (resolve, reject) => { return resolve(await sql.query(`UPDATE users SET ${sql.createSetString(data)} WHERE username = '${username}'`)) }) }
 
 module.exports.create = (sql, data) => {
     return new Promise(async (resolve, reject) => {

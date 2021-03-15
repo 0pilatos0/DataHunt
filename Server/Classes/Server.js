@@ -76,7 +76,7 @@ module.exports.Server = class {
                             }
                         } 
                     })
-                    //worker.send({msg:'ready', data:{bot:this.#bot, sql:this.#sql}})
+                    //worker.send({msg:'ready', data:{}})
                 }
                 
                 process.on('message', (data) => {
@@ -113,9 +113,7 @@ module.exports.Server = class {
 
                     socket.on('register', async (data) => { register(data, socket, players, this.#bot, this.#sql) })
 
-                    socket.on('logout', async () => {
-                        logout(socket, players, this.#bot)
-                    })
+                    socket.on('logout', async () => { logout(socket, players, this.#bot) })
 
                     socket.on('autosave', (data) => {
 
@@ -167,7 +165,10 @@ module.exports.Server = class {
     }
 
     async stop(){
-        if(cluster.isMaster) await this.#bot.sendEmergencyMessage(`❌ server offline`)
-        await this.#sql.disconnect()
+        return new Promise(async (resolve, reject) => {
+            if(cluster.isMaster) await this.#bot.sendEmergencyMessage(`❌ server offline`)
+            await this.#sql.disconnect()
+            return resolve(true)
+        })
     }
 }

@@ -11,7 +11,8 @@
         integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=RocknRoll+One&display=swap" rel="stylesheet">
-    <title>DataHunt || Home</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet"> 
+    <title>DataHunt</title>
 </head>
 <style>
     body {
@@ -81,13 +82,13 @@
                 <?php 
                     session_start();
                     if(isset($_SESSION['user']) && !empty($_SESSION['user'])) {
-                       echo '<li style="float:right"><a href="./Website/pages/logout">Logout</a></li>';
-                       echo '<li style="float:right"><a href="./Website/pages/user">User</a></li>';
+                       echo '<li style="float:right"><a href="/Website/pages/logout">Logout</a></li>';
+                       echo '<li style="float:right"><a href="/Website/pages/user">User</a></li>';
 
                     }else{
                         echo '                
-                        <li style="float:right"><a href="./Website/pages/register">Registration</a></li>
-                        <li style="float:right"><a href="./Website/pages/login">Login</a></li>';
+                        <li style="float:right"><a href="/Website/pages/register">Registration</a></li>
+                        <li style="float:right"><a href="/Website/pages/login">Login</a></li>';
                     }
                 ?>
                 <li style="float:right"><a href="#news">Game</a></li>

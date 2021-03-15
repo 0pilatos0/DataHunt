@@ -32,7 +32,7 @@ function ResetVerification($id)
         $stmt->execute();
         $dbh = null;
         echo "you are verified!";
-        echo "<script>location = \"http://datahunt.duckdns.org\";</script>";
+        echo "<script>location = \"http://live.datahunt.duckdns.org\";</script>";
     } catch (PDOException $e) {
         print "Error!: " . $e->getMessage() . "<br/>";
         die();

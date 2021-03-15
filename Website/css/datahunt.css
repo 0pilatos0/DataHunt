@@ -7,6 +7,9 @@ form{
 .list-group{
     color: black;
 }
+.login-img{
+    float: left;
+}
 .list-group-item{
     padding: .7rem 1.5rem;
     background-color: #DBDBDB;

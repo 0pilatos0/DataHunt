@@ -30,7 +30,7 @@ function sendVerificationMail($receiver, $person, $veritoken)
             'token' => $veritoken
             //hier kunnen meer email variables
         );
-        $body = file_get_contents('htmlmail.html');
+        $body = file_get_contents('../../Mail/htmlmail.html');
 
         if(isset($email_vars)){
             foreach($email_vars as $k=>$v){

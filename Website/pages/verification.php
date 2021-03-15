@@ -1,11 +1,11 @@
 <h1>Please wait...</h1>
 <?php
-require "../../env.php";
+require "../php/database.php";
 
 $verificationtoken = $_GET["veri"];
 $id;
 try {
-    $dbh = new PDO("mysql:host=" . getenv("MYSQLHOST") . ";" . "dbname=" . getenv("MYSQLDATABASE") . ";", getenv("MYSQLUSERNAME"), getenv("MYSQLPASSWORD"));
+    $dbh = db();
     $dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
     $stmt = $dbh->prepare("SELECT `verifytoken`, `id`, `name` FROM `users` WHERE `verifytoken` = (:verifytoken)");
@@ -26,13 +26,13 @@ try {
 function ResetVerification($id)
 {
     try {
-        $dbh = new PDO("mysql:host=" . getenv("MYSQLHOST") . ";" . "dbname=" . getenv("MYSQLDATABASE") . ";", getenv("MYSQLUSERNAME"), getenv("MYSQLPASSWORD"));
+        $dbh = db();
         $stmt = $dbh->prepare("UPDATE `users` SET verifytoken=\"\", verified=1 WHERE id=(:id)");
         $stmt->bindParam(':id', $id);
         $stmt->execute();
         $dbh = null;
         echo "you are verified!";
-        header('Location: ../../index.php');
+        echo "<script>location = \"http://datahunt.duckdns.org\";</script>";
     } catch (PDOException $e) {
         print "Error!: " . $e->getMessage() . "<br/>";
         die();

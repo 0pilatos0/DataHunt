@@ -1,5 +1,3 @@
-
-
 <?php include '../elements/header.php' ?>
 <style>
     form{
@@ -60,8 +58,8 @@
             </div>
         </form>
         <?php
-        require "../../env.php";
-        require "../functions.php";
+        require "../php/database.php";
+        require "../php/functions.php";
         if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $username = changeInput($_POST["AccUsername"]);
             $password = changeInput($_POST["AccPassword"]);
@@ -77,8 +75,7 @@
             }
 
 
-            $dbh = new PDO("mysql:host=" . getenv("MYSQLHOST") . ";" . "dbname=" . getenv("MYSQLDATABASE") . ";", getenv("MYSQLUSERNAME"), getenv("MYSQLPASSWORD"));
-
+            $dbh = db();
             $stmt = $dbh->prepare("SELECT * FROM `users` WHERE `username` = (:username) AND `enabled` = 1 and `verified` = 1");
             $stmt->bindParam(':username', $username);
             $stmt->execute();
@@ -87,8 +84,10 @@
                 session_start();
                 setSessionValue("user", $result['id']);
                 echo 'Password is valid!';
+                $dbh = null;
                 header('location: http://datahunt.duckdns.org');
             } else {
+                $dbh = null;
                 echo 'Invalid password.';
             }
         }

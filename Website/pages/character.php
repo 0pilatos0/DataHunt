@@ -1,5 +1,7 @@
 <?php
-//get achievements and character data from $_GET['id']
+require "../php/database.php";
+
+
 
 ?>
 <!DOCTYPE html>

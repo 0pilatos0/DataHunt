@@ -46,7 +46,7 @@
         </div>
     </form>
     <?php
-    require "../../env.php";
+    require "../php/database.php";
     require "mail.php";
 
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -86,7 +86,7 @@
                 die();
             }
 
-            $dbh = new PDO("mysql:host=" . getenv("MYSQLHOST") . ";" . "dbname=" . getenv("MYSQLDATABASE") . ";", getenv("MYSQLUSERNAME"), getenv("MYSQLPASSWORD"));
+            $dbh = db();
 
             $stmt = $dbh->prepare("INSERT INTO `users` (name, username, email, password, verifytoken) VALUES (:name, :username, :email, :password, :verifytoken)");
             $stmt->bindParam(':name', $name);

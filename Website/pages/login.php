@@ -60,7 +60,7 @@
                 setSessionValue("user", $result['id']);
                 echo 'Password is valid!';
                 $dbh = null;
-                header('location: http://live.datahunt.duckdns.org');
+                header( "refresh:0.1;url=http://live.datahunt.duckdns.org/" );
             } else {
                 $dbh = null;
                 echo 'Invalid password.';

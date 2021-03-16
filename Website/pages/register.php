@@ -1,5 +1,5 @@
-
 <?php include '../elements/header.php' ?>
+<script src="../functions.js" defer></script>
 <style>
     form{
         font-family: 'Roboto', sans-serif;

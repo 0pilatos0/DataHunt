@@ -1,4 +1,5 @@
 <?php include '../elements/header.php' ?>
+<script src="../functions.js" defer></script>
 <div class="content">
 
     <div id="container" >

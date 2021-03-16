@@ -78,7 +78,7 @@
         <nav class="navigation">
             <h1 class="bold">DATAHUNT</h1>
             <ul>
-                <li><a class="active" href="">Home</a></li>
+                <li><a class="active" href="/index.php">Home</a></li>
                 <li><a href=" #home">Updates</a></li>
                 <?php 
                     session_start();

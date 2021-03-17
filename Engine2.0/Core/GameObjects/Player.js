@@ -4,6 +4,7 @@ import { Sprite } from "../Sprite.js"
 export class Player extends GameObject{
     #controllable
     #keysPressed = []
+    #speed
     constructor(position, size, controllable = false){
         super(position, size, Sprite('/Engine2.0/Sprites/Player.png'))
         this.#controllable = controllable
@@ -12,6 +13,7 @@ export class Player extends GameObject{
 
     #init = () => {
         if(this.#controllable){
+            this.#speed = 100
             window.player = this
             document.body.addEventListener('keydown', this.#keydown)
             document.body.addEventListener('keyup', this.#keyup)
@@ -25,19 +27,19 @@ export class Player extends GameObject{
             switch (key) {
                 case 'w':
                 case 'W':
-                    this.position.y -= 100 * window.deltaTime
+                    this.position.y -= this.#speed * window.deltaTime
                     break;
                 case 'a':
                 case 'A':
-                    this.position.x -= 100 * window.deltaTime
+                    this.position.x -= this.#speed * window.deltaTime
                     break;
                 case 's':
                 case 'S':
-                    this.position.y += 100 * window.deltaTime
+                    this.position.y += this.#speed * window.deltaTime
                     break;
                 case 'd':
                 case 'D':
-                    this.position.x += 100 * window.deltaTime
+                    this.position.x += this.#speed * window.deltaTime
                     break;
                 default:
                     break;

@@ -4,6 +4,9 @@ export async function Sprite(path){
         img.onload = () => {
             let canvas = document.createElement('canvas')
             let ctx = canvas.getContext('2d')
+            console.log(window.spriteSize)
+            canvas.width = window.spriteSize
+            canvas.height = window.spriteSize
             ctx.drawImage(img, 0, 0, window.spriteSize, window.spriteSize)
             return resolve(canvas)
         }

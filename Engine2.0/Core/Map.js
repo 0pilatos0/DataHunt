@@ -54,7 +54,7 @@ export class Map{
 
                     let tX = x * this.#map.tilewidth
                     let tY = y * this.#map.tileheight
-
+                    
                     tileContext.drawImage(this.#tilesets[i], -tX, -tY)
 
                     this.#tiles.push(await Sprite(tileCanvas.toDataURL('image/png')))
@@ -73,10 +73,7 @@ export class Map{
             for (let j = 0; j < this.#map.layers[i].data.length; j++) {
                 let row = this.#map.layers[i].data.splice(0, this.#map.width)
                 for (let x = 0; x < row.length; x++) {
-                    let tile = this.#tiles[row[x]]
-                    if(tile){
-                        row[x] = tile
-                    }
+                    row[x] = this.#tiles[row[x]]
                 }
                 this.#customMap[i].tiles.push(row)
             }

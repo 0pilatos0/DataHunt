@@ -78,3 +78,38 @@
 .user-friend {
     grid-area: friends;
 }
+.overlay{
+    top: 0px;
+    right: 0px;
+    bottom: 0px;
+    left: 0px;
+    z-index: 1;
+    animation-name: opacity;
+    animation-duration: 1s;
+    animation-fill-mode: forwards;
+    position: absolute;
+    background-color: black;
+}
+.delete-confirm{
+    top: -500px;
+    width: 700px;
+    height: 250px;
+    left: calc(50% - 350px);
+    text-align: center;
+    color: black;
+    position: absolute;
+    animation-name: deleteconfirm;
+    animation-duration: 2s;
+    z-index: 2;
+    animation-fill-mode: forwards;
+    background-color: white;
+}
+@keyframes deleteconfirm {
+    from {top: -500px}
+    to {top: 150px}
+}
+
+@keyframes opacity {
+    from {opacity:0.0;}
+    to {opacity:70%;}
+}

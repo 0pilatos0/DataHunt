@@ -17,6 +17,16 @@ function userInfo($param){
     return $result;
 
 }
+
+function deleteUser($param){
+    $dbh = db();
+
+    $stmt = $dbh->prepare("DELETE FROM users where id = :id");
+    $stmt->bindParam(':id', $param);
+    $stmt->execute();
+    $dbh = null;
+}
+
 function characters($param){
     $dbh = db();
 

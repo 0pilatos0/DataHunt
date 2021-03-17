@@ -19,6 +19,10 @@ function resetSession()
 {
     session_unset();
 }
+function deleteAccount($id){
+    deleteUser($id);
+    resetSession();
+}
 function showCharacters($characters){
     for ($i = 0; $i < sizeof($characters); $i++){
         $c = $characters[$i];

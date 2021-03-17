@@ -5,6 +5,9 @@ export class Window{
     #canvas
     #ctx
     #scene
+    #deltaTime
+    #fps = 0
+    #lastUpdate = Date.now()
 
     constructor(){
         this.#init()
@@ -21,6 +24,7 @@ export class Window{
         this.#scene = new Scene()
         window.requestAnimationFrame(this.#render)
         setInterval(() => { this.#update() }, 1000/60)
+        setInterval(() => { this.#fps = 0 }, 1000)
     }
      
     #resize = () => {
@@ -52,6 +56,10 @@ export class Window{
     }
 
     #update = () => {
+        let now = Date.now()
+        window.deltaTime = (now - this.#lastUpdate) / 1000
+        this.#lastUpdate = now
+        this.#fps++
         this.#scene.update()
         this.map.update()
         window.player.update()

@@ -37,7 +37,7 @@
         "char feed form"
         "friends feed form";
     grid-template-rows: auto 1fr;
-    grid-template-columns: 20% 1fr 25%;
+    grid-template-columns: 20% 1fr 30%;
 }
 
 .char-link,

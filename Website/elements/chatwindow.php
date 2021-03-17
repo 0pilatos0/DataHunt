@@ -16,7 +16,7 @@
                   <img src="https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png" alt="" style="width:40px">
                 </div>
                 <div class="col-sm-7">
-                  <h5>Emile</h1>
+                  <h5>Emile</h5>
                   <p>hahaha gr...</p>
                 </div>
                 <div class="col-sm-2 time">
@@ -35,7 +35,7 @@
                   <img src="https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png" alt="" style="width:40px">
                 </div>
                 <div class="col-sm-7">
-                  <h5>Emile</h1>
+                  <h5>Emile</h5>
                   <p>hahaha gr...</p>
                 </div>
                 <div class="col-sm-2 time">
@@ -54,7 +54,7 @@
                   <img src="https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png" alt="" style="width:40px">
                 </div>
                 <div class="col-sm-7">
-                  <h5>Emile</h1>
+                  <h5>Emile</h5>
                   <p>hahaha gr...</p>
                 </div>
                 <div class="col-sm-2 time">
@@ -73,7 +73,7 @@
                   <img src="https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png" alt="" style="width:40px">
                 </div>
                 <div class="col-sm-7">
-                  <h5>Emile</h1>
+                  <h5>Emile</h5>
                   <p>hahaha gr...</p>
                 </div>
                 <div class="col-sm-2 time">
@@ -92,7 +92,7 @@
                   <img src="https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png" alt="" style="width:40px">
                 </div>
                 <div class="col-sm-7">
-                  <h5>Emile</h1>
+                  <h5>Emile</h5>
                   <p>hahaha gr...</p>
                 </div>
                 <div class="col-sm-2 time">
@@ -111,7 +111,7 @@
                   <img src="https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png" alt="" style="width:40px">
                 </div>
                 <div class="col-sm-7">
-                  <h5>Emile</h1>
+                  <h5>Emile</h5>
                   <p>hahaha gr...</p>
                 </div>
                 <div class="col-sm-2 time">
@@ -130,7 +130,7 @@
                   <img src="https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png" alt="" style="width:40px">
                 </div>
                 <div class="col-sm-7">
-                  <h5>Emile</h1>
+                  <h5>Emile</h5>
                   <p>hahaha gr...</p>
                 </div>
                 <div class="col-sm-2 time">
@@ -149,7 +149,7 @@
                   <img src="https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png" alt="" style="width:40px">
                 </div>
                 <div class="col-sm-7">
-                  <h5>Emile</h1>
+                  <h5>Emile</h5>
                   <p>hahaha gr...</p>
                 </div>
                 <div class="col-sm-2 time">
@@ -168,7 +168,7 @@
                   <img src="https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png" alt="" style="width:40px">
                 </div>
                 <div class="col-sm-7">
-                  <h5>Emile</h1>
+                  <h5>Emile</h5>
                   <p>hahaha gr...</p>
                 </div>
                 <div class="col-sm-2 time">
@@ -187,7 +187,7 @@
                   <img src="https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png" alt="" style="width:40px">
                 </div>
                 <div class="col-sm-7">
-                  <h5>Emile</h1>
+                  <h5>Emile</h5>
                   <p>hahaha gr...</p>
                 </div>
                 <div class="col-sm-2 time">
@@ -206,7 +206,7 @@
                   <img src="https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png" alt="" style="width:40px">
                 </div>
                 <div class="col-sm-7">
-                  <h5>Emile</h1>
+                  <h5>Emile</h5>
                   <p>hahaha gr...</p>
                 </div>
                 <div class="col-sm-2 time">
@@ -225,7 +225,7 @@
                   <img src="https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png" alt="" style="width:40px">
                 </div>
                 <div class="col-sm-7">
-                  <h5>Emile</h1>
+                  <h5>Emile</h5>
                   <p>hahaha gr...</p>
                 </div>
                 <div class="col-sm-2 time">
@@ -244,7 +244,7 @@
                   <img src="https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png" alt="" style="width:40px">
                 </div>
                 <div class="col-sm-7">
-                  <h5>Emile</h1>
+                  <h5>Emile</h5>
                   <p>hahaha gr...</p>
                 </div>
                 <div class="col-sm-2 time">

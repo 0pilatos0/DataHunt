@@ -13,7 +13,7 @@ export class Player extends GameObject{
 
     #init = () => {
         if(this.#controllable){
-            this.#speed = 100
+            this.#speed = 500
             window.player = this
             document.body.addEventListener('keydown', this.#keydown)
             document.body.addEventListener('keyup', this.#keyup)

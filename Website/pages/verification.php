@@ -1,4 +1,3 @@
-<h1>Please wait...</h1>
 <?php
 require "../php/database.php";
 
@@ -31,8 +30,9 @@ function ResetVerification($id)
         $stmt->bindParam(':id', $id);
         $stmt->execute();
         $dbh = null;
-        echo "you are verified!";
-        echo "<script>location = \"http://datahunt.duckdns.org\";</script>";
+        include "../elements/header.php";
+        echo "<h2>Thank you for verifying!</h2>";
+        include "../elements/footer.php";
     } catch (PDOException $e) {
         print "Error!: " . $e->getMessage() . "<br/>";
         die();

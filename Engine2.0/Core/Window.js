@@ -38,8 +38,8 @@ export class Window{
         this.#ctx.setTransform(scaleFitNative, 0, 0, scaleFitNative, window.innerWidth / 2, window.innerHeight / 2)
         this.#ctx.imageSmoothingEnabled = scaleFitNative < 1
 
-        window.maxSpritesX = Math.round(window.displayWidth / window.spriteSize) + 1
-        window.maxSpritesY = Math.round(window.displayHeight / window.spriteSize) + 1
+        window.maxSpritesX = Math.round(window.displayWidth / window.spriteSize) + 2
+        window.maxSpritesY = Math.round(window.displayHeight / window.spriteSize) + 2
 
         console.log(window.maxSpritesX)
         console.log(window.maxSpritesY)

@@ -1,0 +1,119 @@
+.open-button {
+    background-color: #3D3D3D;
+    color: white;
+    padding: 16px 20px;
+    border: none;
+    cursor: pointer;
+    opacity: 0.8;
+    position: fixed;
+    bottom: 50vh;
+    right: -20px;
+    width: 100px;
+    transform: rotate(-90deg);
+
+
+    -webkit-transform: rotate(-90deg);
+
+    -moz-transform: rotate(-90deg);
+    -ms-transform: rotate(-90deg);
+    -o-transform: rotate(-90deg);
+}
+
+.chat-popup {
+    display: none;
+    position: fixed;
+    bottom: 15px;
+    right: 15px;
+    border: 3px solid #f1f1f1;
+    z-index: 9;
+    background-color: #DBDBDB;
+    color: black;
+    height: 500px;
+    width: 700px;
+}
+
+.form-container {
+    max-width: 300px;
+    padding: 10px;
+}
+
+.form-container textarea {
+    width: 100%;
+    padding: 15px;
+    margin: 5px 0 22px 0;
+    border: none;
+    background: #f1f1f1;
+    resize: none;
+    min-height: 200px;
+}
+
+.form-container textarea:focus {
+
+    outline: none;
+}
+
+.form-container .btn {
+    background-color: #4CAF50;
+    color: white;
+    padding: 16px 20px;
+    border: none;
+    cursor: pointer;
+    width: 100%;
+    margin-bottom: 10px;
+    opacity: 0.8;
+}
+
+.form-container .cancel {
+    background-color: #3D3D3D;
+    border-radius: 50px;
+}
+
+.form-container .btn:hover,
+.open-button:hover {
+    opacity: 1;
+}
+
+.options {
+    text-align: right;
+    border-bottom: 2px solid #333333;
+}
+
+.contactList {
+    height: 500px;
+    border-right: 2px solid #333333;
+    padding: 0;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+.contactList ul {
+    list-style-type: none;
+    margin-top: 2px;
+    padding: 0;
+}
+
+.contact {
+    padding-left: 1rem;
+    text-decoration: none;
+    border-bottom: 2px solid #333333;
+    padding-top: 5px;
+}
+
+.contact a {
+    text-decoration: none;
+    color: black;
+}
+
+.time p {
+    font-size: 10px;
+
+}
+
+.time {
+    margin-left: 0px;
+}
+
+.profile {
+    margin-left: 1px;
+    padding-left: 0px;
+}

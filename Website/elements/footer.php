@@ -1,3 +1,4 @@
+<?php include 'chatwindow.php' ?>
 <footer class="footer">
             <p>© 2021 - Datahunt Team</p>
         </footer>

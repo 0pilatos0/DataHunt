@@ -1,12 +1,6 @@
 
 <?php include '../elements/header.php' ?>
 <style>
-    form{
-        font-family: 'Roboto', sans-serif;
-        margin-left: auto;
-        margin-top: 30px;
-
-    }
     .list-group{
         color: black;
     }
@@ -30,7 +24,7 @@
 
     <div id="container" >
         <img src="https://via.placeholder.com/800x640.png?text=Hier+komt+coole+afbeelding+van+game" alt="">
-        <form method="post" style="width: 30rem;">
+        <form method="post" style="width: 30rem;" class="formLogin">
             <div>
             <div class="card-header">
                 <h3>Registration</h3>

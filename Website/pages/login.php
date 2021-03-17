@@ -59,7 +59,7 @@
             if (password_verify($password, $result['password'])) {
                 setSessionValue("user", $uid);
                 echo 'Password is valid!';
-                if ($_POST["AccPassword"] === "on") {
+                if ($_POST["AccRemember"] === "on") {
                     $dbh = db();
                     $stmt = $dbh->prepare("INSERT INTO logintokens (user_id, token) VALUES (:user_id, :token)");
                     $stmt->bindParam(':user_id', $uid);

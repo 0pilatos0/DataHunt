@@ -1,4 +1,5 @@
 import { CustomImage, Sprite } from "./Sprite.js"
+import { Vector2 } from "./Vector2.js"
 
 export class Map{
     #map
@@ -80,6 +81,8 @@ export class Map{
                 this.#customMap[i].tiles.push(row)
             }
         }
+        window.mapBoundX = this.#map.width * window.spriteSize
+        window.mapBoundY = this.#map.height * window.spriteSize
         console.log(this.#customMap)
     }
 
@@ -87,7 +90,7 @@ export class Map{
         for (let i = 0; i < this.#mapAreaToDraw.length; i++) {
             for (let y = 0; y < this.#mapAreaToDraw[i].length; y++) {
                 for (let x = 0; x < this.#mapAreaToDraw[i][y].length; x++) {
-                    ctx.drawImage(this.#mapAreaToDraw[i][y][x], x * window.spriteSize - window.displayWidth / 2, y * window.spriteSize - window.displayHeight / 2)
+                    ctx.drawImage(this.#mapAreaToDraw[i][y][x], x * window.spriteSize - window.mapOffsetX - window.displayWidth / 2, y * window.spriteSize - window.mapOffsetY - window.displayHeight / 2)
                     //ctx.rect(x * window.spriteSize - window.deviceDisplayWidth / 2, y * window.spriteSize -  window.deviceDisplayHeight / 2,  window.spriteSize, window.spriteSize)
                     
                 }
@@ -101,12 +104,22 @@ export class Map{
             if(!this.#mapAreaToDraw[i]) this.#mapAreaToDraw.push(new Array)
             for (let y = 0; y < window.maxSpritesY; y++) {
                 if(!this.#mapAreaToDraw[i][y]) this.#mapAreaToDraw[i].push(new Array)
-                let posY = y //window.spriteSize
+                let posY = y + mapLocation().y
+                window.mapOffsetY = window.player.position.y%window.spriteSize
+                if(posY<0) posY = 0
+                if(posY>=this.#customMap[i].tiles.length) posY = this.#customMap[i].tiles.length - 1 - y
                 for (let x = 0; x < window.maxSpritesX; x++) {
-                    let posX = x
+                    let posX = x + mapLocation().x
+                    window.mapOffsetX = window.player.position.x%window.spriteSize
+                    if(posX<0) posX = 0
+                    if(posX>=this.#customMap[i].tiles[posY].length) posX = this.#customMap[i].tiles[posY].length - 1 - x
                     this.#mapAreaToDraw[i][y][x] = this.#customMap[i].tiles[posY][posX] || new Image()
                 }
             }
         }
     }
+}
+
+function mapLocation (){
+    return new Vector2(Math.floor(window.player.position.x/window.spriteSize), Math.floor(window.player.position.y/window.spriteSize))
 }

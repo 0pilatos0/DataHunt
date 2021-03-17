@@ -45,6 +45,10 @@ export class GameObject{
         return this.#size
     }
 
+    get sprite(){
+        return this.#sprite
+    }
+
     render(ctx){
         if(this.#sprite) ctx.drawImage(this.#sprite, this.#position.x - window.displayWidth / 2, this.#position.y - window.displayHeight / 2)
     }

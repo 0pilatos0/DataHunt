@@ -25,24 +25,50 @@ export class Player extends GameObject{
             switch (key) {
                 case 'w':
                 case 'W':
-                    this.position.y -= 1
+                    this.position.y -= 10
                     break;
                 case 'a':
                 case 'A':
-                    this.position.x -= 1
+                    this.position.x -= 10
                     break;
                 case 's':
                 case 'S':
-                    this.position.y += 1
+                    this.position.y += 10
                     break;
                 case 'd':
                 case 'D':
-                    this.position.x += 1
+                    this.position.x += 10
                     break;
                 default:
                     break;
             }
         }
+        if(this.position.x < 0){
+            this.position.x = 0
+        }
+        if(this.position.y < 0){
+            this.position.y = 0
+        }
+        if(this.position.x > window.mapBoundX){
+            this.position.x = window.mapBoundX
+        }
+        if(this.position.y > window.mapBoundY){
+            this.position.y = window.mapBoundY
+        }
+    }
+
+    render = (ctx) => {
+        if(this.position.x+this.size.x/2 >= window.displayWidth/2 && this.position.x+this.size.x/2 < window.mapBoundX-window.displayWidth/2 || this.position.y+this.size.y/2 >= window.displayHeight/2 && this.position.y+this.size.y/2 < window.mapBoundY-window.displayHeight/2){
+            ctx.drawImage(this.sprite, 0, 0)
+        }else{
+            super.render(ctx)
+        }
+        // if(this.position.y+this.size.y/2 >= window.mapBoundY-window.displayHeight/2){
+        //     super.render(ctx)
+        // }
+        // if(this.position.x+this.size.x/2 >= window.mapBoundX-window.displayWidth/2){
+        //     super.render(ctx)
+        // }
     }
 
     #keydown = (e) => {

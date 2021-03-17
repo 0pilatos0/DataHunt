@@ -101,7 +101,7 @@ export class Map{
             if(!this.#mapAreaToDraw[i]) this.#mapAreaToDraw.push(new Array)
             for (let y = 0; y < window.maxSpritesY; y++) {
                 if(!this.#mapAreaToDraw[i][y]) this.#mapAreaToDraw[i].push(new Array)
-                let posY = y
+                let posY = y //window.spriteSize
                 for (let x = 0; x < window.maxSpritesX; x++) {
                     let posX = x
                     this.#mapAreaToDraw[i][y][x] = this.#customMap[i].tiles[posY][posX] || new Image()

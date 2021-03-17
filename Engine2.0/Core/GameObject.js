@@ -20,13 +20,13 @@ export class GameObject{
     constructor(position, size, sprite) {
         this.#position = new Vector2(position.x, position.y, this.#positionCallback)
         this.#size = new Vector2(size.x, size.y, this.#sizeCallback)
-        this.#sprite = sprite
-        this.#init()
+        this.#init(sprite)
     }
 
-    #init = () => {
+    #init = async (sprite) => {
         window.gameObjects.push(this)
         reloadGameObjectList()
+        this.#sprite = await sprite
     }
 
     set position(position){
@@ -46,7 +46,7 @@ export class GameObject{
     }
 
     render(ctx){
-        ctx.drawImage(sprite, this.#position.x - window.spriteSize / 2 - window.displayWidth / 2, this.#position.y - window.spriteSize / 2 - window.displayHeight / 2)
+        if(this.#sprite) ctx.drawImage(this.#sprite, this.#position.x - window.displayWidth / 2, this.#position.y - window.displayHeight / 2)
     }
 
     update(){

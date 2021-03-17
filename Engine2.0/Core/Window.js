@@ -46,12 +46,14 @@ export class Window{
         window.requestAnimationFrame(this.#render)
         this.#ctx.clearRect(-window.displayWidth / 2, -window.displayHeight / 2, window.displayWidth, window.displayHeight)
         this.#ctx.fillRect(-window.displayWidth / 2, -window.displayHeight / 2, window.displayWidth, window.displayHeight)
-        this.#scene.render(this.#ctx)
         this.map.render(this.#ctx)
+        this.#scene.render(this.#ctx)
+        window.player.render(this.#ctx)
     }
 
     #update = () => {
         this.#scene.update()
         this.map.update()
+        window.player.update()
     }
 }

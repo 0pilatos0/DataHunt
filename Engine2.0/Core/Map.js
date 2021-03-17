@@ -1,5 +1,4 @@
 import { CustomImage, Sprite } from "./Sprite.js"
-import { Vector2 } from "./Vector2.js"
 
 export class Map{
     #map
@@ -58,7 +57,6 @@ export class Map{
                     tileContext.drawImage(this.#tilesets[i], -tX, -tY)
 
                     this.#tiles.push(await Sprite(tileCanvas.toDataURL('image/png')))
-                    //this.#tiles.push(this.#tilesets[i])
                 }
             }
         }
@@ -108,7 +106,7 @@ export class Map{
                     posY += Math.floor((window.player.position.y + window.player.size.y / 2 - window.displayHeight / 2) / window.spriteSize)
                 }
                 if(posY < 0) posY = 0
-                if(posY>=this.#customMap[i].tiles.length) posY = this.#customMap[i].tiles.length - 1 - y //fix this not working correct
+                if(posY >= this.#customMap[i].tiles.length) posY = this.#customMap[i].tiles.length - 1 - y //fix this not working correct
                 for (let x = 0; x < window.maxSpritesX; x++) {
                     let posX = x
                     if(window.player.position.x + window.player.size.x / 2 >= window.displayWidth / 2 && window.player.position.x + window.player.size.x / 2 < window.mapBoundX - window.displayWidth / 2){

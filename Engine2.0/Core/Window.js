@@ -5,7 +5,6 @@ export class Window{
     #canvas
     #ctx
     #scene
-    #deltaTime
     #fps = 0
     #lastUpdate = Date.now()
 

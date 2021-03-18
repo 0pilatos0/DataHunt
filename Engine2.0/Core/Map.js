@@ -86,10 +86,6 @@ export class Map{
             for (let y = 0; y < this.#mapAreaToDraw[i].length; y++) {
                 for (let x = 0; x < this.#mapAreaToDraw[i][y].length; x++) {
                     ctx.drawImage(this.#mapAreaToDraw[i][y][x], x * window.spriteSize - window.mapOffsetX - window.displayWidth / 2, y * window.spriteSize - window.mapOffsetY - window.displayHeight / 2)
-                    ctx.beginPath()
-                    ctx.strokeStyle = "#000000"
-                    ctx.rect(x * window.spriteSize - window.mapOffsetX - window.displayWidth / 2, y * window.spriteSize - window.mapOffsetY - window.displayHeight / 2,  window.spriteSize, window.spriteSize)
-                    ctx.stroke()
                 }
             }
         }

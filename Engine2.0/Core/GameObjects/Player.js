@@ -51,18 +51,18 @@ export class Player extends GameObject{
         if(this.position.y < 0){
             this.position.y = 0
         }
-        if(this.position.x > window.mapBoundX){
-            this.position.x = window.mapBoundX
+        if(this.position.x + this.size.x > window.mapBoundX){
+            this.position.x = window.mapBoundX - this.size.x
         }
-        if(this.position.y > window.mapBoundY){
-            this.position.y = window.mapBoundY
+        if(this.position.y + this.size.y > window.mapBoundY){
+            this.position.y = window.mapBoundY - this.size.y
         }
     }
 
     render = (ctx) => {
         if(!this.sprite) return
-        let renderX = 0
-        let renderY = 0
+        let renderX = null
+        let renderY = null
         if(this.position.x + this.size.x / 2 >= window.displayWidth / 2 && this.position.x + this.size.x / 2 < window.mapBoundX - window.displayWidth / 2){
             renderX = -this.size.x / 2
         }
@@ -73,13 +73,13 @@ export class Player extends GameObject{
             renderX = -this.size.x / 2
             renderY = -this.size.y / 2
         }
-        ctx.drawImage(this.sprite, renderX || this.position.x - window.displayWidth / 2, renderY || this.position.y - window.displayHeight / 2)
-        // if(this.position.y + this.size.y / 2 >= window.mapBoundY - window.displayHeight / 2){
-        //     super.render(ctx)
-        // }
-        // if(this.position.x + this.size.x / 2 >= window.mapBoundX - window.displayWidth / 2){
-        //     super.render(ctx)
-        // }
+        if(this.position.x + this.size.x / 2 >= window.mapBoundX - window.displayWidth / 2){
+            renderX = this.position.x - window.mapBoundX + window.displayWidth / 2
+        }
+        if(this.position.y + this.size.y / 2 >= window.mapBoundY - window.displayHeight / 2){
+            renderY = this.position.y - window.mapBoundY + window.displayHeight / 2
+        }
+        ctx.drawImage(this.sprite, renderX ?? this.position.x - window.displayWidth / 2, renderY ?? this.position.y - window.displayHeight / 2)
     }
 
     #keydown = (e) => {

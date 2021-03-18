@@ -86,7 +86,10 @@ export class Map{
             for (let y = 0; y < this.#mapAreaToDraw[i].length; y++) {
                 for (let x = 0; x < this.#mapAreaToDraw[i][y].length; x++) {
                     ctx.drawImage(this.#mapAreaToDraw[i][y][x], x * window.spriteSize - window.mapOffsetX - window.displayWidth / 2, y * window.spriteSize - window.mapOffsetY - window.displayHeight / 2)
-                    //ctx.rect(x * window.spriteSize - window.deviceDisplayWidth / 2, y * window.spriteSize -  window.deviceDisplayHeight / 2,  window.spriteSize, window.spriteSize)
+                    ctx.beginPath()
+                    ctx.strokeStyle = "#000000"
+                    ctx.rect(x * window.spriteSize - window.mapOffsetX - window.displayWidth / 2, y * window.spriteSize - window.mapOffsetY - window.displayHeight / 2,  window.spriteSize, window.spriteSize)
+                    ctx.stroke()
                 }
             }
         }
@@ -105,16 +108,22 @@ export class Map{
                     window.mapOffsetY = (window.player.position.y + window.player.size.y / 2 - window.displayHeight / 2) % window.spriteSize
                     posY += Math.floor((window.player.position.y + window.player.size.y / 2 - window.displayHeight / 2) / window.spriteSize)
                 }
+                else if(window.player.position.y + window.player.size.y / 2 >= window.mapBoundY - window.displayHeight / 2){
+                    posY += this.#customMap[i].tiles.length  - Math.round(window.displayHeight / window.spriteSize)
+                }
                 if(posY < 0) posY = 0
-                if(posY >= this.#customMap[i].tiles.length) posY = this.#customMap[i].tiles.length - 1 - y //fix this not working correct
+                if(posY >= this.#customMap[i].tiles.length - 1) posY = this.#customMap[i].tiles.length - 1
                 for (let x = 0; x < window.maxSpritesX; x++) {
                     let posX = x
                     if(window.player.position.x + window.player.size.x / 2 >= window.displayWidth / 2 && window.player.position.x + window.player.size.x / 2 < window.mapBoundX - window.displayWidth / 2){
                         window.mapOffsetX = (window.player.position.x + window.player.size.x / 2 - window.displayWidth / 2) % window.spriteSize
                         posX += Math.floor((window.player.position.x + window.player.size.x / 2 - window.displayWidth / 2) / window.spriteSize)
                     }
+                    else if(window.player.position.x + window.player.size.x / 2 >= window.mapBoundX - window.displayWidth / 2){
+                        posX += this.#customMap[i].tiles[posY].length - Math.round(window.displayWidth / window.spriteSize)
+                    }
                     if(posX < 0) posX = 0
-                    if(posX >= this.#customMap[i].tiles[posY].length) posX = this.#customMap[i].tiles[posY].length - 1 - x //fix this not working correct
+                    if(posX >= this.#customMap[i].tiles[posY].length - 1) posX = this.#customMap[i].tiles[posY].length - 1
                     this.#mapAreaToDraw[i][y][x] = this.#customMap[i].tiles[posY][posX] || new Image()
                 }
             }

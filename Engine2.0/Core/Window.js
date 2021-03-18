@@ -14,7 +14,7 @@ export class Window{
     }
 
     #init = () => {
-        window.spriteSize = 96
+        window.spriteSize = 64
         this.#canvas = document.createElement('canvas')
         this.#ctx = this.#canvas.getContext('2d')
         this.#resize()

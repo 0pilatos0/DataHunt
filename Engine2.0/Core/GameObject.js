@@ -2,7 +2,7 @@ import { Sprite } from "./Sprite.js"
 import { Vector2 } from "./Vector2.js"
 
 window.gameObjects = []
-window.gameObjectTypes = ['Player'] //<- make it dynamic
+window.gameObjectTypes = ['Player'] //TODO <- make it dynamic
 
 export class GameObject{
     #position

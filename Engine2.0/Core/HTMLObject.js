@@ -1,7 +1,8 @@
 import { Vector2 } from "./Vector2.js"
 
 window.htmlObjects = []
-window.htmlObjectTypes = ['Button', 'Div', 'InputField', 'List', 'Title'] //<- make it dynamic
+window.htmlObjectTypes = ['Button', 'Div', 'InputField', 'List', 'Title'] //TODO <- make it dynamic
+//TODO extend from BaseObject???
 
 export class HTMLObject{
     #position

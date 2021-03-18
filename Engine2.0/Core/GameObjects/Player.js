@@ -69,10 +69,6 @@ export class Player extends GameObject{
         if(this.position.y + this.size.y / 2 >= window.displayHeight / 2 && this.position.y + this.size.y / 2 < window.mapBoundY - window.displayHeight / 2){
             renderY = -this.size.y / 2
         }
-        if(this.position.x + this.size.x / 2 >= window.displayWidth / 2 && this.position.x + this.size.x / 2 < window.mapBoundX - window.displayWidth / 2 && this.position.y + this.size.y / 2 >= window.displayHeight / 2 && this.position.y + this.size.y / 2 < window.mapBoundY - window.displayHeight / 2){
-            renderX = -this.size.x / 2
-            renderY = -this.size.y / 2
-        }
         if(this.position.x + this.size.x / 2 >= window.mapBoundX - window.displayWidth / 2){
             renderX = this.position.x - window.mapBoundX + window.displayWidth / 2
         }

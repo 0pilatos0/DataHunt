@@ -1,4 +1,4 @@
-import { HTMLObject } from '../HTMLObject.js'
+import { HTMLObject } from '../Core/HTMLObject.js'
 
 export class InputField extends HTMLObject{
     constructor(position, size, type = null, parent = null){

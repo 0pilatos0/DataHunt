@@ -1,4 +1,4 @@
-import { HTMLObject } from "../HTMLObject.js";
+import { HTMLObject } from "../Core/HTMLObject.js";
 
 export class Div extends HTMLObject{
     constructor(position, size, parent = null){

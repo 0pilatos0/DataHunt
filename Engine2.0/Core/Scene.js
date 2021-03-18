@@ -23,4 +23,9 @@ export class Scene{
             this.#gameObjects[i].update()
         }
     }
+
+    addObject(object){
+        if(object.__proto__?.__proto__ == 'GameObject') this.#gameObjects.push(object)
+        else if(object.__proto__?.__proto__ == 'HTMLObject') this.#htmlObjects.push(object)
+    }
 }

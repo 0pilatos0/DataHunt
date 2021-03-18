@@ -1,4 +1,4 @@
-import { HTMLObject } from "../HTMLObject.js";
+import { HTMLObject } from "../Core/HTMLObject.js";
 import { Vector2 } from "../Vector2.js";
 
 export class ListItem extends HTMLObject{

@@ -1,12 +1,13 @@
-import { GameObject } from "../GameObject.js"
-import { Sprite } from "../Sprite.js"
+import { GameObject } from "../Core/GameObject.js"
+import { Sprite } from "../Core/Sprite.js"
+import { Vector2 } from "../Core/Vector2.js"
 
 export class Player extends GameObject{
     #controllable
     #keysPressed = []
     #speed
-    constructor(position, size, controllable = false){
-        super(position, size, Sprite('/Engine2.0/Sprites/Player.png'))
+    constructor(position, controllable = false){
+        super(position, new Vector2(window.spriteSize, window.spriteSize), Sprite('/Engine2.0/Sprites/Player.png'))
         this.#controllable = controllable
         this.#init()
     }

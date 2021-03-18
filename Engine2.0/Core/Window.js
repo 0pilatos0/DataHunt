@@ -1,5 +1,4 @@
-import { Map } from "./Map.js"
-import { Scene } from "./Scene.js"
+import { GameScene } from "../Scenes/GameScene.js"
 
 export class Window{
     #canvas
@@ -10,7 +9,6 @@ export class Window{
 
     constructor(){
         this.#init()
-        this.map = new Map()
     }
 
     #init = () => {
@@ -20,7 +18,7 @@ export class Window{
         this.#resize()
         window.addEventListener('resize', this.#resize)
         document.body.appendChild(this.#canvas)
-        this.#scene = new Scene()
+        this.#scene = new GameScene()
         window.requestAnimationFrame(this.#render)
         setInterval(() => { this.#update() }, 1000/60)
         setInterval(() => { this.#fps = 0 }, 1000)
@@ -49,7 +47,6 @@ export class Window{
         window.requestAnimationFrame(this.#render)
         this.#ctx.clearRect(-window.displayWidth / 2, -window.displayHeight / 2, window.displayWidth, window.displayHeight)
         this.#ctx.fillRect(-window.displayWidth / 2, -window.displayHeight / 2, window.displayWidth, window.displayHeight)
-        this.map.render(this.#ctx)
         this.#scene.render(this.#ctx)
         window.player.render(this.#ctx)
     }
@@ -59,8 +56,7 @@ export class Window{
         window.deltaTime = (now - this.#lastUpdate) / 1000
         this.#lastUpdate = now
         this.#fps++
-        this.#scene.update()
-        this.map.update()
+        this.#scene.update()     
         window.player.update()
     }
 }

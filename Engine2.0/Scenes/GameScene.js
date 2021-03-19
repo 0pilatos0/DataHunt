@@ -5,6 +5,7 @@ import { Player } from "../GameObjects/Player.js";
 
 export class GameScene extends Scene{
     #map
+    #player
 
     constructor(){
         super()
@@ -13,16 +14,19 @@ export class GameScene extends Scene{
 
     #init = () => {
         this.#map = new Map()
-        this.addObject(new Player(new Vector2(0, 0), true))
+        this.#player = new Player(new Vector2(0, 0), true)
+        this.addObject(this.#player)
     }
 
     render = (ctx) => {
         this.#map.render(ctx)
+        this.#player.render(ctx)
         super.render(ctx)
     }
 
     update = () => {
         this.#map.update()
+        this.#player.update()
         super.update()
     }
 }

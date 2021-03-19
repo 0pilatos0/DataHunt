@@ -48,7 +48,6 @@ export class Window{
         this.#ctx.clearRect(-window.displayWidth / 2, -window.displayHeight / 2, window.displayWidth, window.displayHeight)
         this.#ctx.fillRect(-window.displayWidth / 2, -window.displayHeight / 2, window.displayWidth, window.displayHeight)
         this.#scene.render(this.#ctx)
-        window.player.render(this.#ctx)
     }
 
     #update = () => {
@@ -57,6 +56,5 @@ export class Window{
         this.#lastUpdate = now
         this.#fps++
         this.#scene.update()     
-        window.player.update()
     }
 }

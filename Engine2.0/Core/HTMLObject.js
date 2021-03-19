@@ -1,12 +1,10 @@
+import { BaseObject } from "./BaseObject.js"
 import { Vector2 } from "./Vector2.js"
 
 window.htmlObjects = []
 window.htmlObjectTypes = ['Button', 'Div', 'InputField', 'List', 'Title'] //TODO <- make it dynamic
-//TODO extend from BaseObject???
 
-export class HTMLObject{
-    #position
-    #size
+export class HTMLObject extends BaseObject{
     #element
     #visible
     #positionCallback = () => { this.position = this.#position }
@@ -19,8 +17,7 @@ export class HTMLObject{
      * @param {*} element 
      */
     constructor(position, size, element, parent = null){
-        this.#position = new Vector2(position.x, position.y, this.#positionCallback)
-        this.#size = new Vector2(size.x, size.y, this.#sizeCallback)
+        super(position, size)
         this.#element = element
         this.#visible = true
         this.#init(parent)
@@ -39,60 +36,33 @@ export class HTMLObject{
             document.body.appendChild(this.#element)
         }
         this.#element.style.position = "absolute"
-        if(this.#size.x) this.#element.style.width = `${this.#size.x}px`
-        if(this.#size.y) this.#element.style.height = `${this.#size.y}px`
-        this.#element.style.left = `${this.#position.x}px`
-        this.#element.style.top = `${this.#position.y}px`
+        if(this.size.x) this.#element.style.width = `${this.#size.x}px`
+        if(this.size.y) this.#element.style.height = `${this.#size.y}px`
+        this.#element.style.left = `${this.position.x}px`
+        this.#element.style.top = `${this.position.y}px`
         window.htmlObjects.push(this)
         reloadHTMLObjectList()
     }
 
     set position(position){
-        this.#position = new Vector2(position.x, position.y, this.#positionCallback)
-        this.#element.style.left = `${this.#position.x}px`
-        this.#element.style.top = `${this.#position.y}px`
+        super.position(position)
+        this.#element.style.left = `${this.position.x}px`
+        this.#element.style.top = `${this.position.y}px`
     }
 
-    get position(){
-        return this.#position
-    }
 
     set size(size){
-        this.#size = new Vector2(size.x, size.y, this.#sizeCallback)
-        this.#element.style.width = `${this.#size.x}px`
-        this.#element.style.height = `${this.#size.y}px`
-    }
-
-    get size(){
-        return this.#size
+        super.size(size)
+        this.#element.style.width = `${this.size.x}px`
+        this.#element.style.height = `${this.size.y}px`
     }
 
     set visible(visible){
-        this.#visible = visible
+        super.visible(visible)
         this.element.style.display = this.#visible ? "block" : "none"
-    }
-
-    get visible(){
-        return this.#visible
     }
 
     get element(){
         return this.#element
-    }
-
-    get json(){
-        return {
-            position: this.position,
-            size: this.size,
-            visible: this.visible
-        }
-    }
-
-    update(){
-        
-    }
-
-    render(){
-        
     }
 }

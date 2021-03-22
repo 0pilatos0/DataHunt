@@ -25,7 +25,7 @@ export class Player extends GameObject{
         super.update()
         let colliding
         let oldPosition
-        let steps = 640
+        let steps = 10
         for (let i = 0; i < this.#keysPressed.length; i++) {
             let key = this.#keysPressed[i]
             switch (key) {

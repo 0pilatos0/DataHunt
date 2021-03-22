@@ -1,4 +1,6 @@
+import { GameObject } from "./GameObject.js"
 import { CustomImage, Sprite } from "./Sprite.js"
+import { Vector2 } from "./Vector2.js"
 
 export class Map{
     #map
@@ -6,6 +8,7 @@ export class Map{
     #tiles = [null]
     #customMap
     #mapAreaToDraw = []
+    #collisionMap = []
     constructor(){
         this.#init()
     }
@@ -67,11 +70,13 @@ export class Map{
         this.#customMap = []
         for (let i = 0; i < this.#map.layers.length; i++) {
             if(this.#map.layers[i].type !== 'tilelayer') return
-            this.#customMap.push({layer:this.#map.layers[i].type, tiles:new Array})
+            this.#customMap.push({layer:this.#map.layers[i].name, tiles:new Array})
             for (let j = 0; j < this.#map.layers[i].data.length; j++) {
                 let row = this.#map.layers[i].data.splice(0, this.#map.width)
                 for (let x = 0; x < row.length; x++) {
-                    row[x] = this.#tiles[row[x]]
+                    if(this.#map.layers[i].name == 'collisions' && this.#tiles[row[x]] != null) this.#collisionMap.push(new GameObject(new Vector2(x * window.spriteSize, j * window.spriteSize), new Vector2(window.spriteSize, window.spriteSize), this.#tiles[row[x]]))
+                    if(this.#map.layers[i].name != 'collisions') row[x] = this.#tiles[row[x]]
+                    else row[x] = null
                 }
                 this.#customMap[i].tiles.push(row)
             }
@@ -79,6 +84,8 @@ export class Map{
         window.mapBoundX = this.#map.width * window.spriteSize
         window.mapBoundY = this.#map.height * window.spriteSize
         console.log(this.#customMap)
+        console.log(this.#collisionMap)
+        window.collisionMap = this.#collisionMap
     }
 
     render(ctx){

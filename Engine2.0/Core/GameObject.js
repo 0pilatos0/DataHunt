@@ -39,4 +39,11 @@ export class GameObject extends BaseObject{
         data.sprite = this.#sprite
         return data
     }
+
+    colliding(gameObject){
+        return (this.position.x < gameObject.position.x + gameObject.size.x &&
+           this.position.x + this.size.x > gameObject.position.x &&
+           this.position.y < gameObject.position.y + gameObject.size.y &&
+           this.position.y + this.size.y > gameObject.position.y)
+    }
 }

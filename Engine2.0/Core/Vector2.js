@@ -3,7 +3,7 @@ export class Vector2{
     #y
     #callback
 
-    constructor(x, y, callback){
+    constructor(x, y, callback = null){
         this.#x = x
         this.#y = y
         this.#callback = callback
@@ -15,7 +15,7 @@ export class Vector2{
 
     set x(x){
         this.#x = x
-        this.#callback()
+        if(this.#callback) this.#callback()
     }
 
     get y(){
@@ -24,7 +24,7 @@ export class Vector2{
 
     set y(y){
         this.#y = y
-        this.#callback()
+        if(this.#callback) this.#callback()
     }
 
     toString(){

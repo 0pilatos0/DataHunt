@@ -57,7 +57,7 @@ export class Window{
         window.deltaTime = (now - this.#lastUpdate) / 1000
         this.#lastUpdate = now
         this.#fps++
-        this.#scene.update()     
+        this.#scene.update()
     }
 
     setScene(scene){

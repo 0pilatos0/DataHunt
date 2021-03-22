@@ -23,24 +23,91 @@ export class Player extends GameObject{
 
     update(){
         super.update()
+        let colliding
+        let oldPosition
+        let steps = 640
         for (let i = 0; i < this.#keysPressed.length; i++) {
             let key = this.#keysPressed[i]
             switch (key) {
                 case 'w':
                 case 'W':
-                    this.position.y -= this.#speed * window.deltaTime
+                    oldPosition = new Vector2(this.position.x, this.position.y)
+                    for (let y = 0; y < steps; y++) {
+                        this.position.y -= this.#speed * window.deltaTime / steps
+                        for (let i = 0; i < window.collisionMap.length; i++) {
+                            if(window.collisionMap[i].position.x >= window.player.position.x - window.displayWidth / 2 && window.collisionMap[i].position.x < window.player.position.x + window.displayWidth / 2){
+                                if(window.collisionMap[i].position.y >= window.player.position.y - window.displayHeight / 2 && window.collisionMap[i].position.y < window.player.position.y + window.displayHeight / 2){
+                                    if(window.collisionMap[i] != this){
+                                        colliding = this.colliding(window.collisionMap[i])
+                                        if(colliding){
+                                            this.position.y = oldPosition.y
+                                            break
+                                        }
+                                    } 
+                                }
+                            }
+                        }
+                    }
                     break;
                 case 'a':
                 case 'A':
-                    this.position.x -= this.#speed * window.deltaTime
+                    oldPosition = new Vector2(this.position.x, this.position.y)
+                    for (let y = 0; y < steps; y++) {
+                        this.position.x -= this.#speed * window.deltaTime / steps
+                        for (let i = 0; i < window.collisionMap.length; i++) {
+                            if(window.collisionMap[i].position.x >= window.player.position.x - window.displayWidth / 2 && window.collisionMap[i].position.x < window.player.position.x + window.displayWidth / 2){
+                                if(window.collisionMap[i].position.y >= window.player.position.y - window.displayHeight / 2 && window.collisionMap[i].position.y < window.player.position.y + window.displayHeight / 2){
+                                    if(window.collisionMap[i] != this){
+                                        colliding = this.colliding(window.collisionMap[i])
+                                        if(colliding){
+                                            this.position.x = oldPosition.x
+                                            break
+                                        }
+                                    } 
+                                }
+                            }
+                        }
+                    }
                     break;
                 case 's':
                 case 'S':
-                    this.position.y += this.#speed * window.deltaTime
+                    oldPosition = new Vector2(this.position.x, this.position.y)
+                    for (let y = 0; y < steps; y++) {
+                        this.position.y += this.#speed * window.deltaTime / steps
+                        for (let i = 0; i < window.collisionMap.length; i++) {
+                            if(window.collisionMap[i].position.x >= window.player.position.x - window.displayWidth / 2 && window.collisionMap[i].position.x < window.player.position.x + window.displayWidth / 2){
+                                if(window.collisionMap[i].position.y >= window.player.position.y - window.displayHeight / 2 && window.collisionMap[i].position.y < window.player.position.y + window.displayHeight / 2){
+                                    if(window.collisionMap[i] != this){
+                                        colliding = this.colliding(window.collisionMap[i])
+                                        if(colliding){
+                                            this.position.y = oldPosition.y
+                                            break
+                                        }
+                                    } 
+                                }
+                            }
+                        }
+                    }
                     break;
                 case 'd':
                 case 'D':
-                    this.position.x += this.#speed * window.deltaTime
+                    oldPosition = new Vector2(this.position.x, this.position.y)
+                    for (let y = 0; y < steps; y++) {
+                        this.position.x += this.#speed * window.deltaTime / steps
+                        for (let i = 0; i < window.collisionMap.length; i++) {
+                            if(window.collisionMap[i].position.x >= window.player.position.x - window.displayWidth / 2 && window.collisionMap[i].position.x < window.player.position.x + window.displayWidth / 2){
+                                if(window.collisionMap[i].position.y >= window.player.position.y - window.displayHeight / 2 && window.collisionMap[i].position.y < window.player.position.y + window.displayHeight / 2){
+                                    if(window.collisionMap[i] != this){
+                                        colliding = this.colliding(window.collisionMap[i])
+                                        if(colliding){
+                                            this.position.x = oldPosition.x
+                                            break
+                                        }
+                                    } 
+                                }
+                            }
+                        }
+                    }
                     break;
                 default:
                     break;
@@ -58,10 +125,12 @@ export class Player extends GameObject{
         if(this.position.y + this.size.y > window.mapBoundY){
             this.position.y = window.mapBoundY - this.size.y
         }
+        
     }
 
     render = (ctx) => {
         if(!this.sprite) return
+        if(!this.visible) return
         let renderX = null
         let renderY = null
         if(this.position.x + this.size.x / 2 >= window.displayWidth / 2 && this.position.x + this.size.x / 2 < window.mapBoundX - window.displayWidth / 2){

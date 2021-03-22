@@ -1,3 +1,5 @@
+import { Window } from "./Window.js"
+
 export class Socket{
     #socket
 
@@ -10,7 +12,7 @@ export class Socket{
         this.#socket.on('connect', () => {
             console.log("Connected to server")
             gameLoader.style.display = "none"
-            
+            new Window()
         })
         window.socket = this
     }

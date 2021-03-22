@@ -9,10 +9,14 @@ export class Socket{
     }
 
     #init = () => {
+        new Window()
         this.#socket.on('connect', () => {
             console.log("Connected to server")
             gameLoader.style.display = "none"
-            new Window()
+        })
+        this.#socket.on('disconnect', () => {
+            console.log("Disconnected from server")
+            gameLoader.style.display = "block"
         })
         window.socket = this
     }

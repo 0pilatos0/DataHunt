@@ -1,15 +1,13 @@
 import { HTMLObject } from "../Core/HTMLObject.js";
 
-export class Button extends HTMLObject{
+export class Label extends HTMLObject{
     constructor(position, size, parent = null){
-        super(position, size, document.createElement('button'), parent)
+        super(position, size, document.createElement('label'), parent)
         this.#init()
     }
 
     #init = () => {
-        this.element.addEventListener('click', () => {
-            
-        })
+
     }
 
     set text(text){

@@ -21,7 +21,7 @@ export class GameObject extends BaseObject{
 
     #init = async (sprite) => {
         window.gameObjects.push(this)
-        reloadGameObjectList()
+        //reloadGameObjectList()
         this.#sprite = await sprite
     }
 

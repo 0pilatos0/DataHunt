@@ -8,7 +8,7 @@ export class BaseObject{
     #sizeCallback = () => { this.size = this.#size }
 
     constructor(position, size){
-        this.#position =  new Vector2(position.x, position.y, this.#positionCallback)
+        this.#position = new Vector2(position.x, position.y, this.#positionCallback)
         this.#size = new Vector2(size.x, size.y, this.#sizeCallback)
         //TODO create some sort of event when changing x and y vector2
     }

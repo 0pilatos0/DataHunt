@@ -1,10 +1,15 @@
 body{
     margin: 0;
     background: #333333;
+    overflow: hidden;
 }
 
 *{
     color: white;
+}
+
+input, button{
+    color: black;
 }
 
 #gameLoader{

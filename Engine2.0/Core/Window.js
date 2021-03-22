@@ -1,4 +1,5 @@
 import { GameScene } from "../Scenes/GameScene.js"
+import { LoginScene } from "../Scenes/LoginScene.js"
 
 export class Window{
     #canvas
@@ -46,6 +47,7 @@ export class Window{
     #render = () => {
         window.requestAnimationFrame(this.#render)
         this.#ctx.clearRect(-window.displayWidth / 2, -window.displayHeight / 2, window.displayWidth, window.displayHeight)
+        this.#ctx.fillStyle = "#333333"
         this.#ctx.fillRect(-window.displayWidth / 2, -window.displayHeight / 2, window.displayWidth, window.displayHeight)
         this.#scene.render(this.#ctx)
     }
@@ -56,5 +58,9 @@ export class Window{
         this.#lastUpdate = now
         this.#fps++
         this.#scene.update()     
+    }
+
+    setScene(scene){
+        this.#scene = scene
     }
 }

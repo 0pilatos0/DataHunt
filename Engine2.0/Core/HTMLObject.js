@@ -7,8 +7,6 @@ window.htmlObjectTypes = ['Button', 'Div', 'InputField', 'List', 'Title'] //TODO
 export class HTMLObject extends BaseObject{
     #element
     #visible
-    #positionCallback = () => { this.position = this.#position }
-    #sizeCallback = () => { this.size = this.#size }
 
     /**
      * 
@@ -17,6 +15,8 @@ export class HTMLObject extends BaseObject{
      * @param {*} element 
      */
     constructor(position, size, element, parent = null){
+        if(!position) position = new Vector2(0, 0)
+        if(!size) size = new Vector2(0, 0)
         super(position, size)
         this.#element = element
         this.#visible = true
@@ -36,25 +36,33 @@ export class HTMLObject extends BaseObject{
             document.body.appendChild(this.#element)
         }
         this.#element.style.position = "absolute"
-        if(this.size.x) this.#element.style.width = `${this.#size.x}px`
-        if(this.size.y) this.#element.style.height = `${this.#size.y}px`
-        this.#element.style.left = `${this.position.x}px`
-        this.#element.style.top = `${this.position.y}px`
+        if(this.size.x) this.#element.style.width = `${this.size.x}`
+        if(this.size.y) this.#element.style.height = `${this.size.y}`
+        this.#element.style.left = `${this.position.x}`
+        this.#element.style.top = `${this.position.y}`
         window.htmlObjects.push(this)
-        reloadHTMLObjectList()
+        //reloadHTMLObjectList()
     }
 
     set position(position){
         super.position(position)
-        this.#element.style.left = `${this.position.x}px`
-        this.#element.style.top = `${this.position.y}px`
+        this.#element.style.left = `${this.position.x}`
+        this.#element.style.top = `${this.position.y}`
     }
 
 
     set size(size){
         super.size(size)
-        this.#element.style.width = `${this.size.x}px`
-        this.#element.style.height = `${this.size.y}px`
+        this.#element.style.width = `${this.size.x}`
+        this.#element.style.height = `${this.size.y}`
+    }
+    
+    get size(){
+        return super.size
+    }
+
+    get position(){
+        return super.position
     }
 
     set visible(visible){

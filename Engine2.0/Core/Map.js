@@ -11,7 +11,7 @@ export class Map{
     }
 
     #init = () => {
-        let path = '/Engine2.0/Maps/testmap.json'
+        let path = '/Engine2.0/Maps/echtemap.json'
         let xhr = new XMLHttpRequest()
         xhr.onreadystatechange = () => {
             if(xhr.readyState != 4 || xhr.status != 200) return

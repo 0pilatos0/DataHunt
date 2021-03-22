@@ -7,9 +7,10 @@ export class Socket{
     }
 
     #init = () => {
-        console.log(this.#socket)
         this.#socket.on('connect', () => {
             console.log("Connected to server")
+            gameLoader.style.display = "none"
+            
         })
         window.socket = this
     }

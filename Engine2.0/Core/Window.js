@@ -29,7 +29,7 @@ export class Window{
         this.#canvas.width = window.innerWidth
         this.#canvas.height = window.innerHeight
 
-        let scaleFitNative = Math.min(window.innerWidth / 1920, window.innerHeight / 1080)
+        let scaleFitNative = Math.max(window.innerWidth / 1920, window.innerHeight / 1080) //TODO fix this with using min or max
 
         window.displayWidth = window.innerWidth / scaleFitNative
         window.displayHeight = window.innerHeight / scaleFitNative

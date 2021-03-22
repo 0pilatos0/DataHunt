@@ -25,7 +25,7 @@ export class Player extends GameObject{
         super.update()
         let colliding
         let oldPosition
-        let steps = 10
+        let steps = 30 //TODO optimize collision checking
         for (let i = 0; i < this.#keysPressed.length; i++) {
             let key = this.#keysPressed[i]
             switch (key) {
@@ -40,7 +40,7 @@ export class Player extends GameObject{
                                     if(window.collisionMap[i] != this){
                                         colliding = this.colliding(window.collisionMap[i])
                                         if(colliding){
-                                            this.position.y = oldPosition.y
+                                            this.position.y = Math.round(oldPosition.y)
                                             break
                                         }
                                     } 
@@ -60,7 +60,7 @@ export class Player extends GameObject{
                                     if(window.collisionMap[i] != this){
                                         colliding = this.colliding(window.collisionMap[i])
                                         if(colliding){
-                                            this.position.x = oldPosition.x
+                                            this.position.x = Math.round(oldPosition.x)
                                             break
                                         }
                                     } 
@@ -80,7 +80,7 @@ export class Player extends GameObject{
                                     if(window.collisionMap[i] != this){
                                         colliding = this.colliding(window.collisionMap[i])
                                         if(colliding){
-                                            this.position.y = oldPosition.y
+                                            this.position.y = Math.round(oldPosition.y)
                                             break
                                         }
                                     } 
@@ -100,7 +100,7 @@ export class Player extends GameObject{
                                     if(window.collisionMap[i] != this){
                                         colliding = this.colliding(window.collisionMap[i])
                                         if(colliding){
-                                            this.position.x = oldPosition.x
+                                            this.position.x = Math.round(oldPosition.x)
                                             break
                                         }
                                     } 
@@ -145,6 +145,8 @@ export class Player extends GameObject{
         if(this.position.y + this.size.y / 2 >= window.mapBoundY - window.displayHeight / 2){
             renderY = this.position.y - window.mapBoundY + window.displayHeight / 2
         }
+        window.renderX = renderX
+        window.renderY = renderY
         ctx.drawImage(this.sprite, renderX ?? this.position.x - window.displayWidth / 2, renderY ?? this.position.y - window.displayHeight / 2)
     }
 

@@ -41,9 +41,10 @@ export class GameObject extends BaseObject{
     }
 
     colliding(gameObject){
-        return (this.position.x < gameObject.position.x + gameObject.size.x - 1 &&
-           this.position.x + this.size.x - 1 > gameObject.position.x &&
-           this.position.y < gameObject.position.y + gameObject.size.y - 1 &&
-           this.position.y + this.size.y - 1 > gameObject.position.y)
+        let offset = 0
+        return (this.position.x < gameObject.position.x + gameObject.size.x - offset &&
+           this.position.x + this.size.x - offset > gameObject.position.x &&
+           this.position.y < gameObject.position.y + gameObject.size.y - offset &&
+           this.position.y + this.size.y - offset > gameObject.position.y)
     }
 }

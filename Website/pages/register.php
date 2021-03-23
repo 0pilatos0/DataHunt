@@ -67,7 +67,6 @@
         </div>
     </form>
     <?php
-    require "../php/database.php";
     require "mail.php";
 
     if ($_SERVER["REQUEST_METHOD"] == "POST") {

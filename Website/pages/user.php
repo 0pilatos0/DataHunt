@@ -8,7 +8,6 @@ if(empty($_SESSION["user"])){
 
 $userinfo = userInfo($_SESSION["user"]);
 
-
     if(isset($_GET["delete"])){
         if($_GET["delete"] === "true"){
             echo "

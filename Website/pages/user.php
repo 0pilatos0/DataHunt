@@ -3,6 +3,10 @@ require "../php/database.php";
 require "../php/functions.php";
 include './../elements/header.php';
 
+if(empty($_SESSION["user"])){
+    echo "<script>location = \"http://datahunt.duckdns.org\";</script>";
+}
+
 $userinfo = userInfo($_SESSION["user"]);
 
 

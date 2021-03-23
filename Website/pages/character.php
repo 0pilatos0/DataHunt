@@ -1,8 +1,9 @@
 <?php
 require "../php/database.php";
 
-
-
+if(empty($_SESSION["user"])){
+    echo "<script>location = \"http://datahunt.duckdns.org\";</script>";
+}
 ?>
 <!DOCTYPE html>
 <html>

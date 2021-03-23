@@ -44,18 +44,19 @@ $userinfo = $_SESSION["userinfo"];
 
             <div class="user user-feed">
                 <div class="card-header">
-                    <?php
-
-                    foreach($userinfo["feed"] as $index){
-                        echo "<div>";
-                        foreach($index as $key => $value){
-                            echo "<h1>{$key} : {$value}</h1>";
-                        }
-                        echo "</div>";
-                    }
-
-                    ?>
+                    <h3>Feed</h3>
                 </div>
+                <?php
+
+                foreach(json_decode($userinfo["feed"]) as $index){
+                    echo "<div>";
+                    foreach($index as $key => $value){
+                        echo "<h1>{$key} : {$value}</h1>";
+                    }
+                    echo "</div>";
+                }
+
+                ?>
             </div>
 
             <form class="user user-form" method="post">

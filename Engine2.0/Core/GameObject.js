@@ -7,6 +7,7 @@ window.gameObjectTypes = ['Player'] //TODO <- make it dynamic
 
 export class GameObject extends BaseObject{
     #sprite
+    #type
     
     /**
      * 
@@ -14,8 +15,9 @@ export class GameObject extends BaseObject{
      * @param {Vector2} size 
      * @param {Sprite} sprite 
      */
-    constructor(position, size, sprite) {
+    constructor(position, size, sprite, type = 'normal') {
         super(position, size)
+        this.#type = type
         this.#init(sprite)
     }
 
@@ -45,5 +47,9 @@ export class GameObject extends BaseObject{
            this.position.x + this.size.x > gameObject.position.x &&
            this.position.y < gameObject.position.y + gameObject.size.y &&
            this.position.y + this.size.y > gameObject.position.y)
+    }
+
+    get type(){
+        return this.#type
     }
 }

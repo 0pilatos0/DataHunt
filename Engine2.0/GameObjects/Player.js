@@ -6,6 +6,7 @@ export class Player extends GameObject{
     #controllable
     #keysPressed = []
     #speed
+    #oldPosition
     constructor(position, controllable = false){
         super(position, new Vector2(window.spriteSize, window.spriteSize), Sprite('/Engine2.0/Sprites/Player.png'))
         this.#controllable = controllable
@@ -23,96 +24,45 @@ export class Player extends GameObject{
 
     update(){
         super.update()
-        let colliding
-        let oldPosition
-        let steps = 10 //TODO optimize collision checking
+        this.#oldPosition = new Vector2(this.position.x, this.position.y)
+        let steps = 15 //TODO optimize collision checking
+
         for (let i = 0; i < this.#keysPressed.length; i++) {
             let key = this.#keysPressed[i]
             switch (key) {
                 case 'w':
                 case 'W':
-                    for (let y = 0; y < steps; y++) {
-                        oldPosition = new Vector2(this.position.x, this.position.y)
+                    for (let i = 0; i < steps; i++) {
                         this.position.y -= this.#speed * window.deltaTime / steps
-                        for (let i = 0; i < window.collisionMap.length; i++) {
-                            if(window.collisionMap[i].position.x >= window.player.position.x - window.displayWidth / 2 && window.collisionMap[i].position.x < window.player.position.x + window.displayWidth / 2){
-                                if(window.collisionMap[i].position.y >= window.player.position.y - window.displayHeight / 2 && window.collisionMap[i].position.y < window.player.position.y + window.displayHeight / 2){
-                                    if(window.collisionMap[i] != this){
-                                        colliding = this.colliding(window.collisionMap[i])
-                                        if(colliding){
-                                            this.position.y = Math.round(oldPosition.y)
-                                            break
-                                        }
-                                    } 
-                                }
-                            }
-                        }
+                        this.#checkCollisions(() => {this.position.y = Math.round(this.#oldPosition.y)})
                     }
                     break;
                 case 'a':
                 case 'A':
-                    for (let y = 0; y < steps; y++) {
-                        oldPosition = new Vector2(this.position.x, this.position.y)
+                    for (let i = 0; i < steps; i++) {
                         this.position.x -= this.#speed * window.deltaTime / steps
-                        for (let i = 0; i < window.collisionMap.length; i++) {
-                            if(window.collisionMap[i].position.x >= window.player.position.x - window.displayWidth / 2 && window.collisionMap[i].position.x < window.player.position.x + window.displayWidth / 2){
-                                if(window.collisionMap[i].position.y >= window.player.position.y - window.displayHeight / 2 && window.collisionMap[i].position.y < window.player.position.y + window.displayHeight / 2){
-                                    if(window.collisionMap[i] != this){
-                                        colliding = this.colliding(window.collisionMap[i])
-                                        if(colliding){
-                                            this.position.x = Math.round(oldPosition.x)
-                                            break
-                                        }
-                                    } 
-                                }
-                            }
-                        }
+                        this.#checkCollisions(() => {this.position.x = Math.round(this.#oldPosition.x)})
                     }
                     break;
                 case 's':
                 case 'S':
-                    for (let y = 0; y < steps; y++) {
-                        oldPosition = new Vector2(this.position.x, this.position.y)
+                    for (let i = 0; i < steps; i++) {
                         this.position.y += this.#speed * window.deltaTime / steps
-                        for (let i = 0; i < window.collisionMap.length; i++) {
-                            if(window.collisionMap[i].position.x >= window.player.position.x - window.displayWidth / 2 && window.collisionMap[i].position.x < window.player.position.x + window.displayWidth / 2){
-                                if(window.collisionMap[i].position.y >= window.player.position.y - window.displayHeight / 2 && window.collisionMap[i].position.y < window.player.position.y + window.displayHeight / 2){
-                                    if(window.collisionMap[i] != this){
-                                        colliding = this.colliding(window.collisionMap[i])
-                                        if(colliding){
-                                            this.position.y = Math.round(oldPosition.y)
-                                            break
-                                        }
-                                    } 
-                                }
-                            }
-                        }
+                        this.#checkCollisions(() => {this.position.y = Math.round(this.#oldPosition.y)})
                     }
                     break;
                 case 'd':
                 case 'D':
-                    for (let y = 0; y < steps; y++) {
-                        oldPosition = new Vector2(this.position.x, this.position.y)
+                    for (let i = 0; i < steps; i++) {
                         this.position.x += this.#speed * window.deltaTime / steps
-                        for (let i = 0; i < window.collisionMap.length; i++) {
-                            if(window.collisionMap[i].position.x >= window.player.position.x - window.displayWidth / 2 && window.collisionMap[i].position.x < window.player.position.x + window.displayWidth / 2){
-                                if(window.collisionMap[i].position.y >= window.player.position.y - window.displayHeight / 2 && window.collisionMap[i].position.y < window.player.position.y + window.displayHeight / 2){
-                                    if(window.collisionMap[i] != this){
-                                        colliding = this.colliding(window.collisionMap[i])
-                                        if(colliding){
-                                            this.position.x = Math.round(oldPosition.x)
-                                            break
-                                        }
-                                    } 
-                                }
-                            }
-                        }
+                        this.#checkCollisions(() => {this.position.x = Math.round(this.#oldPosition.x)})
                     }
                     break;
                 default:
                     break;
             }
         }
+
         if(this.position.x < 0){
             this.position.x = 0
         }
@@ -147,7 +97,7 @@ export class Player extends GameObject{
         }
         window.renderX = renderX
         window.renderY = renderY
-        ctx.drawImage(this.sprite, renderX ?? this.position.x - window.displayWidth / 2, renderY ?? this.position.y - window.displayHeight / 2)
+        ctx.drawImage(this.sprite.sprite, renderX ?? this.position.x - window.displayWidth / 2, renderY ?? this.position.y - window.displayHeight / 2)
     }
 
     #keydown = (e) => {
@@ -156,6 +106,32 @@ export class Player extends GameObject{
 
     #keyup = (e) => {
         this.#keysPressed.splice(this.#keysPressed.indexOf(e.key), 1)
+    }
+
+    #checkCollisions = (setPosition) => {
+        for (let i = 0; i < window.mapRenderArea?.length; i++) {
+            for (let y = 0; y < window.mapRenderArea[i].length; y++) {
+                for (let x = 0; x < window.mapRenderArea[i][y].length; x++) {
+                    let gameObject = window.mapRenderArea[i][y][x]
+                    if(gameObject.visible && gameObject.type == 'Collidable' || gameObject.type == 'Interactable'){
+                        if(gameObject.position.x >= window.player.position.x - window.displayWidth / 2 && gameObject.position.x < window.player.position.x + window.displayWidth / 2){
+                            if(gameObject.position.y >= window.player.position.y - window.displayHeight / 2 && gameObject.position.y < window.player.position.y + window.displayHeight / 2){
+                                if(gameObject != this){
+                                    if(this.colliding(gameObject)){
+                                        if(gameObject.type == 'Collidable'){
+                                            setPosition()
+                                        }
+                                        if(gameObject.type == 'Interactable'){
+                                            gameObject.visible = false
+                                        }
+                                    }
+                                } 
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
 
     get json(){

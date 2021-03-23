@@ -8,18 +8,29 @@ export class Map{
     #tiles = [null]
     #customMap
     #mapAreaToDraw = []
-    #collisionMap = []
     constructor(){
         this.#init()
     }
 
     #init = () => {
-        let path = '/Engine2.0/Maps/echtemap.json'
+        let path = '/Engine2.0/Maps/Map/echtemap.json'
         let xhr = new XMLHttpRequest()
         xhr.onreadystatechange = () => {
             if(xhr.readyState != 4 || xhr.status != 200) return
             this.#map = eval(`(${xhr.responseText})`)
-            this.#loadTilemaps()
+            let amount = 0
+            for (let i = 0; i < this.#map.tilesets.length; i++) {
+                let tilesetLoader = new XMLHttpRequest()
+                tilesetLoader.onreadystatechange = () => {
+                    if(tilesetLoader.readyState != 4 || tilesetLoader.status != 200) return
+                    this.#map.tilesets[i] = JSON.parse(tilesetLoader.responseText)
+                    this.#map.tilesets[i].image = `/Engine2.0/Maps/Map/${this.#map.tilesets[i].image}`
+                    amount++
+                    if(amount == this.#map.tilesets.length) this.#loadTilemaps()
+                }
+                tilesetLoader.open('GET', `/Engine2.0/Maps/Map/${this.#map.tilesets[i].source}`, true)
+                tilesetLoader.send()
+            }
         }
         xhr.open('GET', path, true)
         xhr.send()
@@ -58,8 +69,13 @@ export class Map{
                     let tY = y * this.#map.tileheight
                     
                     tileContext.drawImage(this.#tilesets[i], -tX, -tY)
-
-                    this.#tiles.push(await Sprite(tileCanvas.toDataURL('image/png')))
+                    let data = null
+                    for (let j = 0; j < this.#map.tilesets[i].tiles.length; j++) {
+                        if(this.#tiles.length - 1 == this.#map.tilesets[i].tiles[j].id){
+                            data = this.#map.tilesets[i].tiles[j]
+                        }
+                    }
+                    this.#tiles.push(await Sprite(tileCanvas.toDataURL('image/png'), data))
                 }
             }
         }
@@ -70,13 +86,11 @@ export class Map{
         this.#customMap = []
         for (let i = 0; i < this.#map.layers.length; i++) {
             if(this.#map.layers[i].type !== 'tilelayer') return
-            this.#customMap.push({layer:this.#map.layers[i].name, tiles:new Array})
+            this.#customMap.push({layer:this.#map.layers[i].name, tiles:new Array}) //TODO remove this like remove the .tiles
             for (let j = 0; j < this.#map.layers[i].data.length; j++) {
                 let row = this.#map.layers[i].data.splice(0, this.#map.width)
                 for (let x = 0; x < row.length; x++) {
-                    if(this.#map.layers[i].name == 'collisions' && this.#tiles[row[x]] != null) this.#collisionMap.push(new GameObject(new Vector2(x * window.spriteSize, j * window.spriteSize), new Vector2(window.spriteSize, window.spriteSize), this.#tiles[row[x]]))
-                    if(this.#map.layers[i].name != 'collisions') row[x] = this.#tiles[row[x]]
-                    else row[x] = null
+                    if(row[x] != null) row[x] = new GameObject(new Vector2(x * window.spriteSize, j * window.spriteSize), new Vector2(window.spriteSize, window.spriteSize), this.#tiles[row[x]]?.sprite, this.#tiles[row[x]]?.type)
                 }
                 this.#customMap[i].tiles.push(row)
             }
@@ -84,15 +98,14 @@ export class Map{
         window.mapBoundX = this.#map.width * window.spriteSize
         window.mapBoundY = this.#map.height * window.spriteSize
         console.log(this.#customMap)
-        console.log(this.#collisionMap)
-        window.collisionMap = this.#collisionMap
+        window.map = this.#customMap
     }
 
     render(ctx){
         for (let i = 0; i < this.#mapAreaToDraw.length; i++) {
             for (let y = 0; y < this.#mapAreaToDraw[i].length; y++) {
                 for (let x = 0; x < this.#mapAreaToDraw[i][y].length; x++) {
-                    ctx.drawImage(this.#mapAreaToDraw[i][y][x], x * window.spriteSize - window.mapOffsetX - window.displayWidth / 2, y * window.spriteSize - window.mapOffsetY - window.displayHeight / 2)
+                    if(this.#mapAreaToDraw[i][y][x]?.visible && this.#mapAreaToDraw[i][y][x]?.sprite) ctx.drawImage(this.#mapAreaToDraw[i][y][x]?.sprite, x * window.spriteSize - window.mapOffsetX - window.displayWidth / 2, y * window.spriteSize - window.mapOffsetY - window.displayHeight / 2)
                 }
             }
         }
@@ -127,9 +140,10 @@ export class Map{
                     }
                     if(posX < 0) posX = 0
                     if(posX >= this.#customMap[i].tiles[posY].length - 1) posX = this.#customMap[i].tiles[posY].length - 1
-                    this.#mapAreaToDraw[i][y][x] = this.#customMap[i].tiles[posY][posX] || new Image()
+                    this.#mapAreaToDraw[i][y][x] = this.#customMap[i].tiles[posY][posX]
                 }
             }
         }
+        window.mapRenderArea = this.#mapAreaToDraw
     }
 }

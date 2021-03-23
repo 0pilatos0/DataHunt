@@ -12,8 +12,6 @@ if(empty($_SESSION["user"])){
     include '../elements/footer.php';
 ?>
 <?php
-require "../php/database.php";
-require "../php/functions.php";
 $dbh = db();
 $stmt = $dbh->prepare("DELETE FROM logintokens WHERE user_id = (:uid)");
 $stmt->bindParam(':uid', getSessionValue("user"));

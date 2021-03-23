@@ -25,14 +25,14 @@ export class Player extends GameObject{
         super.update()
         let colliding
         let oldPosition
-        let steps = 30 //TODO optimize collision checking
+        let steps = 10 //TODO optimize collision checking
         for (let i = 0; i < this.#keysPressed.length; i++) {
             let key = this.#keysPressed[i]
             switch (key) {
                 case 'w':
                 case 'W':
-                    oldPosition = new Vector2(this.position.x, this.position.y)
                     for (let y = 0; y < steps; y++) {
+                        oldPosition = new Vector2(this.position.x, this.position.y)
                         this.position.y -= this.#speed * window.deltaTime / steps
                         for (let i = 0; i < window.collisionMap.length; i++) {
                             if(window.collisionMap[i].position.x >= window.player.position.x - window.displayWidth / 2 && window.collisionMap[i].position.x < window.player.position.x + window.displayWidth / 2){
@@ -51,8 +51,8 @@ export class Player extends GameObject{
                     break;
                 case 'a':
                 case 'A':
-                    oldPosition = new Vector2(this.position.x, this.position.y)
                     for (let y = 0; y < steps; y++) {
+                        oldPosition = new Vector2(this.position.x, this.position.y)
                         this.position.x -= this.#speed * window.deltaTime / steps
                         for (let i = 0; i < window.collisionMap.length; i++) {
                             if(window.collisionMap[i].position.x >= window.player.position.x - window.displayWidth / 2 && window.collisionMap[i].position.x < window.player.position.x + window.displayWidth / 2){
@@ -71,8 +71,8 @@ export class Player extends GameObject{
                     break;
                 case 's':
                 case 'S':
-                    oldPosition = new Vector2(this.position.x, this.position.y)
                     for (let y = 0; y < steps; y++) {
+                        oldPosition = new Vector2(this.position.x, this.position.y)
                         this.position.y += this.#speed * window.deltaTime / steps
                         for (let i = 0; i < window.collisionMap.length; i++) {
                             if(window.collisionMap[i].position.x >= window.player.position.x - window.displayWidth / 2 && window.collisionMap[i].position.x < window.player.position.x + window.displayWidth / 2){
@@ -91,8 +91,8 @@ export class Player extends GameObject{
                     break;
                 case 'd':
                 case 'D':
-                    oldPosition = new Vector2(this.position.x, this.position.y)
                     for (let y = 0; y < steps; y++) {
+                        oldPosition = new Vector2(this.position.x, this.position.y)
                         this.position.x += this.#speed * window.deltaTime / steps
                         for (let i = 0; i < window.collisionMap.length; i++) {
                             if(window.collisionMap[i].position.x >= window.player.position.x - window.displayWidth / 2 && window.collisionMap[i].position.x < window.player.position.x + window.displayWidth / 2){

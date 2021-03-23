@@ -6,6 +6,9 @@ body{
 
 *{
     color: white;
+    image-rendering: -moz-crisp-edges;
+    image-rendering: -webkit-crisp-edges;
+    image-rendering: crisp-edges;
 }
 
 input, button{

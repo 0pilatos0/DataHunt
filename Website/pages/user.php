@@ -6,12 +6,12 @@ if(empty($_SESSION["user"])){
     echo "<script>location = \"http://datahunt.duckdns.org\";</script>";
 }
 
-$userinfo = userInfo($_SESSION["user"]);
+$userinfo = $_SESSION["userinfo"];
 
     if(isset($_GET["delete"])){
         if($_GET["delete"] === "true"){
             echo "
-            <div id=\"delete-account-overlay\" class=\"overlay delete-element\">
+            <div id=\"delete-account-overlay\" onclick='removeOverlay()' class=\"overlay delete-element\">
                 
             </div>
             <div class=\"delete-confirm delete-element\">
@@ -26,7 +26,6 @@ $userinfo = userInfo($_SESSION["user"]);
         }
     }
 
-    var_dump($_SESSION["userinfo"]);
 ?>
 
         <div class="user-container">
@@ -58,7 +57,7 @@ $userinfo = userInfo($_SESSION["user"]);
                         <li class="list-group-item">
                             <label for="username">Username</label>
                             <div class="col-sm-10">
-                                <input class="input form-control" name="username" id="username" value="<?php echo $_SESSION["userinfo"]["username"] ?>"><br>
+                                <input class="input form-control" name="username" id="username" value="<?php echo $userinfo["username"] ?>"><br>
                             </div>
                         </li>
                         <li class="list-group-item">
@@ -82,7 +81,7 @@ $userinfo = userInfo($_SESSION["user"]);
                         <li class="list-group-item">
                             <label for="email">Email</label>
                             <div class="col-sm-10">
-                                <input class="input form-control" name="email" id="email" value="<?php echo $_SESSION["userinfo"]["email"] ?>"><br>
+                                <input class="input form-control" name="email" id="email" value="<?php echo $userinfo["email"] ?>"><br>
                             </div>
                         </li>
                         <li class="list-group-item">
@@ -95,8 +94,6 @@ $userinfo = userInfo($_SESSION["user"]);
             </form>
 
 
-
-
             <div class="user user-friend">
                 <div class="card-header">
                     <h3>Friends</h3>
@@ -106,9 +103,7 @@ $userinfo = userInfo($_SESSION["user"]);
 
         </div>
 <script>
-    document.getElementById("delete-account-overlay").addEventListener("click", () =>{
-        removeOverlay()
-    });
+
     function removeOverlay(){
         let f = document.getElementsByClassName("delete-element");
         while (f.length > 0){

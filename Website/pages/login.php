@@ -38,8 +38,6 @@
             </div>
         </form>
         <?php
-        require "../php/database.php";
-        require "../php/functions.php";
         if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $username = changeInput($_POST["AccUsername"]);
             $password = changeInput($_POST["AccPassword"]);

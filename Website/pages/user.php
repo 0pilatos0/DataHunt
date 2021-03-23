@@ -2,6 +2,13 @@
 
 include './../elements/header.php';
 
+if(empty($_SESSION["user"])){
+    echo "<script>location = \"http://datahunt.duckdns.org\";</script>";
+}
+
+$userinfo = userInfo($_SESSION["user"]);
+
+
     if(isset($_GET["delete"])){
         if($_GET["delete"] === "true"){
             echo "

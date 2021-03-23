@@ -1,5 +1,10 @@
+<?php
+    include '../elements/header.php';
 
-<?php include '../elements/header.php' ?>
+    if(!empty($_SESSION["user"])){
+        echo "<script>location = \"http://datahunt.duckdns.org\";</script>";
+    }
+?>
 <style>
     .list-group{
         color: black;

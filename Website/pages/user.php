@@ -51,7 +51,7 @@ $userinfo = $_SESSION["userinfo"];
                 foreach(json_decode($userinfo["feed"]) as $index){
                     echo "<div>";
                     foreach($index as $key => $value){
-                        echo "<h1>{$key} : {$value}</h1>";
+                        echo "<p>{$key} : {$value}</p>";
                     }
                     echo "</div>";
                 }

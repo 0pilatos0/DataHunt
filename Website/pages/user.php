@@ -1,10 +1,6 @@
 <?php
-require "../php/database.php";
-require "../php/functions.php";
+
 include './../elements/header.php';
-
-$userinfo = userInfo($_SESSION["user"]);
-
 
     if(isset($_GET["delete"])){
         if($_GET["delete"] === "true"){
@@ -23,6 +19,8 @@ $userinfo = userInfo($_SESSION["user"]);
             echo "<script>location = \"/\"</script>";
         }
     }
+
+    var_dump($_SESSION["userinfo"]);
 ?>
 
         <div class="user-container">
@@ -54,7 +52,7 @@ $userinfo = userInfo($_SESSION["user"]);
                         <li class="list-group-item">
                             <label for="username">Username</label>
                             <div class="col-sm-10">
-                                <input class="input form-control" name="username" id="username" value="<?php echo $userinfo["username"] ?>"><br>
+                                <input class="input form-control" name="username" id="username" value="<?php echo $_SESSION["userinfo"]["username"] ?>"><br>
                             </div>
                         </li>
                         <li class="list-group-item">
@@ -78,7 +76,7 @@ $userinfo = userInfo($_SESSION["user"]);
                         <li class="list-group-item">
                             <label for="email">Email</label>
                             <div class="col-sm-10">
-                                <input class="input form-control" name="email" id="email" value="<?php echo $userinfo["email"] ?>"><br>
+                                <input class="input form-control" name="email" id="email" value="<?php echo $_SESSION["userinfo"]["email"] ?>"><br>
                             </div>
                         </li>
                         <li class="list-group-item">

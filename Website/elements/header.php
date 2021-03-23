@@ -82,12 +82,14 @@
             <ul>
                 <li><a class="active" href="">Home</a></li>
                 <li><a href=" #home">Updates</a></li>
-                <?php 
+                <?php
                     session_start();
+                require "../php/database.php";
+                require "../php/functions.php";
                     if(isset($_SESSION['user']) && !empty($_SESSION['user'])) {
                        echo '<li style="float:right"><a href="/Website/pages/logout">Logout</a></li>';
                        echo '<li style="float:right"><a href="/Website/pages/user">User</a></li>';
-
+                       $_SESSION["userinfo"] = userInfo($_SESSION["user"]);
                     }else{
                         echo '                
                         <li style="float:right"><a href="/Website/pages/register">Registration</a></li>

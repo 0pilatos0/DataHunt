@@ -49,7 +49,10 @@ $userinfo = $_SESSION["userinfo"];
                 <?php
 
                 $array=array("name"=>"friet","name"=>"pizza");
-                echo json_encode($array);
+                
+                echo json_decode($userinfo["feed"]);
+
+
                 foreach(json_decode($userinfo["feed"]) as $index){
                     echo "<div>";
                     foreach($index as $key => $value){

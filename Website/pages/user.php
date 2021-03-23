@@ -48,10 +48,12 @@ $userinfo = $_SESSION["userinfo"];
                 </div>
                 <?php
 
+                $array = "[{\"name\": \"friet\"}, {\"name\": \"pizza\"}]";
+                echo json_encode($array);
                 foreach(json_decode($userinfo["feed"]) as $index){
                     echo "<div>";
                     foreach($index as $key => $value){
-                        echo "<p>{$key} : {$value}</p>";
+                        echo "<p>{$value}</p>";
                     }
                     echo "</div>";
                 }

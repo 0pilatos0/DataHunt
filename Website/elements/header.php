@@ -85,8 +85,8 @@
                 <?php
                     session_start();
                     var_dump($_SERVER);
-                require $_SERVER["DOCUMENT_ROOT"] . "Website/php/database.php";
-                require $_SERVER["DOCUMENT_ROOT"] . "Website/php/functions.php";
+                require $_SERVER["DOCUMENT_ROOT"] . "/Website/php/database.php";
+                require $_SERVER["DOCUMENT_ROOT"] . "/Website/php/functions.php";
                     if(isset($_SESSION['user']) && !empty($_SESSION['user'])) {
                        echo '<li style="float:right"><a href="/Website/pages/logout">Logout</a></li>';
                        echo '<li style="float:right"><a href="/Website/pages/user">User</a></li>';

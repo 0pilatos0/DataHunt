@@ -48,9 +48,9 @@ $userinfo = $_SESSION["userinfo"];
                 </div>
                 <?php
 
-                $array=array("name"=>"friet","name"=>"pizza");
 
-                 var_dump(json_decode($userinfo["feed"]));
+                    $array = [json_decode($userinfo["feed"])];
+                    var_dump($array);
 
 
                 foreach(json_decode($userinfo["feed"]) as $index){

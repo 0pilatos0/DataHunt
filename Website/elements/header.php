@@ -84,8 +84,8 @@
                 <li><a href=" #home">Updates</a></li>
                 <?php
                     session_start();
-                    require "Website/php/database.php";
-                    require "Website/php/functions.php";
+                    require "../php/database.php";
+                    require "../php/functions.php";
                     if(isset($_SESSION['user']) && !empty($_SESSION['user'])) {
                        echo '<li style="float:right"><a href="/Website/pages/logout">Logout</a></li>';
                        echo '<li style="float:right"><a href="/Website/pages/user">User</a></li>';

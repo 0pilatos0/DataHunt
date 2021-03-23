@@ -54,7 +54,7 @@ $userinfo = $_SESSION["userinfo"];
                         array_push($array, $entry);
                     }
 
-                    array_push($array, "{\"time\": \"now\", \"message\": \"Test Message\"}");
+                    array_push($array, json_encode("{\"time\": \"now\", \"message\": \"Test Message\"}"));
 
                     var_dump(json_encode($array));
 

@@ -44,7 +44,17 @@ $userinfo = $_SESSION["userinfo"];
 
             <div class="user user-feed">
                 <div class="card-header">
-                    <h3>Feed</h3>
+                    <?php
+
+                    foreach($userinfo["feed"] as $index => $entry){
+                        echo "<div>";
+                        foreach($entry as $key => $value){
+                            echo "<h1>{$key} : {$value}</h1>";
+                        }
+                        echo "</div>";
+                    }
+
+                    ?>
                 </div>
             </div>
 

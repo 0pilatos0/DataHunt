@@ -49,11 +49,16 @@ $userinfo = $_SESSION["userinfo"];
                 <?php
 
 
-                    $array = [json_decode($userinfo["feed"])];
+                    $array = [];
+                    foreach(json_decode($userinfo["feed"]) as $entry){
+                        array_push($array, $entry);
+                    }
 
-                    array_push($array, "{\"name\": \"test\"}");
+                    array_push($array, "{\"time\": \"now\", \"message\": \"Test Message\"}");
 
                     var_dump($array);
+                    echo "<br>";
+                    var_dump(json_encode($array));
 
 
                 foreach(json_decode($userinfo["feed"]) as $index){

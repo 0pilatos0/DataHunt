@@ -56,9 +56,9 @@ $userinfo = $_SESSION["userinfo"];
 
                     array_push($array, "{\"time\": \"now\", \"message\": \"Test Message\"}");
 
-                    var_dump(json_decode($array));
-                    echo "<br>";
                     var_dump(json_encode($array));
+
+
 
 
                 foreach(json_decode($userinfo["feed"]) as $index){

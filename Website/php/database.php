@@ -1,5 +1,5 @@
 <?php
-require "env.php";
+require $_SERVER["DOCUMENT_ROOT"] . "/env.php";
 
 function db(){
    return new PDO("mysql:host=" . getenv("MYSQLHOST") . ";" . "dbname=" . getenv("MYSQLDATABASE") . ";", getenv("MYSQLUSERNAME"), getenv("MYSQLPASSWORD"));

@@ -84,7 +84,6 @@
                 <li><a href=" #home">Updates</a></li>
                 <?php
                     session_start();
-                    var_dump($_SERVER);
                 require $_SERVER["DOCUMENT_ROOT"] . "/Website/php/database.php";
                 require $_SERVER["DOCUMENT_ROOT"] . "/Website/php/functions.php";
                     if(isset($_SESSION['user']) && !empty($_SESSION['user'])) {

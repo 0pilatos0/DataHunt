@@ -8,7 +8,7 @@ export class Player extends GameObject{
     #speed
     #oldPosition
     constructor(position, controllable = false){
-        super(position, new Vector2(window.spriteSize, window.spriteSize), Sprite('/Engine2.0/Sprites/Player.png'))
+        super(position, new Vector2(window.spriteSize, window.spriteSize), new Sprite('/Engine2.0/Sprites/Player.png'))
         this.#controllable = controllable
         this.#init()
     }
@@ -97,7 +97,7 @@ export class Player extends GameObject{
         }
         window.renderX = renderX
         window.renderY = renderY
-        ctx.drawImage(this.sprite.sprite, renderX ?? this.position.x - window.displayWidth / 2, renderY ?? this.position.y - window.displayHeight / 2)
+        ctx.drawImage(this.sprite.sprite || new Image(), renderX ?? this.position.x - window.displayWidth / 2, renderY ?? this.position.y - window.displayHeight / 2)
     }
 
     #keydown = (e) => {

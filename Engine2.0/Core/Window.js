@@ -9,6 +9,7 @@ export class Window{
     #lastUpdate = Date.now()
 
     constructor(){
+        //TODO implement on load correct on every init
         this.#init()
     }
 
@@ -35,7 +36,7 @@ export class Window{
         else{
             scaleFitNative = Math.min(window.innerWidth / 1920, window.innerHeight / 1080)
         }
-          //TODO fix this with using min or max
+        //TODO fix this with using min or max
 
         window.displayWidth = window.innerWidth / scaleFitNative
         window.displayHeight = window.innerHeight / scaleFitNative

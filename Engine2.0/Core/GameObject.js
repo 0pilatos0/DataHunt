@@ -24,11 +24,16 @@ export class GameObject extends BaseObject{
     #init = async (sprite) => {
         window.gameObjects.push(this)
         //reloadGameObjectList()
-        this.#sprite = await sprite
+        this.#sprite = sprite
+        this.trigger('load')
     }
 
     get sprite(){
         return this.#sprite
+    }
+
+    set sprite(sprite){
+        this.#sprite = sprite
     }
 
     render(ctx){

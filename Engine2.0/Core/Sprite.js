@@ -1,15 +1,17 @@
-export async function Sprite(path, data = null){
-    return new Promise(async (resolve, reject) => {
-        let img = await CustomImage(path)
-        let canvas = document.createElement('canvas')
+import { Events } from "./Event.js"
+
+// export async function Sprite(path, data = null){
+//     return new Promise(async (resolve, reject) => {
+//         let img = await CustomImage(path)
+//         let canvas = document.createElement('canvas')
         
-        canvas.width = window.spriteSize
-        canvas.height = window.spriteSize
-        let ctx = canvas.getContext('2d')
-        ctx.drawImage(img, 0, 0, window.spriteSize, window.spriteSize)
-        return resolve(new CustomSprite(canvas, data))
-    })
-}
+//         canvas.width = window.spriteSize
+//         canvas.height = window.spriteSize
+//         let ctx = canvas.getContext('2d')
+//         ctx.drawImage(img, 0, 0, window.spriteSize, window.spriteSize)
+//         return resolve(new CustomSprite(canvas, data))
+//     })
+// }
 
 export async function CustomImage(path){
     return new Promise((resolve, reject) => {
@@ -24,22 +26,30 @@ export async function CustomImage(path){
     })
 }
 
-class CustomSprite{
+export class Sprite extends Events{
     #sprite
     #name
     #type
-    constructor(sprite, data = null){
-        this.#sprite = sprite
-        this.#init(data)
+    constructor(path, data = null){
+        super()
+        this.#init(path, data)
     }
 
-    #init = (data) => {
+    #init = async (path, data) => {
+        let img = await CustomImage(path)
+        let canvas = document.createElement('canvas')
+        canvas.width = window.spriteSize
+        canvas.height = window.spriteSize
+        let ctx = canvas.getContext('2d')
+        ctx.drawImage(img, 0, 0, window.spriteSize, window.spriteSize)
+        this.#sprite = canvas
         for (let i = 0; i < data?.properties?.length; i++) {
             if(data.properties[i].name == 'name' && data.properties[i].type == 'string'){
                 this.#name = data.properties[i].value
             }
         }
         if(data?.type) this.#type = data.type
+        this.trigger('load')
     }
 
     get name(){

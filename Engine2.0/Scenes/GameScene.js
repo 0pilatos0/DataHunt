@@ -14,19 +14,20 @@ export class GameScene extends Scene{
 
     #init = () => {
         this.#map = new Map()
-        this.#player = new Player(new Vector2(window.spriteSize, window.spriteSize), true)
-        this.addObject(this.#player)
+        this.#map.on('load', () => {
+            this.addObject(this.#player = new Player(new Vector2(window.spriteSize, window.spriteSize), true))
+        })
     }
 
     render = (ctx) => {
         this.#map.render(ctx)
-        this.#player.render(ctx)
+        this.#player?.render(ctx) //TODO don't forget to remove ? to make it cleaner because of wrong usage on('load')
         super.render(ctx)
     }
 
     update = () => {
         this.#map.update()
-        this.#player.update()
+        this.#player?.update()
         super.update()
     }
 }

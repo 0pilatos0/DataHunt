@@ -1,39 +1,36 @@
+import { Events } from "./Event.js"
+import { FileLoader } from "./FileLoader.js"
 import { GameObject } from "./GameObject.js"
 import { CustomImage, Sprite } from "./Sprite.js"
 import { Vector2 } from "./Vector2.js"
 
-export class Map{
+export class Map extends Events{
     #map
     #tilesets = []
     #tiles = [null]
     #customMap
     #mapAreaToDraw = []
     constructor(){
+        super()
         this.#init()
     }
 
     #init = () => {
         let path = '/Engine2.0/Maps/Map/echtemap.json'
-        let xhr = new XMLHttpRequest()
-        xhr.onreadystatechange = () => {
-            if(xhr.readyState != 4 || xhr.status != 200) return
-            this.#map = eval(`(${xhr.responseText})`)
+        let mapData = new FileLoader(path)
+        mapData.on('load', () => {
+            this.#map = eval(`(${mapData.data})`)
             let amount = 0
             for (let i = 0; i < this.#map.tilesets.length; i++) {
-                let tilesetLoader = new XMLHttpRequest()
-                tilesetLoader.onreadystatechange = () => {
-                    if(tilesetLoader.readyState != 4 || tilesetLoader.status != 200) return
-                    this.#map.tilesets[i] = JSON.parse(tilesetLoader.responseText)
+                let tilesetLoader = new FileLoader(`/Engine2.0/Maps/Map/${this.#map.tilesets[i].source}`)
+                tilesetLoader.on('load', () => {
+                    this.#map.tilesets[i] = JSON.parse(tilesetLoader.data)
                     this.#map.tilesets[i].image = `/Engine2.0/Maps/Map/${this.#map.tilesets[i].image}`
                     amount++
                     if(amount == this.#map.tilesets.length) this.#loadTilemaps()
-                }
-                tilesetLoader.open('GET', `/Engine2.0/Maps/Map/${this.#map.tilesets[i].source}`, true)
-                tilesetLoader.send()
+                })
             }
-        }
-        xhr.open('GET', path, true)
-        xhr.send()
+        })
     }
 
     #loadTilemaps = async () => {
@@ -54,6 +51,8 @@ export class Map{
     }
 
     #seperateTilesOfTilemaps = async () => {
+        let amount = 0
+        let spriteIndex = 0
         for (let i = 0; i < this.#tilesets.length; i++) {
             let tileColumns = this.#tilesets[i].width / this.#map.tilewidth
             let tileRows = this.#tilesets[i].height / this.#map.tileheight
@@ -71,34 +70,40 @@ export class Map{
                     tileContext.drawImage(this.#tilesets[i], -tX, -tY)
                     let data = null
                     for (let j = 0; j < this.#map.tilesets[i].tiles.length; j++) {
-                        if(this.#tiles.length - 1 == this.#map.tilesets[i].tiles[j].id){
+                        if(spriteIndex == this.#map.tilesets[i].tiles[j].id){
                             data = this.#map.tilesets[i].tiles[j]
                         }
                     }
-                    this.#tiles.push(await Sprite(tileCanvas.toDataURL('image/png'), data))
+                    spriteIndex++
+                    let sprite = new Sprite(tileCanvas.toDataURL('image/png'), data)
+                    sprite.on('load', () => {
+                        this.#tiles.push(sprite)
+                        amount++
+                        if(amount == this.#tilesets.length * tileRows * tileColumns)this.#generateMap()
+                    })
                 }
             }
         }
-        this.#generateMap()
     }
 
     #generateMap = async () => {
         this.#customMap = []
         for (let i = 0; i < this.#map.layers.length; i++) {
             if(this.#map.layers[i].type !== 'tilelayer') return
-            this.#customMap.push({layer:this.#map.layers[i].name, tiles:new Array}) //TODO remove this like remove the .tiles
+            this.#customMap.push(new Array)
             for (let j = 0; j < this.#map.layers[i].data.length; j++) {
                 let row = this.#map.layers[i].data.splice(0, this.#map.width)
                 for (let x = 0; x < row.length; x++) {
                     if(row[x] != null) row[x] = new GameObject(new Vector2(x * window.spriteSize, j * window.spriteSize), new Vector2(window.spriteSize, window.spriteSize), this.#tiles[row[x]]?.sprite, this.#tiles[row[x]]?.type)
                 }
-                this.#customMap[i].tiles.push(row)
+                this.#customMap[i].push(row)
             }
         }
         window.mapBoundX = this.#map.width * window.spriteSize
         window.mapBoundY = this.#map.height * window.spriteSize
         console.log(this.#customMap)
         window.map = this.#customMap
+        this.trigger('load')
     }
 
     render(ctx){
@@ -125,10 +130,10 @@ export class Map{
                     posY += Math.floor((window.player.position.y + window.player.size.y / 2 - window.displayHeight / 2) / window.spriteSize)
                 }
                 else if(window.player.position.y + window.player.size.y / 2 >= window.mapBoundY - window.displayHeight / 2){
-                    posY += this.#customMap[i].tiles.length  - Math.round(window.displayHeight / window.spriteSize)
+                    posY += this.#customMap[i].length  - Math.round(window.displayHeight / window.spriteSize)
                 }
                 if(posY < 0) posY = 0
-                if(posY >= this.#customMap[i].tiles.length - 1) posY = this.#customMap[i].tiles.length - 1
+                if(posY >= this.#customMap[i].length - 1) posY = this.#customMap[i].length - 1
                 for (let x = 0; x < window.maxSpritesX; x++) {
                     let posX = x
                     if(window.player.position.x + window.player.size.x / 2 >= window.displayWidth / 2 && window.player.position.x + window.player.size.x / 2 < window.mapBoundX - window.displayWidth / 2){
@@ -136,11 +141,11 @@ export class Map{
                         posX += Math.floor((window.player.position.x + window.player.size.x / 2 - window.displayWidth / 2) / window.spriteSize)
                     }
                     else if(window.player.position.x + window.player.size.x / 2 >= window.mapBoundX - window.displayWidth / 2){
-                        posX += this.#customMap[i].tiles[posY].length - Math.round(window.displayWidth / window.spriteSize)
+                        posX += this.#customMap[i][posY].length - Math.round(window.displayWidth / window.spriteSize)
                     }
                     if(posX < 0) posX = 0
-                    if(posX >= this.#customMap[i].tiles[posY].length - 1) posX = this.#customMap[i].tiles[posY].length - 1
-                    this.#mapAreaToDraw[i][y][x] = this.#customMap[i].tiles[posY][posX]
+                    if(posX >= this.#customMap[i][posY].length - 1) posX = this.#customMap[i][posY].length - 1
+                    this.#mapAreaToDraw[i][y][x] = this.#customMap[i][posY][posX]
                 }
             }
         }

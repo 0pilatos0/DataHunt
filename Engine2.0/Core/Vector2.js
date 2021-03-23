@@ -1,12 +1,13 @@
-export class Vector2{
+import { Events } from "./Event.js"
+
+export class Vector2 extends Events{
     #x
     #y
-    #callback
 
-    constructor(x, y, callback = null){
+    constructor(x, y){
+        super()
         this.#x = x
         this.#y = y
-        this.#callback = callback
     }
 
     get x(){
@@ -15,7 +16,7 @@ export class Vector2{
 
     set x(x){
         this.#x = x
-        if(this.#callback) this.#callback()
+        this.trigger('x')
     }
 
     get y(){
@@ -24,7 +25,7 @@ export class Vector2{
 
     set y(y){
         this.#y = y
-        if(this.#callback) this.#callback()
+        this.trigger('y')
     }
 
     toString(){

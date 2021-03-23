@@ -42,6 +42,7 @@ export class HTMLObject extends BaseObject{
         this.#element.style.top = `${this.position.y}`
         window.htmlObjects.push(this)
         //reloadHTMLObjectList()
+        this.trigger('load')
     }
 
     set position(position){
@@ -55,14 +56,6 @@ export class HTMLObject extends BaseObject{
         super.size(size)
         this.#element.style.width = `${this.size.x}`
         this.#element.style.height = `${this.size.y}`
-    }
-    
-    get size(){
-        return super.size
-    }
-
-    get position(){
-        return super.position
     }
 
     set visible(visible){

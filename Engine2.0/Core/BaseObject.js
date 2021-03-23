@@ -1,20 +1,27 @@
-import { Vector2 } from "./Vector2.js"
+import { Events } from "./Event.js"
 
-export class BaseObject{
+export class BaseObject extends Events{
     #position
     #size
     #visible = true
-    #positionCallback = () => { this.position = this.#position }
-    #sizeCallback = () => { this.size = this.#size }
 
     constructor(position, size){
-        this.#position = new Vector2(position.x, position.y, this.#positionCallback)
-        this.#size = new Vector2(size.x, size.y, this.#sizeCallback)
-        //TODO create some sort of event when changing x and y vector2
+        super()
+        this.#position = position
+        this.#size = size
+        this.#init()
+    }
+
+    #init = () => {
+        this.#position.on('x', () => {this.position = this.#position})
+        this.#position.on('y', () => {this.position = this.#position})
+        this.#size.on('x', () => {this.size = this.#size})
+        this.#size.on('y', () => {this.size = this.#size})
+        this.trigger('load')
     }
 
     set size(size){
-        this.#size = new Vector2(size.x, size.y, this.#sizeCallback)
+        this.#size = size
     }
 
     get size(){
@@ -22,7 +29,7 @@ export class BaseObject{
     }
 
     set position(position){
-        this.#position = new Vector2(position.x, position.y, this.#positionCallback)
+        this.#position = position
     }
 
     get position(){

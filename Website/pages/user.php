@@ -51,7 +51,7 @@ $userinfo = $_SESSION["userinfo"];
 
                     $array = [json_decode($userinfo["feed"])];
 
-                    array_push($array[0], "{\"name\": \"test\"}");
+                    array_push($array, "{\"name\": \"test\"}");
 
                     var_dump($array);
 

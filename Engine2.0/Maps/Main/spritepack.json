@@ -1,0 +1,14 @@
+{ "columns":11,
+ "image":"TileSheet.png",
+ "imageheight":352,
+ "imagewidth":352,
+ "margin":0,
+ "name":"spritepack",
+ "spacing":0,
+ "tilecount":121,
+ "tiledversion":"1.4.3",
+ "tileheight":32,
+ "tilewidth":32,
+ "type":"tileset",
+ "version":1.4
+}

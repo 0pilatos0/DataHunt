@@ -1,9 +1,11 @@
-export class Scene{
+import { Events } from "./Event.js"
+
+export class Scene extends Events{
     #htmlObjects = []
     #gameObjects = []
 
     constructor(){
-
+        super()
     }
 
     render(ctx){

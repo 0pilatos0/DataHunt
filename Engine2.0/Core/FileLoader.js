@@ -12,7 +12,7 @@ export class FileLoader extends Events{
         xhr.onreadystatechange = () => {
             if(xhr.readyState != 4 || xhr.status != 200) return
             this.#data = xhr.responseText
-            this.trigger('load')
+            this.trigger('load', this.#data)
         }
         xhr.open('GET', path, true)
         xhr.send()

@@ -16,16 +16,16 @@ export class Map extends Events{
     }
 
     #init = () => {
-        let path = '/Engine2.0/Maps/Map/echtemap.json'
+        let path = '/Engine2.0/Maps/Main/Map.json'
         let mapData = new FileLoader(path)
         mapData.on('load', (data) => {
             this.#map = eval(`(${data})`)
             let amount = 0
             for (let i = 0; i < this.#map.tilesets.length; i++) {
-                let tilesetLoader = new FileLoader(`/Engine2.0/Maps/Map/${this.#map.tilesets[i].source}`)
+                let tilesetLoader = new FileLoader(`/Engine2.0/Maps/Main/${this.#map.tilesets[i].source}`)
                 tilesetLoader.on('load', (tilesetData) => {
                     this.#map.tilesets[i] = JSON.parse(tilesetData)
-                    this.#map.tilesets[i].image = `/Engine2.0/Maps/Map/${this.#map.tilesets[i].image}`
+                    this.#map.tilesets[i].image = `/Engine2.0/Maps/Main/${this.#map.tilesets[i].image}`
                     amount++
                     if(amount == this.#map.tilesets.length) this.#loadTilemaps()
                 })

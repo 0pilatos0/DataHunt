@@ -1,3 +1,4 @@
+import { HTMLLoader } from "../Loaders/HTMLLoader.js"
 import { Window } from "./Window.js"
 
 export class Socket{
@@ -9,6 +10,7 @@ export class Socket{
     }
 
     #init = () => {
+        new HTMLLoader("/Engine2.0/editor.html", document.body)
         new Window()
         this.#socket.on('connect', () => {
             console.log("Connected to server")

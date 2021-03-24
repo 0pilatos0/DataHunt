@@ -21,9 +21,11 @@ export class Window{
         window.addEventListener('resize', this.#resize)
         document.body.appendChild(this.#canvas)
         this.#scene = new GameScene()
-        window.requestAnimationFrame(this.#render)
-        setInterval(() => { this.#update() }, 1000/60)
-        setInterval(() => { this.#fps = 0 }, 1000)
+        this.#scene.on('load', () => {
+            window.requestAnimationFrame(this.#render)
+            setInterval(() => { this.#update() }, 1000/60)
+            setInterval(() => { this.#fps = 0 }, 1000)
+        })
     }
      
     #resize = () => {

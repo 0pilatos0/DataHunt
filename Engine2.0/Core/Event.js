@@ -26,10 +26,10 @@ export class Events{
         this.#events[event].push(callback)
     }
 
-    trigger = (event) => {
+    trigger = (event, data = null) => {
         if(!this.#events[event]) return
         for (let i = 0; i < this.#events[event].length; i++) {
-            this.#events[event][i]()
+            this.#events[event][i](data)
         }
     }
 }

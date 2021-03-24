@@ -37,16 +37,13 @@ export class Map extends Events{
         let successCount = 0
         let errorCount = 0
         for (let i = 0; i < this.#map.tilesets.length; i++) {
-            let img = await CustomImage(this.#map.tilesets[i].image)
-            if(img){
+            new CustomImage(this.#map.tilesets[i].image).on('load', (img) => {
                 successCount++
                 this.#tilesets.push(img)
                 successCount + errorCount == this.#map.tilesets.length ? this.#seperateTilesOfTilemaps() : false
-            } 
-            else{
-                errorCount++
-                console.log(`Failed loading ${this.#map.tilesets[i].image}`)
-            }
+            })
+            // errorCount++
+            // console.log(`Failed loading ${this.#map.tilesets[i].image}`)
         }
     }
 
@@ -79,7 +76,7 @@ export class Map extends Events{
                     sprite.on('load', () => {
                         this.#tiles.push(sprite)
                         amount++
-                        if(amount == this.#tilesets.length * tileRows * tileColumns)this.#generateMap()
+                        if(amount == this.#tilesets.length * tileRows * tileColumns) this.#generateMap()
                     })
                 }
             }
@@ -102,7 +99,6 @@ export class Map extends Events{
         window.mapBoundX = this.#map.width * window.spriteSize
         window.mapBoundY = this.#map.height * window.spriteSize
         console.log(this.#customMap)
-        window.map = this.#customMap
         this.trigger('load')
     }
 

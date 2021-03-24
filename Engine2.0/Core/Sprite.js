@@ -1,16 +1,21 @@
 import { Events } from "./Event.js"
 
-export async function CustomImage(path){
-    return new Promise((resolve, reject) => {
+export class CustomImage extends Events{
+    constructor(path){
+        super()
+        this.#init(path)
+    }
+
+    #init = (path) => {
         let img = new Image()
         img.onload = () => {
-            return resolve(img)
+            this.trigger('load', img)
         }
         img.onerror = () => {
-            return resolve(false)
+            return
         }
         img.src = path
-    })
+    }
 }
 
 export class Sprite extends Events{
@@ -24,20 +29,21 @@ export class Sprite extends Events{
 
     #init = async (path, data) => {
         //TODO fix scaling sprites
-        let img = await CustomImage(path)
-        let canvas = document.createElement('canvas')
-        canvas.width = window.spriteSize
-        canvas.height = window.spriteSize
-        let ctx = canvas.getContext('2d')
-        ctx.drawImage(img, 0, 0, window.spriteSize, window.spriteSize)
-        this.#sprite = canvas
-        for (let i = 0; i < data?.properties?.length; i++) {
-            if(data.properties[i].name == 'name' && data.properties[i].type == 'string'){
-                this.#name = data.properties[i].value
+        new CustomImage(path).on('load', (img) => {
+            let canvas = document.createElement('canvas')
+            canvas.width = window.spriteSize
+            canvas.height = window.spriteSize
+            let ctx = canvas.getContext('2d')
+            ctx.drawImage(img, 0, 0, window.spriteSize, window.spriteSize)
+            this.#sprite = canvas
+            for (let i = 0; i < data?.properties?.length; i++) {
+                if(data.properties[i].name == 'name' && data.properties[i].type == 'string'){
+                    this.#name = data.properties[i].value
+                }
             }
-        }
-        if(data?.type) this.#type = data.type
-        this.trigger('load')
+            if(data?.type) this.#type = data.type
+            this.trigger('load')
+        })
     }
 
     get name(){

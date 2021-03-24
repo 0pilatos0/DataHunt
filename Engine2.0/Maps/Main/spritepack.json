@@ -140,6 +140,42 @@
         {
          "id":32,
          "type":"Collidable"
+        }, 
+        {
+         "id":66,
+         "type":"Interactable"
+        }, 
+        {
+         "id":67,
+         "type":"Interactable"
+        }, 
+        {
+         "id":68,
+         "type":"Interactable"
+        }, 
+        {
+         "id":69,
+         "type":"Interactable"
+        }, 
+        {
+         "id":70,
+         "type":"Interactable"
+        }, 
+        {
+         "id":71,
+         "type":"Interactable"
+        }, 
+        {
+         "id":72,
+         "type":"Interactable"
+        }, 
+        {
+         "id":73,
+         "type":"Interactable"
+        }, 
+        {
+         "id":74,
+         "type":"Interactable"
         }],
  "tilewidth":32,
  "type":"tileset",

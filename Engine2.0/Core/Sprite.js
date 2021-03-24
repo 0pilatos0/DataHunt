@@ -28,12 +28,12 @@ export class Sprite extends Events{
     }
 
     #init = async (path, data) => {
-        //TODO fix scaling sprites
         new CustomImage(path).on('load', (img) => {
             let canvas = document.createElement('canvas')
             canvas.width = window.spriteSize
             canvas.height = window.spriteSize
             let ctx = canvas.getContext('2d')
+            ctx.imageSmoothingEnabled = false
             ctx.drawImage(img, 0, 0, window.spriteSize, window.spriteSize)
             this.#sprite = canvas
             for (let i = 0; i < data?.properties?.length; i++) {

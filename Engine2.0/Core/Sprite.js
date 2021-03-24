@@ -1,18 +1,5 @@
 import { Events } from "./Event.js"
 
-// export async function Sprite(path, data = null){
-//     return new Promise(async (resolve, reject) => {
-//         let img = await CustomImage(path)
-//         let canvas = document.createElement('canvas')
-        
-//         canvas.width = window.spriteSize
-//         canvas.height = window.spriteSize
-//         let ctx = canvas.getContext('2d')
-//         ctx.drawImage(img, 0, 0, window.spriteSize, window.spriteSize)
-//         return resolve(new CustomSprite(canvas, data))
-//     })
-// }
-
 export async function CustomImage(path){
     return new Promise((resolve, reject) => {
         let img = new Image()
@@ -36,6 +23,7 @@ export class Sprite extends Events{
     }
 
     #init = async (path, data) => {
+        //TODO fix scaling sprites
         let img = await CustomImage(path)
         let canvas = document.createElement('canvas')
         canvas.width = window.spriteSize

@@ -1,5 +1,5 @@
 import { GameObject } from "../Core/GameObject.js"
-import { Sprite } from "../Core/Sprite.js"
+import { Animation, Sprite, tilesetToSprites } from "../Core/Sprite.js"
 import { Vector2 } from "../Core/Vector2.js"
 
 export class Player extends GameObject{
@@ -7,18 +7,34 @@ export class Player extends GameObject{
     #keysPressed = []
     #speed
     #oldPosition
-    constructor(position, controllable = false){
-        super(position, new Vector2(window.spriteSize, window.spriteSize), new Sprite('/Engine2.0/Sprites/Player.png'))
+    #animations = []
+    constructor(position, size, sprite, controllable = false){
+        super(position, size, sprite)
+        console.log(sprite)
         this.#controllable = controllable
         this.#init()
     }
 
-    #init = () => {
+    #init = async () => {
         if(this.#controllable){
             this.#speed = 500
             window.player = this
             document.body.addEventListener('keydown', this.#keydown)
             document.body.addEventListener('keyup', this.#keyup)
+            tilesetToSprites("/Engine2.0/Sprites/Players/Player1.png").then(sprites => {
+                for (let i = 0; i < sprites.length; i++) {
+                    new Animation(sprites[i], 200).on('load', (animation) => {
+                        console.log(animation)
+                        sprites[i] = animation
+                        this.#animations[i] = animation
+                        sprites[i].on('change', (animation) => {
+                            this.#animations[i] = animation
+                        })
+                    })
+                }
+                this.trigger('load')
+            })
+            
         }
     }
 
@@ -62,6 +78,16 @@ export class Player extends GameObject{
                     break;
             }
         }
+
+        if(this.#keysPressed.includes('w') && !this.#keysPressed.includes('d') && !this.#keysPressed.includes('a')) this.sprite = this.#animations[4].currentSprite
+        else if(this.#keysPressed.includes('a') && this.#keysPressed.includes('w')) this.sprite = this.#animations[5].currentSprite
+        else if(this.#keysPressed.includes('a') && !this.#keysPressed.includes('w') && !this.#keysPressed.includes('s')) this.sprite = this.#animations[6].currentSprite
+        else if(this.#keysPressed.includes('a') && this.#keysPressed.includes('s')) this.sprite = this.#animations[7].currentSprite
+        else if(this.#keysPressed.includes('s') && !this.#keysPressed.includes('a') && !this.#keysPressed.includes('d')) this.sprite = this.#animations[8].currentSprite
+        else if(this.#keysPressed.includes('d') && !this.#keysPressed.includes('w') && !this.#keysPressed.includes('s')) this.sprite = this.#animations[2].currentSprite
+        else if(this.#keysPressed.includes('d') && this.#keysPressed.includes('s')) this.sprite = this.#animations[1].currentSprite
+        else if(this.#keysPressed.includes('d') && this.#keysPressed.includes('w')) this.sprite = this.#animations[3].currentSprite
+        else this.sprite = this.#animations[0].currentSprite
 
         if(this.position.x < 0){
             this.position.x = 0
@@ -113,19 +139,21 @@ export class Player extends GameObject{
             for (let y = 0; y < window.mapRenderArea[i].length; y++) {
                 for (let x = 0; x < window.mapRenderArea[i][y].length; x++) {
                     let gameObject = window.mapRenderArea[i][y][x]
-                    if(gameObject.visible && gameObject.type == 'Collidable' || gameObject.type == 'Interactable'){
-                        if(gameObject.position.x >= window.player.position.x - window.displayWidth / 2 && gameObject.position.x < window.player.position.x + window.displayWidth / 2){
-                            if(gameObject.position.y >= window.player.position.y - window.displayHeight / 2 && gameObject.position.y < window.player.position.y + window.displayHeight / 2){
-                                if(gameObject != this){
-                                    if(this.colliding(gameObject)){
-                                        if(gameObject.type == 'Collidable'){
-                                            setPosition()
+                    if(gameObject && gameObject?.visible){
+                        if(gameObject.type == 'Collidable' || gameObject.type == 'Interactable'){
+                            if(gameObject.position.x >= window.player.position.x - window.displayWidth / 2 && gameObject.position.x < window.player.position.x + window.displayWidth / 2){
+                                if(gameObject.position.y >= window.player.position.y - window.displayHeight / 2 && gameObject.position.y < window.player.position.y + window.displayHeight / 2){
+                                    if(gameObject != this){
+                                        if(this.colliding(gameObject)){
+                                            if(gameObject.type == 'Collidable'){
+                                                setPosition()
+                                            }
+                                            if(gameObject.type == 'Interactable'){
+                                                gameObject.visible = false
+                                            }
                                         }
-                                        if(gameObject.type == 'Interactable'){
-                                            gameObject.visible = false
-                                        }
-                                    }
-                                } 
+                                    } 
+                                }
                             }
                         }
                     }

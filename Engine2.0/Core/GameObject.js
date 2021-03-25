@@ -15,7 +15,7 @@ export class GameObject extends BaseObject{
      * @param {Vector2} size 
      * @param {Sprite} sprite 
      */
-    constructor(position, size, sprite, type = 'normal') {
+    constructor(position, size, sprite = null, type = 'normal') {
         super(position, size)
         this.#type = type
         this.#init(sprite)
@@ -38,7 +38,13 @@ export class GameObject extends BaseObject{
 
     render(ctx){
         super.render(ctx)
-        if(this.#sprite) ctx.drawImage(this.#sprite, this.position.x - window.displayWidth / 2, this.position.y - window.displayHeight / 2)
+        // if(this.#sprite){
+        //     console.log(this.#sprite)
+        //     if(this.#sprite.animation){
+        //         console.log(this.#sprite.animation)
+        //     }
+        //     //else ctx.drawImage(this.#sprite, this.position.x - window.displayWidth / 2, this.position.y - window.displayHeight / 2)
+        // } 
     }
 
     get json(){

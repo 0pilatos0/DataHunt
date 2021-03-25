@@ -1,3 +1,4 @@
+import { Player } from "../GameObjects/Player.js"
 import { Events } from "./Event.js"
 import { FileLoader } from "./FileLoader.js"
 import { GameObject } from "./GameObject.js"
@@ -10,22 +11,25 @@ export class Map extends Events{
     #tiles = [null]
     #customMap
     #mapAreaToDraw = []
+    #objects = []
     constructor(){
         super()
         this.#init()
     }
 
     #init = () => {
+        window.map = this
         let path = '/Engine2.0/Maps/Main/Map.json'
         let mapData = new FileLoader(path)
         mapData.on('load', (data) => {
             this.#map = eval(`(${data})`)
             let amount = 0
             for (let i = 0; i < this.#map.tilesets.length; i++) {
-                let tilesetLoader = new FileLoader(`/Engine2.0/Maps/Main/${this.#map.tilesets[i].source}`)
+                let tileset = this.#map.tilesets[i]
+                let tilesetLoader = new FileLoader(`/Engine2.0/Maps/Main/${tileset.source}`)
                 tilesetLoader.on('load', (tilesetData) => {
-                    this.#map.tilesets[i] = JSON.parse(tilesetData)
-                    this.#map.tilesets[i].image = `/Engine2.0/Maps/Main/${this.#map.tilesets[i].image}`
+                    this.#map.tilesets[i] = {tileset:JSON.parse(tilesetData),tileOffset:tileset.firstgid - 1}
+                    this.#map.tilesets[i].tileset.image = `/Engine2.0/Maps/Main/${this.#map.tilesets[i].tileset.image}`
                     amount++
                     if(amount == this.#map.tilesets.length) this.#loadTilemaps()
                 })
@@ -37,46 +41,44 @@ export class Map extends Events{
         let successCount = 0
         let errorCount = 0
         for (let i = 0; i < this.#map.tilesets.length; i++) {
-            new CustomImage(this.#map.tilesets[i].image).on('load', (img) => {
+            new CustomImage(this.#map.tilesets[i].tileset.image).on('load', (img) => {
                 successCount++
-                this.#tilesets.push(img)
+                this.#tilesets[i] = {img,tileOffset:this.#map.tilesets[i].tileOffset}
                 successCount + errorCount == this.#map.tilesets.length ? this.#seperateTilesOfTilemaps() : false
             })
             // errorCount++
-            // console.log(`Failed loading ${this.#map.tilesets[i].image}`)
+            // console.log(`Failed loading ${this.#map.tilesets[i].tileset.image}`)
         }
     }
 
     #seperateTilesOfTilemaps = async () => {
         let amount = 0
         let spriteIndex = 0
+        let totalSprites = 0
         for (let i = 0; i < this.#tilesets.length; i++) {
-            let tileColumns = this.#tilesets[i].width / this.#map.tilewidth
-            let tileRows = this.#tilesets[i].height / this.#map.tileheight
+            let tileset = this.#tilesets[i]
+            let tileColumns = tileset.img.width / this.#map.tilewidth
+            let tileRows = tileset.img.height / this.#map.tileheight
+            totalSprites += tileRows * tileColumns
             for (let y = 0; y < tileRows; y++) {
                 for (let x = 0; x < tileColumns; x++) {
                     let tileCanvas = document.createElement('canvas')
                     let tileContext = tileCanvas.getContext('2d')
-
                     tileCanvas.width = this.#map.tilewidth
                     tileCanvas.height = this.#map.tileheight
-
-                    let tX = x * this.#map.tilewidth
-                    let tY = y * this.#map.tileheight
-                    
-                    tileContext.drawImage(this.#tilesets[i], -tX, -tY)
+                    tileContext.drawImage(tileset.img, -x * this.#map.tilewidth, -y * this.#map.tileheight)
                     let data = null
-                    for (let j = 0; j < this.#map.tilesets[i].tiles.length; j++) {
-                        if(spriteIndex == this.#map.tilesets[i].tiles[j].id){
-                            data = this.#map.tilesets[i].tiles[j]
+                    for (let j = 0; j < this.#map.tilesets[i].tileset.tiles.length; j++) {
+                        if(spriteIndex == this.#map.tilesets[i].tileset.tiles[j].id + this.#tilesets[i].tileOffset){
+                            data = this.#map.tilesets[i].tileset.tiles[j]
+                            data.tileOffset = this.#tilesets[i].tileOffset
                         }
                     }
                     spriteIndex++
-                    let sprite = new Sprite(tileCanvas.toDataURL('image/png'), data)
-                    sprite.on('load', () => {
+                    new Sprite(tileCanvas.toDataURL('image/png'), data).on('load', (sprite) => {
                         this.#tiles.push(sprite)
                         amount++
-                        if(amount == this.#tilesets.length * tileRows * tileColumns) this.#generateMap()
+                        if(amount == totalSprites) {window.tiles = this.#tiles; this.#generateMap()}
                     })
                 }
             }
@@ -85,28 +87,44 @@ export class Map extends Events{
 
     #generateMap = async () => {
         this.#customMap = []
+        new Player(new Vector2(0, 0), new Vector2(window.spriteSize, window.spriteSize), new Sprite("/Engine2.0/Sprites/Players/Player1.png"), true)
         for (let i = 0; i < this.#map.layers.length; i++) {
-            if(this.#map.layers[i].type !== 'tilelayer') return
-            this.#customMap.push(new Array)
-            for (let j = 0; j < this.#map.layers[i].data.length; j++) {
-                let row = this.#map.layers[i].data.splice(0, this.#map.width)
-                for (let x = 0; x < row.length; x++) {
-                    if(row[x] != null) row[x] = new GameObject(new Vector2(x * window.spriteSize, j * window.spriteSize), new Vector2(window.spriteSize, window.spriteSize), this.#tiles[row[x]]?.sprite, this.#tiles[row[x]]?.type)
-                }
-                this.#customMap[i].push(row)
+            let layer = this.#map.layers[i]
+            switch (layer.type) {
+                case "tilelayer":
+                    this.#customMap.push(new Array)
+                    for (let j = 0; j < this.#map.layers[i].data.length; j++) {
+                        let row = this.#map.layers[i].data.splice(0, this.#map.width)
+                        for (let x = 0; x < row.length; x++) {
+                            if(row[x] != null && row[x]) row[x] = new GameObject(new Vector2(x * window.spriteSize, j * window.spriteSize), new Vector2(window.spriteSize, window.spriteSize), this.#tiles[row[x]], this.#tiles[row[x]]?.type)
+                            else row[x] = null
+                        }
+                        this.#customMap[this.#customMap.length-1].push(row)
+                    }
+                    break;
+                case "objectgroup":
+                    for (let j = 0; j < layer.objects.length; j++) {
+                        let object = layer.objects[i]
+                        new GameObject(new Vector2(object.x, object.y), new Vector2(object.width * window.spriteFactor, object.height * window.spriteFactor), null, object.type)
+                        //TODO make spawnpoint work
+                    }
+                    console.log(window.gameObjects)
+                    break;
+                default:
+                    break;
             }
         }
         window.mapBoundX = this.#map.width * window.spriteSize
         window.mapBoundY = this.#map.height * window.spriteSize
         console.log(this.#customMap)
-        this.trigger('load')
+        this.trigger('load', window.player)
     }
 
     render(ctx){
         for (let i = 0; i < this.#mapAreaToDraw.length; i++) {
             for (let y = 0; y < this.#mapAreaToDraw[i].length; y++) {
                 for (let x = 0; x < this.#mapAreaToDraw[i][y].length; x++) {
-                    if(this.#mapAreaToDraw[i][y][x]?.visible && this.#mapAreaToDraw[i][y][x]?.sprite) ctx.drawImage(this.#mapAreaToDraw[i][y][x]?.sprite, x * window.spriteSize - window.mapOffsetX - window.displayWidth / 2, y * window.spriteSize - window.mapOffsetY - window.displayHeight / 2)
+                    if(this.#mapAreaToDraw[i][y][x]?.visible && this.#mapAreaToDraw[i][y][x]?.sprite?.sprite) ctx.drawImage(this.#mapAreaToDraw[i][y][x]?.sprite.sprite, x * window.spriteSize - window.mapOffsetX - window.displayWidth / 2, y * window.spriteSize - window.mapOffsetY - window.displayHeight / 2)
                 }
             }
         }

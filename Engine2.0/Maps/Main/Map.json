@@ -92,10 +92,6 @@
         {
          "firstgid":1,
          "source":"spritepack.json"
-        }, 
-        {
-         "firstgid":122,
-         "source":"Player.json"
         }],
  "tilewidth":32,
  "type":"map",

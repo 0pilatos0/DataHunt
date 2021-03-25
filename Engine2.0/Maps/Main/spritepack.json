@@ -265,6 +265,42 @@
                 }],
          "id":74,
          "type":"Interactable"
+        }, 
+        {
+         "id":77,
+         "type":"Interactable"
+        }, 
+        {
+         "id":78,
+         "type":"Interactable"
+        }, 
+        {
+         "id":79,
+         "type":"Interactable"
+        }, 
+        {
+         "id":80,
+         "type":"Interactable"
+        }, 
+        {
+         "id":81,
+         "type":"Interactable"
+        }, 
+        {
+         "id":82,
+         "type":"Interactable"
+        }, 
+        {
+         "id":83,
+         "type":"Interactable"
+        }, 
+        {
+         "id":84,
+         "type":"Interactable"
+        }, 
+        {
+         "id":85,
+         "type":"Interactable"
         }],
  "tilewidth":32,
  "type":"tileset",

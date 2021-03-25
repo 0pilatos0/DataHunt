@@ -10,7 +10,6 @@ export class Player extends GameObject{
     #animations = []
     constructor(position, size, sprite, controllable = false){
         super(position, size, sprite)
-        console.log(sprite)
         this.#controllable = controllable
         this.#init()
     }
@@ -24,7 +23,6 @@ export class Player extends GameObject{
             tilesetToSprites("/Engine2.0/Sprites/Players/Player1.png").then(sprites => {
                 for (let i = 0; i < sprites.length; i++) {
                     new Animation(sprites[i], 200).on('load', (animation) => {
-                        console.log(animation)
                         sprites[i] = animation
                         this.#animations[i] = animation
                         sprites[i].on('change', (animation) => {
@@ -79,15 +77,17 @@ export class Player extends GameObject{
             }
         }
 
-        if(this.#keysPressed.includes('w') && !this.#keysPressed.includes('d') && !this.#keysPressed.includes('a')) this.sprite = this.#animations[4].currentSprite
-        else if(this.#keysPressed.includes('a') && this.#keysPressed.includes('w')) this.sprite = this.#animations[5].currentSprite
-        else if(this.#keysPressed.includes('a') && !this.#keysPressed.includes('w') && !this.#keysPressed.includes('s')) this.sprite = this.#animations[6].currentSprite
-        else if(this.#keysPressed.includes('a') && this.#keysPressed.includes('s')) this.sprite = this.#animations[7].currentSprite
-        else if(this.#keysPressed.includes('s') && !this.#keysPressed.includes('a') && !this.#keysPressed.includes('d')) this.sprite = this.#animations[8].currentSprite
-        else if(this.#keysPressed.includes('d') && !this.#keysPressed.includes('w') && !this.#keysPressed.includes('s')) this.sprite = this.#animations[2].currentSprite
-        else if(this.#keysPressed.includes('d') && this.#keysPressed.includes('s')) this.sprite = this.#animations[1].currentSprite
-        else if(this.#keysPressed.includes('d') && this.#keysPressed.includes('w')) this.sprite = this.#animations[3].currentSprite
-        else this.sprite = this.#animations[0].currentSprite
+        if(this.#animations.length == 9){
+            if(this.#keysPressed.includes('w') && !this.#keysPressed.includes('d') && !this.#keysPressed.includes('a')) this.sprite = this.#animations[4].currentSprite
+            else if(this.#keysPressed.includes('a') && this.#keysPressed.includes('w')) this.sprite = this.#animations[5].currentSprite
+            else if(this.#keysPressed.includes('a') && !this.#keysPressed.includes('w') && !this.#keysPressed.includes('s')) this.sprite = this.#animations[6].currentSprite
+            else if(this.#keysPressed.includes('a') && this.#keysPressed.includes('s')) this.sprite = this.#animations[7].currentSprite
+            else if(this.#keysPressed.includes('s') && !this.#keysPressed.includes('a') && !this.#keysPressed.includes('d')) this.sprite = this.#animations[8].currentSprite
+            else if(this.#keysPressed.includes('d') && !this.#keysPressed.includes('w') && !this.#keysPressed.includes('s')) this.sprite = this.#animations[2].currentSprite
+            else if(this.#keysPressed.includes('d') && this.#keysPressed.includes('s')) this.sprite = this.#animations[1].currentSprite
+            else if(this.#keysPressed.includes('d') && this.#keysPressed.includes('w')) this.sprite = this.#animations[3].currentSprite
+            else this.sprite = this.#animations[0].currentSprite
+        }
 
         if(this.position.x < 0){
             this.position.x = 0

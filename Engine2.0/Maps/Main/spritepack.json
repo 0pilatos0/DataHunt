@@ -1,4 +1,12 @@
 { "columns":11,
+ "editorsettings":
+    {
+     "export":
+        {
+         "format":"",
+         "target":"."
+        }
+    },
  "image":"TileSheet.png",
  "imageheight":352,
  "imagewidth":352,
@@ -142,38 +150,119 @@
          "type":"Collidable"
         }, 
         {
+         "animation":[
+                {
+                 "duration":100,
+                 "tileid":66
+                }, 
+                {
+                 "duration":100,
+                 "tileid":77
+                }],
          "id":66,
          "type":"Interactable"
         }, 
         {
+         "animation":[
+                {
+                 "duration":100,
+                 "tileid":67
+                }, 
+                {
+                 "duration":100,
+                 "tileid":78
+                }],
          "id":67,
          "type":"Interactable"
         }, 
         {
+         "animation":[
+                {
+                 "duration":100,
+                 "tileid":68
+                }, 
+                {
+                 "duration":100,
+                 "tileid":79
+                }],
          "id":68,
          "type":"Interactable"
         }, 
         {
+         "animation":[
+                {
+                 "duration":100,
+                 "tileid":69
+                }, 
+                {
+                 "duration":100,
+                 "tileid":80
+                }],
          "id":69,
          "type":"Interactable"
         }, 
         {
+         "animation":[
+                {
+                 "duration":100,
+                 "tileid":81
+                }, 
+                {
+                 "duration":100,
+                 "tileid":70
+                }],
          "id":70,
          "type":"Interactable"
         }, 
         {
+         "animation":[
+                {
+                 "duration":100,
+                 "tileid":71
+                }, 
+                {
+                 "duration":100,
+                 "tileid":82
+                }],
          "id":71,
          "type":"Interactable"
         }, 
         {
+         "animation":[
+                {
+                 "duration":100,
+                 "tileid":72
+                }, 
+                {
+                 "duration":100,
+                 "tileid":83
+                }],
          "id":72,
          "type":"Interactable"
         }, 
         {
+         "animation":[
+                {
+                 "duration":100,
+                 "tileid":73
+                }, 
+                {
+                 "duration":100,
+                 "tileid":84
+                }],
          "id":73,
          "type":"Interactable"
         }, 
         {
+         "animation":[
+                {
+                 "duration":100,
+                 "tileid":74
+                }, 
+                {
+                 "duration":100,
+                 "tileid":85
+                }],
          "id":74,
          "type":"Interactable"
         }],

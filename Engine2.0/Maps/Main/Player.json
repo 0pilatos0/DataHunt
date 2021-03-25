@@ -1,5 +1,5 @@
 { "columns":4,
- "image":"..\/..\/Sprites\/Player.png",
+ "image":"Player.png",
  "imageheight":256,
  "imagewidth":128,
  "margin":0,
@@ -12,19 +12,19 @@
         {
          "animation":[
                 {
-                 "duration":100,
+                 "duration":200,
                  "tileid":0
                 }, 
                 {
-                 "duration":100,
+                 "duration":200,
                  "tileid":1
                 }, 
                 {
-                 "duration":100,
+                 "duration":200,
                  "tileid":2
                 }, 
                 {
-                 "duration":100,
+                 "duration":200,
                  "tileid":3
                 }],
          "id":0

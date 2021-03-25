@@ -1,12 +1,12 @@
 { "columns":4,
  "image":"Player.png",
- "imageheight":256,
+ "imageheight":288,
  "imagewidth":128,
  "margin":0,
  "name":"Player",
  "spacing":0,
- "tilecount":32,
- "tiledversion":"1.4.3",
+ "tilecount":36,
+ "tiledversion":"1.5.0",
  "tileheight":32,
  "tiles":[
         {
@@ -27,7 +27,20 @@
                  "duration":200,
                  "tileid":3
                 }],
-         "id":0
+         "id":0,
+         "type":"Player"
+        }, 
+        {
+         "id":1,
+         "type":"Player"
+        }, 
+        {
+         "id":2,
+         "type":"Player"
+        }, 
+        {
+         "id":3,
+         "type":"Player"
         }, 
         {
          "animation":[
@@ -47,7 +60,20 @@
                  "duration":200,
                  "tileid":7
                 }],
-         "id":4
+         "id":4,
+         "type":"Player"
+        }, 
+        {
+         "id":5,
+         "type":"Player"
+        }, 
+        {
+         "id":6,
+         "type":"Player"
+        }, 
+        {
+         "id":7,
+         "type":"Player"
         }, 
         {
          "animation":[
@@ -67,7 +93,20 @@
                  "duration":200,
                  "tileid":11
                 }],
-         "id":8
+         "id":8,
+         "type":"Player"
+        }, 
+        {
+         "id":9,
+         "type":"Player"
+        }, 
+        {
+         "id":10,
+         "type":"Player"
+        }, 
+        {
+         "id":11,
+         "type":"Player"
         }, 
         {
          "animation":[
@@ -87,7 +126,20 @@
                  "duration":200,
                  "tileid":15
                 }],
-         "id":12
+         "id":12,
+         "type":"Player"
+        }, 
+        {
+         "id":13,
+         "type":"Player"
+        }, 
+        {
+         "id":14,
+         "type":"Player"
+        }, 
+        {
+         "id":15,
+         "type":"Player"
         }, 
         {
          "animation":[
@@ -107,7 +159,20 @@
                  "duration":200,
                  "tileid":19
                 }],
-         "id":16
+         "id":16,
+         "type":"Player"
+        }, 
+        {
+         "id":17,
+         "type":"Player"
+        }, 
+        {
+         "id":18,
+         "type":"Player"
+        }, 
+        {
+         "id":19,
+         "type":"Player"
         }, 
         {
          "animation":[
@@ -127,7 +192,20 @@
                  "duration":200,
                  "tileid":23
                 }],
-         "id":20
+         "id":20,
+         "type":"Player"
+        }, 
+        {
+         "id":21,
+         "type":"Player"
+        }, 
+        {
+         "id":22,
+         "type":"Player"
+        }, 
+        {
+         "id":23,
+         "type":"Player"
         }, 
         {
          "animation":[
@@ -147,7 +225,20 @@
                  "duration":200,
                  "tileid":27
                 }],
-         "id":24
+         "id":24,
+         "type":"Player"
+        }, 
+        {
+         "id":25,
+         "type":"Player"
+        }, 
+        {
+         "id":26,
+         "type":"Player"
+        }, 
+        {
+         "id":27,
+         "type":"Player"
         }, 
         {
          "animation":[
@@ -167,9 +258,38 @@
                  "duration":200,
                  "tileid":31
                 }],
-         "id":28
+         "id":28,
+         "type":"Player"
+        }, 
+        {
+         "id":29,
+         "type":"Player"
+        }, 
+        {
+         "id":30,
+         "type":"Player"
+        }, 
+        {
+         "id":31,
+         "type":"Player"
+        }, 
+        {
+         "id":32,
+         "type":"Player"
+        }, 
+        {
+         "id":33,
+         "type":"Player"
+        }, 
+        {
+         "id":34,
+         "type":"Player"
+        }, 
+        {
+         "id":35,
+         "type":"Player"
         }],
  "tilewidth":32,
  "type":"tileset",
- "version":1.4
+ "version":1.5
 }

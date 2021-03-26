@@ -10,7 +10,7 @@ export default class Sprite extends Event{
         this.init(path, size, data)
     }
 
-    private async init(path: string, size: Vector2, data?: any){
+    private init(path: string, size: Vector2, data?: any){
         let img = new Image()
         img.onload = () => {
             let canvas = new Canvas(new Vector2(img.width, img.height))

@@ -1,4 +1,5 @@
 import Canvas from "./Canvas.js";
+import Map from "./Map.js";
 export default class Window {
     constructor() {
         this._canvas = new Canvas();
@@ -11,6 +12,7 @@ export default class Window {
         window.gameObjects = [];
         window.addEventListener('resize', this.resize);
         document.body.appendChild(this._canvas.element);
+        new Map('/Engine3.0/Maps/Main/Map.json');
         window.requestAnimationFrame(this.render.bind(this));
         setInterval(() => { this.update; }, 1000 / 60);
         setInterval(() => { this._fps = 0; }, 1000);

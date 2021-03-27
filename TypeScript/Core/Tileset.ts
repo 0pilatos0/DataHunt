@@ -24,13 +24,13 @@ export default class Tileset extends Event{
             rows = img.height / tileHeight
             columns = img.width / tileWidth
             let tileIndex: number = 0
-            for (let y = 0; y < columns; y++) {
+            for (let y = 0; y < rows; y++) {
                 this._tiles2D.push([])
-                for (let x = 0; x < rows; x++) {
+                for (let x = 0; x < columns; x++) {
                     let canvas = new Canvas(new Vector2(tileWidth, tileHeight))
                     canvas.ctx.drawImage(img, -x * tileWidth, -y * tileHeight)
                     let spriteData = !onlyPath ? {offsetId: data.offsetId} : null
-                    for (let i = 0; i < data?.tiles.length; i++) {
+                    for (let i = 0; i < data?.tiles?.length; i++) {
                         Object.assign(spriteData, (data.tiles[i].id == tileIndex ? data.tiles[i] : spriteData))
                     }
                     tileIndex++

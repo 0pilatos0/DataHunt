@@ -17,7 +17,7 @@ export default class Sprite extends Event{
             let canvas = new Canvas(new Vector2(size.x, size.y))
             canvas.ctx.drawImage(img, 0, 0, size.x, size.y)
             this._sprite = canvas.element
-            this.trigger('load', this._sprite)
+            this.trigger('load', this)
             //console.log(data)
         }
         img.src = path

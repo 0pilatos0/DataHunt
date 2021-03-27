@@ -21,11 +21,11 @@ export default class GameObject extends Event{
         this.trigger('load')
     }
 
-    private render(ctx: CanvasRenderingContext2D){
+    public render(ctx: CanvasRenderingContext2D){
 
     }
 
-    private update(){
+    public update(){
 
     }
 

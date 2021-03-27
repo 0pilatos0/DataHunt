@@ -1,21 +1,28 @@
+import Player from "../GameObjects/Player.js";
 import Canvas from "./Canvas.js";
 import Map from "./Map.js";
+import Vector2 from "./Vector2.js";
 export default class Window {
     constructor() {
         this._canvas = new Canvas();
         this._fps = 0;
         this._lastUpdate = Date.now();
+        this._map = null;
         this.init();
     }
     init() {
-        this.resize();
         window.gameObjects = [];
-        window.addEventListener('resize', this.resize);
         document.body.appendChild(this._canvas.element);
-        new Map('/Engine3.0/Maps/Main/Map.json');
-        window.requestAnimationFrame(this.render.bind(this));
-        setInterval(() => { this.update; }, 1000 / 60);
-        setInterval(() => { this._fps = 0; }, 1000);
+        new Map('/Engine3.0/Maps/Main/Map.json').on('load', (map) => {
+            this._map = map;
+            new Player(new Vector2(0, 0), new Vector2(window.spriteSize, window.spriteSize), true).on('load', () => {
+                this.resize();
+                window.addEventListener('resize', this.resize);
+                window.requestAnimationFrame(this.render.bind(this));
+                setInterval(() => { this.update(); }, 1000 / 60);
+                setInterval(() => { this._fps = 0; }, 1000);
+            });
+        });
     }
     resize() {
         this._canvas.element.width = window.innerWidth;
@@ -29,15 +36,19 @@ export default class Window {
         window.maxSpritesY = Math.round(window.displayHeight / window.spriteSize) + 2;
     }
     render() {
+        var _a;
         window.requestAnimationFrame(this.render.bind(this));
         this._canvas.ctx.clearRect(-window.displayWidth / 2, -window.displayHeight / 2, window.displayWidth, window.displayHeight);
         this._canvas.ctx.fillStyle = "#333";
         this._canvas.ctx.fillRect(-window.displayWidth / 2, -window.displayHeight / 2, window.displayWidth, window.displayHeight);
+        (_a = this._map) === null || _a === void 0 ? void 0 : _a.render(this._canvas.ctx);
     }
     update() {
+        var _a;
         let now = Date.now();
         window.deltaTime = (now - this._lastUpdate) / 1000;
         this._lastUpdate = now;
         this._fps++;
+        (_a = this._map) === null || _a === void 0 ? void 0 : _a.update();
     }
 }

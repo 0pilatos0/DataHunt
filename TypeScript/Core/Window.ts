@@ -1,3 +1,4 @@
+import Player from "../GameObjects/Player.js"
 import Canvas from "./Canvas.js"
 import Map from "./Map.js"
 import Vector2 from "./Vector2.js"
@@ -6,20 +7,25 @@ export default class Window{
     private _canvas: Canvas = new Canvas()
     private _fps: number = 0
     private _lastUpdate: number = Date.now()
+    private _map: Map | null = null
 
     constructor(){
         this.init()
     }
 
     private init(){
-        this.resize()
         window.gameObjects = []
-        window.addEventListener('resize', this.resize)
         document.body.appendChild(this._canvas.element)
-        new Map('/Engine3.0/Maps/Main/Map.json')
-        window.requestAnimationFrame(this.render.bind(this))
-        setInterval(() => {this.update}, 1000/60)
-        setInterval(() => {this._fps = 0}, 1000)
+        new Map('/Engine3.0/Maps/Main/Map.json').on('load', (map: Map) => {
+            this._map = map
+            new Player(new Vector2(0, 0), new Vector2(window.spriteSize, window.spriteSize), true).on('load', () => {
+                this.resize()
+                window.addEventListener('resize', this.resize)
+                window.requestAnimationFrame(this.render.bind(this))
+                setInterval(() => {this.update()}, 1000/60)
+                setInterval(() => {this._fps = 0}, 1000)
+            })
+        })
     }
 
     private resize(){
@@ -39,6 +45,7 @@ export default class Window{
         this._canvas.ctx.clearRect(-window.displayWidth / 2, -window.displayHeight / 2, window.displayWidth, window.displayHeight)
         this._canvas.ctx.fillStyle = "#333"
         this._canvas.ctx.fillRect(-window.displayWidth / 2, -window.displayHeight / 2, window.displayWidth, window.displayHeight)
+        this._map?.render(this._canvas.ctx)
     }
 
     private update(){
@@ -46,5 +53,6 @@ export default class Window{
         window.deltaTime = (now - this._lastUpdate) / 1000
         this._lastUpdate = now
         this._fps++
+        this._map?.update()
     }
 }

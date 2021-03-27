@@ -15,18 +15,19 @@ export default class Tileset extends Event {
         let onlyPath = typeof data == "string";
         imgPath = onlyPath ? data : data.image;
         img.onload = () => {
+            var _a;
             tileWidth = onlyPath ? window.spriteSize / window.spriteScaleFactor : data.tilewidth;
             tileHeight = onlyPath ? window.spriteSize / window.spriteScaleFactor : data.tileheight;
             rows = img.height / tileHeight;
             columns = img.width / tileWidth;
             let tileIndex = 0;
-            for (let y = 0; y < columns; y++) {
+            for (let y = 0; y < rows; y++) {
                 this._tiles2D.push([]);
-                for (let x = 0; x < rows; x++) {
+                for (let x = 0; x < columns; x++) {
                     let canvas = new Canvas(new Vector2(tileWidth, tileHeight));
                     canvas.ctx.drawImage(img, -x * tileWidth, -y * tileHeight);
                     let spriteData = !onlyPath ? { offsetId: data.offsetId } : null;
-                    for (let i = 0; i < (data === null || data === void 0 ? void 0 : data.tiles.length); i++) {
+                    for (let i = 0; i < ((_a = data === null || data === void 0 ? void 0 : data.tiles) === null || _a === void 0 ? void 0 : _a.length); i++) {
                         Object.assign(spriteData, (data.tiles[i].id == tileIndex ? data.tiles[i] : spriteData));
                     }
                     tileIndex++;

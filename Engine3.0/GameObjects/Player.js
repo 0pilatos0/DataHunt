@@ -1,3 +1,4 @@
+import Animation from "../Core/Animation.js";
 import GameObject from "../Core/GameObject.js";
 import Tileset from "../Core/Tileset.js";
 import Vector2 from "../Core/Vector2.js";
@@ -18,10 +19,16 @@ export default class Player extends GameObject {
             document.body.addEventListener('keyup', this.keyup.bind(this));
             window.player = this;
             new Tileset("/Engine3.0/Players/Player1.png").on('load', (tileset) => {
-                console.log(tileset);
-                for (let i = 0; i < tileset.tiles.length; i++) {
+                for (let i = 0; i < tileset.tiles2D.length; i++) {
+                    console.log(tileset.tiles2D[i]);
+                    this._animations.push(new Animation());
+                    for (let j = 0; j < tileset.tiles2D[i].length; j++) {
+                        this._animations[i].add(tileset.tiles2D[i][j], 200);
+                    }
                 }
-                this.sprite = tileset.tiles[0];
+                this._animations[0].on('change', (sprite) => {
+                    this.sprite = sprite;
+                });
                 this.trigger('load', this);
             });
         }
@@ -99,6 +106,8 @@ export default class Player extends GameObject {
         this._keysPressed.splice(this._keysPressed.indexOf(e.key), 1);
     }
     checkCollisions(callback) {
+        if (!window.mapRenderArea)
+            return;
         for (let l = 0; l < window.mapRenderArea.length; l++) {
             for (let y = 0; y < window.mapRenderArea[l].length; y++) {
                 for (let x = 0; x < window.mapRenderArea[l][y].length; x++) {
@@ -122,7 +131,7 @@ export default class Player extends GameObject {
                             callback();
                             break;
                         case 2 /* INTERACTABLE */:
-                            gameObject.visible = false;
+                            gameObject.visible = false; //TODO make it destroyable
                             break;
                         default:
                             break;

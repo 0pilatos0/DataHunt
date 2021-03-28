@@ -14,20 +14,20 @@ export const enum SpriteType{
 export default class Sprite extends Event{
     private _sprite: HTMLCanvasElement = document.createElement('canvas')
     private _type: SpriteType = SpriteType.DEFAULT
+    private _animation: Animation | null = null
 
-    constructor(path: string, size?: Vector2, data?: any){
+    constructor(path: string, size?: Vector2, data?: any, tileset?: Tileset){
         super()
-        this.init(path, size, data)
+        this.init(path, size, data, tileset)
     }
 
-    private init(path: string, size?: Vector2, data?: any){
+    private init(path: string, size?: Vector2, data?: any, tileset?: Tileset){
         let img = new Image()
         img.onload = () => {
             if(!size) size = new Vector2(window.spriteSize, window.spriteSize)
             let canvas = new Canvas(new Vector2(size.x, size.y))
             canvas.ctx.drawImage(img, 0, 0, size.x, size.y)
             this._sprite = canvas.element
-            this.trigger('load', this)
             //console.log(data)
             switch (data?.type) {
                 case "Collidable":
@@ -41,17 +41,15 @@ export default class Sprite extends Event{
                     break;
             }
             if(data?.animation){
-                window.map.on('load', () => {
-                    let animation = new Animation()
+                tileset?.on('load', () => {
+                    this._animation = new Animation()
                     for (let a = 0; a < data?.animation.length; a++) {
-                        let anim = data.animation[a]
-                        animation.addSprite(Tileset.tiles[anim.tileid], anim.duration)
+                        this._animation.add(tileset.tiles[data.animation[a].tileid], data.animation[a].duration)
                     }
-                    animation.on('change', (sprite: Sprite) => {
-                        this._sprite = sprite.sprite
-                    })
+                    this.trigger('animation', this._animation)
                 })
             }
+            this.trigger('load', this)
         }
         img.src = path
     }
@@ -62,5 +60,9 @@ export default class Sprite extends Event{
 
     get type(){
         return this._type
+    }
+
+    get animation(){
+        return this._animation
     }
 }

@@ -7,11 +7,16 @@ export default class GameObject extends Event {
         this._position = position;
         this._size = size;
         this._sprite = sprite;
+        this.sprite.on('animation', (animation) => {
+            animation.on('change', (sprite) => {
+                this.sprite = sprite;
+            });
+        });
         this.init();
     }
     init() {
-        window.gameObjects.push(this);
-        this.trigger('load');
+        //window.gameObjects.push(this)
+        this.trigger('load', this);
     }
     render(ctx) {
     }

@@ -6,11 +6,18 @@ export default class Event {
                 this.events[event] = new Array;
             this.events[event].push(callback);
         };
-        this.trigger = (event, data) => {
-            if (!this.events[event])
+        this.trigger = (event, data, amount = 0) => {
+            if (amount >= 5)
                 return;
-            for (let i = 0; i < this.events[event].length; i++) {
-                this.events[event][i](data);
+            if (!this.events[event])
+                setTimeout(() => {
+                    amount++;
+                    this.trigger(event, data, amount);
+                }, 10 * amount);
+            else {
+                for (let i = 0; i < this.events[event].length; i++) {
+                    this.events[event][i](data);
+                }
             }
         };
     }

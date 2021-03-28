@@ -1,3 +1,4 @@
+import Animation from "./Animation.js";
 import Event from "./Event.js";
 import Sprite from "./Sprite.js";
 import Vector2 from "./Vector2.js";
@@ -13,12 +14,17 @@ export default class GameObject extends Event{
         this._position = position
         this._size = size
         this._sprite = sprite
+        this.sprite.on('animation', (animation: Animation) => {
+            animation.on('change', (sprite: Sprite) => {
+                this.sprite = sprite
+            })
+        })
         this.init()
     }
 
     private init(){
-        window.gameObjects.push(this)
-        this.trigger('load')
+        //window.gameObjects.push(this)
+        this.trigger('load', this)
     }
 
     public render(ctx: CanvasRenderingContext2D){

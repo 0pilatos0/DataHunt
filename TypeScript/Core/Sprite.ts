@@ -47,6 +47,7 @@ export default class Sprite extends Event{
                         this._animation.add(tileset.tiles[data.animation[a].tileid], data.animation[a].duration)
                     }
                     this.trigger('animation', this._animation)
+                    //TODO findout why animations aren't working inside here...
                 })
             }
             this.trigger('load', this)

@@ -27,7 +27,7 @@ export default class Tileset extends Event {
             let doneTiles = 0;
             for (let i = 0; i < totalTiles; i++) {
                 let canvas = new Canvas(new Vector2(tileWidth, tileHeight));
-                canvas.ctx.drawImage(img, -(i % this._columns) * tileWidth, -Math.floor(i / this._rows) * tileHeight);
+                canvas.ctx.drawImage(img, -(i % this._columns) * tileWidth, -Math.floor(i / this._columns) * tileHeight);
                 let spriteData = !onlyPath ? { offsetId: data.offsetId } : {};
                 for (let j = 0; j < ((_a = data === null || data === void 0 ? void 0 : data.tiles) === null || _a === void 0 ? void 0 : _a.length); j++) {
                     Object.assign(spriteData, (data.tiles[j].id == i ? data.tiles[j] : spriteData));
@@ -48,13 +48,11 @@ export default class Tileset extends Event {
         return this._tiles;
     }
     get tiles2D() {
-        let tiles = this._tiles;
         let rtn = [];
         for (let y = 0; y < this._rows; y++) {
             rtn.push([]);
-            rtn[y] = this._tiles.slice(0, this._columns);
+            rtn[y] = this._tiles.slice(y * this._columns, ((y + 1) * this._columns) - 1);
         }
-        this._tiles = tiles;
         return rtn;
     }
 }

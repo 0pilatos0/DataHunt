@@ -6,7 +6,7 @@ import Vector2 from "../Core/Vector2.js";
 declare var window: any
 export default class Player extends GameObject{
     private _controllable: boolean = false
-    private _keysPressed: Array<any> = []
+    private _keysPressed: Array<string> = []
     private _speed: number = 500
     private _oldPosition: Vector2 = new Vector2(this.position.x, this.position.y)
     private _animations: Array<Animation> = []
@@ -23,16 +23,13 @@ export default class Player extends GameObject{
             document.body.addEventListener('keyup', this.keyup.bind(this))
             window.player = this
             new Tileset("/Engine3.0/Players/Player1.png").on('load', (tileset: Tileset) => {
+                console.log(tileset.tiles2D)
                 for (let i = 0; i < tileset.tiles2D.length; i++) {
-                    console.log(tileset.tiles2D[i])
                     this._animations.push(new Animation())
                     for (let j = 0; j < tileset.tiles2D[i].length; j++) {
                         this._animations[i].add(tileset.tiles2D[i][j], 200)
                     }
                 }
-                this._animations[0].on('change', (sprite: Sprite) => {
-                    this.sprite = sprite
-                })
                 this.trigger('load', this)
             })
         }
@@ -90,6 +87,18 @@ export default class Player extends GameObject{
             }
         }
 
+        if(this._animations.length == 9){
+            if(this.pressed('w') && !this.pressed('d') && !this.pressed('a')) this.sprite = this._animations[4].activeSprite
+            else if(this.pressed('a') && this.pressed('w')) this.sprite = this._animations[5].activeSprite
+            else if(this.pressed('a') && !this.pressed('w') && !this.pressed('s')) this.sprite = this._animations[6].activeSprite
+            else if(this.pressed('a') && this.pressed('s')) this.sprite = this._animations[7].activeSprite
+            else if(this.pressed('s') && !this.pressed('a') && !this.pressed('d')) this.sprite = this._animations[8].activeSprite
+            else if(this.pressed('d') && !this.pressed('w') && !this.pressed('s')) this.sprite = this._animations[2].activeSprite
+            else if(this.pressed('d') && this.pressed('s')) this.sprite = this._animations[1].activeSprite
+            else if(this.pressed('d') && this.pressed('w')) this.sprite = this._animations[3].activeSprite
+            else this.sprite = this._animations[0].activeSprite
+        }
+
         if(this.position.x < 0) this.position.x = 0
         if(this.position.y < 0) this.position.y = 0
         if(this.position.x + this.size.x > window.mapBoundX) this.position.x = window.mapBoundX - this.size.x
@@ -102,6 +111,10 @@ export default class Player extends GameObject{
 
     private keyup(e: KeyboardEvent){
         this._keysPressed.splice(this._keysPressed.indexOf(e.key), 1)
+    }
+
+    private pressed(key: string){
+        return this._keysPressed.indexOf(key) > -1
     }
 
     private checkCollisions(callback: Function){

@@ -19,16 +19,13 @@ export default class Player extends GameObject {
             document.body.addEventListener('keyup', this.keyup.bind(this));
             window.player = this;
             new Tileset("/Engine3.0/Players/Player1.png").on('load', (tileset) => {
+                console.log(tileset.tiles2D);
                 for (let i = 0; i < tileset.tiles2D.length; i++) {
-                    console.log(tileset.tiles2D[i]);
                     this._animations.push(new Animation());
                     for (let j = 0; j < tileset.tiles2D[i].length; j++) {
                         this._animations[i].add(tileset.tiles2D[i][j], 200);
                     }
                 }
-                this._animations[0].on('change', (sprite) => {
-                    this.sprite = sprite;
-                });
                 this.trigger('load', this);
             });
         }
@@ -89,6 +86,26 @@ export default class Player extends GameObject {
                     break;
             }
         }
+        if (this._animations.length == 9) {
+            if (this.pressed('w') && !this.pressed('d') && !this.pressed('a'))
+                this.sprite = this._animations[4].activeSprite;
+            else if (this.pressed('a') && this.pressed('w'))
+                this.sprite = this._animations[5].activeSprite;
+            else if (this.pressed('a') && !this.pressed('w') && !this.pressed('s'))
+                this.sprite = this._animations[6].activeSprite;
+            else if (this.pressed('a') && this.pressed('s'))
+                this.sprite = this._animations[7].activeSprite;
+            else if (this.pressed('s') && !this.pressed('a') && !this.pressed('d'))
+                this.sprite = this._animations[8].activeSprite;
+            else if (this.pressed('d') && !this.pressed('w') && !this.pressed('s'))
+                this.sprite = this._animations[2].activeSprite;
+            else if (this.pressed('d') && this.pressed('s'))
+                this.sprite = this._animations[1].activeSprite;
+            else if (this.pressed('d') && this.pressed('w'))
+                this.sprite = this._animations[3].activeSprite;
+            else
+                this.sprite = this._animations[0].activeSprite;
+        }
         if (this.position.x < 0)
             this.position.x = 0;
         if (this.position.y < 0)
@@ -104,6 +121,9 @@ export default class Player extends GameObject {
     }
     keyup(e) {
         this._keysPressed.splice(this._keysPressed.indexOf(e.key), 1);
+    }
+    pressed(key) {
+        return this._keysPressed.indexOf(key) > -1;
     }
     checkCollisions(callback) {
         if (!window.mapRenderArea)

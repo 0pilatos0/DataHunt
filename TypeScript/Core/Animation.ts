@@ -4,6 +4,7 @@ import Sprite from "./Sprite.js"
 export default class Animation extends Event{
     private _frames: Array<any> = []
     private _interval: any
+    private _activeSprite: Sprite = new Sprite('')
 
     constructor(){
         super()
@@ -12,12 +13,14 @@ export default class Animation extends Event{
 
     private init(){
         this.on('add', () => {
+            //TODO update them only when seeable by player
             let totalDuration: number = 0
             this._frames.map(o => {totalDuration += o.duration})
             clearInterval(this._interval)
             this._interval = setInterval(() => {
                 for (let s = 0; s < this._frames.length; s++) {
                     setTimeout(() => {
+                        this._activeSprite = this._frames[s].sprite
                         this.trigger('change', this._frames[s].sprite)
                     }, this._frames[s].duration * s)
                 }
@@ -35,5 +38,9 @@ export default class Animation extends Event{
         let data: Array<Sprite> = []
         this._frames.map(f => {data.push(f.sprite)})
         return data
+    }
+
+    get activeSprite(){
+        return this._activeSprite
     }
 }

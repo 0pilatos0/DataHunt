@@ -1,5 +1,6 @@
 import Player from "../GameObjects/Player.js";
 import Canvas from "./Canvas.js";
+import GameObject from "./GameObject.js";
 import Map from "./Map.js";
 import Vector2 from "./Vector2.js";
 export default class Window {
@@ -14,7 +15,9 @@ export default class Window {
         document.body.appendChild(this._canvas.element);
         new Map('/Engine3.0/Maps/Main/Map.json').on('load', (map) => {
             this._map = map;
-            new Player(new Vector2(0, 0), new Vector2(window.spriteSize, window.spriteSize), true).on('load', (player) => {
+            console.log(GameObject.getByType(1 /* SPAWNPOINT */));
+            let playerPos = GameObject.getByType(1 /* SPAWNPOINT */)[Math.floor(Math.random() * GameObject.getByType(1 /* SPAWNPOINT */).length)].position;
+            new Player(playerPos, new Vector2(window.spriteSize, window.spriteSize), true).on('load', (player) => {
                 this._player = player;
                 this.resize();
                 window.addEventListener('resize', this.resize.bind(this));

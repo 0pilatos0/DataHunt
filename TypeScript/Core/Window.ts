@@ -1,5 +1,6 @@
 import Player from "../GameObjects/Player.js"
 import Canvas from "./Canvas.js"
+import GameObject, { GameObjectType } from "./GameObject.js"
 import Map from "./Map.js"
 import Vector2 from "./Vector2.js"
 declare var window: any
@@ -19,7 +20,9 @@ export default class Window{
         document.body.appendChild(this._canvas.element)
         new Map('/Engine3.0/Maps/Main/Map.json').on('load', (map: Map) => {
             this._map = map
-            new Player(new Vector2(0, 0), new Vector2(window.spriteSize, window.spriteSize), true).on('load', (player: Player) => {
+            console.log(GameObject.getByType(GameObjectType.SPAWNPOINT))
+            let playerPos = GameObject.getByType(GameObjectType.SPAWNPOINT)[Math.floor(Math.random() * GameObject.getByType(GameObjectType.SPAWNPOINT).length)].position
+            new Player(playerPos, new Vector2(window.spriteSize, window.spriteSize), true).on('load', (player: Player) => {
                 this._player = player
                 this.resize()
                 window.addEventListener('resize', this.resize.bind(this))

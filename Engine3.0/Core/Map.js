@@ -21,15 +21,14 @@ export default class Map extends Event {
                     tileset.offsetId = map.tilesets[i].firstgid - 1;
                     new Tileset(tileset).on('load', (tileset) => {
                         tilesetCount++;
-                        //TODO remove counter but use a total var
                         if (tilesetCount == map.tilesets.length) {
                             let gameObjectCount = 0;
-                            let totalCount = 0;
+                            let totalGameObjectsCount = 0;
                             for (let l = 0; l < map.layers.length; l++) {
                                 let layer = map.layers[l];
                                 switch (layer.type) {
                                     case "tilelayer":
-                                        totalCount += layer.data.length;
+                                        totalGameObjectsCount += layer.data.length;
                                         for (let y = 0; y < layer.data.length; y++) {
                                             let row = layer.data.splice(0, map.width);
                                             for (let x = 0; x < row.length; x++) {
@@ -48,12 +47,21 @@ export default class Map extends Event {
                                         }
                                         break;
                                     case "objectgroup":
-                                        totalCount += layer.objects.length;
+                                        totalGameObjectsCount += layer.objects.length;
                                         for (let o = 0; o < layer.objects.length; o++) {
                                             let object = layer.objects[o];
-                                            new GameObject(new Vector2(object.x, object.y), new Vector2(object.width * window.spriteScaleFactor, object.height * window.spriteScaleFactor), undefined).on('load', (gameObject) => {
+                                            let type;
+                                            switch (object.type) {
+                                                case "Spawnpoint":
+                                                    type = 1 /* SPAWNPOINT */;
+                                                    break;
+                                                default:
+                                                    type = 0 /* DEFAULT */;
+                                                    break;
+                                            }
+                                            new GameObject(new Vector2(object.x * window.spriteScaleFactor, object.y * window.spriteScaleFactor), new Vector2(object.width * window.spriteScaleFactor, object.height * window.spriteScaleFactor), undefined, type).on('load', (gameObject) => {
                                                 gameObjectCount++;
-                                                layer.objects[o] = gameObject; //TODO make spawnpoints work
+                                                layer.objects[o] = gameObject;
                                             });
                                         }
                                         break;
@@ -62,7 +70,7 @@ export default class Map extends Event {
                             }
                             let interval = setInterval(() => {
                                 var _a;
-                                if (gameObjectCount == totalCount) {
+                                if (gameObjectCount == totalGameObjectsCount) {
                                     clearInterval(interval);
                                     window.mapBoundX = map.width * window.spriteSize;
                                     window.mapBoundY = map.height * window.spriteSize;

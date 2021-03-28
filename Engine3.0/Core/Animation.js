@@ -5,20 +5,22 @@ export default class Animation extends Event {
         super();
         this._frames = [];
         this._activeSprite = new Sprite('');
+        this._state = 2 /* PAUSED */;
         this.init();
     }
     init() {
         this.on('add', () => {
-            //TODO update them only when seeable by player
             let totalDuration = 0;
             this._frames.map(o => { totalDuration += o.duration; });
             clearInterval(this._interval);
             this._interval = setInterval(() => {
-                for (let s = 0; s < this._frames.length; s++) {
-                    setTimeout(() => {
-                        this._activeSprite = this._frames[s].sprite;
-                        this.trigger('change', this._frames[s].sprite);
-                    }, this._frames[s].duration * s);
+                if (this._state == 1 /* PLAYING */) {
+                    for (let s = 0; s < this._frames.length; s++) {
+                        setTimeout(() => {
+                            this._activeSprite = this._frames[s].sprite;
+                            this.trigger('change', this._frames[s].sprite);
+                        }, this._frames[s].duration * s);
+                    }
                 }
             }, totalDuration);
         });
@@ -34,5 +36,12 @@ export default class Animation extends Event {
     }
     get activeSprite() {
         return this._activeSprite;
+    }
+    get state() {
+        return this._state;
+    }
+    set state(state) {
+        console.log(state);
+        this._state = state;
     }
 }

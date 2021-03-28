@@ -90,13 +90,20 @@ export default class Map extends Event{
     }
 
     public render(ctx: CanvasRenderingContext2D){
+        let gameObjectArr = []
         for (let l = 0; l < this._mapAreaToDraw.length; l++) {
             for (let y = 0; y < this._mapAreaToDraw[l].length; y++) {
                 for (let x = 0; x < this._mapAreaToDraw[l][y].length; x++) {
                     let gameObject: GameObject = this._mapAreaToDraw[l][y][x]
-                    if(gameObject?.visible && gameObject) ctx.drawImage(gameObject?.sprite.sprite, x * window.spriteSize - window.mapOffsetX - window.displayWidth / 2, y * window.spriteSize - window.mapOffsetY - window.displayHeight / 2)
+                    if(gameObject?.visible && gameObject){
+                        gameObjectArr.push(gameObject)
+                        ctx.drawImage(gameObject?.sprite.sprite, x * window.spriteSize - window.mapOffsetX - window.displayWidth / 2, y * window.spriteSize - window.mapOffsetY - window.displayHeight / 2)
+                    }
                 }
             }
+        }
+        for (let i = 0; i < GameObject.gameObjects.length; i++) {
+            GameObject.gameObjects[i].beenRendered = gameObjectArr.indexOf(GameObject.gameObjects[i]) > -1
         }
     }
 

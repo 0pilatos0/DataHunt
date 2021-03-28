@@ -14,7 +14,6 @@ export const enum SpriteType{
 export default class Sprite extends Event{
     private _sprite: HTMLCanvasElement = document.createElement('canvas')
     private _type: SpriteType = SpriteType.DEFAULT
-    private _animation: Animation | null = null
 
     constructor(path: string, size?: Vector2, data?: any, tileset?: Tileset){
         super()
@@ -42,11 +41,11 @@ export default class Sprite extends Event{
             }
             if(data?.animation){
                 tileset?.on('load', () => {
-                    this._animation = new Animation()
+                    let animation = new Animation()
                     for (let a = 0; a < data?.animation.length; a++) {
-                        this._animation.add(tileset.tiles[data.animation[a].tileid], data.animation[a].duration)
+                        animation.add(tileset.tiles[data.animation[a].tileid], data.animation[a].duration)
                     }
-                    this.trigger('animation', this._animation)
+                    this.trigger('animation', animation)
                     //TODO findout why animations aren't working inside here...
                 })
             }
@@ -61,9 +60,5 @@ export default class Sprite extends Event{
 
     get type(){
         return this._type
-    }
-
-    get animation(){
-        return this._animation
     }
 }

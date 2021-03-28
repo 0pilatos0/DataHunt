@@ -1,4 +1,4 @@
-import Animation from "../Core/Animation.js";
+import Animation, { AnimationState } from "../Core/Animation.js";
 import GameObject from "../Core/GameObject.js";
 import Sprite, { SpriteType } from "../Core/Sprite.js";
 import Tileset from "../Core/Tileset.js";
@@ -19,6 +19,7 @@ export default class Player extends GameObject{
 
     private initialize(){
         if(this._controllable){
+            this.beenRendered = true
             document.body.addEventListener('keydown', this.keydown.bind(this))
             document.body.addEventListener('keyup', this.keyup.bind(this))
             window.player = this
@@ -28,6 +29,7 @@ export default class Player extends GameObject{
                     for (let j = 0; j < tileset.tiles2D[i].length; j++) {
                         this._animations[i].add(tileset.tiles2D[i][j], 200)
                     }
+                    this._animations[i].state = AnimationState.PLAYING
                 }
                 this.trigger('load', this)
             })
@@ -86,7 +88,7 @@ export default class Player extends GameObject{
             }
         }
 
-        if(this._animations.length == 9){
+        if(this._animations.length == 9){ //TODO work here with some sort of activeAnimation so i can shut down updating animations
             if(this.pressed('w') && !this.pressed('d') && !this.pressed('a')) this.sprite = this._animations[4].activeSprite
             else if(this.pressed('a') && this.pressed('w')) this.sprite = this._animations[5].activeSprite
             else if(this.pressed('a') && !this.pressed('w') && !this.pressed('s')) this.sprite = this._animations[6].activeSprite

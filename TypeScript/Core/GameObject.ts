@@ -1,4 +1,4 @@
-import Animation from "./Animation.js";
+import Animation, { AnimationState } from "./Animation.js";
 import Event from "./Event.js";
 import Sprite from "./Sprite.js";
 import Vector2 from "./Vector2.js";
@@ -16,6 +16,8 @@ export default class GameObject extends Event{
     private _sprite: Sprite
     private _visible: boolean = true
     private _type: GameObjectType
+    private _beenRendered: boolean = false
+    private _animation: Animation | null = null
 
     constructor(position: Vector2, size: Vector2, sprite: Sprite = new Sprite(''), type: GameObjectType = GameObjectType.DEFAULT){
         super()
@@ -24,6 +26,7 @@ export default class GameObject extends Event{
         this._sprite = sprite
         this._type = type
         this.sprite.on('animation', (animation: Animation) => {
+            this._animation = animation
             animation.on('change', (sprite: Sprite) => {
                 this.sprite = sprite
             })
@@ -66,10 +69,26 @@ export default class GameObject extends Event{
 
     set visible(visible: boolean){
         this._visible = visible
+        if(this._animation){
+            if(!visible) this._animation.state = AnimationState.PAUSED 
+            else if(visible) this._animation.state = AnimationState.PLAYING 
+        }
     }
 
     get type(){
         return this._type
+    }
+
+    get beenRendered(){
+        return this._beenRendered
+    }
+
+    set beenRendered(beenRendered: boolean){
+        this._beenRendered = beenRendered
+        if(this._animation){
+            if(!beenRendered) this._animation.state = AnimationState.PAUSED
+            else if(beenRendered) this._animation.state = AnimationState.PLAYING
+        } 
     }
 
     public colliding(gameObject: GameObject){

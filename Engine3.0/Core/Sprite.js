@@ -7,7 +7,6 @@ export default class Sprite extends Event {
         super();
         this._sprite = document.createElement('canvas');
         this._type = 0 /* DEFAULT */;
-        this._animation = null;
         this.init(path, size, data, tileset);
     }
     init(path, size, data, tileset) {
@@ -32,11 +31,11 @@ export default class Sprite extends Event {
             }
             if (data === null || data === void 0 ? void 0 : data.animation) {
                 tileset === null || tileset === void 0 ? void 0 : tileset.on('load', () => {
-                    this._animation = new Animation();
+                    let animation = new Animation();
                     for (let a = 0; a < (data === null || data === void 0 ? void 0 : data.animation.length); a++) {
-                        this._animation.add(tileset.tiles[data.animation[a].tileid], data.animation[a].duration);
+                        animation.add(tileset.tiles[data.animation[a].tileid], data.animation[a].duration);
                     }
-                    this.trigger('animation', this._animation);
+                    this.trigger('animation', animation);
                     //TODO findout why animations aren't working inside here...
                 });
             }
@@ -49,8 +48,5 @@ export default class Sprite extends Event {
     }
     get type() {
         return this._type;
-    }
-    get animation() {
-        return this._animation;
     }
 }

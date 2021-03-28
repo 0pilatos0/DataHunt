@@ -11,11 +11,11 @@ export default class Event{
     }
 
     public trigger = (event: string, data?: any, amount: number = 0) => {
-        if(amount >= 5) return
+        if(amount >= 10) return
         if(!this.events[event]) setTimeout(() => {
             amount++
             this.trigger(event, data, amount)
-        }, 10 * amount);
+        }, 5 * amount);
         else{
             for (let i = 0; i < this.events[event].length; i++) {
                 this.events[event][i](data)

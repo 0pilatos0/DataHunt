@@ -23,7 +23,6 @@ export default class Player extends GameObject{
             document.body.addEventListener('keyup', this.keyup.bind(this))
             window.player = this
             new Tileset("/Engine3.0/Players/Player1.png").on('load', (tileset: Tileset) => {
-                console.log(tileset.tiles2D)
                 for (let i = 0; i < tileset.tiles2D.length; i++) {
                     this._animations.push(new Animation())
                     for (let j = 0; j < tileset.tiles2D[i].length; j++) {

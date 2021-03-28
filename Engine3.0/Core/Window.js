@@ -15,7 +15,6 @@ export default class Window {
         document.body.appendChild(this._canvas.element);
         new Map('/Engine3.0/Maps/Main/Map.json').on('load', (map) => {
             this._map = map;
-            console.log(GameObject.getByType(1 /* SPAWNPOINT */));
             let playerPos = GameObject.getByType(1 /* SPAWNPOINT */)[Math.floor(Math.random() * GameObject.getByType(1 /* SPAWNPOINT */).length)].position;
             new Player(playerPos, new Vector2(window.spriteSize, window.spriteSize), true).on('load', (player) => {
                 this._player = player;

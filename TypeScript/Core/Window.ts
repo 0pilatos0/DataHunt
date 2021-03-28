@@ -20,7 +20,6 @@ export default class Window{
         document.body.appendChild(this._canvas.element)
         new Map('/Engine3.0/Maps/Main/Map.json').on('load', (map: Map) => {
             this._map = map
-            console.log(GameObject.getByType(GameObjectType.SPAWNPOINT))
             let playerPos = GameObject.getByType(GameObjectType.SPAWNPOINT)[Math.floor(Math.random() * GameObject.getByType(GameObjectType.SPAWNPOINT).length)].position
             new Player(playerPos, new Vector2(window.spriteSize, window.spriteSize), true).on('load', (player: Player) => {
                 this._player = player

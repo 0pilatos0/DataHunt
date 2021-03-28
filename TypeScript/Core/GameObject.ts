@@ -40,8 +40,23 @@ export default class GameObject extends Event{
     get sprite(){
         return this._sprite
     }
+    
+    set sprite(sprite: Sprite){
+        this._sprite = sprite
+    }
 
     get visible(){
         return this._visible
+    }
+
+    set visible(visible: boolean){
+        this._visible = visible
+    }
+
+    public colliding(gameObject: GameObject){
+        return this.position.x < gameObject.position.x + gameObject.size.x &&
+        this.position.x + this.size.x > gameObject.position.x &&
+        this.position.y < gameObject.position.y + gameObject.size.y &&
+        this.position.y + this.size.y > gameObject.position.y
     }
 }

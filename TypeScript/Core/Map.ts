@@ -14,6 +14,7 @@ export default class Map extends Event{
     }
 
     private init(path: string){
+        window.map = this
         new FileLoader(path).on('load', (map: any) => {
             map = JSON.parse(map)
             for (let i = 0; i < map.tilesets.length; i++) {
@@ -30,7 +31,7 @@ export default class Map extends Event{
                                         for (let y = 0; y < layer.data.length; y++) {
                                             let row = layer.data.splice(0, map.width)
                                             for (let x = 0; x < row.length; x++) {
-                                                if(row[x] && row[x] != null) row[x] = new GameObject(new Vector2(y * window.spriteSize, x * window.spriteSize), new Vector2(window.spriteSize, window.spriteSize), Tileset.tiles[row[x] - 1])
+                                                if(row[x] && row[x] != null) row[x] = new GameObject(new Vector2(x * window.spriteSize, y * window.spriteSize), new Vector2(window.spriteSize, window.spriteSize), tileset.tiles[row[x] - 1])
                                                 else row[x] = null
                                             }
                                             layer.data.push(row)
@@ -73,8 +74,8 @@ export default class Map extends Event{
         window.mapOffsetX = 0
         window.mapOffsetY = 0
         for (let l = 0; l < this._map.layers.length; l++) {
-            if(this._map.layers[l].type != 'tilelayer') return
             if(!this._mapAreaToDraw[l]) this._mapAreaToDraw.push([])
+            if(this._map.layers[l].type != 'tilelayer') continue
             for (let y = 0; y < window.maxSpritesY; y++) {
                 if(!this._mapAreaToDraw[l][y]) this._mapAreaToDraw[l].push([])
                 let posY: number = y
@@ -99,6 +100,7 @@ export default class Map extends Event{
                     if(posX < 0) posX = 0
                     if(posX >= this._map.layers[l].data[posY].length - 1) posX = this._map.layers[l].data[posY].length - 1
                     this._mapAreaToDraw[l][y][x] = this._map.layers[l].data[posY][posX]
+                    window.mapRenderArea = this._mapAreaToDraw
                 }
             }
         }

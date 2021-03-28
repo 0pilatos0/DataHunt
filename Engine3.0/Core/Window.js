@@ -7,7 +7,6 @@ export default class Window {
         this._canvas = new Canvas();
         this._fps = 0;
         this._lastUpdate = Date.now();
-        this._map = null;
         this.init();
     }
     init() {
@@ -15,9 +14,10 @@ export default class Window {
         document.body.appendChild(this._canvas.element);
         new Map('/Engine3.0/Maps/Main/Map.json').on('load', (map) => {
             this._map = map;
-            new Player(new Vector2(0, 0), new Vector2(window.spriteSize, window.spriteSize), true).on('load', () => {
+            new Player(new Vector2(0, 0), new Vector2(window.spriteSize, window.spriteSize), true).on('load', (player) => {
+                this._player = player;
                 this.resize();
-                window.addEventListener('resize', this.resize);
+                window.addEventListener('resize', this.resize.bind(this));
                 window.requestAnimationFrame(this.render.bind(this));
                 setInterval(() => { this.update(); }, 1000 / 60);
                 setInterval(() => { this._fps = 0; }, 1000);
@@ -36,19 +36,21 @@ export default class Window {
         window.maxSpritesY = Math.round(window.displayHeight / window.spriteSize) + 2;
     }
     render() {
-        var _a;
+        var _a, _b;
         window.requestAnimationFrame(this.render.bind(this));
         this._canvas.ctx.clearRect(-window.displayWidth / 2, -window.displayHeight / 2, window.displayWidth, window.displayHeight);
         this._canvas.ctx.fillStyle = "#333";
         this._canvas.ctx.fillRect(-window.displayWidth / 2, -window.displayHeight / 2, window.displayWidth, window.displayHeight);
         (_a = this._map) === null || _a === void 0 ? void 0 : _a.render(this._canvas.ctx);
+        (_b = this._player) === null || _b === void 0 ? void 0 : _b.render(this._canvas.ctx);
     }
     update() {
-        var _a;
+        var _a, _b;
         let now = Date.now();
         window.deltaTime = (now - this._lastUpdate) / 1000;
         this._lastUpdate = now;
         this._fps++;
         (_a = this._map) === null || _a === void 0 ? void 0 : _a.update();
+        (_b = this._player) === null || _b === void 0 ? void 0 : _b.update();
     }
 }

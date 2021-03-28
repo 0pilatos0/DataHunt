@@ -5,12 +5,13 @@ import Vector2 from "./Vector2.js";
 export default class Tileset extends Event {
     constructor(data) {
         super();
-        this._tiles2D = [];
         this._tiles = [];
+        this._columns = 0;
+        this._rows = 0;
         this.init(data);
     }
     init(data) {
-        let imgPath, columns, rows, tileWidth, tileHeight;
+        let imgPath, tileWidth, tileHeight;
         let img = new Image();
         let onlyPath = typeof data == "string";
         imgPath = onlyPath ? data : data.image;
@@ -18,12 +19,11 @@ export default class Tileset extends Event {
             var _a;
             tileWidth = onlyPath ? window.spriteSize / window.spriteScaleFactor : data.tilewidth;
             tileHeight = onlyPath ? window.spriteSize / window.spriteScaleFactor : data.tileheight;
-            rows = img.height / tileHeight;
-            columns = img.width / tileWidth;
+            this._rows = img.height / tileHeight;
+            this._columns = img.width / tileWidth;
             let tileIndex = 0;
-            for (let y = 0; y < rows; y++) {
-                this._tiles2D.push([]);
-                for (let x = 0; x < columns; x++) {
+            for (let y = 0; y < this._rows; y++) {
+                for (let x = 0; x < this._columns; x++) {
                     let canvas = new Canvas(new Vector2(tileWidth, tileHeight));
                     canvas.ctx.drawImage(img, -x * tileWidth, -y * tileHeight);
                     let spriteData = !onlyPath ? { offsetId: data.offsetId } : null;
@@ -34,8 +34,7 @@ export default class Tileset extends Event {
                     new Sprite(canvas.element.toDataURL('image/png'), new Vector2(window.spriteSize, window.spriteSize), spriteData).on('load', (sprite) => {
                         Tileset.tiles.push(sprite);
                         this._tiles.push(sprite);
-                        this._tiles2D[y].push(sprite);
-                        if (this._tiles.indexOf(sprite) + 1 == columns * rows)
+                        if (this._tiles.indexOf(sprite) + 1 == this._columns * this._rows)
                             this.trigger('load', this);
                     });
                 }
@@ -47,7 +46,14 @@ export default class Tileset extends Event {
         return this._tiles;
     }
     get tiles2D() {
-        return this._tiles2D;
+        let rtn = [];
+        for (let y = 0; y < this._columns; y++) {
+            rtn.push([]);
+            for (let x = 0; x < this._rows; x++) {
+                rtn[y] = this._tiles.splice(0, this._columns);
+            }
+        }
+        return rtn;
     }
 }
 Tileset.tiles = [];

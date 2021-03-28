@@ -7,7 +7,8 @@ export default class Window{
     private _canvas: Canvas = new Canvas()
     private _fps: number = 0
     private _lastUpdate: number = Date.now()
-    private _map: Map | null = null
+    private _map?: Map
+    private _player?: Player
 
     constructor(){
         this.init()
@@ -18,9 +19,10 @@ export default class Window{
         document.body.appendChild(this._canvas.element)
         new Map('/Engine3.0/Maps/Main/Map.json').on('load', (map: Map) => {
             this._map = map
-            new Player(new Vector2(0, 0), new Vector2(window.spriteSize, window.spriteSize), true).on('load', () => {
+            new Player(new Vector2(0, 0), new Vector2(window.spriteSize, window.spriteSize), true).on('load', (player: Player) => {
+                this._player = player
                 this.resize()
-                window.addEventListener('resize', this.resize)
+                window.addEventListener('resize', this.resize.bind(this))
                 window.requestAnimationFrame(this.render.bind(this))
                 setInterval(() => {this.update()}, 1000/60)
                 setInterval(() => {this._fps = 0}, 1000)
@@ -46,6 +48,7 @@ export default class Window{
         this._canvas.ctx.fillStyle = "#333"
         this._canvas.ctx.fillRect(-window.displayWidth / 2, -window.displayHeight / 2, window.displayWidth, window.displayHeight)
         this._map?.render(this._canvas.ctx)
+        this._player?.render(this._canvas.ctx)
     }
 
     private update(){
@@ -54,5 +57,6 @@ export default class Window{
         this._lastUpdate = now
         this._fps++
         this._map?.update()
+        this._player?.update()
     }
 }

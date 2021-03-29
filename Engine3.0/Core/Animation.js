@@ -41,7 +41,6 @@ export default class Animation extends Event {
         return this._state;
     }
     set state(state) {
-        console.log(state);
         this._state = state;
     }
 }

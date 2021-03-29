@@ -51,6 +51,9 @@ export default class Window{
         this._canvas.ctx.fillRect(-window.displayWidth / 2, -window.displayHeight / 2, window.displayWidth, window.displayHeight)
         this._map?.render(this._canvas.ctx)
         this._player?.render(this._canvas.ctx)
+        for (let i = 0; i < GameObject.gameObjects.length; i++) {
+            if(GameObject.gameObjects[i].beenRendered) GameObject.gameObjects[i].render(this._canvas.ctx)
+        }
     }
 
     private update(){
@@ -60,5 +63,8 @@ export default class Window{
         this._fps++
         this._map?.update()
         this._player?.update()
+        for (let i = 0; i < GameObject.gameObjects.length; i++) {
+            if(GameObject.gameObjects[i].beenRendered) GameObject.gameObjects[i].update()
+        }
     }
 }

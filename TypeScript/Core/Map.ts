@@ -7,6 +7,8 @@ declare var window: any
 export default class Map extends Event{
     private _mapAreaToDraw: Array<Array<Array<GameObject>>> = []
     private _map: any
+    private _gameObjectArray: Array<GameObject> = []
+    private _oldGameObjectArray: Array<GameObject> = []
 
     constructor(path: string){
         super()
@@ -90,20 +92,26 @@ export default class Map extends Event{
     }
 
     public render(ctx: CanvasRenderingContext2D){
-        let gameObjectArr = []
+        this._oldGameObjectArray = this._gameObjectArray
+        this._gameObjectArray = []
         for (let l = 0; l < this._mapAreaToDraw.length; l++) {
             for (let y = 0; y < this._mapAreaToDraw[l].length; y++) {
                 for (let x = 0; x < this._mapAreaToDraw[l][y].length; x++) {
                     let gameObject: GameObject = this._mapAreaToDraw[l][y][x]
-                    if(gameObject?.visible && gameObject){
-                        gameObjectArr.push(gameObject)
-                        ctx.drawImage(gameObject?.sprite.sprite, x * window.spriteSize - window.mapOffsetX - window.displayWidth / 2, y * window.spriteSize - window.mapOffsetY - window.displayHeight / 2)
+                    if(gameObject){
+                        this._gameObjectArray.push(gameObject)
+                        if(gameObject.visible){
+                            ctx.drawImage(gameObject?.sprite.sprite, x * window.spriteSize - window.mapOffsetX - window.displayWidth / 2, y * window.spriteSize - window.mapOffsetY - window.displayHeight / 2)
+                        }
                     }
                 }
             }
         }
-        for (let i = 0; i < GameObject.gameObjects.length; i++) {
-            GameObject.gameObjects[i].beenRendered = gameObjectArr.indexOf(GameObject.gameObjects[i]) > -1
+        for (let i = 0; i < this._oldGameObjectArray.length; i++) {
+            this._oldGameObjectArray[i].beenRendered = false
+        }
+        for (let i = 0; i < this._gameObjectArray.length; i++) {
+            this._gameObjectArray[i].beenRendered = true
         }
     }
 

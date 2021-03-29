@@ -7,13 +7,13 @@ export default class Event {
             this.events[event].push(callback);
         };
         this.trigger = (event, data, amount = 0) => {
-            if (amount >= 10)
+            if (amount >= 4)
                 return;
-            if (!this.events[event])
+            if (!this.events[event] && amount < 5)
                 setTimeout(() => {
                     amount++;
                     this.trigger(event, data, amount);
-                }, 5 * amount);
+                }, 10 * amount);
             else {
                 for (let i = 0; i < this.events[event].length; i++) {
                     this.events[event][i](data);

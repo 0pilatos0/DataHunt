@@ -7,6 +7,8 @@ export default class Map extends Event {
     constructor(path) {
         super();
         this._mapAreaToDraw = [];
+        this._gameObjectArray = [];
+        this._oldGameObjectArray = [];
         this.init(path);
     }
     init(path) {
@@ -93,20 +95,26 @@ export default class Map extends Event {
         });
     }
     render(ctx) {
-        let gameObjectArr = [];
+        this._oldGameObjectArray = this._gameObjectArray;
+        this._gameObjectArray = [];
         for (let l = 0; l < this._mapAreaToDraw.length; l++) {
             for (let y = 0; y < this._mapAreaToDraw[l].length; y++) {
                 for (let x = 0; x < this._mapAreaToDraw[l][y].length; x++) {
                     let gameObject = this._mapAreaToDraw[l][y][x];
-                    if ((gameObject === null || gameObject === void 0 ? void 0 : gameObject.visible) && gameObject) {
-                        gameObjectArr.push(gameObject);
-                        ctx.drawImage(gameObject === null || gameObject === void 0 ? void 0 : gameObject.sprite.sprite, x * window.spriteSize - window.mapOffsetX - window.displayWidth / 2, y * window.spriteSize - window.mapOffsetY - window.displayHeight / 2);
+                    if (gameObject) {
+                        this._gameObjectArray.push(gameObject);
+                        if (gameObject.visible) {
+                            ctx.drawImage(gameObject === null || gameObject === void 0 ? void 0 : gameObject.sprite.sprite, x * window.spriteSize - window.mapOffsetX - window.displayWidth / 2, y * window.spriteSize - window.mapOffsetY - window.displayHeight / 2);
+                        }
                     }
                 }
             }
         }
-        for (let i = 0; i < GameObject.gameObjects.length; i++) {
-            GameObject.gameObjects[i].beenRendered = gameObjectArr.indexOf(GameObject.gameObjects[i]) > -1;
+        for (let i = 0; i < this._oldGameObjectArray.length; i++) {
+            this._oldGameObjectArray[i].beenRendered = false;
+        }
+        for (let i = 0; i < this._gameObjectArray.length; i++) {
+            this._gameObjectArray[i].beenRendered = true;
         }
     }
     update() {

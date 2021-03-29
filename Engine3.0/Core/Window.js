@@ -45,6 +45,10 @@ export default class Window {
         this._canvas.ctx.fillRect(-window.displayWidth / 2, -window.displayHeight / 2, window.displayWidth, window.displayHeight);
         (_a = this._map) === null || _a === void 0 ? void 0 : _a.render(this._canvas.ctx);
         (_b = this._player) === null || _b === void 0 ? void 0 : _b.render(this._canvas.ctx);
+        for (let i = 0; i < GameObject.gameObjects.length; i++) {
+            if (GameObject.gameObjects[i].beenRendered)
+                GameObject.gameObjects[i].render(this._canvas.ctx);
+        }
     }
     update() {
         var _a, _b;
@@ -54,5 +58,9 @@ export default class Window {
         this._fps++;
         (_a = this._map) === null || _a === void 0 ? void 0 : _a.update();
         (_b = this._player) === null || _b === void 0 ? void 0 : _b.update();
+        for (let i = 0; i < GameObject.gameObjects.length; i++) {
+            if (GameObject.gameObjects[i].beenRendered)
+                GameObject.gameObjects[i].update();
+        }
     }
 }

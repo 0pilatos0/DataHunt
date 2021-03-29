@@ -10,12 +10,7 @@ export default class GameObject extends Event {
         this._size = size;
         this._sprite = sprite;
         this._type = type;
-        this.sprite.on('animation', (animation) => {
-            this._animation = animation;
-            animation.on('change', (sprite) => {
-                this.sprite = sprite;
-            });
-        });
+        this.sprite.on('animation', (animation) => { this._animation = animation; });
         this.init();
     }
     init() {
@@ -23,8 +18,14 @@ export default class GameObject extends Event {
         this.trigger('load', this);
     }
     render(ctx) {
+        if (!this._beenRendered)
+            return;
+        if (this._animation)
+            this._sprite = this._animation.activeSprite;
     }
     update() {
+        if (!this._beenRendered)
+            return;
     }
     get position() {
         return this._position;

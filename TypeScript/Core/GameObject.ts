@@ -25,26 +25,22 @@ export default class GameObject extends Event{
         this._size = size
         this._sprite = sprite
         this._type = type
-        this.sprite.on('animation', (animation: Animation) => {
-            this._animation = animation
-            animation.on('change', (sprite: Sprite) => {
-                this.sprite = sprite
-            })
-        })
+        this.sprite.on('animation', (animation: Animation) => { this._animation = animation })
         this.init()
     }
 
-    private init(){
+    protected init(){
         GameObject.gameObjects.push(this)
         this.trigger('load', this)
     }
 
     public render(ctx: CanvasRenderingContext2D){
-
+        if(!this._beenRendered) return
+        if(this._animation) this._sprite = this._animation.activeSprite
     }
 
     public update(){
-
+        if(!this._beenRendered) return
     }
 
     get position(){

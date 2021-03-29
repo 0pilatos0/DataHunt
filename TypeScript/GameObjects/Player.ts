@@ -1,4 +1,5 @@
 import Animation, { AnimationState } from "../Core/Animation.js";
+import AnimationController from "../Core/AnimationController.js";
 import GameObject from "../Core/GameObject.js";
 import Sprite, { SpriteType } from "../Core/Sprite.js";
 import Tileset from "../Core/Tileset.js";
@@ -7,17 +8,17 @@ declare var window: any
 export default class Player extends GameObject{
     private _controllable: boolean = false
     private _keysPressed: Array<string> = []
-    private _speed: number = 500
+    private _speed: number = 200
     private _oldPosition: Vector2 = new Vector2(this.position.x, this.position.y)
-    private _animations: Array<Animation> = []
+    private _animationController: AnimationController = new AnimationController()
 
     constructor(position: Vector2, size: Vector2, controllable: boolean = false){
         super(position, size)
         this._controllable = controllable
-        this.initialize()
+        this.init()
     }
 
-    private initialize(){
+    protected init(){
         if(this._controllable){
             this.beenRendered = true
             document.body.addEventListener('keydown', this.keydown.bind(this))
@@ -25,13 +26,13 @@ export default class Player extends GameObject{
             window.player = this
             new Tileset("/Engine3.0/Players/Player1.png").on('load', (tileset: Tileset) => {
                 for (let i = 0; i < tileset.tiles2D.length; i++) {
-                    this._animations.push(new Animation())
+                    let animation = new Animation()
                     for (let j = 0; j < tileset.tiles2D[i].length; j++) {
-                        this._animations[i].add(tileset.tiles2D[i][j], 200)
+                        animation.add(tileset.tiles2D[i][j], 200)
                     }
-                    this._animations[i].state = AnimationState.PLAYING
+                    this._animationController.add(animation)
                 }
-                this.trigger('load', this)
+                super.init()
             })
         }
     }
@@ -88,17 +89,16 @@ export default class Player extends GameObject{
             }
         }
 
-        if(this._animations.length == 9){ //TODO work here with some sort of activeAnimation so i can shut down updating animations
-            if(this.pressed('w') && !this.pressed('d') && !this.pressed('a')) this.sprite = this._animations[4].activeSprite
-            else if(this.pressed('a') && this.pressed('w')) this.sprite = this._animations[5].activeSprite
-            else if(this.pressed('a') && !this.pressed('w') && !this.pressed('s')) this.sprite = this._animations[6].activeSprite
-            else if(this.pressed('a') && this.pressed('s')) this.sprite = this._animations[7].activeSprite
-            else if(this.pressed('s') && !this.pressed('a') && !this.pressed('d')) this.sprite = this._animations[8].activeSprite
-            else if(this.pressed('d') && !this.pressed('w') && !this.pressed('s')) this.sprite = this._animations[2].activeSprite
-            else if(this.pressed('d') && this.pressed('s')) this.sprite = this._animations[1].activeSprite
-            else if(this.pressed('d') && this.pressed('w')) this.sprite = this._animations[3].activeSprite
-            else this.sprite = this._animations[0].activeSprite
-        }
+        if(this.pressed('w') && !this.pressed('d') && !this.pressed('a')) this._animationController.active = 4
+        else if(this.pressed('a') && this.pressed('w')) this._animationController.active = 5
+        else if(this.pressed('a') && !this.pressed('w') && !this.pressed('s')) this._animationController.active = 6
+        else if(this.pressed('a') && this.pressed('s')) this._animationController.active = 7
+        else if(this.pressed('s') && !this.pressed('a') && !this.pressed('d')) this._animationController.active = 8
+        else if(this.pressed('d') && !this.pressed('w') && !this.pressed('s')) this._animationController.active = 2
+        else if(this.pressed('d') && this.pressed('s')) this._animationController.active = 1
+        else if(this.pressed('d') && this.pressed('w')) this._animationController.active = 3
+        else this._animationController.active = 0
+        this.sprite = this._animationController.activeSprite
 
         if(this.position.x < 0) this.position.x = 0
         if(this.position.y < 0) this.position.y = 0

@@ -106,7 +106,7 @@ export default class Player extends GameObject {
             this._animationController.active = 3;
         else
             this._animationController.active = 0;
-        this.sprite = this._animationController.activeSprite;
+        this.sprite = this._animationController.activeAnimation.activeSprite;
         if (this.position.x < 0)
             this.position.x = 0;
         if (this.position.y < 0)

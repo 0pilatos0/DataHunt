@@ -29,7 +29,7 @@ export default class AnimationController extends Event{
         }
     }
 
-    get activeSprite(){
-        return this._animations[this._activeAnimation].activeSprite
+    get activeAnimation(){
+        return this._animations[this._activeAnimation]
     }
 }

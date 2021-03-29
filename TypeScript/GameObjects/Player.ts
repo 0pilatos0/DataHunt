@@ -98,7 +98,7 @@ export default class Player extends GameObject{
         else if(this.pressed('d') && this.pressed('s')) this._animationController.active = 1
         else if(this.pressed('d') && this.pressed('w')) this._animationController.active = 3
         else this._animationController.active = 0
-        this.sprite = this._animationController.activeSprite
+        this.sprite = this._animationController.activeAnimation.activeSprite
 
         if(this.position.x < 0) this.position.x = 0
         if(this.position.y < 0) this.position.y = 0

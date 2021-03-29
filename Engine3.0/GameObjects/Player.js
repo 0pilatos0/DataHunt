@@ -152,6 +152,7 @@ export default class Player extends GameObject {
                             callback();
                             break;
                         case 2 /* INTERACTABLE */:
+                            //gameObject.destroy()
                             gameObject.visible = false; //TODO make it destroyable
                             break;
                         default:

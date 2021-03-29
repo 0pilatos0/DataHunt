@@ -35,7 +35,8 @@ export default class Map extends Event {
                                             let row = layer.data.splice(0, map.width);
                                             for (let x = 0; x < row.length; x++) {
                                                 if (row[x] && row[x] != null) {
-                                                    new GameObject(new Vector2(x * window.spriteSize, y * window.spriteSize), new Vector2(window.spriteSize, window.spriteSize), tileset.tiles[row[x] - 1]).on('load', (gameObject) => {
+                                                    let gameObject = new GameObject(new Vector2(x * window.spriteSize, y * window.spriteSize), new Vector2(window.spriteSize, window.spriteSize), tileset.tiles[row[x] - 1]);
+                                                    gameObject.on('load', (gameObject) => {
                                                         gameObjectCount++;
                                                         row[x] = gameObject;
                                                     });
@@ -118,6 +119,7 @@ export default class Map extends Event {
         }
     }
     update() {
+        //TODO maybe isn't even required inside here but just on gameobject self
         window.mapOffsetX = 0;
         window.mapOffsetY = 0;
         this._mapAreaToDraw = [];

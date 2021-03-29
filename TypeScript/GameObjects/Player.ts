@@ -136,6 +136,7 @@ export default class Player extends GameObject{
                             callback()
                             break;
                         case SpriteType.INTERACTABLE:
+                            //gameObject.destroy()
                             gameObject.visible = false //TODO make it destroyable
                             break;
                         default:

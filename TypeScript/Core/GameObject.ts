@@ -36,7 +36,9 @@ export default class GameObject extends Event{
 
     public render(ctx: CanvasRenderingContext2D){
         if(!this._beenRendered) return
-        if(this._animation) this._sprite = this._animation.activeSprite
+        if(this._visible){
+            if(this._animation) this._sprite = this._animation.activeSprite
+        }
     }
 
     public update(){
@@ -45,6 +47,10 @@ export default class GameObject extends Event{
 
     get position(){
         return this._position
+    }
+
+    set position(position){
+        this._position = position
     }
 
     get size(){
@@ -101,5 +107,11 @@ export default class GameObject extends Event{
             if(gameObject.type == type) rtn.push(gameObject)
         }
         return rtn
+    }
+
+    public destroy(){
+        GameObject.gameObjects.splice(GameObject.gameObjects.indexOf(this), 1)
+        this.trigger('destroy')
+        //TODO make the destroying work at the map
     }
 }

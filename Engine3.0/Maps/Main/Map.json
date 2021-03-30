@@ -91,7 +91,7 @@
  "tilesets":[
         {
          "firstgid":1,
-         "source":"spritepack.json"
+         "source":"..\/..\/..\/Engine2.0\/Maps\/Main\/spritepack.json"
         }],
  "tilewidth":32,
  "type":"map",

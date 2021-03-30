@@ -1,4 +1,5 @@
-import Animation, { AnimationState } from "./Animation.js";
+import Animation from "./Animation.js";
+import AnimationState from "./Enums/AnimationState.js";
 import Event from "./Event.js";
 
 export default class AnimationController extends Event{

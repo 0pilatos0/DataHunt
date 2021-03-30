@@ -20,6 +20,7 @@ export default class Animation extends Event {
                     for (let s = 0; s < this._frames.length; s++) {
                         setTimeout(() => {
                             this._activeSprite = this._frames[s].sprite;
+                            //this.trigger('change', this._frames[s].sprite)
                         }, this._frames[s].duration * s);
                     }
                 }

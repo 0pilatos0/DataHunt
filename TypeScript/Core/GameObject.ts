@@ -1,18 +1,14 @@
-import Animation, { AnimationState } from "./Animation.js";
+import Animation from "./Animation.js";
+import AnimationState from "./Enums/AnimationState.js";
+import GameObjectType from "./Enums/GameObjectState.js";
 import Event from "./Event.js";
 import Sprite from "./Sprite.js";
+import Transform from "./Transform.js";
 import Vector2 from "./Vector2.js";
 declare var window: any
 
-export const enum GameObjectType{
-    DEFAULT,
-    SPAWNPOINT
-}
-
-export default class GameObject extends Event{
+export default class GameObject extends Transform{
     static gameObjects: Array<GameObject> = []
-    private _position: Vector2
-    private _size: Vector2
     private _sprite: Sprite
     private _visible: boolean = true
     private _type: GameObjectType
@@ -20,9 +16,7 @@ export default class GameObject extends Event{
     private _animation: Animation | null = null
 
     constructor(position: Vector2, size: Vector2, sprite: Sprite = new Sprite(''), type: GameObjectType = GameObjectType.DEFAULT){
-        super()
-        this._position = position
-        this._size = size
+        super(position, size)
         this._sprite = sprite
         this._type = type
         this.sprite.on('animation', (animation: Animation) => { this._animation = animation })
@@ -43,18 +37,6 @@ export default class GameObject extends Event{
 
     public update(){
         if(!this._beenRendered) return
-    }
-
-    get position(){
-        return this._position
-    }
-
-    set position(position){
-        this._position = position
-    }
-
-    get size(){
-        return this._size
     }
 
     get sprite(){

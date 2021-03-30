@@ -11,6 +11,7 @@ export default class Window {
         this.init();
     }
     init() {
+        Window.windows.push(this);
         window.gameObjects = [];
         document.body.appendChild(this._canvas.element);
         new Map('/Engine3.0/Maps/Main/Map.json').on('load', (map) => {
@@ -62,4 +63,9 @@ export default class Window {
                 GameObject.gameObjects[i].update();
         }
     }
+    static get active() {
+        return Window.windows[Window._activeWindow];
+    }
 }
+Window.windows = [];
+Window._activeWindow = 0;

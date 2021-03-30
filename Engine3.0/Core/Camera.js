@@ -1,8 +1,7 @@
-import Vector2 from "./Vector2";
-export default class Camera {
-    constructor() {
-        this._position = new Vector2(0, 0);
-        this._size = new Vector2(0, 0);
+import Transform from "./Transform.js";
+export default class Camera extends Transform {
+    constructor(position, size) {
+        super(position, size);
         this.init();
     }
     init() {
@@ -11,7 +10,7 @@ export default class Camera {
     setActive() {
         Camera._activeCamera = Camera.cameras.indexOf(this);
     }
-    static get activeCamera() {
+    static get active() {
         return Camera.cameras[Camera._activeCamera];
     }
 }

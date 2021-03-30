@@ -1,15 +1,10 @@
 import Animation from "./Animation.js";
 import Canvas from "./Canvas.js";
+import SpriteType from "./Enums/SpriteType.js";
 import Event from "./Event.js";
 import Tileset from "./Tileset.js";
 import Vector2 from "./Vector2.js";
 declare var window: any
-
-export const enum SpriteType{
-    DEFAULT,
-    COLLIDABLE,
-    INTERACTABLE
-}
 
 export default class Sprite extends Event{
     private _sprite: HTMLCanvasElement = document.createElement('canvas')

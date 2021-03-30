@@ -1,8 +1,10 @@
+import GameObjectType from "./Enums/GameObjectState.js"
 import Event from "./Event.js"
 import FileLoader from "./FileLoader.js"
-import GameObject, { GameObjectType } from "./GameObject.js"
+import GameObject from "./GameObject.js"
 import Tileset from "./Tileset.js"
 import Vector2 from "./Vector2.js"
+
 declare var window: any
 export default class Map extends Event{
     private _mapAreaToDraw: Array<Array<Array<GameObject>>> = []

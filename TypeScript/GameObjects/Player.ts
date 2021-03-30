@@ -1,9 +1,13 @@
-import Animation, { AnimationState } from "../Core/Animation.js";
+import Animation from "../Core/Animation.js";
 import AnimationController from "../Core/AnimationController.js";
+import AnimationState from "../Core/Enums/AnimationState.js";
+import SpriteType from "../Core/Enums/SpriteType.js";
 import GameObject from "../Core/GameObject.js";
-import Sprite, { SpriteType } from "../Core/Sprite.js";
+import Input from "../Core/Input.js";
+import Sprite from "../Core/Sprite.js";
 import Tileset from "../Core/Tileset.js";
 import Vector2 from "../Core/Vector2.js";
+
 declare var window: any
 export default class Player extends GameObject{
     private _controllable: boolean = false
@@ -21,8 +25,6 @@ export default class Player extends GameObject{
     protected init(){
         if(this._controllable){
             this.beenRendered = true
-            document.body.addEventListener('keydown', this.keydown.bind(this))
-            document.body.addEventListener('keyup', this.keyup.bind(this))
             window.player = this
             new Tileset("/Engine3.0/Players/Player1.png").on('load', (tileset: Tileset) => {
                 for (let i = 0; i < tileset.tiles2D.length; i++) {
@@ -53,50 +55,39 @@ export default class Player extends GameObject{
         super.update()
         this._oldPosition = new Vector2(this.position.x, this.position.y)
         let steps: number = 20
-        for (let k = 0; k < this._keysPressed.length; k++) {
-            let key = this._keysPressed[k]
-            switch (key) {
-                case 'w':
-                case 'W':
-                    for (let s = 0; s < steps; s++) {
-                        this.position.y -= this._speed * window.deltaTime / steps
-                        this.checkCollisions(() => {this.position.y = Math.round(this._oldPosition.y)})
-                    }
-                    break;
-                case 'a':
-                case 'A':
-                    for (let s = 0; s < steps; s++) {
-                        this.position.x -= this._speed * window.deltaTime / steps
-                        this.checkCollisions(() => {this.position.x = Math.round(this._oldPosition.x)})
-                    }
-                    break;
-                case 's':
-                case 'S':
-                    for (let s = 0; s < steps; s++) {
-                        this.position.y += this._speed * window.deltaTime / steps
-                        this.checkCollisions(() => {this.position.y = Math.round(this._oldPosition.y)})
-                    }
-                    break;
-                case 'd':
-                case 'D':
-                    for (let s = 0; s < steps; s++) {
-                        this.position.x += this._speed * window.deltaTime / steps
-                        this.checkCollisions(() => {this.position.x = Math.round(this._oldPosition.x)})
-                    }
-                    break;
-                default:
-                    break;
+        if(Input.pressed('w')){
+            for (let s = 0; s < steps; s++) {
+                this.position.y -= this._speed * window.deltaTime / steps
+                this.checkCollisions(() => {this.position.y = Math.round(this._oldPosition.y)})
+            }
+        }
+        if(Input.pressed('a')){
+            for (let s = 0; s < steps; s++) {
+                this.position.x -= this._speed * window.deltaTime / steps
+                this.checkCollisions(() => {this.position.x = Math.round(this._oldPosition.x)})
+            }
+        }
+        if(Input.pressed('s')){
+            for (let s = 0; s < steps; s++) {
+                this.position.y += this._speed * window.deltaTime / steps
+                this.checkCollisions(() => {this.position.y = Math.round(this._oldPosition.y)})
+            }
+        }
+        if(Input.pressed('d')){
+            for (let s = 0; s < steps; s++) {
+                this.position.x += this._speed * window.deltaTime / steps
+                this.checkCollisions(() => {this.position.x = Math.round(this._oldPosition.x)})
             }
         }
 
-        if(this.pressed('w') && !this.pressed('d') && !this.pressed('a')) this._animationController.active = 4
-        else if(this.pressed('a') && this.pressed('w')) this._animationController.active = 5
-        else if(this.pressed('a') && !this.pressed('w') && !this.pressed('s')) this._animationController.active = 6
-        else if(this.pressed('a') && this.pressed('s')) this._animationController.active = 7
-        else if(this.pressed('s') && !this.pressed('a') && !this.pressed('d')) this._animationController.active = 8
-        else if(this.pressed('d') && !this.pressed('w') && !this.pressed('s')) this._animationController.active = 2
-        else if(this.pressed('d') && this.pressed('s')) this._animationController.active = 1
-        else if(this.pressed('d') && this.pressed('w')) this._animationController.active = 3
+        if(Input.pressed('w') && !Input.pressed('d') && !Input.pressed('a')) this._animationController.active = 4
+        else if(Input.pressed('a') && Input.pressed('w')) this._animationController.active = 5
+        else if(Input.pressed('a') && !Input.pressed('w') && !Input.pressed('s')) this._animationController.active = 6
+        else if(Input.pressed('a') && Input.pressed('s')) this._animationController.active = 7
+        else if(Input.pressed('s') && !Input.pressed('a') && !Input.pressed('d')) this._animationController.active = 8
+        else if(Input.pressed('d') && !Input.pressed('w') && !Input.pressed('s')) this._animationController.active = 2
+        else if(Input.pressed('d') && Input.pressed('s')) this._animationController.active = 1
+        else if(Input.pressed('d') && Input.pressed('w')) this._animationController.active = 3
         else this._animationController.active = 0
         this.sprite = this._animationController.activeAnimation.activeSprite
 
@@ -104,18 +95,6 @@ export default class Player extends GameObject{
         if(this.position.y < 0) this.position.y = 0
         if(this.position.x + this.size.x > window.mapBoundX) this.position.x = window.mapBoundX - this.size.x
         if(this.position.y + this.size.y > window.mapBoundY) this.position.y = window.mapBoundY - this.size.y
-    }
-
-    private keydown(e: KeyboardEvent){
-        if(this._keysPressed.indexOf(e.key) == -1) this._keysPressed.push(e.key)
-    }
-
-    private keyup(e: KeyboardEvent){
-        this._keysPressed.splice(this._keysPressed.indexOf(e.key), 1)
-    }
-
-    private pressed(key: string){
-        return this._keysPressed.indexOf(key) > -1
     }
 
     private checkCollisions(callback: Function){

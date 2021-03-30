@@ -1,13 +1,11 @@
-import Event from "./Event.js";
 import Sprite from "./Sprite.js";
-export default class GameObject extends Event {
+import Transform from "./Transform.js";
+export default class GameObject extends Transform {
     constructor(position, size, sprite = new Sprite(''), type = 0 /* DEFAULT */) {
-        super();
+        super(position, size);
         this._visible = true;
         this._beenRendered = false;
         this._animation = null;
-        this._position = position;
-        this._size = size;
         this._sprite = sprite;
         this._type = type;
         this.sprite.on('animation', (animation) => { this._animation = animation; });
@@ -28,15 +26,6 @@ export default class GameObject extends Event {
     update() {
         if (!this._beenRendered)
             return;
-    }
-    get position() {
-        return this._position;
-    }
-    set position(position) {
-        this._position = position;
-    }
-    get size() {
-        return this._size;
     }
     get sprite() {
         return this._sprite;

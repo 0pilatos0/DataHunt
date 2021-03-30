@@ -1,11 +1,6 @@
+import AnimationState from "./Enums/AnimationState.js"
 import Event from "./Event.js"
 import Sprite from "./Sprite.js"
-
-export const enum AnimationState{
-    DEFAULT,
-    PLAYING,
-    PAUSED
-}
 
 export default class Animation extends Event{
     private _frames: Array<any> = []
@@ -29,6 +24,7 @@ export default class Animation extends Event{
                     for (let s = 0; s < this._frames.length; s++) {
                         setTimeout(() => {
                             this._activeSprite = this._frames[s].sprite
+                            //this.trigger('change', this._frames[s].sprite)
                         }, this._frames[s].duration * s)
                     }
                 }

@@ -1,10 +1,14 @@
 import Player from "../GameObjects/Player.js"
 import Canvas from "./Canvas.js"
-import GameObject, { GameObjectType } from "./GameObject.js"
+import GameObjectType from "./Enums/GameObjectState.js"
+import GameObject from "./GameObject.js"
 import Map from "./Map.js"
 import Vector2 from "./Vector2.js"
+
 declare var window: any
 export default class Window{
+    public static windows: Array<Window> = []
+    private static _activeWindow: number = 0
     private _canvas: Canvas = new Canvas()
     private _fps: number = 0
     private _lastUpdate: number = Date.now()
@@ -16,6 +20,7 @@ export default class Window{
     }
 
     private init(){
+        Window.windows.push(this)
         window.gameObjects = []
         document.body.appendChild(this._canvas.element)
         new Map('/Engine3.0/Maps/Main/Map.json').on('load', (map: Map) => {
@@ -66,5 +71,9 @@ export default class Window{
         for (let i = 0; i < GameObject.gameObjects.length; i++) {
             if(GameObject.gameObjects[i].beenRendered) GameObject.gameObjects[i].update()
         }
+    }
+
+    public static get active(){
+        return Window.windows[Window._activeWindow]
     }
 }

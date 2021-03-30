@@ -52,7 +52,7 @@ export default class Player extends GameObject {
     update() {
         super.update();
         this._oldPosition = new Vector2(this.position.x, this.position.y);
-        let steps = 15;
+        let steps = 20;
         for (let k = 0; k < this._keysPressed.length; k++) {
             let key = this._keysPressed[k];
             switch (key) {

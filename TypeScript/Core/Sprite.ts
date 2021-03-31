@@ -4,9 +4,11 @@ import SpriteType from "./Enums/SpriteType.js";
 import Event from "./Event.js";
 import Tileset from "./Tileset.js";
 import Vector2 from "./Vector2.js";
-declare var window: any
+import Window from "./Window.js";
 
 export default class Sprite extends Event{
+    public static sprites: Array<Sprite> = []
+
     private _sprite: HTMLCanvasElement = document.createElement('canvas')
     private _type: SpriteType = SpriteType.DEFAULT
 
@@ -18,7 +20,7 @@ export default class Sprite extends Event{
     private init(path: string, size?: Vector2, data?: any, tileset?: Tileset){
         let img = new Image()
         img.onload = () => {
-            if(!size) size = new Vector2(window.spriteSize, window.spriteSize)
+            if(!size) size = new Vector2(Window.spriteSize, Window.spriteSize)
             let canvas = new Canvas(new Vector2(size.x, size.y))
             canvas.ctx.drawImage(img, 0, 0, size.x, size.y)
             this._sprite = canvas.element
@@ -38,12 +40,14 @@ export default class Sprite extends Event{
                 tileset?.on('load', () => {
                     let animation = new Animation()
                     for (let a = 0; a < data?.animation.length; a++) {
+                        //tileset.tiles[]
                         animation.add(tileset.tiles[data.animation[a].tileid], data.animation[a].duration)
                     }
                     this.trigger('animation', animation)
                 })
             }
-            this.trigger('load', this)
+            Sprite.sprites.push(this)
+            this.trigger('load', Sprite.sprites.indexOf(this))
         }
         img.src = path
     }

@@ -5,10 +5,6 @@ export default class Canvas{
     private _ctx: any = this._element.getContext('2d')
 
     constructor(size: Vector2 = new Vector2(0, 0)){
-        this.init(size)
-    }
-
-    private init(size: Vector2){
         this._element.width = size.x
         this._element.height = size.y
         this._ctx.imageSmoothingEnabled = false

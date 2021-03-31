@@ -3,9 +3,6 @@ export default class Canvas {
     constructor(size = new Vector2(0, 0)) {
         this._element = document.createElement('canvas');
         this._ctx = this._element.getContext('2d');
-        this.init(size);
-    }
-    init(size) {
         this._element.width = size.x;
         this._element.height = size.y;
         this._ctx.imageSmoothingEnabled = false;

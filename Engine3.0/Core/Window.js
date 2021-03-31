@@ -7,11 +7,7 @@ export default class Window {
         this._fps = 0;
         this._lastUpdate = Date.now();
         this._scene = null;
-        this.init();
-    }
-    init() {
         Window.windows.push(this);
-        window.gameObjects = [];
         document.body.appendChild(this._canvas.element);
         new Scene().on('load', (scene) => {
             this._scene = scene;
@@ -26,42 +22,28 @@ export default class Window {
         this._canvas.element.width = window.innerWidth;
         this._canvas.element.height = window.innerHeight;
         let scaleFitNative = (window.innerWidth >= 1920 ? Math.max(window.innerWidth / 1920, window.innerHeight / 1080) : Math.min(window.innerWidth / 1920, window.innerHeight / 1080));
-        window.displayWidth = window.innerWidth / scaleFitNative;
-        window.displayHeight = window.innerHeight / scaleFitNative;
+        Window.displayWidth = window.innerWidth / scaleFitNative;
+        Window.displayHeight = window.innerHeight / scaleFitNative;
         this._canvas.ctx.setTransform(scaleFitNative, 0, 0, scaleFitNative, window.innerWidth / 2, window.innerHeight / 2);
         this._canvas.ctx.imageSmoothingEnabled = scaleFitNative < 1;
-        window.maxSpritesX = Math.round(window.displayWidth / window.spriteSize) + 2;
-        window.maxSpritesY = Math.round(window.displayHeight / window.spriteSize) + 2;
-        Window.displayWidth = window.displayWidth;
-        Window.displayHeight = window.displayHeight;
         if (this._scene)
-            this._scene.camera.size = new Vector2(window.displayWidth, window.displayHeight);
+            this._scene.camera.size = new Vector2(Window.displayWidth, Window.displayHeight);
     }
     render() {
         var _a;
         window.requestAnimationFrame(this.render.bind(this));
-        this._canvas.ctx.clearRect(-window.displayWidth / 2, -window.displayHeight / 2, window.displayWidth, window.displayHeight);
+        this._canvas.ctx.clearRect(-Window.displayWidth / 2, -Window.displayHeight / 2, Window.displayWidth, Window.displayHeight);
         this._canvas.ctx.fillStyle = "#333";
-        this._canvas.ctx.fillRect(-window.displayWidth / 2, -window.displayHeight / 2, window.displayWidth, window.displayHeight);
+        this._canvas.ctx.fillRect(-Window.displayWidth / 2, -Window.displayHeight / 2, Window.displayWidth, Window.displayHeight);
         (_a = this._scene) === null || _a === void 0 ? void 0 : _a.render(this._canvas.ctx);
-        // this._map?.render(this._canvas.ctx)
-        // for (let i = 0; i < GameObject.gameObjects.length; i++) {
-        //     GameObject.gameObjects[i].render(this._canvas.ctx)
-        // }
-        // this._player?.render(this._canvas.ctx)
     }
     update() {
         var _a;
         let now = Date.now();
-        window.deltaTime = (now - this._lastUpdate) / 1000;
+        Window.deltaTime = (now - this._lastUpdate) / 1000;
         this._lastUpdate = now;
         this._fps++;
         (_a = this._scene) === null || _a === void 0 ? void 0 : _a.update();
-        //this._map?.update()
-        //this._player?.update()
-        // for (let i = 0; i < GameObject.gameObjects.length; i++) {
-        //     if(GameObject.gameObjects[i].beenRendered) GameObject.gameObjects[i].update()
-        // }
     }
     static get active() {
         return Window.windows[Window._activeWindow];
@@ -69,7 +51,8 @@ export default class Window {
 }
 Window.windows = [];
 Window._activeWindow = 0;
-Window.spriteSize = 96;
+Window.spriteSize = 128;
 Window.spriteScaleFactor = Window.spriteSize / 32;
 Window.displayWidth = 0;
 Window.displayHeight = 0;
+Window.deltaTime = 0;

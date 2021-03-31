@@ -1,37 +1,49 @@
+import BoxCollider from "./BoxCollider.js";
+import Camera from "./Camera.js";
 import Sprite from "./Sprite.js";
 import Transform from "./Transform.js";
 import Window from "./Window.js";
 export default class GameObject extends Transform {
-    constructor(position, size, sprite = new Sprite(''), type = 0 /* DEFAULT */) {
+    constructor(position, size, spriteIndex = -1, type = 0 /* DEFAULT */) {
+        var _a, _b;
         super(position, size);
-        this._visible = true;
-        this._beenRendered = false;
+        this._visible = false;
         this._animation = null;
-        this._sprite = sprite;
+        this._collider = null;
+        this._spriteIndex = spriteIndex;
         this._type = type;
-        this.sprite.on('animation', (animation) => { this._animation = animation; });
-        this.init();
-    }
-    init() {
+        (_a = Sprite.sprites[this.spriteIndex]) === null || _a === void 0 ? void 0 : _a.on('animation', (animation) => { this._animation = animation; });
         GameObject.gameObjects.push(this);
-        this.trigger('load', this);
+        this.trigger('load', this, true);
+        if (((_b = Sprite.sprites[this.spriteIndex]) === null || _b === void 0 ? void 0 : _b.type) != 0 /* DEFAULT */) {
+            this._collider = new BoxCollider(position, size, this);
+            this.on('position', () => {
+                if (this.collider)
+                    this.collider.position = this.position;
+            });
+            this.on('size', () => {
+                if (this.collider)
+                    this.collider.size = this.size;
+            });
+        }
     }
     render(ctx) {
-        //if(!this._beenRendered) return
         if (this._visible) {
             if (this._animation)
-                this._sprite = this._animation.activeSprite;
-            ctx.drawImage(this._sprite.sprite, this.position.x - Window.displayWidth / 2, this.position.y - Window.displayHeight / 2);
+                this._spriteIndex = this._animation.activeSpriteIndex;
+            if (this._spriteIndex > -1)
+                ctx.drawImage(Sprite.sprites[this._spriteIndex].sprite, this.position.x - Window.displayWidth / 2 - Camera.active.position.x, this.position.y - Window.displayHeight / 2 - Camera.active.position.y);
         }
     }
     update() {
-        //if(!this._beenRendered) return
+        var _a;
+        (_a = this.collider) === null || _a === void 0 ? void 0 : _a.update();
     }
-    get sprite() {
-        return this._sprite;
+    get spriteIndex() {
+        return this._spriteIndex;
     }
-    set sprite(sprite) {
-        this._sprite = sprite;
+    set spriteIndex(spriteIndex) {
+        this._spriteIndex = spriteIndex;
     }
     get visible() {
         return this._visible;
@@ -48,23 +60,8 @@ export default class GameObject extends Transform {
     get type() {
         return this._type;
     }
-    get beenRendered() {
-        return this._beenRendered;
-    }
-    set beenRendered(beenRendered) {
-        this._beenRendered = beenRendered;
-        if (this._animation) {
-            if (!beenRendered)
-                this._animation.state = 2 /* PAUSED */;
-            else if (beenRendered)
-                this._animation.state = 1 /* PLAYING */;
-        }
-    }
-    colliding(gameObject) {
-        return this.position.x < gameObject.position.x + gameObject.size.x &&
-            this.position.x + this.size.x > gameObject.position.x &&
-            this.position.y < gameObject.position.y + gameObject.size.y &&
-            this.position.y + this.size.y > gameObject.position.y;
+    get collider() {
+        return this._collider;
     }
     static getByType(type) {
         let rtn = [];
@@ -77,8 +74,6 @@ export default class GameObject extends Transform {
     }
     destroy() {
         GameObject.gameObjects.splice(GameObject.gameObjects.indexOf(this), 1);
-        this.trigger('destroy');
-        //TODO make the destroying work at the map
     }
 }
 GameObject.gameObjects = [];

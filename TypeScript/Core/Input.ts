@@ -1,10 +1,10 @@
 import Event from "./Event.js";
 
-document.body.addEventListener('keydown', (e: KeyboardEvent) => {
-    Input.keysPressed.push(e.key)
+window.addEventListener('keydown', (e: KeyboardEvent) => {
+    if(Input.keysPressed.indexOf(e.key) == -1) Input.keysPressed.push(e.key)
 })
 
-document.body.addEventListener('keyup', (e: KeyboardEvent) => {
+window.addEventListener('keyup', (e: KeyboardEvent) => {
     Input.keysPressed.splice(Input.keysPressed.indexOf(e.key), 1)
 })
 

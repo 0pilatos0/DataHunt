@@ -1,52 +1,59 @@
 import Animation from "./Animation.js";
+import BoxCollider from "./BoxCollider.js";
+import Camera from "./Camera.js";
+import Collider from "./Collider.js";
 import AnimationState from "./Enums/AnimationState.js";
 import GameObjectType from "./Enums/GameObjectState.js";
+import SpriteType from "./Enums/SpriteType.js";
 import Event from "./Event.js";
 import Sprite from "./Sprite.js";
 import Transform from "./Transform.js";
 import Vector2 from "./Vector2.js";
 import Window from "./Window.js";
-declare var window: any
 
 export default class GameObject extends Transform{
     static gameObjects: Array<GameObject> = []
-    private _sprite: Sprite
-    private _visible: boolean = true
+    private _spriteIndex: number
+    private _visible: boolean = false
     private _type: GameObjectType
-    private _beenRendered: boolean = false
     private _animation: Animation | null = null
+    private _collider: Collider | null = null
 
-    constructor(position: Vector2, size: Vector2, sprite: Sprite = new Sprite(''), type: GameObjectType = GameObjectType.DEFAULT){
+    constructor(position: Vector2, size: Vector2, spriteIndex: number = -1, type: GameObjectType = GameObjectType.DEFAULT){
         super(position, size)
-        this._sprite = sprite
+        this._spriteIndex = spriteIndex
         this._type = type
-        this.sprite.on('animation', (animation: Animation) => { this._animation = animation })
-        this.init()
-    }
-
-    protected init(){
+        Sprite.sprites[this.spriteIndex]?.on('animation', (animation: Animation) => { this._animation = animation })
         GameObject.gameObjects.push(this)
-        this.trigger('load', this)
+        this.trigger('load', this, true)
+        if(Sprite.sprites[this.spriteIndex]?.type != SpriteType.DEFAULT){
+            this._collider = new BoxCollider(position, size, this)
+            this.on('position', () => {
+                if(this.collider) this.collider.position = this.position
+            })
+            this.on('size', () => {
+                if(this.collider) this.collider.size = this.size
+            })
+        }
     }
 
     public render(ctx: CanvasRenderingContext2D){
-        //if(!this._beenRendered) return
         if(this._visible){
-            if(this._animation) this._sprite = this._animation.activeSprite
-            ctx.drawImage(this._sprite.sprite, this.position.x - Window.displayWidth / 2, this.position.y - Window.displayHeight / 2)
+            if(this._animation) this._spriteIndex = this._animation.activeSpriteIndex
+            if(this._spriteIndex > -1) ctx.drawImage(Sprite.sprites[this._spriteIndex].sprite, this.position.x - Window.displayWidth / 2 - Camera.active.position.x, this.position.y - Window.displayHeight / 2 - Camera.active.position.y)
         }
     }
 
     public update(){
-        //if(!this._beenRendered) return
+        this.collider?.update()
     }
 
-    get sprite(){
-        return this._sprite
+    get spriteIndex(){
+        return this._spriteIndex
     }
     
-    set sprite(sprite: Sprite){
-        this._sprite = sprite
+    set spriteIndex(spriteIndex: number){
+        this._spriteIndex = spriteIndex
     }
 
     get visible(){
@@ -65,23 +72,8 @@ export default class GameObject extends Transform{
         return this._type
     }
 
-    get beenRendered(){
-        return this._beenRendered
-    }
-
-    set beenRendered(beenRendered: boolean){
-        this._beenRendered = beenRendered
-        if(this._animation){
-            if(!beenRendered) this._animation.state = AnimationState.PAUSED
-            else if(beenRendered) this._animation.state = AnimationState.PLAYING
-        } 
-    }
-
-    public colliding(gameObject: GameObject){
-        return this.position.x < gameObject.position.x + gameObject.size.x &&
-        this.position.x + this.size.x > gameObject.position.x &&
-        this.position.y < gameObject.position.y + gameObject.size.y &&
-        this.position.y + this.size.y > gameObject.position.y
+    get collider(){
+        return this._collider
     }
 
     static getByType(type: GameObjectType){
@@ -95,7 +87,5 @@ export default class GameObject extends Transform{
 
     public destroy(){
         GameObject.gameObjects.splice(GameObject.gameObjects.indexOf(this), 1)
-        this.trigger('destroy')
-        //TODO make the destroying work at the map
     }
 }

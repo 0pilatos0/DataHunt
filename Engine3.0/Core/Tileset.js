@@ -2,6 +2,7 @@ import Canvas from "./Canvas.js";
 import Event from "./Event.js";
 import Sprite from "./Sprite.js";
 import Vector2 from "./Vector2.js";
+import Window from "./Window.js";
 export default class Tileset extends Event {
     constructor(data) {
         super();
@@ -17,13 +18,12 @@ export default class Tileset extends Event {
         imgPath = onlyPath ? data : data.image;
         img.onload = () => {
             var _a;
-            tileWidth = onlyPath ? window.spriteSize / window.spriteScaleFactor : data.tilewidth;
-            tileHeight = onlyPath ? window.spriteSize / window.spriteScaleFactor : data.tileheight;
+            tileWidth = onlyPath ? Window.spriteSize / Window.spriteScaleFactor : data.tilewidth;
+            tileHeight = onlyPath ? Window.spriteSize / Window.spriteScaleFactor : data.tileheight;
             this._rows = img.height / tileHeight;
             this._columns = img.width / tileWidth;
             let totalTiles = this._columns * this._rows;
-            this._tiles.fill(new Sprite(''), 0, totalTiles);
-            Tileset.tiles.fill(new Sprite(''), 0, totalTiles);
+            this._tiles.fill(-1, 0, totalTiles);
             let doneTiles = 0;
             for (let i = 0; i < totalTiles; i++) {
                 let canvas = new Canvas(new Vector2(tileWidth, tileHeight));
@@ -32,9 +32,8 @@ export default class Tileset extends Event {
                 for (let j = 0; j < ((_a = data === null || data === void 0 ? void 0 : data.tiles) === null || _a === void 0 ? void 0 : _a.length); j++) {
                     Object.assign(spriteData, (data.tiles[j].id == i ? data.tiles[j] : spriteData));
                 }
-                new Sprite(canvas.element.toDataURL('image/png'), new Vector2(window.spriteSize, window.spriteSize), spriteData, this).on('load', (sprite) => {
-                    Tileset.tiles[i] = sprite;
-                    this._tiles[i] = sprite;
+                new Sprite(canvas.element.toDataURL('image/png'), new Vector2(Window.spriteSize, Window.spriteSize), spriteData, this).on('load', (spriteIndex) => {
+                    this._tiles[i] = spriteIndex;
                     doneTiles++;
                     if (doneTiles == totalTiles) {
                         this.trigger('load', this);
@@ -51,9 +50,9 @@ export default class Tileset extends Event {
         let rtn = [];
         for (let y = 0; y < this._rows; y++) {
             rtn.push([]);
-            rtn[y] = this._tiles.slice(y * this._columns, ((y + 1) * this._columns) - 1);
+            rtn[y] = this._tiles.slice(y * this._columns, ((y + 1) * this._columns));
         }
         return rtn;
     }
 }
-Tileset.tiles = [];
+Tileset.tilesets = [];

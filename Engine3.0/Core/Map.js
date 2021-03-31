@@ -1,18 +1,16 @@
-import Event from "./Event.js";
 import FileLoader from "./FileLoader.js";
 import GameObject from "./GameObject.js";
 import Tileset from "./Tileset.js";
+import Transform from "./Transform.js";
 import Vector2 from "./Vector2.js";
-export default class Map extends Event {
+import Window from "./Window.js";
+export default class Map extends Transform {
+    //private _mapAreaToDraw: Array<Array<Array<GameObject>>> = []
+    //private _map: any
+    //private _gameObjectArray: Array<GameObject> = []
+    //private _oldGameObjectArray: Array<GameObject> = []
     constructor(path) {
-        super();
-        this._mapAreaToDraw = [];
-        this._gameObjectArray = [];
-        this._oldGameObjectArray = [];
-        this.init(path);
-    }
-    init(path) {
-        window.map = this;
+        super(new Vector2(0, 0), new Vector2(0, 0));
         new FileLoader(path).on('load', (map) => {
             map = JSON.parse(map);
             let tilesetCount = 0;
@@ -35,7 +33,7 @@ export default class Map extends Event {
                                             let row = layer.data.splice(0, map.width);
                                             for (let x = 0; x < row.length; x++) {
                                                 if (row[x] && row[x] != null) {
-                                                    let gameObject = new GameObject(new Vector2(x * window.spriteSize, y * window.spriteSize), new Vector2(window.spriteSize, window.spriteSize), tileset.tiles[row[x] - 1]);
+                                                    let gameObject = new GameObject(new Vector2(x * Window.spriteSize, y * Window.spriteSize), new Vector2(Window.spriteSize, Window.spriteSize), tileset.tiles[row[x] - 1]);
                                                     gameObject.on('load', (gameObject) => {
                                                         gameObjectCount++;
                                                         row[x] = gameObject;
@@ -62,7 +60,7 @@ export default class Map extends Event {
                                                     type = 0 /* DEFAULT */;
                                                     break;
                                             }
-                                            new GameObject(new Vector2(object.x * window.spriteScaleFactor, object.y * window.spriteScaleFactor), new Vector2(object.width * window.spriteScaleFactor, object.height * window.spriteScaleFactor), undefined, type).on('load', (gameObject) => {
+                                            new GameObject(new Vector2(object.x * Window.spriteScaleFactor, object.y * Window.spriteScaleFactor), new Vector2(object.width * Window.spriteScaleFactor, object.height * Window.spriteScaleFactor), undefined, type).on('load', (gameObject) => {
                                                 gameObjectCount++;
                                                 layer.objects[o] = gameObject;
                                             });
@@ -72,20 +70,16 @@ export default class Map extends Event {
                                 }
                             }
                             let interval = setInterval(() => {
-                                var _a;
                                 if (gameObjectCount == totalGameObjectsCount) {
                                     clearInterval(interval);
-                                    window.mapBoundX = map.width * window.spriteSize;
-                                    window.mapBoundY = map.height * window.spriteSize;
-                                    this._map = map.layers;
-                                    for (let i = 0; i < this._map.length; i++) {
-                                        if ((_a = this._map[i]) === null || _a === void 0 ? void 0 : _a.data)
-                                            this._map[i] = this._map[i].data;
-                                        else {
-                                            this._map.splice(i, 1);
-                                            i--;
-                                        }
-                                    }
+                                    this.size.x = map.width * Window.spriteSize;
+                                    this.size.y = map.height * Window.spriteSize;
+                                    Map.maps.push(this);
+                                    // this._map = map.layers
+                                    // for (let i = 0; i < this._map.length; i++) {
+                                    //     if(this._map[i]?.data) this._map[i] = this._map[i].data
+                                    //     else {this._map.splice(i, 1); i--}
+                                    // }
                                     this.trigger('load', this);
                                 }
                             }, 100);
@@ -95,63 +89,17 @@ export default class Map extends Event {
             }
         });
     }
-    render(ctx) {
-        // this._oldGameObjectArray = this._gameObjectArray
-        // this._gameObjectArray = []
-        // for (let l = 0; l < this._mapAreaToDraw.length; l++) {
-        //     for (let y = 0; y < this._mapAreaToDraw[l].length; y++) {
-        //         for (let x = 0; x < this._mapAreaToDraw[l][y].length; x++) {
-        //             let gameObject: GameObject = this._mapAreaToDraw[l][y][x]
-        //             if(gameObject){
-        //                 this._gameObjectArray.push(gameObject)
-        //                 if(gameObject.visible){
-        //                     ctx.drawImage(gameObject?.sprite.sprite, x * window.spriteSize - window.mapOffsetX - window.displayWidth / 2, y * window.spriteSize - window.mapOffsetY - window.displayHeight / 2)
-        //                 }
-        //             }
-        //         }
-        //     }
-        // }
-        // for (let i = 0; i < this._oldGameObjectArray.length; i++) {
-        //     this._oldGameObjectArray[i].beenRendered = false
-        // }
-        // for (let i = 0; i < this._gameObjectArray.length; i++) {
-        //     this._gameObjectArray[i].beenRendered = true
-        // }
+    get bounds() {
+        return {
+            left: this.position.x,
+            top: this.position.y,
+            right: this.position.x + this.size.x,
+            bottom: this.position.y + this.size.y
+        };
     }
-    update() {
-        //TODO maybe isn't even required inside here but just on gameobject self
-        // window.mapOffsetX = 0
-        // window.mapOffsetY = 0
-        // this._mapAreaToDraw = []
-        // for (let l = 0; l < this._map.length; l++) {
-        //     if(!this._mapAreaToDraw[l]) this._mapAreaToDraw.push([])
-        //     for (let y = 0; y < window.maxSpritesY; y++) {
-        //         if(!this._mapAreaToDraw[l][y]) this._mapAreaToDraw[l].push([])
-        //         let posY: number = y
-        //         if(window.player.position.y + window.player.size.y / 2 >= window.displayHeight / 2 && window.player.position.y + window.player.size.y / 2 < window.mapBoundY - window.displayHeight / 2){
-        //             window.mapOffsetY = (window.player.position.y + window.player.size.y / 2 - window.displayHeight / 2) % window.spriteSize
-        //             posY += Math.floor((window.player.position.y + window.player.size.y / 2 - window.displayHeight / 2) / window.spriteSize)
-        //         }
-        //         else if(window.player.position.y + window.player.size.y / 2 >= window.mapBoundY - window.displayHeight / 2){
-        //             posY += this._map[l].length - Math.round(window.displayHeight / window.spriteSize)
-        //         }
-        //         if(posY < 0) posY = 0
-        //         if(posY >= this._map[l].length - 1) posY = this._map[l].length - 1
-        //         for (let x = 0; x < window.maxSpritesX; x++) {
-        //             let posX: number = x
-        //             if(window.player.position.x + window.player.size.x / 2 >= window.displayWidth / 2 && window.player.position.x + window.player.size.x / 2 < window.mapBoundX - window.displayWidth / 2){
-        //                 window.mapOffsetX = (window.player.position.x + window.player.size.x / 2 - window.displayWidth / 2) % window.spriteSize
-        //                 posX += Math.floor((window.player.position.x + window.player.size.x / 2 - window.displayWidth / 2) / window.spriteSize)
-        //             }
-        //             else if(window.player.position.x + window.player.size.x / 2 >= window.mapBoundX - window.displayWidth / 2){
-        //                 posX += this._map[l][posY].length - Math.round(window.displayWidth / window.spriteSize)
-        //             }
-        //             if(posX < 0) posX = 0
-        //             if(posX >= this._map[l][posY].length - 1) posX = this._map[l][posY].length - 1
-        //             this._mapAreaToDraw[l][y][x] = this._map[l][posY][posX]
-        //         }
-        //     }
-        // }
-        // window.mapRenderArea = this._mapAreaToDraw
+    static get active() {
+        return Map.maps[Map._activeMap];
     }
 }
+Map.maps = [];
+Map._activeMap = 0;

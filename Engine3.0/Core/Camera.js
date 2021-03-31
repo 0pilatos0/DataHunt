@@ -2,9 +2,6 @@ import Transform from "./Transform.js";
 export default class Camera extends Transform {
     constructor(position, size) {
         super(position, size);
-        this.init();
-    }
-    init() {
         Camera.cameras.push(this);
     }
     setActive() {

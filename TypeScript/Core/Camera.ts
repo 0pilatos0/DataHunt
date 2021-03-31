@@ -8,10 +8,6 @@ export default class Camera extends Transform{
 
     constructor(position: Vector2, size: Vector2){
         super(position, size)
-        this.init()
-    }
-
-    private init(){
         Camera.cameras.push(this)
     }
 

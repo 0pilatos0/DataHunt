@@ -9,10 +9,17 @@ export default class Transform extends Event{
         super()
         this._position = position
         this._size = size
+        this._position.on('change', () => {
+            this.position = this._position
+        })
+        this._size.on('change', () => {
+            this.size = this._size
+        })
     }
 
     set size(size){
         this._size = size
+        this.trigger('size')
     }
 
     get size(){
@@ -21,6 +28,7 @@ export default class Transform extends Event{
 
     set position(position){
         this._position = position
+        this.trigger('position')
     }
 
     get position(){

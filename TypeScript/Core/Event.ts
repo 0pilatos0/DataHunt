@@ -10,13 +10,14 @@ export default class Event{
         this.events[event].push(callback)
     }
 
-    public trigger = (event: string, data?: any, amount: number = 0) => {
+    public trigger = (event: string, data?: any, keepTrying: boolean = false, amount: number = 0) => {
         if(amount >= 4) return
-        if(!this.events[event] && amount < 5) setTimeout(() => {
+        if(!this.events[event] && amount < 5 && keepTrying) setTimeout(() => {
             amount++
-            this.trigger(event, data, amount)
+            this.trigger(event, data, keepTrying, amount)
         }, 10 * amount);
         else{
+            if(!this.events[event]) return
             for (let i = 0; i < this.events[event].length; i++) {
                 this.events[event][i](data)
             }

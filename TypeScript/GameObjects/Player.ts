@@ -4,7 +4,6 @@ import SpriteType from "../Core/Enums/SpriteType.js";
 import GameObject from "../Core/GameObject.js";
 import Input from "../Core/Input.js";
 import Map from "../Core/Map.js";
-import Scene from "../Core/Scene.js";
 import Sprite from "../Core/Sprite.js";
 import Tileset from "../Core/Tileset.js";
 import Vector2 from "../Core/Vector2.js";

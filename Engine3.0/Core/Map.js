@@ -5,10 +5,6 @@ import Transform from "./Transform.js";
 import Vector2 from "./Vector2.js";
 import Window from "./Window.js";
 export default class Map extends Transform {
-    //private _mapAreaToDraw: Array<Array<Array<GameObject>>> = []
-    //private _map: any
-    //private _gameObjectArray: Array<GameObject> = []
-    //private _oldGameObjectArray: Array<GameObject> = []
     constructor(path) {
         super(new Vector2(0, 0), new Vector2(0, 0));
         new FileLoader(path).on('load', (map) => {
@@ -75,11 +71,6 @@ export default class Map extends Transform {
                                     this.size.x = map.width * Window.spriteSize;
                                     this.size.y = map.height * Window.spriteSize;
                                     Map.maps.push(this);
-                                    // this._map = map.layers
-                                    // for (let i = 0; i < this._map.length; i++) {
-                                    //     if(this._map[i]?.data) this._map[i] = this._map[i].data
-                                    //     else {this._map.splice(i, 1); i--}
-                                    // }
                                     this.trigger('load', this);
                                 }
                             }, 100);

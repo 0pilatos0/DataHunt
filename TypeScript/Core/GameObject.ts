@@ -5,7 +5,6 @@ import Collider from "./Collider.js";
 import AnimationState from "./Enums/AnimationState.js";
 import GameObjectType from "./Enums/GameObjectState.js";
 import SpriteType from "./Enums/SpriteType.js";
-import Event from "./Event.js";
 import Sprite from "./Sprite.js";
 import Transform from "./Transform.js";
 import Vector2 from "./Vector2.js";

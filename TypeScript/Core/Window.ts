@@ -1,6 +1,4 @@
-import Player from "../GameObjects/Player.js"
 import Canvas from "./Canvas.js"
-import Map from "./Map.js"
 import Scene from "./Scene.js"
 import Vector2 from "./Vector2.js"
 export default class Window{

@@ -25,6 +25,8 @@ export default class Sprite extends Event{
             canvas.ctx.drawImage(img, 0, 0, size.x, size.y)
             this._sprite = canvas.element
             //console.log(data)
+            //TODO set type of sprite to gameobject
+            //TODO set some parameters on gameobject instead of sprite
             switch (data?.type) {
                 case "Collidable":
                     this._type = SpriteType.COLLIDABLE
@@ -40,7 +42,6 @@ export default class Sprite extends Event{
                 tileset?.on('load', () => {
                     let animation = new Animation()
                     for (let a = 0; a < data?.animation.length; a++) {
-                        //tileset.tiles[]
                         animation.add(tileset.tiles[data.animation[a].tileid], data.animation[a].duration)
                     }
                     this.trigger('animation', animation)

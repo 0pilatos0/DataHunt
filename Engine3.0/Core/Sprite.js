@@ -21,6 +21,7 @@ export default class Sprite extends Event {
             //console.log(data)
             //TODO set type of sprite to gameobject
             //TODO set some parameters on gameobject instead of sprite
+            //TODO use width, height, x and y of objects
             switch (data === null || data === void 0 ? void 0 : data.type) {
                 case "Collidable":
                     this._type = 1 /* COLLIDABLE */;

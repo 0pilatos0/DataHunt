@@ -10,6 +10,7 @@ export default class GameObject extends Transform {
         this._visible = false;
         this._animation = null;
         this._collider = null;
+        this._layer = 100;
         this._spriteIndex = spriteIndex;
         this._type = type;
         (_a = Sprite.sprites[this.spriteIndex]) === null || _a === void 0 ? void 0 : _a.on('animation', (animation) => { this._animation = animation; });
@@ -65,15 +66,23 @@ export default class GameObject extends Transform {
     }
     static getByType(type) {
         let rtn = [];
-        for (let g = 0; g < GameObject.gameObjects.length; g++) {
-            let gameObject = GameObject.gameObjects[g];
-            if (gameObject.type == type)
-                rtn.push(gameObject);
-        }
+        GameObject.gameObjects.map(g => {
+            if (g.type == type)
+                rtn.push(g);
+        });
         return rtn;
+    }
+    static sortByLayer() {
+        return GameObject.gameObjects.sort((a, b) => (a.layer > b.layer) ? 1 : -1);
     }
     destroy() {
         GameObject.gameObjects.splice(GameObject.gameObjects.indexOf(this), 1);
+    }
+    set layer(layer) {
+        this._layer = layer;
+    }
+    get layer() {
+        return this._layer;
     }
 }
 GameObject.gameObjects = [];

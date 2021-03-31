@@ -8,7 +8,7 @@ export default class AnimationController extends Event {
     set active(index) {
         if (this._activeAnimation > -1)
             this._animations[this._activeAnimation].state = 2 /* PAUSED */;
-        this._animations[this._activeAnimation] = this._animations[index];
+        this._activeAnimation = index;
         this._animations[this._activeAnimation].state = 1 /* PLAYING */;
     }
     get active() {

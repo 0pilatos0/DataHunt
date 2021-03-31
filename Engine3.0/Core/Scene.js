@@ -15,6 +15,9 @@ export default class Scene extends Event {
             new Player(playerPos, new Vector2(Window.spriteSize, Window.spriteSize), true).on('load', () => {
                 new Camera(new Vector2(0, 0), new Vector2(0, 0));
                 this.trigger('load', this);
+                setTimeout(() => {
+                    console.log(this._visibleGameObjects);
+                }, 1000);
             });
         });
     }
@@ -42,7 +45,7 @@ export default class Scene extends Event {
     }
     update() {
         this._visibleGameObjects = [];
-        GameObject.gameObjects.map(g => {
+        GameObject.sortByLayer().map(g => {
             if (g.position.x - Window.spriteSize <= this.camera.position.x + this.camera.size.x &&
                 g.position.y - Window.spriteSize <= this.camera.position.y + this.camera.size.y &&
                 g.position.x + Window.spriteSize * 2 >= this.camera.position.x &&

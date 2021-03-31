@@ -10,12 +10,14 @@ export default class Map extends Transform {
         new FileLoader(path).on('load', (map) => {
             map = JSON.parse(map);
             let tilesetCount = 0;
+            let tilesetSprites = [];
             for (let i = 0; i < map.tilesets.length; i++) {
                 new FileLoader(path + `/../${map.tilesets[i].source}`).on('load', (tileset) => {
                     tileset = JSON.parse(tileset);
                     tileset.image = path + `/../${tileset.image}`;
                     tileset.offsetId = map.tilesets[i].firstgid - 1;
                     new Tileset(tileset).on('load', (tileset) => {
+                        tilesetSprites = tilesetSprites.concat(tileset.tiles);
                         tilesetCount++;
                         if (tilesetCount == map.tilesets.length) {
                             let gameObjectCount = 0;
@@ -29,10 +31,11 @@ export default class Map extends Transform {
                                             let row = layer.data.splice(0, map.width);
                                             for (let x = 0; x < row.length; x++) {
                                                 if (row[x] && row[x] != null) {
-                                                    let gameObject = new GameObject(new Vector2(x * Window.spriteSize, y * Window.spriteSize), new Vector2(Window.spriteSize, Window.spriteSize), tileset.tiles[row[x] - 1]);
+                                                    let gameObject = new GameObject(new Vector2(x * Window.spriteSize, y * Window.spriteSize), new Vector2(Window.spriteSize, Window.spriteSize), tilesetSprites[row[x] - 1]);
                                                     gameObject.on('load', (gameObject) => {
                                                         gameObjectCount++;
                                                         row[x] = gameObject;
+                                                        gameObject.layer = l;
                                                     });
                                                 }
                                                 else {
@@ -59,6 +62,7 @@ export default class Map extends Transform {
                                             new GameObject(new Vector2(object.x * Window.spriteScaleFactor, object.y * Window.spriteScaleFactor), new Vector2(object.width * Window.spriteScaleFactor, object.height * Window.spriteScaleFactor), undefined, type).on('load', (gameObject) => {
                                                 gameObjectCount++;
                                                 layer.objects[o] = gameObject;
+                                                gameObject.layer = l;
                                             });
                                         }
                                         break;
@@ -67,6 +71,7 @@ export default class Map extends Transform {
                             }
                             let interval = setInterval(() => {
                                 if (gameObjectCount == totalGameObjectsCount) {
+                                    console.log(tilesetSprites);
                                     clearInterval(interval);
                                     this.size.x = map.width * Window.spriteSize;
                                     this.size.y = map.height * Window.spriteSize;

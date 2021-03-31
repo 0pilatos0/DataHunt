@@ -2,8 +2,8 @@ import Canvas from "./Canvas.js"
 import Scene from "./Scene.js"
 import Vector2 from "./Vector2.js"
 export default class Window{
-    public static windows: Array<Window> = []
-    private static _activeWindow: number = 0
+    // public static windows: Array<Window> = []
+    // private static _activeWindow: number = 0
     public static spriteSize: number = 128
     public static spriteScaleFactor: number = Window.spriteSize / 32
     public static displayWidth: number = 0
@@ -15,7 +15,7 @@ export default class Window{
     private _scene: Scene | null = null
 
     constructor(){
-        Window.windows.push(this)
+        //Window.windows.push(this)
         document.body.appendChild(this._canvas.element)
         new Scene().on('load', (scene: Scene) => {
             this._scene = scene
@@ -54,7 +54,7 @@ export default class Window{
         this._scene?.update()
     }
 
-    public static get active(){
-        return Window.windows[Window._activeWindow]
-    }
+    // public static get active(){
+    //     return Window.windows[Window._activeWindow]
+    // }
 }

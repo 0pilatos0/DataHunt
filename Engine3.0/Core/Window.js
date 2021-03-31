@@ -7,7 +7,7 @@ export default class Window {
         this._fps = 0;
         this._lastUpdate = Date.now();
         this._scene = null;
-        Window.windows.push(this);
+        //Window.windows.push(this)
         document.body.appendChild(this._canvas.element);
         new Scene().on('load', (scene) => {
             this._scene = scene;
@@ -45,12 +45,9 @@ export default class Window {
         this._fps++;
         (_a = this._scene) === null || _a === void 0 ? void 0 : _a.update();
     }
-    static get active() {
-        return Window.windows[Window._activeWindow];
-    }
 }
-Window.windows = [];
-Window._activeWindow = 0;
+// public static windows: Array<Window> = []
+// private static _activeWindow: number = 0
 Window.spriteSize = 128;
 Window.spriteScaleFactor = Window.spriteSize / 32;
 Window.displayWidth = 0;

@@ -73,7 +73,6 @@ export default class Map extends Transform{
                             }
                             let interval = setInterval(() => {
                                 if(gameObjectCount == totalGameObjectsCount){
-                                    console.log(tilesetSprites)
                                     clearInterval(interval)
                                     this.size.x = map.width * Window.spriteSize
                                     this.size.y = map.height * Window.spriteSize

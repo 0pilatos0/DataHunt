@@ -15,9 +15,6 @@ export default class Scene extends Event {
             new Player(playerPos, new Vector2(Window.spriteSize, Window.spriteSize), true).on('load', () => {
                 new Camera(new Vector2(0, 0), new Vector2(0, 0));
                 this.trigger('load', this);
-                setTimeout(() => {
-                    console.log(this._visibleGameObjects);
-                }, 1000);
             });
         });
     }

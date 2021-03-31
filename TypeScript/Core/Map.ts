@@ -1,7 +1,6 @@
 import GameObjectType from "./Enums/GameObjectState.js"
 import FileLoader from "./FileLoader.js"
 import GameObject from "./GameObject.js"
-import Sprite from "./Sprite.js"
 import Tileset from "./Tileset.js"
 import Transform from "./Transform.js"
 import Vector2 from "./Vector2.js"
@@ -16,12 +15,14 @@ export default class Map extends Transform{
         new FileLoader(path).on('load', (map: any) => {
             map = JSON.parse(map)
             let tilesetCount: number = 0
+            let tilesetSprites: Array<number> = []
             for (let i = 0; i < map.tilesets.length; i++) {
                 new FileLoader(path + `/../${map.tilesets[i].source}`).on('load', (tileset: any) => {
                     tileset = JSON.parse(tileset)
                     tileset.image = path + `/../${tileset.image}`
                     tileset.offsetId = map.tilesets[i].firstgid - 1
                     new Tileset(tileset).on('load', (tileset: Tileset) => {
+                        tilesetSprites = tilesetSprites.concat(tileset.tiles)
                         tilesetCount++
                         if(tilesetCount == map.tilesets.length){
                             let gameObjectCount: number = 0
@@ -35,10 +36,11 @@ export default class Map extends Transform{
                                             let row = layer.data.splice(0, map.width)
                                             for (let x = 0; x < row.length; x++) {
                                                 if(row[x] && row[x] != null){
-                                                    let gameObject = new GameObject(new Vector2(x * Window.spriteSize, y * Window.spriteSize), new Vector2(Window.spriteSize, Window.spriteSize), tileset.tiles[row[x] - 1])
+                                                    let gameObject = new GameObject(new Vector2(x * Window.spriteSize, y * Window.spriteSize), new Vector2(Window.spriteSize, Window.spriteSize), tilesetSprites[row[x] - 1])
                                                     gameObject.on('load', (gameObject: GameObject) => {
                                                         gameObjectCount++
                                                         row[x] = gameObject
+                                                        gameObject.layer = l
                                                     })
                                                 }
                                                 else{ row[x] = null; gameObjectCount++ }
@@ -62,6 +64,7 @@ export default class Map extends Transform{
                                             new GameObject(new Vector2(object.x * Window.spriteScaleFactor, object.y * Window.spriteScaleFactor), new Vector2(object.width * Window.spriteScaleFactor, object.height * Window.spriteScaleFactor), undefined, type).on('load', (gameObject: GameObject) => {
                                                 gameObjectCount++
                                                 layer.objects[o] = gameObject
+                                                gameObject.layer = l
                                             })
                                         }
                                         break;
@@ -70,6 +73,7 @@ export default class Map extends Transform{
                             }
                             let interval = setInterval(() => {
                                 if(gameObjectCount == totalGameObjectsCount){
+                                    console.log(tilesetSprites)
                                     clearInterval(interval)
                                     this.size.x = map.width * Window.spriteSize
                                     this.size.y = map.height * Window.spriteSize

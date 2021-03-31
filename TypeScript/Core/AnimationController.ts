@@ -12,7 +12,7 @@ export default class AnimationController extends Event{
 
     set active(index: number){
         if(this._activeAnimation > -1) this._animations[this._activeAnimation].state = AnimationState.PAUSED
-        this._animations[this._activeAnimation] = this._animations[index]
+        this._activeAnimation = index
         this._animations[this._activeAnimation].state = AnimationState.PLAYING
     }
 

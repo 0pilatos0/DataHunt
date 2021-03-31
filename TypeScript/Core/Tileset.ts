@@ -8,6 +8,7 @@ export default class Tileset extends Event{
     private _tiles: Array<number> = []
     private _columns: number = 0
     private _rows: number = 0
+    private _offsetId: number = 0
 
     constructor(data: any){
         super()
@@ -31,13 +32,12 @@ export default class Tileset extends Event{
                 let canvas = new Canvas(new Vector2(tileWidth, tileHeight))
                 canvas.ctx.drawImage(img, -(i%this._columns) * tileWidth, -Math.floor(i/this._columns) * tileHeight)
                 let spriteData: any = !onlyPath ? {offsetId: data.offsetId} : {}
+                if(!onlyPath) this._offsetId = data.offsetId
                 for (let j = 0; j < data?.tiles?.length; j++) { Object.assign(spriteData, (data.tiles[j].id == i ? data.tiles[j] : spriteData)) }
                 new Sprite(canvas.element.toDataURL('image/png'), new Vector2(Window.spriteSize, Window.spriteSize), spriteData, this).on('load', (spriteIndex: number) => {
                     this._tiles[i] = spriteIndex
                     doneTiles++
-                    if(doneTiles == totalTiles) {
-                        this.trigger('load', this)
-                    }
+                    if(doneTiles == totalTiles) this.trigger('load', this)
                 })
             }
         }
@@ -55,5 +55,9 @@ export default class Tileset extends Event{
             rtn[y] = this._tiles.slice(y*this._columns, ((y+1)*this._columns))
         }
         return rtn
+    }
+
+    get offsetId(){
+        return this._offsetId
     }
 }

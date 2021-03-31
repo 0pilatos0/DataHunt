@@ -9,6 +9,7 @@ export default class Tileset extends Event {
         this._tiles = [];
         this._columns = 0;
         this._rows = 0;
+        this._offsetId = 0;
         this.init(data);
     }
     init(data) {
@@ -29,15 +30,16 @@ export default class Tileset extends Event {
                 let canvas = new Canvas(new Vector2(tileWidth, tileHeight));
                 canvas.ctx.drawImage(img, -(i % this._columns) * tileWidth, -Math.floor(i / this._columns) * tileHeight);
                 let spriteData = !onlyPath ? { offsetId: data.offsetId } : {};
+                if (!onlyPath)
+                    this._offsetId = data.offsetId;
                 for (let j = 0; j < ((_a = data === null || data === void 0 ? void 0 : data.tiles) === null || _a === void 0 ? void 0 : _a.length); j++) {
                     Object.assign(spriteData, (data.tiles[j].id == i ? data.tiles[j] : spriteData));
                 }
                 new Sprite(canvas.element.toDataURL('image/png'), new Vector2(Window.spriteSize, Window.spriteSize), spriteData, this).on('load', (spriteIndex) => {
                     this._tiles[i] = spriteIndex;
                     doneTiles++;
-                    if (doneTiles == totalTiles) {
+                    if (doneTiles == totalTiles)
                         this.trigger('load', this);
-                    }
                 });
             }
         };
@@ -53,6 +55,9 @@ export default class Tileset extends Event {
             rtn[y] = this._tiles.slice(y * this._columns, ((y + 1) * this._columns));
         }
         return rtn;
+    }
+    get offsetId() {
+        return this._offsetId;
     }
 }
 Tileset.tilesets = [];

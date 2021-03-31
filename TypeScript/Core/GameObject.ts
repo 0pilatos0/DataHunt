@@ -17,6 +17,7 @@ export default class GameObject extends Transform{
     private _type: GameObjectType
     private _animation: Animation | null = null
     private _collider: Collider | null = null
+    private _layer: number = 100
 
     constructor(position: Vector2, size: Vector2, spriteIndex: number = -1, type: GameObjectType = GameObjectType.DEFAULT){
         super(position, size)
@@ -77,14 +78,25 @@ export default class GameObject extends Transform{
 
     static getByType(type: GameObjectType){
         let rtn: Array<GameObject> = []
-        for (let g = 0; g < GameObject.gameObjects.length; g++) {
-            let gameObject = GameObject.gameObjects[g]
-            if(gameObject.type == type) rtn.push(gameObject)
-        }
+        GameObject.gameObjects.map(g => {
+            if(g.type == type) rtn.push(g)
+        })
         return rtn
+    }
+
+    static sortByLayer(){
+        return GameObject.gameObjects.sort((a, b) => (a.layer > b.layer) ? 1 : -1)
     }
 
     public destroy(){
         GameObject.gameObjects.splice(GameObject.gameObjects.indexOf(this), 1)
+    }
+
+    set layer(layer: number){
+        this._layer = layer
+    }
+
+    get layer(){
+        return this._layer
     }
 }

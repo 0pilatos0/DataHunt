@@ -1,4 +1,12 @@
 { "columns":31,
+ "editorsettings":
+    {
+     "export":
+        {
+         "format":"",
+         "target":"."
+        }
+    },
  "image":"Objects.png",
  "imageheight":3123,
  "imagewidth":1000,
@@ -6,7 +14,7 @@
  "name":"Objects",
  "spacing":0,
  "tilecount":3007,
- "tiledversion":"1.5.0",
+ "tiledversion":"1.4.3",
  "tileheight":32,
  "tiles":[
         {
@@ -104,8 +112,33 @@
         {
          "id":69,
          "type":"Collidable"
+        }, 
+        {
+         "id":93,
+         "properties":[
+                {
+                 "name":"height",
+                 "type":"int",
+                 "value":10
+                }, 
+                {
+                 "name":"width",
+                 "type":"int",
+                 "value":10
+                }, 
+                {
+                 "name":"x",
+                 "type":"int",
+                 "value":15
+                }, 
+                {
+                 "name":"y",
+                 "type":"int",
+                 "value":15
+                }],
+         "type":"Collidable"
         }],
  "tilewidth":32,
  "type":"tileset",
- "version":1.5
+ "version":1.4
 }

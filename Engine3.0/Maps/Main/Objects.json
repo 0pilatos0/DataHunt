@@ -107,7 +107,8 @@
                  "name":"y",
                  "type":"int",
                  "value":20
-                }]
+                }],
+         "type":"Collidable"
         }, 
         {
          "id":25,
@@ -131,7 +132,8 @@
                  "name":"y",
                  "type":"string",
                  "value":"5"
-                }]
+                }],
+         "type":"Collidable"
         }, 
         {
          "id":26,
@@ -145,7 +147,8 @@
                  "name":"width",
                  "type":"string",
                  "value":"10"
-                }]
+                }],
+         "type":"Collidable"
         }, 
         {
          "id":27,
@@ -159,7 +162,8 @@
                  "name":"width",
                  "type":"string",
                  "value":"10"
-                }]
+                }],
+         "type":"Collidable"
         }, 
         {
          "id":31,

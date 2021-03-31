@@ -5,6 +5,7 @@ import Event from "./Event.js";
 import Sprite from "./Sprite.js";
 import Transform from "./Transform.js";
 import Vector2 from "./Vector2.js";
+import Window from "./Window.js";
 declare var window: any
 
 export default class GameObject extends Transform{
@@ -29,14 +30,15 @@ export default class GameObject extends Transform{
     }
 
     public render(ctx: CanvasRenderingContext2D){
-        if(!this._beenRendered) return
+        //if(!this._beenRendered) return
         if(this._visible){
             if(this._animation) this._sprite = this._animation.activeSprite
+            ctx.drawImage(this._sprite.sprite, this.position.x - Window.displayWidth / 2, this.position.y - Window.displayHeight / 2)
         }
     }
 
     public update(){
-        if(!this._beenRendered) return
+        //if(!this._beenRendered) return
     }
 
     get sprite(){

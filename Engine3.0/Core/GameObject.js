@@ -1,5 +1,6 @@
 import Sprite from "./Sprite.js";
 import Transform from "./Transform.js";
+import Window from "./Window.js";
 export default class GameObject extends Transform {
     constructor(position, size, sprite = new Sprite(''), type = 0 /* DEFAULT */) {
         super(position, size);
@@ -16,16 +17,15 @@ export default class GameObject extends Transform {
         this.trigger('load', this);
     }
     render(ctx) {
-        if (!this._beenRendered)
-            return;
+        //if(!this._beenRendered) return
         if (this._visible) {
             if (this._animation)
                 this._sprite = this._animation.activeSprite;
+            ctx.drawImage(this._sprite.sprite, this.position.x - Window.displayWidth / 2, this.position.y - Window.displayHeight / 2);
         }
     }
     update() {
-        if (!this._beenRendered)
-            return;
+        //if(!this._beenRendered) return
     }
     get sprite() {
         return this._sprite;

@@ -96,68 +96,62 @@ export default class Map extends Event {
         });
     }
     render(ctx) {
-        this._oldGameObjectArray = this._gameObjectArray;
-        this._gameObjectArray = [];
-        for (let l = 0; l < this._mapAreaToDraw.length; l++) {
-            for (let y = 0; y < this._mapAreaToDraw[l].length; y++) {
-                for (let x = 0; x < this._mapAreaToDraw[l][y].length; x++) {
-                    let gameObject = this._mapAreaToDraw[l][y][x];
-                    if (gameObject) {
-                        this._gameObjectArray.push(gameObject);
-                        if (gameObject.visible) {
-                            ctx.drawImage(gameObject === null || gameObject === void 0 ? void 0 : gameObject.sprite.sprite, x * window.spriteSize - window.mapOffsetX - window.displayWidth / 2, y * window.spriteSize - window.mapOffsetY - window.displayHeight / 2);
-                        }
-                    }
-                }
-            }
-        }
-        for (let i = 0; i < this._oldGameObjectArray.length; i++) {
-            this._oldGameObjectArray[i].beenRendered = false;
-        }
-        for (let i = 0; i < this._gameObjectArray.length; i++) {
-            this._gameObjectArray[i].beenRendered = true;
-        }
+        // this._oldGameObjectArray = this._gameObjectArray
+        // this._gameObjectArray = []
+        // for (let l = 0; l < this._mapAreaToDraw.length; l++) {
+        //     for (let y = 0; y < this._mapAreaToDraw[l].length; y++) {
+        //         for (let x = 0; x < this._mapAreaToDraw[l][y].length; x++) {
+        //             let gameObject: GameObject = this._mapAreaToDraw[l][y][x]
+        //             if(gameObject){
+        //                 this._gameObjectArray.push(gameObject)
+        //                 if(gameObject.visible){
+        //                     ctx.drawImage(gameObject?.sprite.sprite, x * window.spriteSize - window.mapOffsetX - window.displayWidth / 2, y * window.spriteSize - window.mapOffsetY - window.displayHeight / 2)
+        //                 }
+        //             }
+        //         }
+        //     }
+        // }
+        // for (let i = 0; i < this._oldGameObjectArray.length; i++) {
+        //     this._oldGameObjectArray[i].beenRendered = false
+        // }
+        // for (let i = 0; i < this._gameObjectArray.length; i++) {
+        //     this._gameObjectArray[i].beenRendered = true
+        // }
     }
     update() {
         //TODO maybe isn't even required inside here but just on gameobject self
-        window.mapOffsetX = 0;
-        window.mapOffsetY = 0;
-        this._mapAreaToDraw = [];
-        for (let l = 0; l < this._map.length; l++) {
-            if (!this._mapAreaToDraw[l])
-                this._mapAreaToDraw.push([]);
-            for (let y = 0; y < window.maxSpritesY; y++) {
-                if (!this._mapAreaToDraw[l][y])
-                    this._mapAreaToDraw[l].push([]);
-                let posY = y;
-                if (window.player.position.y + window.player.size.y / 2 >= window.displayHeight / 2 && window.player.position.y + window.player.size.y / 2 < window.mapBoundY - window.displayHeight / 2) {
-                    window.mapOffsetY = (window.player.position.y + window.player.size.y / 2 - window.displayHeight / 2) % window.spriteSize;
-                    posY += Math.floor((window.player.position.y + window.player.size.y / 2 - window.displayHeight / 2) / window.spriteSize);
-                }
-                else if (window.player.position.y + window.player.size.y / 2 >= window.mapBoundY - window.displayHeight / 2) {
-                    posY += this._map[l].length - Math.round(window.displayHeight / window.spriteSize);
-                }
-                if (posY < 0)
-                    posY = 0;
-                if (posY >= this._map[l].length - 1)
-                    posY = this._map[l].length - 1;
-                for (let x = 0; x < window.maxSpritesX; x++) {
-                    let posX = x;
-                    if (window.player.position.x + window.player.size.x / 2 >= window.displayWidth / 2 && window.player.position.x + window.player.size.x / 2 < window.mapBoundX - window.displayWidth / 2) {
-                        window.mapOffsetX = (window.player.position.x + window.player.size.x / 2 - window.displayWidth / 2) % window.spriteSize;
-                        posX += Math.floor((window.player.position.x + window.player.size.x / 2 - window.displayWidth / 2) / window.spriteSize);
-                    }
-                    else if (window.player.position.x + window.player.size.x / 2 >= window.mapBoundX - window.displayWidth / 2) {
-                        posX += this._map[l][posY].length - Math.round(window.displayWidth / window.spriteSize);
-                    }
-                    if (posX < 0)
-                        posX = 0;
-                    if (posX >= this._map[l][posY].length - 1)
-                        posX = this._map[l][posY].length - 1;
-                    this._mapAreaToDraw[l][y][x] = this._map[l][posY][posX];
-                }
-            }
-        }
-        window.mapRenderArea = this._mapAreaToDraw;
+        // window.mapOffsetX = 0
+        // window.mapOffsetY = 0
+        // this._mapAreaToDraw = []
+        // for (let l = 0; l < this._map.length; l++) {
+        //     if(!this._mapAreaToDraw[l]) this._mapAreaToDraw.push([])
+        //     for (let y = 0; y < window.maxSpritesY; y++) {
+        //         if(!this._mapAreaToDraw[l][y]) this._mapAreaToDraw[l].push([])
+        //         let posY: number = y
+        //         if(window.player.position.y + window.player.size.y / 2 >= window.displayHeight / 2 && window.player.position.y + window.player.size.y / 2 < window.mapBoundY - window.displayHeight / 2){
+        //             window.mapOffsetY = (window.player.position.y + window.player.size.y / 2 - window.displayHeight / 2) % window.spriteSize
+        //             posY += Math.floor((window.player.position.y + window.player.size.y / 2 - window.displayHeight / 2) / window.spriteSize)
+        //         }
+        //         else if(window.player.position.y + window.player.size.y / 2 >= window.mapBoundY - window.displayHeight / 2){
+        //             posY += this._map[l].length - Math.round(window.displayHeight / window.spriteSize)
+        //         }
+        //         if(posY < 0) posY = 0
+        //         if(posY >= this._map[l].length - 1) posY = this._map[l].length - 1
+        //         for (let x = 0; x < window.maxSpritesX; x++) {
+        //             let posX: number = x
+        //             if(window.player.position.x + window.player.size.x / 2 >= window.displayWidth / 2 && window.player.position.x + window.player.size.x / 2 < window.mapBoundX - window.displayWidth / 2){
+        //                 window.mapOffsetX = (window.player.position.x + window.player.size.x / 2 - window.displayWidth / 2) % window.spriteSize
+        //                 posX += Math.floor((window.player.position.x + window.player.size.x / 2 - window.displayWidth / 2) / window.spriteSize)
+        //             }
+        //             else if(window.player.position.x + window.player.size.x / 2 >= window.mapBoundX - window.displayWidth / 2){
+        //                 posX += this._map[l][posY].length - Math.round(window.displayWidth / window.spriteSize)
+        //             }
+        //             if(posX < 0) posX = 0
+        //             if(posX >= this._map[l][posY].length - 1) posX = this._map[l][posY].length - 1
+        //             this._mapAreaToDraw[l][y][x] = this._map[l][posY][posX]
+        //         }
+        //     }
+        // }
+        // window.mapRenderArea = this._mapAreaToDraw
     }
 }

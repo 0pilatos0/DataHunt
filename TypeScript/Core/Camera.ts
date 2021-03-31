@@ -1,3 +1,4 @@
+import GameObject from "./GameObject.js"
 import Transform from "./Transform.js"
 import Vector2 from "./Vector2.js"
 

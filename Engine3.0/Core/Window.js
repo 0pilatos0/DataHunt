@@ -1,30 +1,25 @@
-import Player from "../GameObjects/Player.js";
 import Canvas from "./Canvas.js";
-import GameObject from "./GameObject.js";
-import Map from "./Map.js";
+import Scene from "./Scene.js";
 import Vector2 from "./Vector2.js";
 export default class Window {
     constructor() {
         this._canvas = new Canvas();
         this._fps = 0;
         this._lastUpdate = Date.now();
+        this._scene = null;
         this.init();
     }
     init() {
         Window.windows.push(this);
         window.gameObjects = [];
         document.body.appendChild(this._canvas.element);
-        new Map('/Engine3.0/Maps/Main/Map.json').on('load', (map) => {
-            this._map = map;
-            let playerPos = GameObject.getByType(1 /* SPAWNPOINT */)[Math.floor(Math.random() * GameObject.getByType(1 /* SPAWNPOINT */).length)].position;
-            new Player(playerPos, new Vector2(window.spriteSize, window.spriteSize), true).on('load', (player) => {
-                this._player = player;
-                this.resize();
-                window.addEventListener('resize', this.resize.bind(this));
-                window.requestAnimationFrame(this.render.bind(this));
-                setInterval(() => { this.update(); }, 1000 / 60);
-                setInterval(() => { this._fps = 0; }, 1000);
-            });
+        new Scene().on('load', (scene) => {
+            this._scene = scene;
+            this.resize();
+            window.addEventListener('resize', this.resize.bind(this));
+            window.requestAnimationFrame(this.render.bind(this));
+            setInterval(() => { this.update(); }, 1000 / 60);
+            setInterval(() => { this._fps = 0; }, 1000);
         });
     }
     resize() {
@@ -37,31 +32,36 @@ export default class Window {
         this._canvas.ctx.imageSmoothingEnabled = scaleFitNative < 1;
         window.maxSpritesX = Math.round(window.displayWidth / window.spriteSize) + 2;
         window.maxSpritesY = Math.round(window.displayHeight / window.spriteSize) + 2;
+        Window.displayWidth = window.displayWidth;
+        Window.displayHeight = window.displayHeight;
+        if (this._scene)
+            this._scene.camera.size = new Vector2(window.displayWidth, window.displayHeight);
     }
     render() {
-        var _a, _b;
+        var _a;
         window.requestAnimationFrame(this.render.bind(this));
         this._canvas.ctx.clearRect(-window.displayWidth / 2, -window.displayHeight / 2, window.displayWidth, window.displayHeight);
         this._canvas.ctx.fillStyle = "#333";
         this._canvas.ctx.fillRect(-window.displayWidth / 2, -window.displayHeight / 2, window.displayWidth, window.displayHeight);
-        (_a = this._map) === null || _a === void 0 ? void 0 : _a.render(this._canvas.ctx);
-        for (let i = 0; i < GameObject.gameObjects.length; i++) {
-            GameObject.gameObjects[i].render(this._canvas.ctx);
-        }
-        (_b = this._player) === null || _b === void 0 ? void 0 : _b.render(this._canvas.ctx);
+        (_a = this._scene) === null || _a === void 0 ? void 0 : _a.render(this._canvas.ctx);
+        // this._map?.render(this._canvas.ctx)
+        // for (let i = 0; i < GameObject.gameObjects.length; i++) {
+        //     GameObject.gameObjects[i].render(this._canvas.ctx)
+        // }
+        // this._player?.render(this._canvas.ctx)
     }
     update() {
-        var _a, _b;
+        var _a;
         let now = Date.now();
         window.deltaTime = (now - this._lastUpdate) / 1000;
         this._lastUpdate = now;
         this._fps++;
-        (_a = this._map) === null || _a === void 0 ? void 0 : _a.update();
-        (_b = this._player) === null || _b === void 0 ? void 0 : _b.update();
-        for (let i = 0; i < GameObject.gameObjects.length; i++) {
-            if (GameObject.gameObjects[i].beenRendered)
-                GameObject.gameObjects[i].update();
-        }
+        (_a = this._scene) === null || _a === void 0 ? void 0 : _a.update();
+        //this._map?.update()
+        //this._player?.update()
+        // for (let i = 0; i < GameObject.gameObjects.length; i++) {
+        //     if(GameObject.gameObjects[i].beenRendered) GameObject.gameObjects[i].update()
+        // }
     }
     static get active() {
         return Window.windows[Window._activeWindow];
@@ -69,3 +69,7 @@ export default class Window {
 }
 Window.windows = [];
 Window._activeWindow = 0;
+Window.spriteSize = 96;
+Window.spriteScaleFactor = Window.spriteSize / 32;
+Window.displayWidth = 0;
+Window.displayHeight = 0;

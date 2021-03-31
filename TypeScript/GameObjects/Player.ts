@@ -7,6 +7,7 @@ import Input from "../Core/Input.js";
 import Sprite from "../Core/Sprite.js";
 import Tileset from "../Core/Tileset.js";
 import Vector2 from "../Core/Vector2.js";
+import Window from "../Core/Window.js";
 
 declare var window: any
 export default class Player extends GameObject{
@@ -39,17 +40,17 @@ export default class Player extends GameObject{
         }
     }
 
-    public render(ctx: CanvasRenderingContext2D){
-        if(!this.sprite) return
-        if(!this.visible) return
-        let renderX: number | null = null
-        let renderY: number | null = null
-        if(this.position.x + this.size.x / 2 >= window.displayWidth / 2 && this.position.x + this.size.x / 2 < window.mapBoundX - window.displayWidth / 2) renderX = -this.size.x / 2
-        if(this.position.y + this.size.y / 2 >= window.displayHeight / 2 && this.position.y + this.size.y / 2 < window.mapBoundY - window.displayHeight / 2) renderY = -this.size.y / 2
-        if(this.position.x + this.size.x / 2 >= window.mapBoundX - window.displayWidth / 2) renderX = this.position.x - window.mapBoundX + window.displayWidth / 2
-        if(this.position.y + this.size.y / 2 >= window.mapBoundY - window.displayHeight / 2) renderY = this.position.y - window.mapBoundY - window.displayHeight / 2
-        ctx.drawImage(this.sprite.sprite, renderX ?? this.position.x - window.displayWidth / 2, renderY ?? this.position.y - window.displayHeight / 2)
-    }
+    // public render(ctx: CanvasRenderingContext2D){
+    //     //if(!this.sprite) return
+    //     //if(!this.visible) return
+    //     //let renderX: number | null = null
+    //     //let renderY: number | null = null
+    //     //if(this.position.x + this.size.x / 2 >= window.displayWidth / 2 && this.position.x + this.size.x / 2 < window.mapBoundX - window.displayWidth / 2) renderX = -this.size.x / 2
+    //     //if(this.position.y + this.size.y / 2 >= window.displayHeight / 2 && this.position.y + this.size.y / 2 < window.mapBoundY - window.displayHeight / 2) renderY = -this.size.y / 2
+    //     //if(this.position.x + this.size.x / 2 >= window.mapBoundX - window.displayWidth / 2) renderX = this.position.x - window.mapBoundX + window.displayWidth / 2
+    //     //if(this.position.y + this.size.y / 2 >= window.mapBoundY - window.displayHeight / 2) renderY = this.position.y - window.mapBoundY - window.displayHeight / 2
+    //     //ctx.drawImage(this.sprite.sprite, renderX ?? this.position.x - Window.displayWidth / 2, renderY ?? this.position.y - Window.displayHeight / 2)
+    // }
 
     public update(){
         super.update()

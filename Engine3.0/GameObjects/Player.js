@@ -31,23 +31,17 @@ export default class Player extends GameObject {
             });
         }
     }
-    render(ctx) {
-        if (!this.sprite)
-            return;
-        if (!this.visible)
-            return;
-        let renderX = null;
-        let renderY = null;
-        if (this.position.x + this.size.x / 2 >= window.displayWidth / 2 && this.position.x + this.size.x / 2 < window.mapBoundX - window.displayWidth / 2)
-            renderX = -this.size.x / 2;
-        if (this.position.y + this.size.y / 2 >= window.displayHeight / 2 && this.position.y + this.size.y / 2 < window.mapBoundY - window.displayHeight / 2)
-            renderY = -this.size.y / 2;
-        if (this.position.x + this.size.x / 2 >= window.mapBoundX - window.displayWidth / 2)
-            renderX = this.position.x - window.mapBoundX + window.displayWidth / 2;
-        if (this.position.y + this.size.y / 2 >= window.mapBoundY - window.displayHeight / 2)
-            renderY = this.position.y - window.mapBoundY - window.displayHeight / 2;
-        ctx.drawImage(this.sprite.sprite, renderX !== null && renderX !== void 0 ? renderX : this.position.x - window.displayWidth / 2, renderY !== null && renderY !== void 0 ? renderY : this.position.y - window.displayHeight / 2);
-    }
+    // public render(ctx: CanvasRenderingContext2D){
+    //     //if(!this.sprite) return
+    //     //if(!this.visible) return
+    //     //let renderX: number | null = null
+    //     //let renderY: number | null = null
+    //     //if(this.position.x + this.size.x / 2 >= window.displayWidth / 2 && this.position.x + this.size.x / 2 < window.mapBoundX - window.displayWidth / 2) renderX = -this.size.x / 2
+    //     //if(this.position.y + this.size.y / 2 >= window.displayHeight / 2 && this.position.y + this.size.y / 2 < window.mapBoundY - window.displayHeight / 2) renderY = -this.size.y / 2
+    //     //if(this.position.x + this.size.x / 2 >= window.mapBoundX - window.displayWidth / 2) renderX = this.position.x - window.mapBoundX + window.displayWidth / 2
+    //     //if(this.position.y + this.size.y / 2 >= window.mapBoundY - window.displayHeight / 2) renderY = this.position.y - window.mapBoundY - window.displayHeight / 2
+    //     //ctx.drawImage(this.sprite.sprite, renderX ?? this.position.x - Window.displayWidth / 2, renderY ?? this.position.y - Window.displayHeight / 2)
+    // }
     update() {
         super.update();
         this._oldPosition = new Vector2(this.position.x, this.position.y);

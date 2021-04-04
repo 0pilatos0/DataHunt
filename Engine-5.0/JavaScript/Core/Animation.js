@@ -32,8 +32,7 @@ export default class Animation extends Event {
         return data;
     }
     get activeSpriteIndex() {
-        var _a;
-        return (_a = this._activeSpriteIndex.id) !== null && _a !== void 0 ? _a : this._activeSpriteIndex;
+        return this._activeSpriteIndex;
     }
     get state() {
         return this._state;

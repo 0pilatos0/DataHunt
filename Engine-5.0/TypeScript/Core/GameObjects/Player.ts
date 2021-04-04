@@ -22,7 +22,7 @@ export default class Player extends GameObject{
             for (let i = 0; i < tileset.tiles2D.length; i++) {
                 let animation = new Animation()
                 for (let j = 0; j < tileset.tiles2D[i].length; j++) {
-                    animation.add(tileset.tiles2D[i][j], 200)
+                    animation.add(tileset.tiles2D[i][j].id, 200)
                 }
                 this._animationController.add(animation)
             }

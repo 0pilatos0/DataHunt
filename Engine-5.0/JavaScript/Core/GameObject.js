@@ -19,7 +19,7 @@ export default class GameObject extends Transform {
             this._spriteIndex = data.id;
             if (data.animation) {
                 this._animation = new Animation();
-                data.animation.map((a) => { var _a; (_a = this._animation) === null || _a === void 0 ? void 0 : _a.add(Tileset.tiles[a.id], a.duration); });
+                data.animation.map((a) => { var _a; (_a = this._animation) === null || _a === void 0 ? void 0 : _a.add(Tileset.tiles[a.id].id, a.duration); });
             }
             if (data.colliderType) {
                 let type = 0 /* DEFAULT */;

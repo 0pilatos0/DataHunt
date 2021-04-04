@@ -27,7 +27,7 @@ export default class GameObject extends Transform{
             this._spriteIndex = data.id
             if(data.animation){
                 this._animation = new Animation()
-                data.animation.map((a: any) => { this._animation?.add(Tileset.tiles[a.id], a.duration) })
+                data.animation.map((a: any) => { this._animation?.add(Tileset.tiles[a.id].id, a.duration) })
             }
             if(data.colliderType){
                 let type: ColliderType = ColliderType.DEFAULT

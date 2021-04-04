@@ -6,7 +6,7 @@ import Window from "./Window.js";
 
 export default class Sprite extends Event{
     public static sprites: Array<Sprite> = []
-    private _sprite?: HTMLCanvasElement
+    private _sprite: HTMLCanvasElement = document.createElement('canvas')
 
     constructor(path: string, size: Vector2 = new Vector2(Window.spriteSize, Window.spriteSize)){
         super()

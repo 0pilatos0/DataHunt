@@ -8,18 +8,20 @@ export default class Tileset extends Event {
     constructor(data) {
         super();
         this._tiles = [];
-        new Img(data.image).on('load', (img) => {
+        this._rows = 0;
+        this._columns = 0;
+        new Img(data.image || data).on('load', (img) => {
             let tileWidth = Window.spriteSize / Window.spriteScaleFactor;
             let tileHeight = Window.spriteSize / Window.spriteScaleFactor;
-            let columns = img.width / tileWidth;
-            let rows = img.height / tileHeight;
-            let totalTiles = columns * rows;
+            this._columns = img.width / tileWidth;
+            this._rows = img.height / tileHeight;
+            let totalTiles = this._columns * this._rows;
             this._tiles = new Array(totalTiles).fill(-1, 0, totalTiles);
             let offset = Tileset.tiles.length;
             Tileset.tiles = Tileset.tiles.concat(new Array(totalTiles).fill(-1, 0, totalTiles));
             for (let t = 0; t < totalTiles; t++) {
                 new Canvas(new Vector2(tileWidth, tileHeight)).on('load', (canvas) => {
-                    canvas.ctx.drawImage(img, -(t % columns) * tileWidth, -Math.floor(t / columns) * tileHeight);
+                    canvas.ctx.drawImage(img, -(t % this._columns) * tileWidth, -Math.floor(t / this._columns) * tileHeight);
                     new Sprite(canvas.element.toDataURL('image/png'), new Vector2(Window.spriteSize, Window.spriteSize)).on('load', (spriteIndex) => {
                         var _a;
                         this._tiles[t] = { id: spriteIndex };
@@ -60,6 +62,17 @@ export default class Tileset extends Event {
                 });
             }
         });
+    }
+    get tiles() {
+        return this._tiles;
+    }
+    get tiles2D() {
+        let rtn = [];
+        for (let y = 0; y < this._rows; y++) {
+            rtn.push([]);
+            rtn[y] = this._tiles.slice(y * this._columns, ((y + 1) * this._columns));
+        }
+        return rtn;
     }
 }
 Tileset.tiles = [];

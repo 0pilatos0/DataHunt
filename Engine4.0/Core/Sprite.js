@@ -6,6 +6,7 @@ import Window from "./Window.js";
 export default class Sprite extends Event {
     constructor(path, size = new Vector2(Window.spriteSize, Window.spriteSize)) {
         super();
+        this._sprite = document.createElement('canvas');
         new Img(path).on('load', (img) => {
             new Canvas(new Vector2(size.x, size.y)).on('load', (canvas) => {
                 canvas.ctx.drawImage(img, 0, 0, size.x, size.y);

@@ -1,29 +1,31 @@
 import Canvas from "./Canvas.js";
 import Event from "./Event.js";
 import Img from "./Img.js";
-import IDictionary from "./Interfaces/IDictionary.js";
 import Sprite from "./Sprite.js";
 import Vector2 from "./Vector2.js";
 import Window from "./Window.js";
+import IDictionary from "./Interfaces/IDictionary.js";
 
 export default class Tileset extends Event{
-    public static tiles: Array<IDictionary>  = []
-    private _tiles: Array<IDictionary> = []
+    public static tiles: IDictionary = []
+    private _tiles: IDictionary = []
+    private _rows: number = 0
+    private _columns: number = 0
 
     constructor(data: string | any){
         super()
-        new Img(data.image).on('load', (img: HTMLImageElement) => {
+        new Img(data.image || data).on('load', (img: HTMLImageElement) => {
             let tileWidth: number = Window.spriteSize / Window.spriteScaleFactor
             let tileHeight: number = Window.spriteSize / Window.spriteScaleFactor
-            let columns: number = img.width / tileWidth
-            let rows: number = img.height / tileHeight
-            let totalTiles: number = columns * rows
+            this._columns = img.width / tileWidth
+            this._rows = img.height / tileHeight
+            let totalTiles: number = this._columns * this._rows
             this._tiles = new Array(totalTiles).fill(-1, 0, totalTiles)
             let offset: number = Tileset.tiles.length
             Tileset.tiles = Tileset.tiles.concat(new Array(totalTiles).fill(-1, 0, totalTiles))
             for (let t = 0; t < totalTiles; t++) {
                 new Canvas(new Vector2(tileWidth, tileHeight)).on('load', (canvas: Canvas) => {
-                    canvas.ctx.drawImage(img, -(t%columns) * tileWidth, -Math.floor(t/columns) * tileHeight)
+                    canvas.ctx.drawImage(img, -(t%this._columns) * tileWidth, -Math.floor(t/this._columns) * tileHeight)
                     new Sprite(canvas.element.toDataURL('image/png'), new Vector2(Window.spriteSize, Window.spriteSize)).on('load', (spriteIndex: number) => {
                         this._tiles[t] = {id:spriteIndex}
                         Tileset.tiles[offset + t] = {id:spriteIndex}
@@ -58,5 +60,18 @@ export default class Tileset extends Event{
                 })
             }
         })
+    }
+
+    get tiles(){
+        return this._tiles
+    }
+
+    get tiles2D(){
+        let rtn = []
+        for (let y = 0; y < this._rows; y++) {
+            rtn.push([])
+            rtn[y] = this._tiles.slice(y*this._columns, ((y+1)*this._columns))
+        }
+        return rtn
     }
 }

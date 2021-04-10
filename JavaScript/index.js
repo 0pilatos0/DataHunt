@@ -1,16 +1,18 @@
 let { WebServer } = require('./classes/WebServer.js')
 let server = new WebServer()
 
-server.on('/', (req, res, html) => {
-    html = html.replace('{{PIZZA}}', "Frietjes")
-    res.end(html)
+server.on('/', (req, res) => {
+    //req.html = req.html.replace('{{PIZZA}}', req.data.pizza)
+    //req.vars.PIZZA = req.data.pizza
+    //console.log(req.vars)
 })
+
 server.on('/pizza', (req, res, html) => {
     
 })
 
-server.post('/', (req, res, data) => {
-    console.log(data)
-    res.end(JSON.stringify(data))
+server.post('/', (req, res) => {
+    console.log(req.data)
 })
+
 server.run()

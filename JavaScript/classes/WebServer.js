@@ -22,9 +22,16 @@ module.exports.WebServer = class{
             //res.setHeader("Access-Control-Allow-Origin", "*")
             if(req.url.includes('.html') || !req.url.includes('.')){
                 let url = req.url.substring(0, req.url.indexOf('?') > -1 ? req.url.indexOf('?') : req.url.length)
-                let args = req.url.substring(req.url.indexOf('?') > -1 ? req.url.indexOf('?') : req.url.length, req.url.length)
+                let args = req.url.substring(req.url.indexOf('?') > -1 ? req.url.indexOf('?') + 1 : req.url.length, req.url.length).split("&")
+                args.map(a => {
+                    args.splice(args.indexOf(a), 1)
+                    a = decodeURI(a).split('=')
+                    args[a[0]] = a[1]
+                })
                 let pathUrl = req.url.substring(1, req.url.indexOf('?') > -1 ? req.url.indexOf('?') : req.url.length)
                 if(pathUrl === "") pathUrl = 'index.html'
+                url = url.replace('.html', '')
+                if(url === "/index") url = '/'
                 if(!pathUrl.includes('.html')) pathUrl = `${pathUrl}.html`
                 if(req.method == "GET"){
                     let route = this._routes.find(r => r.url === url)
@@ -33,8 +40,17 @@ module.exports.WebServer = class{
                         if(fs.existsSync(htmlPath)){
                             fs.readFile(htmlPath, "UTF-8", (err, html) => {
                                 res.writeHead(200, {"Content-Type": "text/html"})
-                                if(route.callback) route.callback(req, res, html)
-                                res.end(html)
+                                req.data = args
+                                req.vars = []
+                                html.match(/{{\w*}}/g).map(v => {
+                                    req.vars[v.replace(/[{}]/g, "")] = v
+                                })
+                                req.html = html
+                                if(route.callback) route.callback(req, res)
+                                html.match(/{{\w*}}/g).map(v => {
+                                    req.html = req.html.replace(v, req.vars[v.replace(/[{}]/g, "")])
+                                })
+                                res.end(req.html)
                             })
                         }
                         else{
@@ -43,9 +59,7 @@ module.exports.WebServer = class{
                         }
                     } 
                     else{
-                        res.statusCode=302
-                        res.setHeader('Location', `/404?page=${pathUrl}${args}`)
-                        res.end()
+                        this.error(req, res)
                     }
                 }
                 else if(req.method == "POST"){
@@ -58,24 +72,20 @@ module.exports.WebServer = class{
     
                         req.on('end', () => {
                             res.writeHead(200, {"Content-Type": "application/json"})
-                            body = qs.parse(body)
-                            post.callback(req, res, body)
-                            res.end()
+                            req.data = qs.parse(body)
+                            post.callback(req, res)
+                            res.end(JSON.stringify(req.data))
                         })
                     }
                     else{
-                        res.statusCode=302
-                        res.setHeader('Location', `/404?page=${pathUrl}${args}`)
-                        res.end()
+                        this.error(req, res)
                     }
                 }
                 else{
-                    res.statusCode=302
-                    res.setHeader('Location', `/404?page=${pathUrl}${args}`)
-                    res.end()
+                    this.error(req, res)
                 }
                 // console.log(url)
-                // console.log(args)
+                //console.log(args)
                 // console.log(pathUrl)
             }
             if(req.method == "GET" && !req.url.includes('.html') && req.url.includes('.')){
@@ -90,11 +100,7 @@ module.exports.WebServer = class{
                     fileStream.pipe(res)
                 }
                 else{
-                    let url = req.url.substring(1, req.url.indexOf('?') > -1 ? req.url.indexOf('?') : req.url.length)
-                    let args = req.url.substring(req.url.indexOf('?') > -1 ? req.url.indexOf('?') : req.url.length, req.url.length)
-                    res.statusCode=302
-                    res.setHeader('Location', `/404?page=${url}${args}`)
-                    res.end()
+                    this.error(req, res)
                 }
             }
         }
@@ -114,5 +120,11 @@ module.exports.WebServer = class{
         http.createServer(this._requestListener).listen(port, 'localhost', () => {
             console.log(`Listening on http://localhost:${port}`)
         })
+    }
+
+    error(req, res){
+        res.statusCode=302
+        res.setHeader('Location', `/404`)
+        res.end()
     }
 }

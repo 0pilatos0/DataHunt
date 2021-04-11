@@ -9,7 +9,7 @@ module.exports.WebServer = class{
 
     _server
     _publicPath = path.join(__dirname, '../public')
-    _routes = [{url:'/404'}]
+    _gets = [{url:'/404'}]
     _posts = []
     _requestListener = (req, res) => {}
 
@@ -22,39 +22,60 @@ module.exports.WebServer = class{
             //res.setHeader("Access-Control-Allow-Origin", "*")
             if(req.url.includes('.html') || !req.url.includes('.')){
                 let url = req.url.substring(0, req.url.indexOf('?') > -1 ? req.url.indexOf('?') : req.url.length)
-                let args = req.url.substring(req.url.indexOf('?') > -1 ? req.url.indexOf('?') + 1 : req.url.length, req.url.length).split("&")
+                let args = req.url.indexOf('?') > -1 ? req.url.substring(req.url.indexOf('?') + 1, req.url.length).split("&") : []
+                let tArgs = []
                 args.map(a => {
-                    args.splice(args.indexOf(a), 1)
                     a = decodeURI(a).split('=')
-                    args[a[0]] = a[1]
+                    tArgs[a[0]] = a[1]
                 })
+                args = tArgs
                 let pathUrl = req.url.substring(1, req.url.indexOf('?') > -1 ? req.url.indexOf('?') : req.url.length)
                 if(pathUrl === "") pathUrl = 'index.html'
                 url = url.replace('.html', '')
                 if(url === "/index") url = '/'
                 if(!pathUrl.includes('.html')) pathUrl = `${pathUrl}.html`
                 if(req.method == "GET"){
-                    let route = this._routes.find(r => r.url === url)
-                    if(route){
+                    let get = this._gets.find(r => r.url === url)
+                    if(typeof get === "undefined") {
+                        get = this._gets.filter(r => url.includes(r.url))
+                        let tGet = {url:''}
+                        get.map(g => {
+                            if(g.url.length > tGet.url.length) tGet = g
+                        })
+                        get = tGet
+                    }
+                    if(get){
+                        let value = url.replace(get.url, '')
+                        let baseUrlPath = get.url
+                        if(!baseUrlPath.includes('.html')) baseUrlPath = `${baseUrlPath}.html`
+                        if(baseUrlPath.includes('/.html')) baseUrlPath = baseUrlPath.replace('/.html', '.html')
                         let htmlPath = path.join(this._publicPath, `pages/${pathUrl}`)
-                        if(fs.existsSync(htmlPath)){
+                        if(fs.existsSync(htmlPath) || fs.existsSync(baseUrlPath)){
                             fs.readFile(htmlPath, "UTF-8", (err, html) => {
                                 res.writeHead(200, {"Content-Type": "text/html"})
                                 req.data = args
                                 req.vars = []
-                                html.match(/{{\w*}}/g).map(v => {
-                                    req.vars[v.replace(/[{}]/g, "")] = v
-                                })
+                                if(html.match(/{{\w*}}/g)){
+                                    html.match(/{{\w*}}/g).map(v => {
+                                        req.vars[v.replace(/[{}]/g, "")] = v
+                                    })
+                                }
                                 req.html = html
-                                if(route.callback) route.callback(req, res)
-                                html.match(/{{\w*}}/g).map(v => {
-                                    req.html = req.html.replace(v, req.vars[v.replace(/[{}]/g, "")])
-                                })
+                                req.params[get.varname] = value
+                                if(get.callback) get.callback(req, res)
+                                if(html.match(/{{\w*}}/g)){
+                                    html.match(/{{\w*}}/g).map(v => {
+                                        req.html = req.html.replace(v, req.vars[v.replace(/[{}]/g, "")])
+                                    })
+                                }
                                 res.end(req.html)
                             })
                         }
                         else{
-                            route.callback(req, res)
+                            req.data = args
+                            req.params = []
+                            req.params[get.varname] = value
+                            get.callback(req, res)
                             res.end()
                         }
                     } 
@@ -85,7 +106,7 @@ module.exports.WebServer = class{
                     this.error(req, res)
                 }
                 // console.log(url)
-                //console.log(args)
+                // console.log(args)
                 // console.log(pathUrl)
             }
             if(req.method == "GET" && !req.url.includes('.html') && req.url.includes('.')){
@@ -106,8 +127,19 @@ module.exports.WebServer = class{
         }
     }
 
-    on(url, callback){
-        this._routes.push({url, callback})
+    get(url, callback){
+        let tUrl = ''
+        let splittedUrl = url.split('/')
+        splittedUrl.splice(0, 1)
+        let varname = ''
+        splittedUrl.map(u => {
+            if(u.match(/:(.*)/)) varname = u.match(/:(.*)/)[1]
+            u = u.replace(/:.*/, '')
+            tUrl += `/${u}`
+        })
+        url = tUrl
+        this._gets.push({url, callback, varname})
+        console.log(this._gets[this._gets.length - 1])
         //maybe add support for multiple
     }
 

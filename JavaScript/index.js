@@ -1,18 +1,26 @@
 let { WebServer } = require('./classes/WebServer.js')
 let server = new WebServer()
 
-server.on('/', (req, res) => {
-    //req.html = req.html.replace('{{PIZZA}}', req.data.pizza)
-    //req.vars.PIZZA = req.data.pizza
-    //console.log(req.vars)
+server.get('/', (req, res) => {
+    // Object.keys(req.data).map(d => {
+    //     req.vars[d] = req.data[d]
+    // })
 })
 
-server.on('/pizza', (req, res, html) => {
+server.get('/pizza', (req, res, html) => {
     
 })
 
 server.post('/', (req, res) => {
     console.log(req.data)
+})
+
+server.get(`/users/:username`, (req, res) => {
+    console.log(req.params)
+    console.log(req.data)
+    // server.on('/hallo', (req, res) => {
+    //     console.log("????")
+    // })
 })
 
 server.run()

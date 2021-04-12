@@ -65,7 +65,7 @@ module.exports.WebServer = class{
                                 if(get.callback) get.callback(req, res)
                                 if(html.match(/{{\w*}}/g)){
                                     html.match(/{{\w*}}/g).map(v => {
-                                        req.html = req.html.replace(v, req.vars[v.replace(/[{}]/g, "")])
+                                        req.html = req.html.replace(v, req.data[v.replace(/[{}]/g, "")] || v)
                                     })
                                 }
                                 res.end(req.html)

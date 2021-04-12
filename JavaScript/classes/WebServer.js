@@ -149,7 +149,7 @@ module.exports.WebServer = class{
     }
 
     run(){
-        http.createServer(this._requestListener).listen(port, 'localhost', () => {
+        http.createServer(this._requestListener).listen(port, () => {
             console.log(`Listening on http://localhost:${port}`)
         })
     }

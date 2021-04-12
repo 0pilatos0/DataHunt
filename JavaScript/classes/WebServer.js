@@ -61,7 +61,7 @@ module.exports.WebServer = class{
                                     })
                                 }
                                 req.html = html
-                                req.params[get.varname] = value
+                                if(get.varname) req.params[get.varname] = value
                                 if(get.callback) get.callback(req, res)
                                 if(html.match(/{{\w*}}/g)){
                                     html.match(/{{\w*}}/g).map(v => {
@@ -74,7 +74,7 @@ module.exports.WebServer = class{
                         else{
                             req.data = args
                             req.params = []
-                            req.params[get.varname] = value
+                            if(get.varname) req.params[get.varname] = value
                             get.callback(req, res)
                             res.end()
                         }

@@ -49,26 +49,30 @@ module.exports.WebServer = class{
                         let baseUrlPath = get.url
                         if(!baseUrlPath.includes('.html')) baseUrlPath = `${baseUrlPath}.html`
                         if(baseUrlPath.includes('/.html')) baseUrlPath = baseUrlPath.replace('/.html', '.html')
+                        baseUrlPath = path.join(this._publicPath, `pages/${baseUrlPath}`)
                         let htmlPath = path.join(this._publicPath, `pages/${pathUrl}`)
                         if(fs.existsSync(htmlPath) || fs.existsSync(baseUrlPath)){
-                            fs.readFile(htmlPath, "UTF-8", (err, html) => {
-                                res.writeHead(200, {"Content-Type": "text/html"})
-                                req.data = args
-                                req.vars = []
-                                if(html.match(/{{\w*}}/g)){
-                                    html.match(/{{\w*}}/g).map(v => {
-                                        req.vars[v.replace(/[{}]/g, "")] = v
-                                    })
-                                }
-                                req.html = html
-                                if(get.varname) req.params[get.varname] = value
-                                if(get.callback) get.callback(req, res)
-                                if(html.match(/{{\w*}}/g)){
-                                    html.match(/{{\w*}}/g).map(v => {
-                                        req.html = req.html.replace(v, req.data[v.replace(/[{}]/g, "")] || v)
-                                    })
-                                }
-                                res.end(req.html)
+                            fs.readFile(path.join(this._publicPath, `pages/template.html`), 'UTF-8', (err, template) => {
+                                fs.readFile(fs.existsSync(htmlPath) ? htmlPath : baseUrlPath, 'UTF-8', (err, html) => {
+                                    res.writeHead(200, {"Content-Type": "text/html"})
+                                    req.data = args
+                                    req.vars = []
+                                    if(html.match(/{{\w*}}/g)){
+                                        html.match(/{{\w*}}/g).map(v => {
+                                            req.vars[v.replace(/[{}]/g, "")] = v
+                                        })
+                                    }
+                                    req.html = html
+                                    req.params = []
+                                    if(get.varname) req.params[get.varname] = value
+                                    if(get.callback) get.callback(req, res)
+                                    if(html.match(/{{\w*}}/g)){
+                                        html.match(/{{\w*}}/g).map(v => {
+                                            req.html = req.html.replace(v, req.vars[v.replace(/[{}]/g, "")] || v)
+                                        })
+                                    }
+                                    res.end(template.replace('{{BODY}}', req.html))
+                                })
                             })
                         }
                         else{

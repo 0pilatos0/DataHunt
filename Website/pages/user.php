@@ -48,9 +48,11 @@ $userinfo = $_SESSION["userinfo"];
                 </div>
                 <?php
 
-                    var_dump($userinfo);
+                    
 
                     $feed = getFeed($userinfo["id"]);
+
+                    var_dump($feed);
 
                     if(!empty($feed)){
                         foreach($feed as $entry){

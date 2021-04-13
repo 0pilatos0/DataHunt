@@ -26,9 +26,11 @@ for ($i = 0; $i < count($results); $i++) {
                 <div class=\"card-body\">
                     <h5 class=\"card-title\">" . $index["name"] . "</h5>";
 
-                if ($index["friendship"] == 0) {
+                if ($index["friendship"] == 0 && $index["userA"] == $_SESSION["user"]) {
                     echo "<p class=\"card-text\">User hasn't replied to your request yet.</p>";
-                } elseif ($index["friendship"] == 1) {
+                } elseif ($index["friendship"] == 0 && $index["userB"] == $_SESSION["user"]) {
+                    echo "<p class=\"card-text\">You have an incoming friend request.</p>";
+                }elseif ($index["friendship"] == 1) {
                     echo "<p class=\"card-text\">You are friends.</p>";
                 }
                 echo "

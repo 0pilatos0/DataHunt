@@ -89,6 +89,7 @@
                     if(isset($_SESSION['user']) && !empty($_SESSION['user'])) {
                        echo '<li style="float:right"><a href="/Website/pages/logout">Logout</a></li>';
                        echo '<li style="float:right"><a href="/Website/pages/user">User</a></li>';
+                       echo '<li style="float:right"><a href="/Website/pages/friends">Friends</a></li>';
                        $_SESSION["userinfo"] = userInfo($_SESSION["user"]);
                     }else{
                         echo '                

@@ -36,3 +36,11 @@ function showCharacters($characters){
 </li>";
     }
 }
+
+function changeInput($data)
+{
+    $data = trim($data);
+    $data = stripslashes($data);
+    $data = htmlspecialchars($data);
+    return $data;
+}

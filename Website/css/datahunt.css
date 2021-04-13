@@ -113,3 +113,17 @@
     from {opacity:0.0;}
     to {opacity:70%;}
 }
+
+#friendsContainer {
+    display: grid;
+    grid-template-areas: "friends form";
+    grid-template-columns: 60% 40%;
+}
+
+#friendsMenu {
+    grid-area: friends;
+}
+
+#friendsForm {
+    grid-area: form;
+}

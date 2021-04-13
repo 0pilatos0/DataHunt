@@ -81,6 +81,7 @@ module.exports.WebServer = class{
                                         let headDataString = headData.toString()
                                         template = template.replace('{{HEAD}}', headDataString.replace(/>,</g , '>\r<'))
                                     }
+                                    else template = template.replace('{{HEAD}}', '')
                                     res.end(template.replace('{{BODY}}', req.html))
                                 })
                             })

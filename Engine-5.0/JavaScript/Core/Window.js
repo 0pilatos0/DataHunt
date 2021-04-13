@@ -21,23 +21,20 @@ export default class Window {
         });
     }
     _resize() {
-        var _a;
         this._canvas.size = new Vector2(window.innerWidth, window.innerHeight);
         let scaleFitNative = (window.innerWidth >= 1920 ? Math.max(window.innerWidth / 1920, window.innerHeight / 1080) : Math.min(window.innerWidth / 1920, window.innerHeight / 1080));
         this._displaySize = new Vector2(window.innerWidth / scaleFitNative, window.innerHeight / scaleFitNative);
-        (_a = this._canvas.ctx) === null || _a === void 0 ? void 0 : _a.setTransform(scaleFitNative, 0, 0, scaleFitNative, window.innerWidth / 2, window.innerHeight / 2);
-        if (this._canvas.ctx)
-            this._canvas.ctx.imageSmoothingEnabled = scaleFitNative < 1;
+        this._canvas.setTransform(scaleFitNative, 0, 0, scaleFitNative, window.innerWidth / 2, window.innerHeight / 2);
+        this._canvas.imageSmoothingEnabled = scaleFitNative < 1;
         Scene.scenes[this._sceneIndex].camera.size = this._displaySize;
     }
     _render() {
-        var _a, _b;
         window.requestAnimationFrame(this._render.bind(this));
-        (_a = this._canvas.ctx) === null || _a === void 0 ? void 0 : _a.clearRect(-this._displaySize.x / 2, -this._displaySize.y / 2, this._displaySize.x, this._displaySize.y);
-        if (this._canvas.ctx)
-            this._canvas.ctx.fillStyle = "#333";
-        (_b = this._canvas.ctx) === null || _b === void 0 ? void 0 : _b.fillRect(-this._displaySize.x / 2, -this._displaySize.y / 2, this._displaySize.x, this._displaySize.y);
-        Scene.scenes[this._sceneIndex].render(this._canvas.ctx);
+        this._canvas.clearRect(new Vector2(-this._displaySize.x / 2, -this._displaySize.y / 2), this.displaySize);
+        if (this._canvas)
+            this._canvas.fillStyle = "#333";
+        this._canvas.fillRect(new Vector2(-this._displaySize.x / 2, -this._displaySize.y / 2), this.displaySize);
+        Scene.scenes[this._sceneIndex].render(this._canvas);
     }
     _update() {
         let now = Date.now();

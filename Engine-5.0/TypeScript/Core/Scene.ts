@@ -1,4 +1,5 @@
 import Camera from "./Camera.js"
+import Canvas from "./Canvas.js"
 import GameObjectType from "./Enums/GameObjectType.js"
 import Event from "./Event.js"
 import GameObject from "./GameObject.js"
@@ -31,7 +32,7 @@ export default class Scene extends Event{
         })
     }
 
-    public render(ctx: CanvasRenderingContext2D | null){
+    public render(canvas: Canvas){
         //TODO fix rendering
         //TODO fix quality of images with black lines
         let renderPosition = new Vector2(0, 0)
@@ -44,7 +45,7 @@ export default class Scene extends Event{
         Camera.cameras[this._cameraIndex].position = renderPosition
         this._gameObjects.map(g => {
             let go = GameObject.gameObjects[g]
-            go.render(ctx)
+            go.render(canvas)
         })
     }
 

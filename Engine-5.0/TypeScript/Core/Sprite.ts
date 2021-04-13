@@ -13,7 +13,7 @@ export default class Sprite extends Event{
         super()
         this._sprite = new Canvas(size)
         new Image(src).on('load', (img: HTMLImageElement) => { 
-            this._sprite.ctx?.drawImage(img, 0, 0, size.x, size.y)
+            this._sprite.drawImage(img, new Vector2(0, 0), size)
             Sprite.sprites.push(this)
             this.trigger('load', Sprite.sprites.indexOf(this))
         })

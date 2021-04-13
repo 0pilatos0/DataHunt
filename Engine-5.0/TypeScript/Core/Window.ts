@@ -30,17 +30,17 @@ export default class Window{
         this._canvas.size = new Vector2(window.innerWidth, window.innerHeight)
         let scaleFitNative = (window.innerWidth >= 1920 ? Math.max(window.innerWidth / 1920, window.innerHeight / 1080) : Math.min(window.innerWidth / 1920, window.innerHeight / 1080))
         this._displaySize = new Vector2(window.innerWidth / scaleFitNative, window.innerHeight / scaleFitNative)
-        this._canvas.ctx?.setTransform(scaleFitNative, 0, 0, scaleFitNative, window.innerWidth / 2, window.innerHeight / 2)
-        if(this._canvas.ctx) this._canvas.ctx.imageSmoothingEnabled = scaleFitNative < 1
+        this._canvas.setTransform(scaleFitNative, 0, 0, scaleFitNative, window.innerWidth / 2, window.innerHeight / 2)
+        this._canvas.imageSmoothingEnabled = scaleFitNative < 1
         Scene.scenes[this._sceneIndex].camera.size = this._displaySize
     }
 
     private _render(){
         window.requestAnimationFrame(this._render.bind(this))
-        this._canvas.ctx?.clearRect(-this._displaySize.x / 2, -this._displaySize.y / 2, this._displaySize.x, this._displaySize.y)
-        if(this._canvas.ctx) this._canvas.ctx.fillStyle = "#333"
-        this._canvas.ctx?.fillRect(-this._displaySize.x / 2, -this._displaySize.y / 2, this._displaySize.x, this._displaySize.y)
-        Scene.scenes[this._sceneIndex].render(this._canvas.ctx)
+        this._canvas.clearRect(new Vector2(-this._displaySize.x / 2, -this._displaySize.y / 2), this.displaySize)
+        if(this._canvas) this._canvas.fillStyle = "#333"
+        this._canvas.fillRect(new Vector2(-this._displaySize.x / 2, -this._displaySize.y / 2), this.displaySize)
+        Scene.scenes[this._sceneIndex].render(this._canvas)
     }
 
     private _update(){

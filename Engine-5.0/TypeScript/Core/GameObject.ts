@@ -1,4 +1,5 @@
 import Animation from "./Animation.js";
+import Canvas from "./Canvas.js";
 import Collider from "./Collider.js";
 import BoxCollider from "./Colliders/BoxCollider.js";
 import AnimationState from "./Enums/AnimationState.js";
@@ -56,10 +57,10 @@ export default class GameObject extends Transform{
         this.trigger('load', this, keepTrying)
     }
 
-    public render(ctx: CanvasRenderingContext2D | null){
-        if(this._visible && ctx){
+    public render(canvas: Canvas){
+        if(this._visible){
             if(this._animation) this._spriteIndex = this._animation.activeSpriteIndex
-            if(this._spriteIndex > -1) ctx.drawImage(Sprite.sprites[this._spriteIndex].sprite, this.position.x - Window.active.displaySize.x / 2 - Window.active.scene.camera.position.x, this.position.y - Window.active.displaySize.y / 2 - Window.active.scene.camera.position.y)
+            if(this._spriteIndex > -1) canvas.drawImage(Sprite.sprites[this._spriteIndex].sprite, new Vector2(this.position.x - Window.active.displaySize.x / 2 - Window.active.scene.camera.position.x, this.position.y - Window.active.displaySize.y / 2 - Window.active.scene.camera.position.y))
         }
     }
 

@@ -49,12 +49,12 @@ export default class GameObject extends Transform {
         GameObject.gameObjects.push(this);
         this.trigger('load', this, keepTrying);
     }
-    render(ctx) {
-        if (this._visible && ctx) {
+    render(canvas) {
+        if (this._visible) {
             if (this._animation)
                 this._spriteIndex = this._animation.activeSpriteIndex;
             if (this._spriteIndex > -1)
-                ctx.drawImage(Sprite.sprites[this._spriteIndex].sprite, this.position.x - Window.active.displaySize.x / 2 - Window.active.scene.camera.position.x, this.position.y - Window.active.displaySize.y / 2 - Window.active.scene.camera.position.y);
+                canvas.drawImage(Sprite.sprites[this._spriteIndex].sprite, new Vector2(this.position.x - Window.active.displaySize.x / 2 - Window.active.scene.camera.position.x, this.position.y - Window.active.displaySize.y / 2 - Window.active.scene.camera.position.y));
         }
     }
     update() {

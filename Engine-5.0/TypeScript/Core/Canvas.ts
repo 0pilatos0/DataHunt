@@ -13,10 +13,6 @@ export default class Canvas extends Event{
         this.trigger('load', this, keepGoing)
     }
 
-    get ctx(){
-        return this._ctx
-    }
-
     set size(size: Vector2){
         this._element.width = size.x
         this._element.height = size.y
@@ -24,5 +20,29 @@ export default class Canvas extends Event{
 
     get element(){
         return this._element
+    }
+
+    drawImage(image: CanvasImageSource, position: Vector2, size: Vector2 = new Vector2(image.width.toString(), image.height.toString())){
+        this._ctx?.drawImage(image, position.x, position.y, size.x, size.y)
+    }
+
+    setTransform(a: number, b: number, c: number, d: number, e: number, f: number){
+        this._ctx?.setTransform(a, b, c, d, e, f)
+    }
+
+    clearRect(position: Vector2, size: Vector2){
+        this._ctx?.clearRect(position.x, position.y, size.x, size.y)
+    }
+
+    set fillStyle(color: string){
+        if(this._ctx) this._ctx.fillStyle = color
+    }
+
+    fillRect(position: Vector2, size: Vector2){
+        this._ctx?.fillRect(position.x, position.y, size.x, size.y)
+    }
+
+    set imageSmoothingEnabled(bool: boolean){
+        if(this._ctx) this._ctx.imageSmoothingEnabled = bool
     }
 }

@@ -2,8 +2,8 @@ import Event from "./Event.js";
 export default class Vector2 extends Event {
     constructor(x, y) {
         super();
-        this._x = x;
-        this._y = y;
+        this._x = +x;
+        this._y = +y;
     }
     get x() {
         return this._x;

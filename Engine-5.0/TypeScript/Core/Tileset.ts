@@ -25,7 +25,7 @@ export default class Tileset extends Event{
             Tileset.tiles = Tileset.tiles.concat(new Array(totalTiles).fill(-1, 0, totalTiles))
             for (let t = 0; t < totalTiles; t++) {
                 new Canvas(new Vector2(tileSize.x, tileSize.y), true).on('load', (canvas: Canvas) => {
-                    canvas.ctx?.drawImage(img, -(t%this._columns) * tileSize.x, -Math.floor(t/this._columns) * tileSize.y)
+                    canvas.drawImage(img, new Vector2(-(t%this._columns) * tileSize.x, -Math.floor(t/this._columns) * tileSize.y))
                     new Sprite(canvas.element.toDataURL('image/png')).on('load', (spriteIndex: number) => {
                         this._tiles[t] = {id:spriteIndex}
                         Tileset.tiles[offset + t] = {id:spriteIndex}

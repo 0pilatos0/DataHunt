@@ -8,8 +8,7 @@ export default class Sprite extends Event {
         super();
         this._sprite = new Canvas(size);
         new Image(src).on('load', (img) => {
-            var _a;
-            (_a = this._sprite.ctx) === null || _a === void 0 ? void 0 : _a.drawImage(img, 0, 0, size.x, size.y);
+            this._sprite.drawImage(img, new Vector2(0, 0), size);
             Sprite.sprites.push(this);
             this.trigger('load', Sprite.sprites.indexOf(this));
         });

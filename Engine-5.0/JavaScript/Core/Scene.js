@@ -25,7 +25,7 @@ export default class Scene extends Event {
             });
         });
     }
-    render(ctx) {
+    render(canvas) {
         //TODO fix rendering
         //TODO fix quality of images with black lines
         let renderPosition = new Vector2(0, 0);
@@ -42,7 +42,7 @@ export default class Scene extends Event {
         Camera.cameras[this._cameraIndex].position = renderPosition;
         this._gameObjects.map(g => {
             let go = GameObject.gameObjects[g];
-            go.render(ctx);
+            go.render(canvas);
         });
     }
     update() {

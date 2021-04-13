@@ -4,10 +4,10 @@ export default class Vector2 extends Event{
     private _x: number;
     private _y: number;
 
-    constructor(x: number, y: number) {
+    constructor(x: number | string, y: number | string) {
         super()
-        this._x = x;
-        this._y = y;
+        this._x = +x;
+        this._y = +y;
     }
 
     public get x() {

@@ -75,29 +75,46 @@
 </style>
 
 <body>
+<?php 
+$get_url = $_SERVER['REQUEST_URI'];
+$pattern = '([^\/]+$)';
+// Works in PHP 5.2.2 and later.
+preg_match($pattern, $get_url, $matches);
+$url = $matches[0];
+if ($url === null or $url === 'index.php') {
+    $url = "home";
+}
+?>
+
 
     <div class="container">
         <nav class="navigation">
             <h1 class="bold">DATAHUNT</h1>
             <ul>
-                <li><a class="active" href="/index.php">Home</a></li>
-                <li><a href="/Website/pages/updates">Updates</a></li>
+                <li><a id="home"href="/index.php">Home</a></li>
+                <li><a id="updates" href="/Website/pages/updates">Updates</a></li>
                 <?php
                     session_start();
                 require $_SERVER["DOCUMENT_ROOT"] . "/Website/php/database.php";
                 require $_SERVER["DOCUMENT_ROOT"] . "/Website/php/functions.php";
                     if(isset($_SESSION['user']) && !empty($_SESSION['user'])) {
-                       echo '<li style="float:right"><a href="/Website/pages/logout">Logout</a></li>';
-                       echo '<li style="float:right"><a href="/Website/pages/user">User</a></li>';
-                       echo '<li style="float:right"><a href="/Website/pages/friends">Friends</a></li>';
+                       echo '<li style="float:right"><a id="logout" href="/Website/pages/logout">Logout</a></li>';
+                       echo '<li style="float:right"><a id="user" href="/Website/pages/user">User</a></li>';
+                       echo '<li style="float:right"><a id="friends" href="/Website/pages/friends">Friends</a></li>';
                        $_SESSION["userinfo"] = userInfo($_SESSION["user"]);
                     }else{
                         echo '                
-                        <li style="float:right"><a href="/Website/pages/register">Registration</a></li>
-                        <li style="float:right"><a href="/Website/pages/login">Login</a></li>';
+                        <li style="float:right"><a id="register" href="/Website/pages/register">Registration</a></li>
+                        <li style="float:right"><a id="login" href="/Website/pages/login">Login</a></li>';
                     }
                 ?>
                 <li style="float:right"><a href="#news">Game</a></li>
 
             </ul>
         </nav>
+
+        <script defer>
+    
+    var element = document.getElementById("<?php echo $url; ?>");
+    element.classList.add("active");
+</script>

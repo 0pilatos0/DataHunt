@@ -73,14 +73,14 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
             echo "you are already friends with this users";
             if ($friendship["friendship"] == 0 && $friendship["userA"] == $friendId) {
                 updateFriendship($friendship["id"], 1);
-                echo "<script>location = \"http://datahunt.duckdns.org/Website/pages/login\";</script>";
+                echo "<script>location = \"http://datahunt.duckdns.org/Website/pages/friends\";</script>";
             }
         } elseif ($friendId === false) {
             echo "user doesn't exist";
         } else {
             echo "adding you as a friend right now :)";
             setFriendship($_SESSION["user"], $friendId[0], 0);
-            echo "<script>location = \"http://datahunt.duckdns.org/Website/pages/login\";</script>";
+            echo "<script>location = \"http://datahunt.duckdns.org/Website/pages/friends\";</script>";
         }
     }
 }

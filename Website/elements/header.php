@@ -84,7 +84,6 @@ $url = $matches[0];
 if ($url === null or $url === 'index.php') {
     $url = "home";
 }
-var_dump($url);
 ?>
 
 

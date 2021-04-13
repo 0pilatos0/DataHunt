@@ -48,19 +48,22 @@ $userinfo = $_SESSION["userinfo"];
                 </div>
                 <?php
 
-                try{
+
                     $feed = getFeed($userinfo["id"]);
 
-                    foreach($feed as $entry){
-                        echo "<div>
+                    if(!empty($feed)){
+                        foreach($feed as $entry){
+                            echo "<div>
                             <p style='font-size: 20px'>{$entry["message"]})</p>
                             <p>{$entry["time"]}</p>
                           </div>";
+                        }
                     }
-                }
-                catch (Exception $e){
-                    echo "Its quite empty here";
-                }
+                    else{
+                        echo "<i>Its quite empty here</i>";
+                    }
+
+
 
 
                 ?>

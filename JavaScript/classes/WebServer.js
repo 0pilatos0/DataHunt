@@ -72,7 +72,6 @@ module.exports.WebServer = class{
                                         })
                                     }
                                     if(req.html.match(/<\bscript.*|<\blink.*|<\bstyle.*/g)){
-                                        console.log("?")
                                         let headData = html.match(/<\bscript.*|<\blink.*|<\bstyle.*/g)
                                         headData.map(h => {
                                             let lines = req.html.split('\n')

@@ -34,16 +34,12 @@ module.exports.WebServer = class{
                 if(req.method == "GET"){
                     let get = this.#gets.find(r => r.url === url)
                     if(typeof get === "undefined") {
-                        get = this.#gets.filter(r => r.url.includes(url) || url.includes(r.url))
-                        let tGet = {url:''}
-                        get.map(g => {
-                            if(url.length - g.url.length < url.length - tGet.url.length) tGet = g
-                        })
-                        get = tGet
+                        let tGet = this.#gets.filter(r => url.includes(r.url) && url.length - r.url.length == 1)
+                        if(tGet.length > 0) get = tGet[0]
+                        else get = this.#gets.filter(r => url.includes(r.url) && r.url != '')[0]
                     }
                     if(get){
-                        let values = url.replace(get.url, '').split(/\//g)
-                        values.shift()
+                        let urlValue = url.replace(get.url, '').replace(/\//g, '')
                         let baseUrlPath = get.url
                         if(!baseUrlPath.includes('.html')) baseUrlPath = `${baseUrlPath}.html`
                         if(baseUrlPath.includes('/.html')) baseUrlPath = baseUrlPath.replace('/.html', '.html')
@@ -62,9 +58,7 @@ module.exports.WebServer = class{
                                     }
                                     req.html = html
                                     req.params = []
-                                    if(get.varnames) get.varnames.map(v => {
-                                        req.params[v] = values[get.varnames.indexOf(v)]
-                                    })
+                                    if(get.varname) req.params[get.varname] = urlValue
                                     if(get.callback) get.callback(req, res)
                                     if(req.html.match(/{{\w*}}/g)){
                                         req.html.match(/{{\w*}}/g).map(v => {
@@ -90,15 +84,14 @@ module.exports.WebServer = class{
                         }
                         else{
                             req.params = []
-                            if(get.varnames) get.varnames.map(v => {
-                                req.params[v] = values[get.varnames.indexOf(v)]
-                            })
+                            if(get.varname) req.params[get.varname] = urlValue
                             if(Object.keys(req.params).length === 0) {
                                 this.#error(req, res)
+                                console.log("?"+ url)
                             }
                             else{
                                 req.data = args
-                                get.callback(req, res)
+                                if(get.callback) get.callback(req, res)
                                 res.end()
                             }
                         }
@@ -165,14 +158,14 @@ module.exports.WebServer = class{
         let tUrl = ''
         let splittedUrl = url.split(/\//g)
         splittedUrl.shift()
-        let varnames = []
+        let varname = ''
         splittedUrl.map(u => {
-            if(u.match(/:(.*)/)) varnames.push(u.match(/:(.*)/)[1])
+            if(u.match(/:(.*)/)) varname = u.match(/:(.*)/)[1]
             u = u.replace(/:.*/, '')
             tUrl += u.length > 0 ? `/${u}` : u
         })
         url = tUrl
-        this.#gets.push({url, callback, varnames})
+        this.#gets.push({url, callback, varname})
         //maybe add support for multiple
     }
 

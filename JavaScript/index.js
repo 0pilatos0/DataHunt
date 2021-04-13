@@ -24,7 +24,7 @@ server.post('/', (req, res) => {
 let r = new Router('/test', server)
 r.get('/pizza', (req, res) => {console.log("?")})
 //r.get('/', (req, res) => {console.log("???")})
-r.get('/:id/:pizza/:username', (req, res) => {console.log(req.params)})
+r.get('/:id', (req, res) => {console.log(req.params)})
 
 server.get(`/users/:username`, (req, res) => {
     req.vars.username = req.params.username

@@ -87,11 +87,16 @@ module.exports.WebServer = class{
                             })
                         }
                         else{
-                            req.data = args
                             req.params = []
                             if(get.varname) req.params[get.varname] = value
-                            get.callback(req, res)
-                            res.end()
+                            if(req.params.length === 0) {
+                                this.error(req, res)
+                            }
+                            else{
+                                req.data = args
+                                get.callback(req, res)
+                                res.end()
+                            }
                         }
                     } 
                     else{

@@ -75,16 +75,23 @@
 </style>
 
 <body>
-<?php 
-$get_url = $_SERVER['REQUEST_URI'];
-$pattern = '([^\/]+$)';
-// Works in PHP 5.2.2 and later.
-preg_match($pattern, $get_url, $matches);
-$url = $matches[0];
-if ($url === null or $url === 'index.php') {
-    $url = "home";
-}
-?>
+
+    <!-- 
+      Toekomstige mij.....
+      hier maak ik een hele coole string waarmee ik later
+      de header kan inrichten
+    -->
+
+    <?php 
+        $get_url = $_SERVER['REQUEST_URI'];
+        $pattern = '([^\/]+$)';
+        // Works in PHP 5.2.2 and later.
+        preg_match($pattern, $get_url, $matches);
+        $url = $matches[0];
+        if ($url === null or $url === 'index.php') {
+            $url = "home";
+        }
+    ?>
 
 
     <div class="container">
@@ -113,8 +120,14 @@ if ($url === null or $url === 'index.php') {
             </ul>
         </nav>
 
+        <!-- 
+            Toekomstige mij.....
+            het spijt me wat ik je aangedaan
+            maar hier krijgt de actieve pagina een speciaale
+            class in de header
+        -->
+        
         <script defer>
-    
-    var element = document.getElementById("<?php echo $url; ?>");
-    element.classList.add("active");
-</script>
+            var element = document.getElementById("<?php echo $url; ?>");
+            element.classList.add("active");
+        </script>

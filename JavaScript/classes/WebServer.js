@@ -6,19 +6,17 @@ const port = process.env.PORT || 3000
 const qs = require('querystring')
 
 module.exports.WebServer = class{
-
-    _server
-    _publicPath = path.join(__dirname, '../public')
-    _gets = [{url:'/404'}]
-    _posts = []
-    _requestListener = (req, res) => {}
+    #publicPath = path.join(__dirname, '../public')
+    #gets = [{url:'/404'}]
+    #posts = []
+    #requestListener = (req, res) => {}
 
     constructor(){ 
         this.init()
     }
 
     init(){
-        this._requestListener = (req, res) => {
+        this.#requestListener = (req, res) => {
             //res.setHeader("Access-Control-Allow-Origin", "*")
             if(req.url.includes('.html') || !req.url.includes('.')){
                 let url = req.url.substring(0, req.url.indexOf('?') > -1 ? req.url.indexOf('?') : req.url.length)
@@ -32,27 +30,27 @@ module.exports.WebServer = class{
                 let pathUrl = req.url.substring(1, req.url.indexOf('?') > -1 ? req.url.indexOf('?') : req.url.length)
                 if(pathUrl === "") pathUrl = 'index.html'
                 url = url.replace('.html', '')
-                if(url === "/index") url = '/'
                 if(!pathUrl.includes('.html')) pathUrl = `${pathUrl}.html`
                 if(req.method == "GET"){
-                    let get = this._gets.find(r => r.url === url)
+                    let get = this.#gets.find(r => r.url === url)
                     if(typeof get === "undefined") {
-                        get = this._gets.filter(r => url.includes(r.url))
+                        get = this.#gets.filter(r => r.url.includes(url) || url.includes(r.url))
                         let tGet = {url:''}
                         get.map(g => {
-                            if(g.url.length > tGet.url.length) tGet = g
+                            if(url.length - g.url.length < url.length - tGet.url.length) tGet = g
                         })
                         get = tGet
                     }
                     if(get){
-                        let value = url.replace(get.url, '')
+                        let values = url.replace(get.url, '').split(/\//g)
+                        values.shift()
                         let baseUrlPath = get.url
                         if(!baseUrlPath.includes('.html')) baseUrlPath = `${baseUrlPath}.html`
                         if(baseUrlPath.includes('/.html')) baseUrlPath = baseUrlPath.replace('/.html', '.html')
-                        baseUrlPath = path.join(this._publicPath, `pages/${baseUrlPath}`)
-                        let htmlPath = path.join(this._publicPath, `pages/${pathUrl}`)
+                        baseUrlPath = path.join(this.#publicPath, `pages/${baseUrlPath}`)
+                        let htmlPath = path.join(this.#publicPath, `pages/${pathUrl}`)
                         if(fs.existsSync(htmlPath) || fs.existsSync(baseUrlPath)){
-                            fs.readFile(path.join(this._publicPath, `pages/template.html`), 'UTF-8', (err, template) => {
+                            fs.readFile(path.join(this.#publicPath, `pages/template.html`), 'UTF-8', (err, template) => {
                                 fs.readFile(fs.existsSync(htmlPath) ? htmlPath : baseUrlPath, 'UTF-8', (err, html) => {
                                     res.writeHead(200, {"Content-Type": "text/html"})
                                     req.data = args
@@ -64,22 +62,26 @@ module.exports.WebServer = class{
                                     }
                                     req.html = html
                                     req.params = []
-                                    if(get.varname) req.params[get.varname] = value
+                                    if(get.varnames) get.varnames.map(v => {
+                                        req.params[v] = values[get.varnames.indexOf(v)]
+                                    })
                                     if(get.callback) get.callback(req, res)
                                     if(req.html.match(/{{\w*}}/g)){
                                         req.html.match(/{{\w*}}/g).map(v => {
                                             req.html = req.html.replace(v, req.vars[v.replace(/[{}]/g, "")] || v)
                                         })
                                     }
-                                    if(req.html.match(/<\bscript.*|<\blink.*|<\bstyle.*/g)){
-                                        let headData = html.match(/<\bscript.*|<\blink.*|<\bstyle.*/g)
+                                    if(req.html.match(/<\bscript.*<\/script>|<\blink.*<\/link>|<\bstyle.*<\/style>/g)){
+                                        let headData = req.html.match(/<\bscript.*<\/script>|<\blink.*<\/link>|<\bstyle.*<\/style>/g)
+                                        let lines = req.html.split('\r\n')
                                         headData.map(h => {
-                                            let lines = req.html.split('\n')
-                                            lines.splice(lines.indexOf(h) > -1 ? lines.indexOf(h) : lines.indexOf(`${h}\r`), 1)
-                                            req.html = lines.join('\n')
+                                            lines.map(l => {
+                                                lines[lines.indexOf(l)] = l.replace(h, '')
+                                            })
                                         })
-                                        let headDataString = headData.toString()
-                                        template = template.replace('{{HEAD}}', headDataString.replace(/>,</g , '>\r<'))
+                                        req.html = lines.join('\r\n')
+                                        req.html = req.html.replace(/<[\w\s\d]*><\/[\w\s\d]*>/g, '')
+                                        template = template.replace('{{HEAD}}', headData.toString().replace(/>,</g , '>\r\n<'))
                                     }
                                     else template = template.replace('{{HEAD}}', '')
                                     res.end(template.replace('{{BODY}}', req.html))
@@ -88,9 +90,11 @@ module.exports.WebServer = class{
                         }
                         else{
                             req.params = []
-                            if(get.varname) req.params[get.varname] = value
-                            if(req.params.length === 0) {
-                                this.error(req, res)
+                            if(get.varnames) get.varnames.map(v => {
+                                req.params[v] = values[get.varnames.indexOf(v)]
+                            })
+                            if(Object.keys(req.params).length === 0) {
+                                this.#error(req, res)
                             }
                             else{
                                 req.data = args
@@ -100,11 +104,11 @@ module.exports.WebServer = class{
                         }
                     } 
                     else{
-                        this.error(req, res)
+                        this.#error(req, res)
                     }
                 }
                 else if(req.method == "POST"){
-                    let post = this._posts.find(p => p.url === url)
+                    let post = this.#posts.find(p => p.url === url)
                     if(post){
                         let body = ''
                         req.on('data', (data) => {
@@ -119,19 +123,19 @@ module.exports.WebServer = class{
                         })
                     }
                     else{
-                        this.error(req, res)
+                        this.#error(req, res)
                     }
                 }
                 else{
-                    this.error(req, res)
+                    this.#error(req, res)
                 }
                 // console.log(url)
                 // console.log(args)
                 // console.log(pathUrl)
             }
             if(req.method == "GET" && !req.url.includes('.html') && req.url.includes('.')){
-                if(fs.existsSync(path.join(this._publicPath, req.url))){
-                    let fileStream = fs.createReadStream(path.join(this._publicPath, req.url), "UTF-8")
+                if(fs.existsSync(path.join(this.#publicPath, req.url))){
+                    let fileStream = fs.createReadStream(path.join(this.#publicPath, req.url), "UTF-8")
                     if(req.url.match("\.css$")){
                         res.writeHead(200, {"Content-Type": "text/css"})
                     }
@@ -141,40 +145,56 @@ module.exports.WebServer = class{
                     fileStream.pipe(res)
                 }
                 else{
-                    this.error(req, res)
+                    this.#error(req, res)
                 }
             }
         }
     }
 
+    /**
+     * 
+     * @param {string} url The url the user has to navigate towards.
+     * /test/:id: With req.params you can get the data of variable back.
+     * /test?id=123&pizza=456: With req.data you can get the data of variables back.
+     * With req.vars you can get all the settable vars inside the html page.
+     * You can set html variables with {{VARNAME}}.
+     * @param {function} callback Gets called when user navigates to url and returns request and response variables.
+     * (req, res) => {} Name of req and res can be whatever you want.
+     */
     get(url, callback){
         let tUrl = ''
-        let splittedUrl = url.split('/')
-        splittedUrl.splice(0, 1)
-        let varname = ''
+        let splittedUrl = url.split(/\//g)
+        splittedUrl.shift()
+        let varnames = []
         splittedUrl.map(u => {
-            if(u.match(/:(.*)/)) varname = u.match(/:(.*)/)[1]
+            if(u.match(/:(.*)/)) varnames.push(u.match(/:(.*)/)[1])
             u = u.replace(/:.*/, '')
-            tUrl += `/${u}`
+            tUrl += u.length > 0 ? `/${u}` : u
         })
         url = tUrl
-        this._gets.push({url, callback, varname})
-        console.log(this._gets[this._gets.length - 1])
+        this.#gets.push({url, callback, varnames})
         //maybe add support for multiple
     }
 
+    /**
+     * 
+     * @param {string} url The url the user has to post towards.
+     * With req.data you can get the data of variables back.
+     * @param {function} callback Gets called when user posts to url and returns request and response variables.
+     * (req, res) => {} Name of req and res can be whatever you want.
+     */
     post(url, callback){
-        this._posts.push({url, callback})
+        this.#posts.push({url, callback})
         //maybe add support for multiple
     }
 
     run(){
-        http.createServer(this._requestListener).listen(port, () => {
+        http.createServer(this.#requestListener).listen(port, () => {
             console.log(`Listening on http://localhost:${port}`)
         })
     }
 
-    error(req, res){
+    #error = (req, res) => {
         res.statusCode=302
         res.setHeader('Location', `/404`)
         res.end()

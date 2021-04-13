@@ -12,7 +12,7 @@ function userInfo($param){
     $stmt = $dbh->prepare("SELECT * FROM users where id = :id");
     $stmt->bindParam(':id', $param);
     $stmt->execute();
-    $result = $stmt->fetch();
+    $result = $stmt->fetch(PDO::FETCH_ASSOC);
     $dbh = null;
     return $result;
 
@@ -37,6 +37,26 @@ function characters($param){
     $dbh = null;
     return $result;
 
+}
+
+function addToFeed($id, $message){
+    $dbh = db();
+
+    $stmt = $dbh->prepare("INSERT INTO `users_feed` (user_id, message) VALUES (:id, :message)");
+    $stmt->bindParam(':id', $id);
+    $stmt->bindParam(':message', $message);
+    $stmt->execute();
+    $dbh = null;
+}
+function getFeed(){
+    $dbh = db();
+
+    $stmt = $dbh->prepare("SELECT * FROM users_feed where users_id = :id");
+    $stmt->bindParam(':id', $id);
+    $stmt->execute();
+    $result = $stmt->fetchAll();
+    $dbh = null;
+    return $result;
 }
 
 /**

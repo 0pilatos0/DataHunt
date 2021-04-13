@@ -48,26 +48,20 @@ $userinfo = $_SESSION["userinfo"];
                 </div>
                 <?php
 
+                try{
+                    $feed = getFeed($userinfo["id"]);
 
-                    $array = [];
-                    foreach(json_decode($userinfo["feed"]) as $entry){
-                        array_push($array, $entry);
+                    foreach($feed as $entry){
+                        echo "<div>
+                            <p style='font-size: 20px'>{$entry["message"]})</p>
+                            <p>{$entry["time"]}</p>
+                          </div>";
                     }
-
-                    array_push($array, json_encode("{'time': 'now', 'message': 'test message'}"));
-
-                    var_dump(json_encode($array));
-
-
-
-
-                foreach(json_decode($userinfo["feed"]) as $index){
-                    echo "<div>";
-                    foreach($index as $key => $value){
-                        echo "<p>{$value}</p>";
-                    }
-                    echo "</div>";
                 }
+                catch (Exception $e){
+                    echo "Its quite empty here";
+                }
+
 
                 ?>
             </div>

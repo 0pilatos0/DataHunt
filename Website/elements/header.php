@@ -54,7 +54,7 @@
         font-weight: bolder;
     }
 
-    li a:hover:not(.active) {
+    .navigation li a:hover:not(.active) {
         background-color: #111;
     }
 
@@ -80,8 +80,8 @@
         <nav class="navigation">
             <h1 class="bold">DATAHUNT</h1>
             <ul>
-                <li><a class="active" href="">Home</a></li>
-                <li><a href=" #home">Updates</a></li>
+                <li><a class="active" href="/index.php">Home</a></li>
+                <li><a href="/Website/pages/updates">Updates</a></li>
                 <?php
                     session_start();
                 require $_SERVER["DOCUMENT_ROOT"] . "/Website/php/database.php";

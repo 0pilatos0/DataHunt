@@ -66,21 +66,37 @@ module.exports.WebServer = class{
                                     req.params = []
                                     if(get.varname) req.params[get.varname] = value
                                     if(get.callback) get.callback(req, res)
-                                    if(html.match(/{{\w*}}/g)){
-                                        html.match(/{{\w*}}/g).map(v => {
+                                    if(req.html.match(/{{\w*}}/g)){
+                                        req.html.match(/{{\w*}}/g).map(v => {
                                             req.html = req.html.replace(v, req.vars[v.replace(/[{}]/g, "")] || v)
                                         })
                                     }
+                                    if(req.html.match(/<\bscript.*|<\blink.*|<\bstyle.*/g)){
+                                        let headData = html.match(/<\bscript.*|<\blink.*|<\bstyle.*/g)
+                                        headData.map(h => {
+                                            let lines = req.html.split('\n')
+                                            lines.splice(lines.indexOf(h) > -1 ? lines.indexOf(h) : lines.indexOf(`${h}\r`), 1)
+                                            req.html = lines.join('\n')
+                                        })
+                                        let headDataString = headData.toString()
+                                        template = template.replace('{{HEAD}}', headDataString.replace(/>,</g , '>\r<'))
+                                    }
+                                    else template = template.replace('{{HEAD}}', '')
                                     res.end(template.replace('{{BODY}}', req.html))
                                 })
                             })
                         }
                         else{
-                            req.data = args
                             req.params = []
                             if(get.varname) req.params[get.varname] = value
-                            get.callback(req, res)
-                            res.end()
+                            if(req.params.length === 0) {
+                                this.error(req, res)
+                            }
+                            else{
+                                req.data = args
+                                get.callback(req, res)
+                                res.end()
+                            }
                         }
                     } 
                     else{

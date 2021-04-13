@@ -37,6 +37,8 @@ function showCharacters($characters){
     }
 }
 
+
+
 function changeInput($data)
 {
     $data = trim($data);

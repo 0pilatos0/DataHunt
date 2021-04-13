@@ -16,17 +16,8 @@ server.post('/', (req, res) => {
 })
 
 server.get(`/users/:username`, (req, res) => {
-    // console.log(req.params)
-    // console.log(req.data)
-    // console.log(req.vars)
     req.vars.username = req.params.username
     req.vars.id = req.data.id
-    // console.log(req.params)
-    // console.log(req.data)
-    // console.log(req.vars)
-    // server.on('/hallo', (req, res) => {
-    //     console.log("????")
-    // })
 })
 
 server.run()

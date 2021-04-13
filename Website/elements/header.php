@@ -98,6 +98,18 @@
         <nav class="navigation">
             <h1 class="bold">DATAHUNT</h1>
             <ul>
+                <!-- 
+                  Toekomstige mij het spijt me wat ik je heb aangedaan maar....
+                  Vergeet als je blieft niet een id te geven aan de link met de value die het zelfde is als de filename,
+                  anders werkt de active page checker niet meer
+                             
+                                   Zijn het zelfde
+                            /¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯\                       
+                            |                           |
+                  <a id="logout" href="/Website/pages/logout">Logout</a>
+                
+                  comment gemaakt op "2021-04-13"
+                -->
                 <li><a id="home"href="/index.php">Home</a></li>
                 <li><a id="updates" href="/Website/pages/updates">Updates</a></li>
                 <?php

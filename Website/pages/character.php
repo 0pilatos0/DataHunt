@@ -15,4 +15,4 @@ if(empty($_SESSION["user"])){
     <div>
         //this characters achievement list
     </div>
-<?php include '../elements/header.php'; ?>
+<?php include '../elements/footer.php'; ?>

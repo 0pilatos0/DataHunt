@@ -48,6 +48,7 @@ $userinfo = $_SESSION["userinfo"];
                 </div>
                 <?php
 
+                    var_dump($userinfo);
 
                     $feed = getFeed($userinfo["id"]);
 

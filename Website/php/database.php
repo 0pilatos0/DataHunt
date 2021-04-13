@@ -54,7 +54,7 @@ function getFeed($id){
     $stmt = $dbh->prepare("SELECT * FROM users_feed where user_id = :id");
     $stmt->bindParam(':id', $id);
     $stmt->execute();
-    $result = $stmt->fetchAll();
+    $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
     $dbh = null;
     return $result;
 }

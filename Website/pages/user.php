@@ -48,16 +48,12 @@ $userinfo = $_SESSION["userinfo"];
                 </div>
                 <?php
 
-                    
-
                     $feed = getFeed($userinfo["id"]);
-
-                    var_dump($feed);
 
                     if(!empty($feed)){
                         foreach($feed as $entry){
                             echo "<div>
-                            <p style='font-size: 20px'>{$entry["message"]})</p>
+                            <p style='font-size: 20px'>{$entry["message"]}</p>
                             <p>{$entry["time"]}</p>
                           </div>";
                         }
@@ -65,9 +61,6 @@ $userinfo = $_SESSION["userinfo"];
                     else{
                         echo "<i>Its quite empty here</i>";
                     }
-
-
-
 
                 ?>
             </div>

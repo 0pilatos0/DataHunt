@@ -51,7 +51,7 @@ function addToFeed($id, $message){
 function getFeed(){
     $dbh = db();
 
-    $stmt = $dbh->prepare("SELECT * FROM users_feed where users_id = :id");
+    $stmt = $dbh->prepare("SELECT * FROM users_feed where user_id = :id");
     $stmt->bindParam(':id', $id);
     $stmt->execute();
     $result = $stmt->fetchAll();

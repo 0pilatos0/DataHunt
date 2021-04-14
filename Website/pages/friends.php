@@ -83,7 +83,6 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
         }
     } elseif ($_POST["btnradio"] == "AcceptRequest") {
         updateFriendship($_POST['id'], 1);
-        echo "accepted your request";
 
         $results = getFriendship(null, null, $_POST['id']);
         if ($results["userA"] == $_SESSION['user']) {
@@ -94,9 +93,10 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
 
         addToFeed($_SESSION["user"], $user[0] . " and " . getUsername($friend)[0] . " are now friends!");
         addToFeed($friend, getUsername($friend)[0] . " and " . $user[0] . " are now friends!");
+        echo "<script>location.reload();</script>";
     } elseif ($_POST["btnradio"] == "DeclineRequest") {
         deleteFriendship($_POST['id']);
-        echo "declined the friend request";
+        echo "<script>location.reload();</script>";
     }
 }
 ?>

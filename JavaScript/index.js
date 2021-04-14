@@ -21,14 +21,22 @@ server.post('/', (req, res) => {
     console.log(req.data)
 })
 
+server.get('/:id', (req, res) => {
+    console.log(req.params)
+})
+
 let r = new Router('/test', server)
 r.get('/pizza', (req, res) => {console.log("?")})
 //r.get('/', (req, res) => {console.log("???")})
-r.get('/:id', (req, res) => {console.log(req.params)})
+r.get('/:id/:iegni/:username/:pizza', (req, res) => {console.log(req.params)})
 
 server.get(`/users/:username`, (req, res) => {
-    req.vars.username = req.params.username
-    req.vars.id = req.data.id
+    // req.vars.username = req.params.username
+    // req.vars.id = req.data.id
+})
+
+server.get('/users/:username/:name/:id', (req, res) => {
+    console.log(req.params)
 })
 
 server.run()

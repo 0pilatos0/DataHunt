@@ -32,20 +32,34 @@ module.exports.WebServer = class{
                 url = url.replace('.html', '')
                 if(!pathUrl.includes('.html')) pathUrl = `${pathUrl}.html`
                 if(req.method == "GET"){
-                    let get = this.#gets.find(r => r.url === url)
-                    if(typeof get === "undefined") {
-                        let tGet = this.#gets.filter(r => url.includes(r.url) && url.length - r.url.length == 1)
-                        if(tGet.length > 0) get = tGet[0]
-                        else get = this.#gets.filter(r => url.includes(r.url) && r.url != '')[0]
-                    }
+                    let urls = url.substring(1, url.length).split('/')
+                    let get
+                    this.#gets.map(g => {
+                        let gUrls = g.url.substring(1, g.url.length).split('/')
+                        if(gUrls.length === urls.length){
+                            let rightUrl = gUrls.every(u => {
+                                gUrls[gUrls.indexOf(u)] = "."
+                                if(u === '*') u = urls[urls.indexOf(u)]
+                                return gUrls[gUrls.indexOf(u)] === urls[gUrls.indexOf(u)]
+                            })
+                            if(rightUrl === true) get = g
+                        }
+                    })
                     if(get){
-                        let urlValue = url.replace(get.url, '').replace(/\//g, '')
+                        req.params = {}
+                        let tUrl = get.url.substring(1, get.url.length).split('/')
+                        while(tUrl.indexOf('*') > -1){
+                            let index = tUrl.indexOf('*')
+                            let varObject = Object.values(get.vars).find(v => {
+                                if(v.index == index) return v
+                            })
+                            req.params[varObject.varname] = urls[index]
+                            tUrl[index] = '^'
+                        }
                         req.data = {}
                         Object.keys(args).map(a => {
                             req.data[a] = args[a]
                         })
-                        req.params = {}
-                        if(get.varname) req.params[get.varname] = urlValue
                         let baseUrlPath = get.url
                         if(!baseUrlPath.includes('.html')) baseUrlPath = `${baseUrlPath}.html`
                         if(baseUrlPath.includes('/.html')) baseUrlPath = baseUrlPath.replace('/.html', '.html')
@@ -55,7 +69,6 @@ module.exports.WebServer = class{
                             fs.readFile(path.join(this.#publicPath, `pages/template.html`), 'UTF-8', (err, template) => {
                                 fs.readFile(fs.existsSync(htmlPath) ? htmlPath : baseUrlPath, 'UTF-8', (err, html) => {
                                     res.writeHead(200, {"Content-Type": "text/html"})
-                                    
                                     req.vars = []
                                     if(html.match(/{{\w*}}/g)){
                                         html.match(/{{\w*}}/g).map(v => {
@@ -87,9 +100,7 @@ module.exports.WebServer = class{
                             })
                         }
                         else{
-                            if(Object.keys(req.params).length === 0) {
-                                this.#error(req, res)
-                            }
+                            if(Object.keys(req.params).length === 0) this.#error(req, res)
                             else{
                                 req.data = {}
                                 Object.keys(args).map(a => {
@@ -97,13 +108,11 @@ module.exports.WebServer = class{
                                 })
                                 if(get.callback) get.callback(req, res)
                                 res.writeHead(200, {"Content-Type": "application/json"})
-                                res.end(JSON.stringify(req.params) + JSON.stringify(req.data))
+                                res.end(JSON.stringify(req.params))
                             }
                         }
                     } 
-                    else{
-                        this.#error(req, res)
-                    }
+                    else this.#error(req, res)
                 }
                 else if(req.method == "POST"){
                     let post = this.#posts.find(p => p.url === url)
@@ -112,7 +121,6 @@ module.exports.WebServer = class{
                         req.on('data', (data) => {
                             body += data
                         })
-    
                         req.on('end', () => {
                             res.writeHead(200, {"Content-Type": "application/json"})
                             req.data = qs.parse(body)
@@ -120,13 +128,9 @@ module.exports.WebServer = class{
                             res.end(JSON.stringify(req.data))
                         })
                     }
-                    else{
-                        this.#error(req, res)
-                    }
+                    else this.#error(req, res)
                 }
-                else{
-                    this.#error(req, res)
-                }
+                else this.#error(req, res)
                 // console.log(url)
                 // console.log(args)
                 // console.log(pathUrl)
@@ -163,14 +167,14 @@ module.exports.WebServer = class{
         let tUrl = ''
         let splittedUrl = url.split(/\//g)
         splittedUrl.shift()
-        let varname = ''
+        let vars = []
         splittedUrl.map(u => {
-            if(u.match(/:(.*)/)) varname = u.match(/:(.*)/)[1]
-            u = u.replace(/:.*/, '')
-            tUrl += u.length > 0 ? `/${u}` : u
+            if(u.match(/:(.*)/)) vars.push({varname:u.match(/:(.*)/)[1], index:splittedUrl.indexOf(u)})
+            u = u.replace(/:.*/, '*')
+            tUrl += `/${u}`
         })
         url = tUrl
-        this.#gets.push({url, callback, varname})
+        this.#gets.push({url, callback, vars})
         //maybe add support for multiple
     }
 

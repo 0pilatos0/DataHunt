@@ -84,7 +84,7 @@ function setFriendship($userA, $userB, $friendship)
 }
 
 /**
- * set friendship
+ * updatefriendship
  * @param int
  * @param int
  *
@@ -104,12 +104,17 @@ function updateFriendship($friendshipID, $friendship)
 }
 
 
-function getFriendship($userA, $userB)
+function getFriendship($userA, $userB, $id)
 {
     $dbh = db();
-    $stmt = $dbh->prepare("SELECT * FROM friends WHERE userA = (:userA) AND userB = (:userB) OR userA = (:userB) AND userB = (:userA)");
-    $stmt->bindParam(':userA', $userA);
-    $stmt->bindParam(':userB', $userB);
+    if($id == null){
+        $stmt = $dbh->prepare("SELECT * FROM friends WHERE userA = (:userA) AND userB = (:userB) OR userA = (:userB) AND userB = (:userA)");
+        $stmt->bindParam(':userA', $userA);
+        $stmt->bindParam(':userB', $userB);
+    }else{
+        $stmt = $dbh->prepare("SELECT * FROM friends WHERE id = :id");
+        $stmt->bindParam(':id', $id);
+    }
     $stmt->execute();
     $results = $stmt->fetch(PDO::FETCH_ASSOC);
     $dbh = null;

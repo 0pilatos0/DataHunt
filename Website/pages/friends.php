@@ -29,8 +29,8 @@ for ($i = 0; $i < count($results); $i++) {
                 if ($index["friendship"] == 0 && $index["userA"] == $_SESSION["user"]) {
                     echo "<p class=\"card-text\">User hasn't replied to your request yet.</p>";
                 } elseif ($index["friendship"] == 0 && $index["userB"] == $_SESSION["user"]) {
-                    echo "<p class=\"card-text\">You have an incoming friend request.</p>";
-                }elseif ($index["friendship"] == 1) {
+                    createButtons($index["id"]);
+                } elseif ($index["friendship"] == 1) {
                     echo "<p class=\"card-text\">You are friends.</p>";
                 }
                 echo "
@@ -57,7 +57,6 @@ for ($i = 0; $i < count($results); $i++) {
     </div>
 <?php
 if ($_SERVER['REQUEST_METHOD'] == "POST") {
-    var_dump($_POST);
     if (!empty($_POST["AccUsername"])) {
         $username = changeInput($_POST["AccUsername"]);
         define("usernameRegex", '/\w{5,29}/i', true);
@@ -67,7 +66,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
         }
 
         $friendId = getUserId($username);
-        $friendship = getFriendship($_SESSION["user"], $friendId[0]);
+        $friendship = getFriendship($_SESSION["user"], $friendId[0], null);
 
         if (!empty($friendship)) {
             echo "you are already friends with this users";
@@ -82,6 +81,22 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
             setFriendship($_SESSION["user"], $friendId[0], 0);
             echo "<script>location = \"http://datahunt.duckdns.org/Website/pages/friends\";</script>";
         }
+    } elseif ($_POST["btnradio"] == "AcceptRequest") {
+        updateFriendship($_POST['id'], 1);
+        echo "accepted your request";
+
+        $results = getFriendship(null, null, $_POST['id']);
+        if ($results["userA"] == $_SESSION['user']) {
+            $friend = $results["userB"];
+        } else {
+            $friend = $results['userA'];
+        }
+
+        addToFeed($_SESSION["user"], $user[0] . " and " . getUsername($friend)[0] . " are now friends!");
+        addToFeed($friend, getUsername($friend)[0] . " and " . $user[0] . " are now friends!");
+    } elseif ($_POST["btnradio"] == "DeclineRequest") {
+        deleteFriendship($_POST['id']);
+        echo "declined the friend request";
     }
 }
 ?>

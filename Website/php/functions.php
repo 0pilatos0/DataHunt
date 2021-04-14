@@ -37,12 +37,27 @@ function showCharacters($characters){
     }
 }
 
-
-
 function changeInput($data)
 {
     $data = trim($data);
     $data = stripslashes($data);
     $data = htmlspecialchars($data);
     return $data;
+}
+
+function createButtons ($id) {
+    ?>
+    <p class="card-text">You have an incoming friend request.</p>
+    <form method="post">
+        <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
+            <input type="radio" class="btn-check" name="btnradio" id="<?php echo $id;?>btnradio1" autocomplete="off" checked value="AcceptRequest">
+            <label class="btn btn-outline-success" for="<?php echo $id;?>btnradio1">Accept</label>
+
+            <input type="radio" class="btn-check" name="btnradio" id="<?php echo $id;?>btnradio2" autocomplete="off" value="DeclineRequest">
+            <label class="btn btn-outline-danger" for="<?php echo $id;?>btnradio2">Decline</label>
+        </div>
+        <input type="submit" class="btn btn-primary" value="Confirm">
+        <input type="hidden" name="id" value="<?php echo $id;?>">
+    </form>
+    <?php
 }

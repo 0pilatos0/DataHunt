@@ -40,6 +40,12 @@ module.exports.WebServer = class{
                     }
                     if(get){
                         let urlValue = url.replace(get.url, '').replace(/\//g, '')
+                        req.data = {}
+                        Object.keys(args).map(a => {
+                            req.data[a] = args[a]
+                        })
+                        req.params = {}
+                        if(get.varname) req.params[get.varname] = urlValue
                         let baseUrlPath = get.url
                         if(!baseUrlPath.includes('.html')) baseUrlPath = `${baseUrlPath}.html`
                         if(baseUrlPath.includes('/.html')) baseUrlPath = baseUrlPath.replace('/.html', '.html')
@@ -49,7 +55,7 @@ module.exports.WebServer = class{
                             fs.readFile(path.join(this.#publicPath, `pages/template.html`), 'UTF-8', (err, template) => {
                                 fs.readFile(fs.existsSync(htmlPath) ? htmlPath : baseUrlPath, 'UTF-8', (err, html) => {
                                     res.writeHead(200, {"Content-Type": "text/html"})
-                                    req.data = args
+                                    
                                     req.vars = []
                                     if(html.match(/{{\w*}}/g)){
                                         html.match(/{{\w*}}/g).map(v => {
@@ -57,8 +63,6 @@ module.exports.WebServer = class{
                                         })
                                     }
                                     req.html = html
-                                    req.params = []
-                                    if(get.varname) req.params[get.varname] = urlValue
                                     if(get.callback) get.callback(req, res)
                                     if(req.html.match(/{{\w*}}/g)){
                                         req.html.match(/{{\w*}}/g).map(v => {
@@ -83,16 +87,17 @@ module.exports.WebServer = class{
                             })
                         }
                         else{
-                            req.params = []
-                            if(get.varname) req.params[get.varname] = urlValue
                             if(Object.keys(req.params).length === 0) {
                                 this.#error(req, res)
-                                console.log("?"+ url)
                             }
                             else{
-                                req.data = args
+                                req.data = {}
+                                Object.keys(args).map(a => {
+                                    req.data[a] = args[a]
+                                })
                                 if(get.callback) get.callback(req, res)
-                                res.end()
+                                res.writeHead(200, {"Content-Type": "application/json"})
+                                res.end(JSON.stringify(req.params) + JSON.stringify(req.data))
                             }
                         }
                     } 

@@ -1,8 +1,11 @@
 import Canvas from "./Canvas.js";
+import Event from "./Event.js";
+import Input from "./Input.js";
 import Scene from "./Scene.js";
 import Vector2 from "./Vector2.js";
-export default class Window {
+export default class Window extends Event {
     constructor() {
+        super();
         this._canvas = new Canvas();
         this._fps = 0;
         this._lastUpdate = Date.now();
@@ -10,23 +13,23 @@ export default class Window {
         this._deltaTime = 0;
         this._displaySize = new Vector2(0, 0);
         this._allowedToRender = false;
+        document.body.appendChild(this._canvas.element);
         let gameLoader = document.getElementById('gameLoader');
         let gameLoaderTitle = document.getElementById('gameLoaderTitle');
         if (gameLoaderTitle)
             gameLoaderTitle.innerText = "Loading resources";
         Window.windows.push(this);
         new Scene().on('load', (sceneIndex) => {
-            document.body.appendChild(this._canvas.element);
             this._sceneIndex = sceneIndex;
             this._resize();
             window.addEventListener('resize', this._resize.bind(this));
             //connect() //yes typescript parser report this as undefined, but it is defined inside the html page
             this._allowedToRender = true;
-            window.requestAnimationFrame(this._render.bind(this));
-            let updateInterval = setInterval(() => { this._update(); }, 1000 / 60);
-            let fpsInterval = setInterval(() => { this._fps = 0; }, 1000);
             if (gameLoader)
                 gameLoader.style.display = "none";
+            let updateInterval = setInterval(() => { this._update(); }, 1000 / 60);
+            window.requestAnimationFrame(this._render.bind(this));
+            let fpsInterval = setInterval(() => { this._fps = 0; }, 1000);
             // clearInterval(updateInterval)
             // clearInterval(fpsInterval)
             // if(gameLoaderTitle) gameLoaderTitle.innerText = "Connecting to server"
@@ -58,6 +61,7 @@ export default class Window {
         });
     }
     _resize() {
+        Input.keys = [];
         this._canvas.size = new Vector2(window.innerWidth, window.innerHeight);
         let scaleFitNative = (window.innerWidth >= 1920 ? Math.max(window.innerWidth / 1920, window.innerHeight / 1080) : Math.min(window.innerWidth / 1920, window.innerHeight / 1080));
         this._displaySize = new Vector2(window.innerWidth / scaleFitNative, window.innerHeight / scaleFitNative);

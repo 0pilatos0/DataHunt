@@ -1,5 +1,6 @@
 import Canvas from "./Canvas.js"
 import Scene from "./Scene.js"
+import { Socket } from "./Socket.js"
 import Vector2 from "./Vector2.js"
 
 export default class Window{
@@ -12,17 +13,54 @@ export default class Window{
     private _sceneIndex: number = -1
     private _deltaTime: number = 0
     private _displaySize: Vector2 = new Vector2(0, 0)
+    private _allowedToRender: boolean = false
 
     constructor(){
+        let gameLoader = document.getElementById('gameLoader')
+        let gameLoaderTitle = document.getElementById('gameLoaderTitle')
+        if(gameLoaderTitle) gameLoaderTitle.innerText = "Loading resources"
         Window.windows.push(this)
         new Scene().on('load', (sceneIndex: number) => {
             document.body.appendChild(this._canvas.element)
             this._sceneIndex = sceneIndex
             this._resize()
             window.addEventListener('resize', this._resize.bind(this))
+            //connect() //yes typescript parser report this as undefined, but it is defined inside the html page
+            this._allowedToRender = true
             window.requestAnimationFrame(this._render.bind(this))
-            setInterval(() => {this._update()}, 1000/60)
-            setInterval(() => {this._fps = 0}, 1000)
+            let updateInterval = setInterval(() => {this._update()}, 1000/60)
+            let fpsInterval = setInterval(() => {this._fps = 0}, 1000)
+            if(gameLoader) gameLoader.style.display = "none"
+            // clearInterval(updateInterval)
+            // clearInterval(fpsInterval)
+            // if(gameLoaderTitle) gameLoaderTitle.innerText = "Connecting to server"
+            // let socket = new Socket()
+            // socket.on('connected', () => {
+            //     console.log("connected :)")
+            //     this._allowedToRender = true
+            //     window.requestAnimationFrame(this._render.bind(this))
+            //     updateInterval = setInterval(() => {this._update()}, 1000/60)
+            //     fpsInterval = setInterval(() => {this._fps = 0}, 1000)
+            //     if(gameLoader) gameLoader.style.display = "none"
+            // })
+
+            // socket.on('disconnected', () => {
+            //     console.log("disconnected :(")
+            //     this._allowedToRender = false
+            //     clearInterval(updateInterval)
+            //     clearInterval(fpsInterval)
+            //     setTimeout(() => { this._canvas.clear() }, 1000/60)
+            //     if(gameLoader) gameLoader.style.display = "block"
+            // })
+
+            // socket.on('failed', () => {
+            //     console.log('Can\'t connect')
+            //     this._allowedToRender = false
+            //     clearInterval(updateInterval)
+            //     clearInterval(fpsInterval)
+            //     setTimeout(() => { this._canvas.clear() }, 1000/60)
+            //     if(gameLoader) gameLoader.style.display = "block"
+            // })
         })
     }
 
@@ -36,7 +74,7 @@ export default class Window{
     }
 
     private _render(){
-        window.requestAnimationFrame(this._render.bind(this))
+        if(this._allowedToRender) window.requestAnimationFrame(this._render.bind(this))
         this._canvas.clearRect(new Vector2(-this._displaySize.x / 2, -this._displaySize.y / 2), this.displaySize)
         if(this._canvas) this._canvas.fillStyle = "#333"
         this._canvas.fillRect(new Vector2(-this._displaySize.x / 2, -this._displaySize.y / 2), this.displaySize)

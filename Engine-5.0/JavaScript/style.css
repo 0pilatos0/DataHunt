@@ -1,10 +1,21 @@
 body{
     margin: 0;
     overflow: hidden;
+    min-height: 100vh;
+    background: #333333 !important;
 }
 
 *{
     image-rendering: pixelated;
     image-rendering: crisp-edges;
     image-rendering: -moz-crisp-edges;
+    color: white;
+}
+
+
+#gameLoader{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
 }

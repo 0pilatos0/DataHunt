@@ -1,5 +1,6 @@
 import Event from "./Event.js";
 import Vector2 from "./Vector2.js";
+import Window from "./Window.js";
 export default class Canvas extends Event {
     constructor(size = new Vector2(0, 0), keepGoing = false) {
         super();
@@ -41,5 +42,9 @@ export default class Canvas extends Event {
     set imageSmoothingEnabled(bool) {
         if (this._ctx)
             this._ctx.imageSmoothingEnabled = bool;
+    }
+    clear() {
+        var _a;
+        (_a = this._ctx) === null || _a === void 0 ? void 0 : _a.clearRect(-Window.active.displaySize.x / 2, -Window.active.displaySize.y / 2, Window.active.displaySize.x, Window.active.displaySize.y);
     }
 }

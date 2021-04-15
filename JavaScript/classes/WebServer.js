@@ -38,9 +38,8 @@ module.exports.WebServer = class{
                         let gUrls = g.url.substring(1, g.url.length).split('/')
                         if(gUrls.length === urls.length){
                             let rightUrl = gUrls.every(u => {
-                                gUrls[gUrls.indexOf(u)] = "."
-                                if(u === '*') u = urls[urls.indexOf(u)]
-                                return gUrls[gUrls.indexOf(u)] === urls[gUrls.indexOf(u)]
+                                if(u === '*') u = urls[gUrls.indexOf(u)]
+                                return urls.indexOf(u) > -1
                             })
                             if(rightUrl === true) get = g
                         }

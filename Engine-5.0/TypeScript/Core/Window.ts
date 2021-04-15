@@ -28,6 +28,8 @@ export default class Window extends Event{
             this._sceneIndex = sceneIndex
             this._resize()
             window.addEventListener('resize', this._resize.bind(this))
+            window.addEventListener('focus', () => {})
+            window.addEventListener('blur', () => {Input.keys = []})
             //connect() //yes typescript parser report this as undefined, but it is defined inside the html page
             this._allowedToRender = true
             if(gameLoader) gameLoader.style.display = "none"
@@ -68,7 +70,6 @@ export default class Window extends Event{
     }
 
     private _resize(){
-        Input.keys = []
         this._canvas.size = new Vector2(window.innerWidth, window.innerHeight)
         let scaleFitNative = (window.innerWidth >= 1920 ? Math.max(window.innerWidth / 1920, window.innerHeight / 1080) : Math.min(window.innerWidth / 1920, window.innerHeight / 1080))
         this._displaySize = new Vector2(window.innerWidth / scaleFitNative, window.innerHeight / scaleFitNative)

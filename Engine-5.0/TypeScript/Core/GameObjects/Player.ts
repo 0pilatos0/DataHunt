@@ -18,7 +18,7 @@ export default class Player extends GameObject{
         super(position, size)
         this._controllable = controllable
         this._animationController = new AnimationController()
-        new Tileset("/Engine-5.0/JavaScript/Players/Player1.png").on('load', (tileset: Tileset) => {
+        new Tileset("/Players/Player1.png").on('load', (tileset: Tileset) => {
             for (let i = 0; i < tileset.tiles2D.length; i++) {
                 let animation = new Animation()
                 for (let j = 0; j < tileset.tiles2D[i].length; j++) {

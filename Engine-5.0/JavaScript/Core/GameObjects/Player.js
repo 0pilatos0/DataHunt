@@ -13,7 +13,7 @@ export default class Player extends GameObject {
         this._oldPosition = new Vector2(this.position.x, this.position.y);
         this._controllable = controllable;
         this._animationController = new AnimationController();
-        new Tileset("/Engine-5.0/JavaScript/Players/Player1.png").on('load', (tileset) => {
+        new Tileset("/Players/Player1.png").on('load', (tileset) => {
             var _a, _b;
             for (let i = 0; i < tileset.tiles2D.length; i++) {
                 let animation = new Animation();

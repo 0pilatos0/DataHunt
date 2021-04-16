@@ -5,7 +5,7 @@ import Transform from "./Transform.js";
 import Vector2 from "./Vector2.js";
 import Window from "./Window.js";
 export default class Map extends Transform {
-    constructor(path = '/Engine-5.0/JavaScript/Maps/Main/') {
+    constructor(path = 'Maps/Main/') {
         super(new Vector2(0, 0), new Vector2(0, 0));
         new FileLoader(`${path}Map.json`).on('load', (map) => {
             let t = -1;

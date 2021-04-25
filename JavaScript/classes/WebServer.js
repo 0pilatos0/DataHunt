@@ -18,6 +18,9 @@ module.exports.WebServer = class{
     init(){
         this.#requestListener = (req, res) => {
             //res.setHeader("Access-Control-Allow-Origin", "*")
+            res.redirect = (url) => {
+                res.writeHead(302, {'Location': url})
+            }
             if(req.url.includes('.html') || !req.url.includes('.')){
                 let url = req.url.substring(0, req.url.indexOf('?') > -1 ? req.url.indexOf('?') : req.url.length)
                 let args = req.url.indexOf('?') > -1 ? req.url.substring(req.url.indexOf('?') + 1, req.url.length).split("&") : []
@@ -105,8 +108,8 @@ module.exports.WebServer = class{
                                 Object.keys(args).map(a => {
                                     req.data[a] = args[a]
                                 })
-                                if(get.callback) get.callback(req, res)
                                 res.writeHead(200, {"Content-Type": "application/json"})
+                                if(get.callback) get.callback(req, res)
                                 res.end(JSON.stringify(req.params))
                             }
                         }
@@ -196,8 +199,7 @@ module.exports.WebServer = class{
     }
 
     #error = (req, res) => {
-        res.statusCode=302
-        res.setHeader('Location', `/404`)
+        res.redirect('/404')
         res.end()
     }
 }

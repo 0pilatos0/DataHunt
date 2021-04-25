@@ -39,4 +39,10 @@ server.get('/users/:username/:name/:id', (req, res) => {
     //console.log(req.params)
 })
 
+server.get('/users/:username/pizza', (req, res) => {
+    console.log(req.data)
+    console.log(req.params)
+    res.redirect('/404')
+})
+
 server.run()

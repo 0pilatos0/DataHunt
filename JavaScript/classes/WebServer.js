@@ -84,8 +84,8 @@ module.exports.WebServer = class{
                                             req.html = req.html.replace(v, req.vars[v.replace(/[{}]/g, "")] || v)
                                         })
                                     }
-                                    if(req.html.match(/<\bscript.*<\/script>|<\blink.*<\/link>|<\bstyle.*<\/style>/g)){
-                                        let headData = req.html.match(/<\bscript.*<\/script>|<\blink.*<\/link>|<\bstyle.*<\/style>/g)
+                                    if(req.html.match(/<script\b[^>]*>[\s\S]*?<\/script>|<link\b[^>]*>[\s\S]*?<\/link>|<style\b[^>]*>[\s\S]*?<\/style>/gm)){
+                                        let headData = req.html.match(/<script\b[^>]*>[\s\S]*?<\/script>|<link\b[^>]*>[\s\S]*?<\/link>|<style\b[^>]*>[\s\S]*?<\/style>/gm)
                                         let lines = req.html.split('\r\n')
                                         headData.map(h => {
                                             lines.map(l => {
@@ -102,6 +102,7 @@ module.exports.WebServer = class{
                             })
                         }
                         else{
+                            if(get.callback) get.callback(req, res)
                             if(Object.keys(req.params).length === 0) this.#error(req, res)
                             else{
                                 req.data = {}
@@ -109,7 +110,6 @@ module.exports.WebServer = class{
                                     req.data[a] = args[a]
                                 })
                                 res.writeHead(200, {"Content-Type": "application/json"})
-                                if(get.callback) get.callback(req, res)
                                 res.end(JSON.stringify(req.params))
                             }
                         }

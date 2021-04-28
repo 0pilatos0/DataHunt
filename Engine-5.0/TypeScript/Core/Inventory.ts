@@ -11,7 +11,7 @@ export default class Inventory extends Event{
 
     constructor(){
         super()
-        new HTMLLoader('./Elements/inventory.html').on('load', (data: any) => {
+        new HTMLLoader('/Engine-5.0/JavaScript/Elements/inventory.html').on('load', (data: any) => {
             // @ts-ignore: Object is possibly 'null'.
             document.querySelector('#inventory').innerHTML = data
         })

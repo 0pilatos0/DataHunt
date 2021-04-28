@@ -5,8 +5,6 @@ if(!$userinfo["role_id"]){
     echo "<script>location = \"http://datahunt.duckdns.org\";</script>";
 }
 
-$users = getUsers();
-
 ?>
     <div id="container">
         <h1>Admin Panel</h1>
@@ -25,7 +23,7 @@ $users = getUsers();
                 </tr>
                 <?php
 
-                foreach($users as $user){
+                foreach(getUsers() as $user){
                     echo "<tr>
                     <td>{$user["id"]}</td>
                     <td>{$user["name"]}</td>

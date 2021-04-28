@@ -2,7 +2,7 @@
     position: fixed;
     left: 50%;
     transform: translateX(-50%);
-    animation: flyin 1.2s ease forwards;
+    animation: flyin 1s ease-out forwards;
     
 }
 .hidden{

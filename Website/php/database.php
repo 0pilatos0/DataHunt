@@ -9,7 +9,7 @@ function db(){
 function userInfo($param){
     $dbh = db();
 
-    $stmt = $dbh->prepare("SELECT * FROM users where id = :id");
+    $stmt = $dbh->prepare("SELECT users.*, user_roles.role_id FROM users INNER JOIN user_roles where users.id = :id AND user_roles.user_id = :id");
     $stmt->bindParam(':id', $param);
     $stmt->execute();
     $result = $stmt->fetch(PDO::FETCH_ASSOC);

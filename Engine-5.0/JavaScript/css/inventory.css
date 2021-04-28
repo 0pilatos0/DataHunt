@@ -2,9 +2,21 @@
     position: fixed;
     left: 50%;
     transform: translateX(-50%);
+    animation: flyin 1.2s ease forwards;
+    
 }
 .hidden{
    display: none;
+}
+
+@keyframes flyin {
+   0%{ 
+      transform: translateY(-100%); 		
+   }
+   100% { 
+      transform: translateY(0%); 
+      transform: translateX(-50%); 
+   }
 }
 .inventory-wrap{
     max-width: 1200px;

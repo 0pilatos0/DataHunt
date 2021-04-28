@@ -6,13 +6,13 @@ export default class Input extends Event{
     constructor(){
         super()
         window.addEventListener('keydown', (e: KeyboardEvent) => {
-            if(this._keys.indexOf(e.key) == -1) this._keys.push(e.key)
-            this.trigger('press', e.key)
+            if(this._keys.indexOf(e.key.toLowerCase()) == -1) this._keys.push(e.key.toLowerCase())
+            this.trigger('press', e.key.toLowerCase())
         })
         
         window.addEventListener('keyup', (e: KeyboardEvent) => {
-            this._keys.splice(this._keys.indexOf(e.key), 1)
-            this.trigger('release', e.key)
+            this._keys.splice(this._keys.indexOf(e.key.toLowerCase()), 1)
+            this.trigger('release', e.key.toLowerCase())
         })
     }
 
@@ -21,8 +21,6 @@ export default class Input extends Event{
     }
 
     public pressed(key: string){
-        if(this._keys.indexOf(key.toLowerCase()) > -1) return true
-        else if(this._keys.indexOf(key.toUpperCase()) > -1) return true
-        return false
+        return this._keys.indexOf(key.toLowerCase()) > -1
     }
 }

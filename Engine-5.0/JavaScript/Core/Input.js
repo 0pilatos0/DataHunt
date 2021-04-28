@@ -4,23 +4,19 @@ export default class Input extends Event {
         super();
         this._keys = [];
         window.addEventListener('keydown', (e) => {
-            if (this._keys.indexOf(e.key) == -1)
-                this._keys.push(e.key);
-            this.trigger('press', e.key);
+            if (this._keys.indexOf(e.key.toLowerCase()) == -1)
+                this._keys.push(e.key.toLowerCase());
+            this.trigger('press', e.key.toLowerCase());
         });
         window.addEventListener('keyup', (e) => {
-            this._keys.splice(this._keys.indexOf(e.key), 1);
-            this.trigger('release', e.key);
+            this._keys.splice(this._keys.indexOf(e.key.toLowerCase()), 1);
+            this.trigger('release', e.key.toLowerCase());
         });
     }
     set keys(keys) {
         this._keys = keys;
     }
     pressed(key) {
-        if (this._keys.indexOf(key.toLowerCase()) > -1)
-            return true;
-        else if (this._keys.indexOf(key.toUpperCase()) > -1)
-            return true;
-        return false;
+        return this._keys.indexOf(key.toLowerCase()) > -1;
     }
 }

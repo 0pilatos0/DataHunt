@@ -135,3 +135,68 @@
     margin-top: 25px;
     margin-left: 25px;
 }
+
+.contentGrid {
+    display: grid;
+    grid-template-areas: 
+        "intro"
+        "image1 patchnotes"
+        "update image2"
+        "whitespace"
+        "event"
+        "leaderboard";
+    grid-template-rows: auto 1fr;
+    grid-template-columns: 10% 1fr 10%;
+}
+
+.main-intro {
+    grid-area: intro;
+}
+
+.main-intro h2{
+    text-align: center;
+}
+
+.main-image-one {
+    grid-area: image1;
+    width: 60%;
+}
+
+.main-patchnotes {
+    grid-area: patchnotes;
+    width: 40%;
+}
+
+.main-update {
+    grid-area: update;
+    width: 40%;
+}
+
+.main-image-two {
+    grid-area: image2;
+    width: 60%;
+}
+
+.main-patchnotes {
+    grid-area: patchnotes;
+    width: 40%;
+}
+
+.main-nothingness {
+    grid-area: whitespace;
+    width: 100%;
+    background-color: lavender;
+    height: 35px;
+    display: block;
+}
+
+.main-events {
+    grid-area: event; 
+}
+
+.main-leaderboard {
+    grid-area: leaderboard;
+    margin: 0;
+    padding: 0;
+    line-height: 1.2em;
+}

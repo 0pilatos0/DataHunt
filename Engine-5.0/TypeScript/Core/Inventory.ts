@@ -7,7 +7,7 @@ import Window from "./Window.js"
 export default class Inventory extends Event{
     private _items: IItemDictionary = {}
     private _slots: number = 0
-    private _opened: boolean = true
+    private _opened: boolean = false
 
     constructor(){
         super()

@@ -6,7 +6,7 @@ export default class Inventory extends Event {
         super();
         this._items = {};
         this._slots = 0;
-        this._opened = true;
+        this._opened = false;
         new HTMLLoader('/Engine-5.0/JavaScript/Elements/inventory.html').on('load', (data) => {
             // @ts-ignore: Object is possibly 'null'.
             document.querySelector('#inventory').innerHTML = data;

@@ -13,6 +13,7 @@ export default class Window extends Event {
         this._deltaTime = 0;
         this._displaySize = new Vector2(0, 0);
         this._allowedToRender = false;
+        this._input = new Input();
         document.body.appendChild(this._canvas.element);
         let gameLoader = document.getElementById('gameLoader');
         let gameLoaderTitle = document.getElementById('gameLoaderTitle');
@@ -24,7 +25,7 @@ export default class Window extends Event {
             this._resize();
             window.addEventListener('resize', this._resize.bind(this));
             window.addEventListener('focus', () => { });
-            window.addEventListener('blur', () => { Input.keys = []; });
+            window.addEventListener('blur', () => { this._input.keys = []; });
             //connect() //yes typescript parser report this as undefined, but it is defined inside the html page
             this._allowedToRender = true;
             if (gameLoader)
@@ -106,6 +107,9 @@ export default class Window extends Event {
     }
     static get active() {
         return Window.windows[Window._activeWindow];
+    }
+    get input() {
+        return this._input;
     }
 }
 Window.windows = [];

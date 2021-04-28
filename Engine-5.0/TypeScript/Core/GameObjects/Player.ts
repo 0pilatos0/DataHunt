@@ -3,7 +3,6 @@ import AnimationController from "../AnimationController.js";
 import BoxCollider from "../Colliders/BoxCollider.js";
 import ColliderType from "../Enums/ColliderType.js";
 import GameObject from "../GameObject.js";
-import Input from "../Input.js";
 import Inventory from "../Inventory.js";
 import Item from "../Item.js";
 import Tileset from "../Tileset.js";
@@ -33,10 +32,10 @@ export default class Player extends GameObject{
                 this.collider = new BoxCollider(new Vector2(0, 0), new Vector2(Window.active.spriteSize, Window.active.spriteSize), GameObject.gameObjects.indexOf(this), ColliderType.COLLIDABLE)
                 this.collider?.on('enter', (gameObject: GameObject) => {
                     if(gameObject.collider?.type == ColliderType.COLLIDABLE){
-                        if(Input.pressed('w')) this.position.y = Math.round(this._oldPosition.y)
-                        if(Input.pressed('a')) this.position.x = Math.round(this._oldPosition.x)
-                        if(Input.pressed('s')) this.position.y = Math.round(this._oldPosition.y)
-                        if(Input.pressed('d')) this.position.x = Math.round(this._oldPosition.x)
+                        if(Window.active.input.pressed('w')) this.position.y = Math.round(this._oldPosition.y)
+                        if(Window.active.input.pressed('a')) this.position.x = Math.round(this._oldPosition.x)
+                        if(Window.active.input.pressed('s')) this.position.y = Math.round(this._oldPosition.y)
+                        if(Window.active.input.pressed('d')) this.position.x = Math.round(this._oldPosition.x)
                     }
                     if(gameObject.collider?.type == ColliderType.INTERACTABLE){
                         gameObject.destroy()
@@ -44,10 +43,10 @@ export default class Player extends GameObject{
                 })
                 this.collider?.on('stay', (gameObject: GameObject) => {
                     if(gameObject.collider?.type == ColliderType.COLLIDABLE){
-                        if(Input.pressed('w')) this.position.y = Math.round(this._oldPosition.y)
-                        if(Input.pressed('a')) this.position.x = Math.round(this._oldPosition.x)
-                        if(Input.pressed('s')) this.position.y = Math.round(this._oldPosition.y)
-                        if(Input.pressed('d')) this.position.x = Math.round(this._oldPosition.x)
+                        if(Window.active.input.pressed('w')) this.position.y = Math.round(this._oldPosition.y)
+                        if(Window.active.input.pressed('a')) this.position.x = Math.round(this._oldPosition.x)
+                        if(Window.active.input.pressed('s')) this.position.y = Math.round(this._oldPosition.y)
+                        if(Window.active.input.pressed('d')) this.position.x = Math.round(this._oldPosition.x)
                     }
                 })
                 this._inventory = new Inventory()
@@ -62,28 +61,28 @@ export default class Player extends GameObject{
     public update(){
         this._oldPosition = new Vector2(this.position.x, this.position.y)
         let steps: number = 20
-        if(Input.pressed('w')){
+        if(Window.active.input.pressed('w')){
             for (let s = 0; s < steps; s++) {
                 this._oldPosition.y = this.position.y
                 this.position.y -= this._speed * Window.active.deltaTime / steps
                 super.update()
             }
         }
-        if(Input.pressed('a')){
+        if(Window.active.input.pressed('a')){
             for (let s = 0; s < steps; s++) {
                 this._oldPosition.x = this.position.x
                 this.position.x -= this._speed * Window.active.deltaTime / steps
                 super.update()
             }
         }
-        if(Input.pressed('s')){
+        if(Window.active.input.pressed('s')){
             for (let s = 0; s < steps; s++) {
                 this._oldPosition.y = this.position.y
                 this.position.y += this._speed * Window.active.deltaTime / steps
                 super.update()
             }
         }
-        if(Input.pressed('d')){
+        if(Window.active.input.pressed('d')){
             for (let s = 0; s < steps; s++) {
                 this._oldPosition.x = this.position.x
                 this.position.x += this._speed * Window.active.deltaTime / steps
@@ -91,14 +90,14 @@ export default class Player extends GameObject{
             }
         }
 
-        if(Input.pressed('w') && !Input.pressed('d') && !Input.pressed('a')) this._animationController.active = 4
-        else if(Input.pressed('a') && Input.pressed('w')) this._animationController.active = 5
-        else if(Input.pressed('a') && !Input.pressed('w') && !Input.pressed('s')) this._animationController.active = 6
-        else if(Input.pressed('a') && Input.pressed('s')) this._animationController.active = 7
-        else if(Input.pressed('s') && !Input.pressed('a') && !Input.pressed('d')) this._animationController.active = 8
-        else if(Input.pressed('d') && !Input.pressed('w') && !Input.pressed('s')) this._animationController.active = 2
-        else if(Input.pressed('d') && Input.pressed('s')) this._animationController.active = 1
-        else if(Input.pressed('d') && Input.pressed('w')) this._animationController.active = 3
+        if(Window.active.input.pressed('w') && !Window.active.input.pressed('d') && !Window.active.input.pressed('a')) this._animationController.active = 4
+        else if(Window.active.input.pressed('a') && Window.active.input.pressed('w')) this._animationController.active = 5
+        else if(Window.active.input.pressed('a') && !Window.active.input.pressed('w') && !Window.active.input.pressed('s')) this._animationController.active = 6
+        else if(Window.active.input.pressed('a') && Window.active.input.pressed('s')) this._animationController.active = 7
+        else if(Window.active.input.pressed('s') && !Window.active.input.pressed('a') && !Window.active.input.pressed('d')) this._animationController.active = 8
+        else if(Window.active.input.pressed('d') && !Window.active.input.pressed('w') && !Window.active.input.pressed('s')) this._animationController.active = 2
+        else if(Window.active.input.pressed('d') && Window.active.input.pressed('s')) this._animationController.active = 1
+        else if(Window.active.input.pressed('d') && Window.active.input.pressed('w')) this._animationController.active = 3
         else this._animationController.active = 0
         this.spriteIndex = this._animationController.activeAnimation.activeSpriteIndex
 

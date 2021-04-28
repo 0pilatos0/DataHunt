@@ -16,6 +16,7 @@ export default class Window extends Event{
     private _deltaTime: number = 0
     private _displaySize: Vector2 = new Vector2(0, 0)
     private _allowedToRender: boolean = false
+    private _input: Input = new Input()
 
     constructor(){
         super()
@@ -29,7 +30,7 @@ export default class Window extends Event{
             this._resize()
             window.addEventListener('resize', this._resize.bind(this))
             window.addEventListener('focus', () => {})
-            window.addEventListener('blur', () => {Input.keys = []})
+            window.addEventListener('blur', () => {this._input.keys = []})
             //connect() //yes typescript parser report this as undefined, but it is defined inside the html page
             this._allowedToRender = true
             if(gameLoader) gameLoader.style.display = "none"
@@ -120,5 +121,9 @@ export default class Window extends Event{
 
     public static get active(){
         return Window.windows[Window._activeWindow]
+    }
+
+    public get input(){
+        return this._input
     }
 }

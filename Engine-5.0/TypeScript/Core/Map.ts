@@ -1,5 +1,5 @@
 import GameObjectType from "./Enums/GameObjectType.js";
-import FileLoader from "./FileLoader.js";
+import JSONLoader from "./FileLoaders/JSONLoader.js";
 import GameObject from "./GameObject.js";
 import Tileset from "./Tileset.js";
 import Transform from "./Transform.js";
@@ -11,11 +11,11 @@ export default class Map extends Transform{
 
     constructor(path: String = '/Engine-5.0/JavaScript/Maps/Main/') {
         super(new Vector2(0, 0), new Vector2(0, 0))
-        new FileLoader(`${path}Map.json`).on('load', (map: any) => {
+        new JSONLoader(`${path}Map.json`).on('load', (map: any) => {
             let t = -1
             let createTileset = (t: number) => {
                 t++
-                new FileLoader(`${path}${map.tilesets[t].source}`).on('load', (tileset: any) => {
+                new JSONLoader(`${path}${map.tilesets[t].source}`).on('load', (tileset: any) => {
                     tileset.image = `${path}${tileset.image}`
                     new Tileset(tileset).on('load', (tileset: Tileset) => {
                         if(t < map.tilesets.length - 1) createTileset(t)

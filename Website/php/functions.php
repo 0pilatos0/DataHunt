@@ -61,3 +61,7 @@ function createButtons ($id) {
     </form>
     <?php
 }
+
+function calculateKD ($K, $D){
+    return $K/$D;
+}

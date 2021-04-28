@@ -27,6 +27,28 @@ function deleteUser($param){
     $dbh = null;
 }
 
+/**
+ * getStats
+ * @param int
+ * 
+ * gets your current selected characters stats!
+ * kills & deaths, level and
+ *
+ * @return array
+ */
+
+function getStats($param)
+{
+    $dbh = db();
+
+    $stmt = $dbh->prepare("SELECT characters.kills, characters.deaths, characters.name,  stats.health, stats.level, class.name FROM characters INNER JOIN stats ON stats.id = characters.stats_id INNER JOIN class ON class.id = characters.class_id  WHERE characters.id = :param");
+    $stmt->bindParam(':param', $param);$stmt->execute();
+    $dbh = null;
+    $result = $stmt->fetchAll(PDO::FETCH_NUM);
+    $dbh = null;
+    return $result;
+}
+
 function characters($param){
     $dbh = db();
 

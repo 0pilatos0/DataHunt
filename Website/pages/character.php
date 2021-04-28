@@ -8,11 +8,11 @@ if(empty($_SESSION["user"])){
 $stats = getStats($_GET['id'])[0];
 ?>
 
-    <div>
+    <div class="statsContainer">
         <h3><?php echo $stats[2]; ?>, <?php echo $stats[5]; ?></h3>
     </div>
     <div>
-        <?php echo "Your K/D (Kills divived by Deaths): " . calculateKD($stats[0], $stats[1]) . "<br>" . "Health: " . $stats[3] . "<br>" . "Level: " . $stats[4]?>
+        <p><?php echo "Your K/D (Kills divived by Deaths): " . calculateKD($stats[0], $stats[1]) . "<br>" . "Health: " . $stats[3] . "<br>" . "Level: " . $stats[4]?></p>
     </div>
 
 <?php include '../elements/footer.php'; ?>

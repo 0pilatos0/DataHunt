@@ -130,3 +130,8 @@
 #friendsForm {
     grid-area: form;
 }
+
+.statsContainer {
+    margin-top: 25px;
+    margin-left: 25px;
+}

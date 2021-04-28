@@ -118,8 +118,8 @@
                 require $_SERVER["DOCUMENT_ROOT"] . "/Website/php/functions.php";
                     if(isset($_SESSION['user']) && !empty($_SESSION['user'])) {
                         $_SESSION["userinfo"] = userInfo($_SESSION["user"]);
-                        $localUserinfo =  $_SESSION["userinfo"];
-                        if($localUserinfo["role_id"]){
+                        $userinfo =  $_SESSION["userinfo"];
+                        if($userinfo["role_id"]){
                             echo '<li><a id="admin" href="/Website/pages/admin">Admin</a></li>';
                         }
                        echo '<li style="float:right"><a id="logout" href="/Website/pages/logout">Logout</a></li>';

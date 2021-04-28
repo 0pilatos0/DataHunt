@@ -27,6 +27,16 @@ function deleteUser($param){
     $dbh = null;
 }
 
+function getUsers(){
+    $dbh = db();
+
+    $stmt = $dbh->prepare("SELECT users.*, user_roles.role_id FROM users INNER JOIN user_roles WHERE users.id = user_roles.user_id");
+    $stmt->execute();
+    $result = $stmt->fetch(PDO::FETCH_ASSOC);
+    $dbh = null;
+    return $result;
+}
+
 /**
  * getStats
  * @param int

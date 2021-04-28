@@ -7,12 +7,12 @@ export default class Input extends Event{
         super()
         window.addEventListener('keydown', (e: KeyboardEvent) => {
             if(this._keys.indexOf(e.key) == -1) this._keys.push(e.key)
-            this.trigger(e.key)
+            this.trigger('press', e.key)
         })
         
         window.addEventListener('keyup', (e: KeyboardEvent) => {
             this._keys.splice(this._keys.indexOf(e.key), 1)
-            this.trigger(e.key)
+            this.trigger('release', e.key)
         })
     }
 

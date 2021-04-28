@@ -6,11 +6,11 @@ export default class Input extends Event {
         window.addEventListener('keydown', (e) => {
             if (this._keys.indexOf(e.key) == -1)
                 this._keys.push(e.key);
-            this.trigger(e.key);
+            this.trigger('press', e.key);
         });
         window.addEventListener('keyup', (e) => {
             this._keys.splice(this._keys.indexOf(e.key), 1);
-            this.trigger(e.key);
+            this.trigger('release', e.key);
         });
     }
     set keys(keys) {

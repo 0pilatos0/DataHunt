@@ -1,14 +1,46 @@
 import Event from "./Event.js"
 import IItemDictionary from "./Interfaces/IDictionary.js"
 import Item from "./Item.js"
+import Window from "./Window.js"
 
 export default class Inventory extends Event{
     private _items: IItemDictionary = {}
     private _slots: number = 0
+    private _opened: boolean = true
 
     constructor(){
         super()
+        var client = new XMLHttpRequest();
+        client.open('GET', './Elements/inventory.html');
+        client.onreadystatechange = function() {
+            // @ts-ignore: Object is possibly 'null'.
+            document.querySelector('#inventory').innerHTML = client.responseText
+        }
+        client.send();
+        Window.active.input.on('press', (key:string) => {
+            if(key == 'i'){
+                if(this._opened){
+                    this.close()
+                    } else{
+                    this.open()
+                }
+            }
+            
+        })
     }
+
+    public update(){
+        
+    }
+    public open(){
+        document.querySelector('#inventory')?.classList.remove('hidden')
+        this._opened = true
+    }
+    public close(){
+        document.querySelector('#inventory')?.classList.add('hidden')
+        this._opened = false
+    }
+
 
     public add(item: Item, amount: number = 1){
         item.amount = amount

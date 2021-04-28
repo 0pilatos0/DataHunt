@@ -105,5 +105,7 @@ export default class Player extends GameObject{
         if(this.position.y < 0) this.position.y = 0
         if(this.position.x + this.size.x > Window.active.scene.map.bounds.right) this.position.x = Window.active.scene.map.bounds.right - this.size.x
         if(this.position.y + this.size.y > Window.active.scene.map.bounds.bottom) this.position.y = Window.active.scene.map.bounds.bottom - this.size.y
+    
+        this._inventory?.update()
     }
 }

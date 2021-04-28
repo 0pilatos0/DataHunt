@@ -18,7 +18,7 @@ export default class Inventory extends Event {
             this._audio.loop = true;
         }
     }
-    play(source = null) {
+    play(source) {
         if (source) {
             this.setSource(source);
             this._audio.play();

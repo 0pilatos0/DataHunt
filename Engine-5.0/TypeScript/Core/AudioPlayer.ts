@@ -4,24 +4,26 @@ export default class Inventory extends Event{
     
     private _isPlaying : boolean = false
     private _audio : HTMLAudioElement
-// @ts-ignore: Object is possibly 'null'.
+    // @ts-ignore: Object is possibly 'null'.
     constructor(){
         super()
-        this._audio = document.createElement('audio');
-        this._audio.id = 'audio-player';
+        this._audio = document.createElement('audio')
+        this._audio.id = 'audio-player'
     }
 
-    public setSource(source){
+    public setSource(source: string){
         this._audio.src = source
     }
+
     public toggleLoop(){
         if (this._audio.loop) {
-            this._audio.loop = false;
+            this._audio.loop = false
         } else {
-            this._audio.loop = true;
+            this._audio.loop = true
         }
     }
-    public play(source = null){
+
+    public play(source: string){
         if (source){
             this.setSource(source)
             this._audio.play()
@@ -38,15 +40,18 @@ export default class Inventory extends Event{
             }
         }
     }
+
     public pause() {
         if (this._isPlaying){
             this._audio.pause()
             this._isPlaying = false
         }
     }
+
     public restart() {
         this._audio.currentTime = 0
     }
+
     public toggleMute(){
         if(this._audio.muted){
             this._audio.muted = false
@@ -60,12 +65,14 @@ export default class Inventory extends Event{
             this._audio.volume += 0.1
         }
     }
+
     public audioDown(){
         if (this._audio.volume >= 0.1) {
             this._audio.volume -= 0.1
         }
     }
-    public setAudioLevel(audioLevel){
+
+    public setAudioLevel(audioLevel: number){
         this._audio.volume = audioLevel
     }
 }

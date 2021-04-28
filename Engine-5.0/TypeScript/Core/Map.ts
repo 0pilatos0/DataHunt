@@ -9,7 +9,7 @@ import Window from "./Window.js";
 export default class Map extends Transform{
     public static maps: Array<Map> = []
 
-    constructor(path: String = '/Maps/Main/') {
+    constructor(path: String = '/Engine-5.0/JavaScript/Maps/Main/') {
         super(new Vector2(0, 0), new Vector2(0, 0))
         new FileLoader(`${path}Map.json`).on('load', (map: any) => {
             let t = -1

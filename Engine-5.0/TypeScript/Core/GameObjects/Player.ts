@@ -4,6 +4,8 @@ import BoxCollider from "../Colliders/BoxCollider.js";
 import ColliderType from "../Enums/ColliderType.js";
 import GameObject from "../GameObject.js";
 import Input from "../Input.js";
+import Inventory from "../Inventory.js";
+import Item from "../Item.js";
 import Tileset from "../Tileset.js";
 import Vector2 from "../Vector2.js";
 import Window from "../Window.js";
@@ -13,12 +15,13 @@ export default class Player extends GameObject{
     private _speed: number = 500
     private _oldPosition: Vector2 = new Vector2(this.position.x, this.position.y)
     private _animationController: AnimationController
+    private _inventory: Inventory | null = null
 
     constructor(position: Vector2, size: Vector2, controllable: boolean = false){
         super(position, size)
         this._controllable = controllable
         this._animationController = new AnimationController()
-        new Tileset("/Players/Player1.png").on('load', (tileset: Tileset) => {
+        new Tileset("/Engine-5.0/JavaScript/Players/Player1.png").on('load', (tileset: Tileset) => {
             for (let i = 0; i < tileset.tiles2D.length; i++) {
                 let animation = new Animation()
                 for (let j = 0; j < tileset.tiles2D[i].length; j++) {
@@ -47,6 +50,9 @@ export default class Player extends GameObject{
                         if(Input.pressed('d')) this.position.x = Math.round(this._oldPosition.x)
                     }
                 })
+                this._inventory = new Inventory()
+                this._inventory?.add(new Item("Pizza"), 100)
+                console.log(this._inventory.items)
             }
             this.layer = 10
             this.trigger('loadPlayer', this, true)

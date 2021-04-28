@@ -4,9 +4,10 @@ export default class Input extends Event {
         super();
         this._keys = [];
         window.addEventListener('keydown', (e) => {
-            if (this._keys.indexOf(e.key.toLowerCase()) == -1)
+            if (this._keys.indexOf(e.key.toLowerCase()) == -1) {
                 this._keys.push(e.key.toLowerCase());
-            this.trigger('press', e.key.toLowerCase());
+                this.trigger('press', e.key.toLowerCase());
+            }
         });
         window.addEventListener('keyup', (e) => {
             this._keys.splice(this._keys.indexOf(e.key.toLowerCase()), 1);

@@ -64,6 +64,7 @@ export default class Player extends GameObject {
         });
     }
     update() {
+        var _a;
         this._oldPosition = new Vector2(this.position.x, this.position.y);
         let steps = 20;
         if (Window.active.input.pressed('w')) {
@@ -121,5 +122,6 @@ export default class Player extends GameObject {
             this.position.x = Window.active.scene.map.bounds.right - this.size.x;
         if (this.position.y + this.size.y > Window.active.scene.map.bounds.bottom)
             this.position.y = Window.active.scene.map.bounds.bottom - this.size.y;
+        (_a = this._inventory) === null || _a === void 0 ? void 0 : _a.update();
     }
 }

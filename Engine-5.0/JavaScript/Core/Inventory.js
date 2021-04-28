@@ -1,4 +1,5 @@
 import Event from "./Event.js";
+import HTMLLoader from "./FileLoaders/HTMLLoader.js";
 import Window from "./Window.js";
 export default class Inventory extends Event {
     constructor() {
@@ -6,21 +7,17 @@ export default class Inventory extends Event {
         this._items = {};
         this._slots = 0;
         this._opened = true;
-        var client = new XMLHttpRequest();
-        client.open('GET', './Elements/inventory.html');
-        client.onreadystatechange = function () {
+        new HTMLLoader('./Elements/inventory.html').on('load', (data) => {
             // @ts-ignore: Object is possibly 'null'.
-            document.querySelector('#inventory').innerHTML = client.responseText;
-        };
-        client.send();
+            document.querySelector('#inventory').innerHTML = data;
+        });
         Window.active.input.on('press', (key) => {
-            if (key == 'i') {
-                if (this._opened) {
-                    this.close();
-                }
-                else {
-                    this.open();
-                }
+            switch (key) {
+                case 'i':
+                    this._opened ? this.close() : this.open();
+                    break;
+                default:
+                    break;
             }
         });
     }

@@ -63,5 +63,5 @@ function createButtons ($id) {
 }
 
 function calculateKD ($K, $D){
-    return $K/$D;
+    return round($K/$D, 2);
 }

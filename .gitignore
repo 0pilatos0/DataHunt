@@ -105,3 +105,14 @@ dist
 .tern-port
 
 .htaccess
+
+.idea/
+
+Website/env.php
+
+composer.phar
+/vendor/
+
+.htaccess
+
+env.php

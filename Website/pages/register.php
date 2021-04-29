@@ -108,7 +108,7 @@
                 die();
             }
             if ($_POST["AccPassword"] !== $_POST["AccPasswordCheck"]) {
-                echo "<div class=\"alert alert-danger\" role=\"alert\">asswords don't match!</div>";
+                echo "<div class=\"alert alert-danger\" role=\"alert\">Passwords don't match!</div>";
                 die();
             }
 

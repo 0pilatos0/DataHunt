@@ -88,3 +88,47 @@
    grid-row: 1/3;
 
  }
+
+ /*-------------------------------*/   
+
+ .inventory-wrap{
+   max-width: 1200px;
+   margin: 0 auto;
+   padding-left: 1em;
+   padding-right: 1em;
+
+   display: grid;
+   grid-template-columns: repeat(8, 1fr);
+   grid-template-columns: repeat(6, 1fr);
+   gap: 10px;
+ }
+ .inventory-wrap img {
+   display: block;
+   position:relative;
+   z-index:1;
+   width: 80%;
+   margin:0 auto;
+   transition: transform 0.2s ease-in-out;
+ }
+ .inventory-wrap img:hover{
+   transform:translateY(-10%);
+ }
+ .inventory-wrap .item{
+    text-align: center;
+ }
+ .inventory-wrap {
+    background-color: rgba(128, 128, 128, 0.329);
+    padding-bottom: 1rem;
+    border-radius: 10px 10px;
+ }
+ .inventoryHeader-wrap, .inventoryTitle{
+   background-color: rgba(128, 128, 128, 0.329);
+ }
+
+ .inventoryTitle h2{
+   margin-bottom: 0;
+
+ }
+ .inventoryTitle{
+    text-align: center;
+ }

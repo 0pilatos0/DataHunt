@@ -19,6 +19,9 @@ function resetSession()
 {
     session_unset();
 }
+function adminDelete($id){
+    deleteUser($id);
+}
 function deleteAccount($id){
     deleteUser($id);
     resetSession();

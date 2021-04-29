@@ -18,7 +18,7 @@ if(isset($_GET["delete"])){
                 </div>";
     }
     elseif($_GET["delete"] === "confirm"){
-        deleteAccount($_GET["id"]);
+        adminDelete($_GET["id"]);
         echo "<script>location = \"/admin\"</script>";
     }
 }

@@ -1,11 +1,30 @@
 <?php
-require "../php/database.php";
-require "../php/functions.php";
+
 include './../elements/header.php';
 
-$userinfo = userInfo($_SESSION["user"]);
+if(empty($_SESSION["user"])){
+    echo "<script>location = \"http://datahunt.duckdns.org\";</script>";
+}
 
+$userinfo = $_SESSION["userinfo"];
 
+    if(isset($_GET["delete"])){
+        if($_GET["delete"] === "true"){
+            echo "
+            <div id=\"delete-account-overlay\" onclick='removeOverlay()' class=\"overlay delete-element\">
+                
+            </div>
+            <div class=\"delete-confirm delete-element\">
+                <h3>Are you sure you want to delete your account?</h3>
+                <button id=\"cancel\" onclick=\"removeOverlay()\" class=\"btn btn-cancel\">Cancel</button>
+                <a href=\"?delete=confirm\" class=\"btn btn-confirm\">Confirm</a>
+                </div>";
+        }
+        elseif($_GET["delete"] === "confirm"){
+            deleteAccount($_SESSION["user"]);
+            echo "<script>location = \"/\"</script>";
+        }
+    }
 
 ?>
 
@@ -27,6 +46,23 @@ $userinfo = userInfo($_SESSION["user"]);
                 <div class="card-header">
                     <h3>Feed</h3>
                 </div>
+                <?php
+
+                    $feed = getFeed($userinfo["id"]);
+
+                    if(!empty($feed)){
+                        foreach($feed as $entry){
+                            echo "<div>
+                            <p style='font-size: 20px'>{$entry["message"]}</p>
+                            <p>{$entry["time"]}</p>
+                          </div>";
+                        }
+                    }
+                    else{
+                        echo "<i>Its quite empty here</i>";
+                    }
+
+                ?>
             </div>
 
             <form class="user user-form" method="post">
@@ -67,14 +103,12 @@ $userinfo = userInfo($_SESSION["user"]);
                         </li>
                         <li class="list-group-item">
                             <input type="submit" class="btn btn-primary" value="Save changes">
-                            <a class="btn btn-primary" href="#?delete=true">Delete account</a>
+                            <a class="btn btn-primary" href="?delete=true">Delete account</a>
                         </li>
                     </ul>
 
                 </div>
             </form>
-
-
 
 
             <div class="user user-friend">
@@ -85,4 +119,13 @@ $userinfo = userInfo($_SESSION["user"]);
 
 
         </div>
+<script>
+
+    function removeOverlay(){
+        let f = document.getElementsByClassName("delete-element");
+        while (f.length > 0){
+            f[0].remove();
+        }
+    }
+</script>
 <?php include '../elements/footer.php' ?>

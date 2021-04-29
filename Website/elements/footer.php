@@ -1,9 +1,10 @@
+<?php include 'chatwindow.php' ?>
 <footer class="footer">
             <p>© 2021 - Datahunt Team</p>
         </footer>
 
     </div>
-
+    <script src="../functions.js"></script>
     <!-- Optional JavaScript; choose one of the two! -->
 
     <!-- Option 1: Bootstrap Bundle with Popper -->

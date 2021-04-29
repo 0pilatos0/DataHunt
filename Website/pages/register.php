@@ -1,3 +1,9 @@
+<?php
+    include '../elements/header.php';
+
+    if(!empty($_SESSION["user"])){
+        echo "<script>location = \"http://live.datahunt.duckdns.org\";</script>";
+    }
 <?php include '../elements/header.php' ?>
 <script src="../functions.js" defer></script>
 <style>
@@ -5,8 +11,9 @@
         font-family: 'Roboto', sans-serif;
         margin-left: auto;
         margin-top: 30px;
-
     }
+?>
+<style>
     .list-group{
         color: black;
     }
@@ -30,7 +37,7 @@
 
     <div id="container" >
         <img src="https://via.placeholder.com/800x640.png?text=Hier+komt+coole+afbeelding+van+game" alt="">
-        <form method="post" style="width: 30rem;">
+        <form method="post" style="width: 30rem;" class="formLogin">
             <div>
             <div class="card-header">
                 <h3>Registration</h3>
@@ -68,7 +75,6 @@
         </div>
     </form>
     <?php
-    require "../php/database.php";
     require "mail.php";
 
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -79,8 +85,6 @@
         $password = password_hash(changeInput($_POST["AccPassword"]), PASSWORD_BCRYPT, ['cost' => 12]);
         $password2 = password_hash(changeInput($_POST["AccPasswordCheck"]), PASSWORD_BCRYPT, ['cost' => 12]);
         $verificationtoken = password_hash(rand(1, 1000000), PASSWORD_BCRYPT, ['cost' => 12]);
-        $token = password_hash(rand(1, 1000000), PASSWORD_BCRYPT, ['cost' => 12]);
-        setrawcookie("token", $token, time() + (86400 * 30));
         define("nameRegex", '/^[a-z ,.\'-]+$/i', true);
         define("usernameRegex", '/\w{5,29}/i', true);
         define("mailRegex", '/(?:[a-z0-9!#$%&\'*+\/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&\'*+\/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9]))\.){3}(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9])|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])/', true);
@@ -135,14 +139,6 @@
             die();
 
         }
-    }
-
-    function changeInput($data)
-    {
-        $data = trim($data);
-        $data = stripslashes($data);
-        $data = htmlspecialchars($data);
-        return $data;
     }
 
     ?>

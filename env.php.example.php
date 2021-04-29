@@ -6,3 +6,5 @@ putenv("MYSQLDATABASE=");
 
 putenv("GMAILUSERNAME=");
 putenv("GMAILPASSWORD=");
+
+putenv("BASEURL=");

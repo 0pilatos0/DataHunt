@@ -1,6 +1,9 @@
-<h1>Please wait...</h1>
 <?php
 require "../php/database.php";
+
+if(!empty($_SESSION["user"])){
+    echo "<script>location = \"http://live.datahunt.duckdns.org\";</script>";
+}
 
 $verificationtoken = $_GET["veri"];
 $id;
@@ -31,8 +34,9 @@ function ResetVerification($id)
         $stmt->bindParam(':id', $id);
         $stmt->execute();
         $dbh = null;
-        echo "you are verified!";
-        echo "<script>location = \"http://live.datahunt.duckdns.org\";</script>";
+        include "../elements/header.php";
+        echo "<h2>Thank you for verifying!</h2>";
+        include "../elements/footer.php";
     } catch (PDOException $e) {
         print "Error!: " . $e->getMessage() . "<br/>";
         die();

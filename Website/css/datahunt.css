@@ -139,18 +139,20 @@
 .contentGrid {
     display: grid;
     grid-template-areas: 
-        "intro"
+        "intro intro"
         "image1 patchnotes"
         "update image2"
-        "whitespace"
-        "event"
-        "leaderboard";
+        "whitespace whitespace"
+        "event event"
+        "leaderboard leaderboard";
     grid-template-rows: auto 1fr;
     grid-template-columns: 10% 1fr 10%;
+    width: 90%;
 }
 
 .main-intro {
     grid-area: intro;
+    text-align: center;
 }
 
 .main-intro h2{

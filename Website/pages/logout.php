@@ -18,6 +18,6 @@ $stmt->bindParam(':uid', getSessionValue("user"));
 $stmt->execute();
 $dbh = null;
 resetSession();
-header( "refresh:0.1;url=http://datahunt.duckdns.org" );
+header( "refresh:0.1;url=http://live.datahunt.duckdns.org/" );
 ?>
 

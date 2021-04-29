@@ -2,7 +2,15 @@
     include '../elements/header.php';
 
     if(!empty($_SESSION["user"])){
-        echo "<script>location = \"http://datahunt.duckdns.org\";</script>";
+        echo "<script>location = \"http://live.datahunt.duckdns.org\";</script>";
+    }
+<?php include '../elements/header.php' ?>
+<script src="../functions.js" defer></script>
+<style>
+    form{
+        font-family: 'Roboto', sans-serif;
+        margin-left: auto;
+        margin-top: 30px;
     }
 ?>
 <style>
@@ -125,7 +133,7 @@
             $dbh = null;
             echo "<p id='succesMessage'>added to the database</p>";
             sendVerificationMail($email, $name, $verificationtoken);
-            echo "<script>location = \"http://datahunt.duckdns.org\";</script>";
+            echo "<script>location = \"http://live.datahunt.duckdns.org/\";</script>";
         } catch (PDOException $e) {
             print "Error!: " . $e->getMessage() . "<br/>";
             die();

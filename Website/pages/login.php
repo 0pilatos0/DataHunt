@@ -2,9 +2,13 @@
     include '../elements/header.php' ;
 
     if(!empty($_SESSION["user"])){
-        echo "<script>location = \"http://datahunt.duckdns.org\";</script>";
+        echo "<script>location = \"http://live.datahunt.duckdns.org\";</script>";
     }
 ?>
+=======
+<?php include '../elements/header.php' ?>
+<script src="../functions.js" defer></script>
+
 <div class="content">
 
     <div id="container" >
@@ -71,7 +75,7 @@
                     $stmt->execute();
                 }
                 $dbh = null;
-                echo "<script>location = \"http://datahunt.duckdns.org\";</script>";
+                echo "<script>location = \"http://live.datahunt.duckdns.org\";</script>";
             } else {
                 $dbh = null;
                 echo 'Invalid password or username';

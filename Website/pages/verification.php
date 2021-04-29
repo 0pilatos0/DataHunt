@@ -2,7 +2,7 @@
 require "../php/database.php";
 
 if(!empty($_SESSION["user"])){
-    echo "<script>location = \"http://datahunt.duckdns.org\";</script>";
+    echo "<script>location = \"http://live.datahunt.duckdns.org\";</script>";
 }
 
 $verificationtoken = $_GET["veri"];

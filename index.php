@@ -1,6 +1,5 @@
 <?php include './Website/elements/header.php' ?>
 <link rel="stylesheet" href="/Website/css/homecontent.css">
-<link rel="stylesheet" href="/Website/css/datahunt.css">
 <div class="content">
     <div class="breadcrumbs">
       <ul class="steps">

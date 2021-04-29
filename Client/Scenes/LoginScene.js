@@ -53,8 +53,9 @@ function init(instance){
         errorLabel.element.innerHTML = `Error: ${data}`
     })
     window.socket.on('loginSucceeded', (data) => {
-        setDataCookie("token", data.token)
+        if(data.token) setDataCookie("token", data.token)
         setDataSocket("username", data.username)
+        if(rememberMeCheckbox.element.style.backgroundColor == "green" ? true : false) setDataCookie("rememberMe", rememberMeCheckbox.element.style.backgroundColor == "green" ? true : false)
         window.scenes[0].visible = false
         window.scenes[2].visible = true
     })

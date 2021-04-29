@@ -79,8 +79,7 @@ function init(instance){
         errorLabel.element.innerHTML = `Error: ${data}`
     })
     window.socket.on('registerSucceeded', (data) => {
-        setDataCookie("token", data.token)
-        setDataSocket("username", data.username)
+        //setDataSocket("username", data.username)
         location.reload()
         // window.scenes[1].visible = false
         // window.scenes[2].visible = true

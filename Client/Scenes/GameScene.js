@@ -15,9 +15,9 @@ function init(instance){
     logoutButton.centerX = true
     instance.addElement(logoutButton)
     logoutButton.element.onclick = () => {
+        window.socket.emit('logout', {token:getDataCookie('token')})
         deleteDataCookie('token')
         deleteDataCookie('rememberMe')
-        window.socket.emit('logout')
         location.reload()
     }
 }

@@ -1,0 +1,98 @@
+body{
+    margin:0;
+    overflow: hidden;
+}
+
+*{
+    image-rendering: pixelated;
+}
+
+#editorRight{
+    right: 0;
+}
+
+.base{
+    position: absolute;
+    background: rgba(0, 255, 255, 0.33);
+    min-width: 250px;
+    max-width: 50vw;
+    z-index: 10000;
+    height: 100vh;
+    width: 25vw;
+}
+
+.dragBar{
+    width: 5px;
+    height: 100%;
+    background: red;
+    z-index: 10001;
+    position: absolute;
+    opacity: 0;
+}
+
+.dragBar:hover{
+    cursor: col-resize;
+    opacity: 1;
+}
+
+.hideButton{
+    position: absolute;
+    z-index: 10002;
+    width: 25px;
+    height: 25px;
+    text-align: center;
+    border: none;
+}
+
+.hideButton:hover{
+    background: red;
+}
+
+.hideButton:focus{
+    border: none;
+}
+
+.left{
+    right: 0;
+}
+
+#htmlObjectList, #gameObjectList{
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+}
+
+#htmlObjectList li, #gameObjectList li{
+    list-style: none;
+}
+
+#holderLeft{
+    display: grid;
+    grid-column: auto;
+    grid-template-columns: repeat(2, auto);
+}
+
+.baseObjectDisplay{
+    display: none;
+    position: absolute;
+    background: red;
+    margin: 0;
+    padding: 5px 25px;
+    width: 200px;
+    z-index: 10002;
+    border-radius: 25px;
+}
+
+.baseObjectDisplay:hover{
+    background: yellow;
+}
+
+
+.baseObjectDisplay li{
+    list-style: none;
+    width: 100%;
+}
+
+.baseObjectDisplay li button{
+    width: 100%;
+}

@@ -5,6 +5,24 @@ if(!$userinfo["role_id"]){
     echo "<script>location = \"http://datahunt.duckdns.org\";</script>";
 }
 
+if(isset($_GET["delete"])){
+    if($_GET["delete"] === "true"){
+        echo "
+            <div id=\"delete-account-overlay\" onclick='removeOverlay()' class=\"overlay delete-element\">
+                
+            </div>
+            <div class=\"delete-confirm delete-element\">
+                <h3>Are you sure you want to delete your account?</h3>
+                <button id=\"cancel\" onclick=\"removeOverlay()\" class=\"btn btn-cancel\">Cancel</button>
+                <a href=\"?delete=confirm&id={$_GET["id"]}\" class=\"btn btn-confirm\">Confirm</a>
+                </div>";
+    }
+    elseif($_GET["delete"] === "confirm"){
+        adminDelete($_GET["id"]);
+        echo "<script>location = \"/admin\"</script>";
+    }
+}
+
 ?>
     <div id="container">
         <h1>Admin Panel</h1>
@@ -20,6 +38,7 @@ if(!$userinfo["role_id"]){
                     <th>Enabled</th>
                     <th>Verified</th>
                     <th>Role</th>
+                    <th></th>
                 </tr>
                 <?php
 
@@ -31,7 +50,13 @@ if(!$userinfo["role_id"]){
                     <td>{$user["email"]}</td>
                     <td>{$user["enabled"]}</td>
                     <td>{$user["verified"]}</td>
-                    <td>{$user["role_id"]}</td></tr>";
+                    <td>{$user["role_id"]}</td>
+                    
+                    <td>
+                    <a href=\"?ban=true&id={$user["id"]}\"><i class=\"fas fa-ban\"></i></a>
+                    <a href=\"?delete=true&id={$user["id"]}\"><i class=\"fas fa-trash\"></i></a>
+                    </td>
+                    </tr>";
                 }
 
 
@@ -40,5 +65,13 @@ if(!$userinfo["role_id"]){
         </div>
 
     </div>
+    <script>
 
+        function removeOverlay(){
+            let f = document.getElementsByClassName("delete-element");
+            while (f.length > 0){
+                f[0].remove();
+            }
+        }
+    </script>
 <?php include '../elements/footer.php'; ?>

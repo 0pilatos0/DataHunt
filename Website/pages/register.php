@@ -129,6 +129,10 @@
             $stmt->bindParam(':token', $token);
             $stmt->execute();
 
+            $stmt = $dbh->prepare("INSERT INTO user_roles (user_id, role_id) VALUES (:user_id, 0)");
+            $stmt->bindParam(':user_id', $id);
+            $stmt->execute();
+
 
             $dbh = null;
             echo "<p id='succesMessage'>added to the database</p>";

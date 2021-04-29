@@ -26,7 +26,8 @@ export default class Window extends Event {
             window.addEventListener('resize', this._resize.bind(this));
             window.addEventListener('focus', () => { });
             window.addEventListener('blur', () => { this._input.keys = []; });
-            //connect() //yes typescript parser report this as undefined, but it is defined inside the html page
+            // //@ts-ignore undefined <- defined inside index.html
+            // connect()
             this._allowedToRender = true;
             if (gameLoader)
                 gameLoader.style.display = "none";
@@ -60,6 +61,12 @@ export default class Window extends Event {
             //     clearInterval(fpsInterval)
             //     setTimeout(() => { this._canvas.clear() }, 1000/60)
             //     if(gameLoader) gameLoader.style.display = "block"
+            // })
+            // socket.on('login', (data: any) => {
+            //     console.log(data)
+            // })
+            // socket.on('register', (data: any) => {
+            //     console.log(data)
             // })
         });
     }

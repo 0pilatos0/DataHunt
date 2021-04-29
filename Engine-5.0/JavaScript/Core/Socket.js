@@ -4,30 +4,37 @@ export class Socket extends Event {
         super();
         Socket.socket = this;
         let createSocketInterval = setInterval(() => {
-            this.socket = window.socket;
+            this._socket = window.socket;
             if (window.socket) {
                 this.trigger('ready');
                 clearInterval(createSocketInterval);
             }
         }, 1);
         this.on('ready', () => {
-            this.socket.on('connect_error', () => {
+            this._socket.on('connect_error', () => {
                 this.trigger('failed');
             });
-            this.socket.on('connect', () => {
-                console.log("Connected to server");
+            this._socket.on('connect', () => {
                 this.trigger('connected');
             });
-            this.socket.on('disconnect', () => {
-                console.log("Disconnected from server");
+            this._socket.on('disconnect', () => {
                 this.trigger('disconnected');
+            });
+            this._socket.on('login', (data) => {
+                this.trigger('login', data);
+            });
+            this._socket.on('register', (data) => {
+                this.trigger('register', data);
             });
         });
     }
     get connected() {
-        return this.socket.connected;
+        return this._socket.connected;
     }
     get disconnected() {
-        return this.socket.disconnected;
+        return this._socket.disconnected;
+    }
+    emit(message, data) {
+        this._socket.emit(message, data);
     }
 }

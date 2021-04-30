@@ -9,6 +9,7 @@ module.exports.WebServer = class{
     #publicPath = path.join(__dirname, '../public')
     #gets = [{url:'/404'}]
     #posts = []
+    #sessions = []
     #requestListener = (req, res) => {}
 
     constructor(){ 
@@ -17,9 +18,51 @@ module.exports.WebServer = class{
 
     init(){
         this.#requestListener = (req, res) => {
-            //res.setHeader("Access-Control-Allow-Origin", "*")
+            res.writeHead(200, {"Access-Control-Allow-Origin": "*"})
             res.redirect = (url) => {
                 res.writeHead(302, {'Location': url})
+            }
+            res.cookie = (name, data, expires = Date.now() + 30 * 24 * 3600) => {
+                res.writeHead(200, {'Set-Cookie': `${name}=${data}; Expires=${expires}`})
+            }
+            res.clearCookie = (name) => {
+                res.writeHead(200, {'Set-Cookie': `${name}=; Max-Age=0`})
+            }
+            res.destroySession = (id) => {
+                this.#sessions.splice(this.#sessions.indexOf(this.#sessions.find(s => s.id === id)), 1)
+            }
+            res.createSession = () => {
+                let cookies = req.headers.cookie?.split(/;\s?/g)
+                cookies?.map(c => {
+                    cookies[cookies.indexOf(c)] = c.split('=', 2)
+                    c = c.split('=', 2)
+                    if(c[0] === 'JSSESSID'){
+                        if(!this.#sessions.some(s => s.id === c[1])) {
+                            res.clearCookie(c[0])
+                        }
+                    }
+                })
+                cookies = req.headers.cookie?.split(/;\s?/g)
+                if(typeof cookies === "undefined" || cookies.every(c => !c.includes('JSSESSID')) || this.#sessions.length == 0 || !this.#sessions.find(s => s.id === cookies.find(c => c.includes('JSSESSID')).split('=', 2)[1])){
+                    let jsSessID = ''
+                    for (let i = 0; i < 10; i++) {
+                        jsSessID += Math.random().toString(36).substring(7)
+                    }
+                    while (jsSessID.length > 54) {
+                        jsSessID = jsSessID.substring(0, jsSessID.length-1)
+                    }
+                    res.cookie('JSSESSID', jsSessID)
+                    cookies?.map(c => {
+                        if(c.includes('JSSESSID')) cookies[cookies.indexOf(c)] = `JSSESSID=${jsSessID}`
+                    })
+                    if(typeof cookies !== "undefined" && !cookies.every(c => {
+                        !c.includes('JSSESSID')
+                    })) cookies.push(`JSSESSID=${jsSessID}`)
+                    if(typeof cookies === "undefined") cookies = [`JSSESSID=${jsSessID}`]
+                    this.#sessions.push({id:jsSessID})
+                }
+                req.session = this.#sessions.find(s => s.id === cookies.find(c => c.includes('JSSESSID')).split('=', 2)[1])
+                return this.#sessions.find(s => s.id === cookies.find(c => c.includes('JSSESSID')).split('=', 2)[1])
             }
             if(req.url.includes('.html') || !req.url.includes('.')){
                 let url = req.url.substring(0, req.url.indexOf('?') > -1 ? req.url.indexOf('?') : req.url.length)
@@ -37,14 +80,15 @@ module.exports.WebServer = class{
                 if(req.method == "GET"){
                     let urls = url.substring(1, url.length).split('/')
                     let get
-                    this.#gets.map(g => {
+                    this.#gets.some(g => {
                         let gUrls = g.url.substring(1, g.url.length).split('/')
-                        if(gUrls.length === urls.length){
+                        if(gUrls == urls){ get = g; return true}
+                        else if(gUrls.length === urls.length){
                             let rightUrl = gUrls.every(u => {
                                 if(u === '*') u = urls[gUrls.indexOf(u)]
                                 return urls.indexOf(u) > -1
                             })
-                            if(rightUrl === true) get = g
+                            if(rightUrl === true){get = g; return true}
                         }
                     })
                     if(get){
@@ -66,11 +110,15 @@ module.exports.WebServer = class{
                         if(!baseUrlPath.includes('.html')) baseUrlPath = `${baseUrlPath}.html`
                         if(baseUrlPath.includes('/.html')) baseUrlPath = baseUrlPath.replace('/.html', '.html')
                         baseUrlPath = path.join(this.#publicPath, `pages/${baseUrlPath}`)
+                        //#region session
+                        let cookies = req.headers.cookie?.split(/;\s?/g)
+                        if(cookies) req.session = this.#sessions.find(s => s.id === cookies.find(c => c.includes('JSSESSID')).split('=', 2)[1]) || {}
+                        else req.session = {}
+                        //#endregion session
                         let htmlPath = path.join(this.#publicPath, `pages/${pathUrl}`)
                         if(fs.existsSync(htmlPath) || fs.existsSync(baseUrlPath)){
                             fs.readFile(path.join(this.#publicPath, `pages/template.html`), 'UTF-8', (err, template) => {
                                 fs.readFile(fs.existsSync(htmlPath) ? htmlPath : baseUrlPath, 'UTF-8', (err, html) => {
-                                    res.writeHead(200, {"Content-Type": "text/html"})
                                     req.vars = []
                                     if(html.match(/{{\w*}}/g)){
                                         html.match(/{{\w*}}/g).map(v => {
@@ -79,6 +127,12 @@ module.exports.WebServer = class{
                                     }
                                     req.html = html
                                     if(get.callback) get.callback(req, res)
+                                    if(typeof cookies === "undefined" || cookies.find(c => !c.includes('JSSESSID'))) {
+                                        let data = req.session
+                                        let session = res.createSession()
+                                        req.session = Object.assign(req.session, data)
+                                        this.#sessions[this.#sessions.indexOf(session)] = req.session
+                                    }
                                     if(req.html.match(/{{\w*}}/g)){
                                         req.html.match(/{{\w*}}/g).map(v => {
                                             req.html = req.html.replace(v, req.vars[v.replace(/[{}]/g, "")] || v)
@@ -97,19 +151,26 @@ module.exports.WebServer = class{
                                         template = template.replace('{{HEAD}}', headData.toString().replace(/>,</g , '>\r\n<'))
                                     }
                                     else template = template.replace('{{HEAD}}', '')
+                                    //res.writeHead(200, {"Content-Type": "text/html"})
                                     res.end(template.replace('{{BODY}}', req.html))
                                 })
                             })
                         }
                         else{
                             if(get.callback) get.callback(req, res)
+                            if(typeof cookies === "undefined" || cookies.find(c => !c.includes('JSSESSID'))) {
+                                let data = req.session
+                                let session = res.createSession()
+                                req.session = Object.assign(req.session, data)
+                                this.#sessions[this.#sessions.indexOf(session)] = req.session
+                            }
                             if(Object.keys(req.params).length === 0) this.#error(req, res)
                             else{
                                 req.data = {}
                                 Object.keys(args).map(a => {
                                     req.data[a] = args[a]
                                 })
-                                res.writeHead(200, {"Content-Type": "application/json"})
+                                //res.writeHead(200, {"Content-Type": "application/json"})
                                 res.end(JSON.stringify(req.params))
                             }
                         }

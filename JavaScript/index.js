@@ -11,10 +11,18 @@ server.get('/', (req, res) => {
     //req.vars.PIZZA = `<script>let pizza = "${req.data.pizza}"</script>`
     //req.vars.pizza = req.data.PIZZA
     //console.log(req.vars)
+    // req.session = []
+    // req.session.pizza = "123"
+    console.log(req.session)
+    
+    // res.createSession()
+    // console.log(req.session)
 })
 
 server.get('/pizza', (req, res, html) => {
-    
+    req.session = {pizza: "123"}
+    //req.session.
+    //console.log(req.session)
 })
 
 server.post('/', (req, res) => {
@@ -23,6 +31,7 @@ server.post('/', (req, res) => {
 
 server.get('/:id', (req, res) => {
     //console.log(req.params)
+    console.log(req.session)
 })
 
 let r = new Router('/test', server)

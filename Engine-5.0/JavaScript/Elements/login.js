@@ -7,14 +7,14 @@ let registerText = document.getElementById('RegisterText');
 let loginElement = document.getElementById('loginElement');
 let registerElement = document.getElementById('RegisterElement');
 
-login.onclick = function(){
+login.onclick = () => {
     registerText.classList.remove('active');
     loginText.classList.add('active');
     loginElement.classList.remove('hidden');
     registerElement.classList.add('hidden');
-    
 }
-register.onclick = function(){
+
+register.onclick = () => {
     loginText.classList.remove('active');
     registerText.classList.add('active');
     registerElement.classList.remove('hidden');

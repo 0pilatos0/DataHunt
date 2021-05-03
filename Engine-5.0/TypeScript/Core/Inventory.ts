@@ -21,7 +21,6 @@ export default class Inventory extends Event{
                 case 'i':
                     this._opened ? this.close() : this.open()
                     break;
-            
                 default:
                     break;
             }

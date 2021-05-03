@@ -1,5 +1,6 @@
 import Canvas from "./Canvas.js"
 import Event from "./Event.js"
+import HTMLLoader from "./FileLoaders/HTMLLoader.js"
 import Input from "./Input.js"
 import Scene from "./Scene.js"
 import { Socket } from "./Socket.js"
@@ -44,11 +45,20 @@ export default class Window extends Event{
             // let socket = new Socket()
             // socket.on('connected', () => {
             //     console.log("connected :)")
-            //     this._allowedToRender = true
-            //     window.requestAnimationFrame(this._render.bind(this))
-            //     updateInterval = setInterval(() => {this._update()}, 1000/60)
-            //     fpsInterval = setInterval(() => {this._fps = 0}, 1000)
-            //     if(gameLoader) gameLoader.style.display = "none"
+            //     new HTMLLoader('/Engine-5.0/JavaScript/Elements/login.html').on('load', (data: any) => {
+            //         //@ts-ignore
+            //         document.getElementById('login').insertAdjacentHTML('beforeend', data)
+            //         let elem = document.createElement('script')
+            //         elem.src = '/Engine-5.0/JavaScript/Elements/login.js'
+            //         //@ts-ignore
+            //         document.getElementById('login').appendChild(elem)
+            //         //document.getElementById('login').innerHTML = data
+            //     })
+            //     // this._allowedToRender = true
+            //     // window.requestAnimationFrame(this._render.bind(this))
+            //     // updateInterval = setInterval(() => {this._update()}, 1000/60)
+            //     // fpsInterval = setInterval(() => {this._fps = 0}, 1000)
+            //     // if(gameLoader) gameLoader.style.display = "none"
             // })
 
             // socket.on('disconnected', () => {

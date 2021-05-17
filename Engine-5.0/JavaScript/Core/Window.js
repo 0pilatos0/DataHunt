@@ -1,7 +1,9 @@
 import Canvas from "./Canvas.js";
 import Event from "./Event.js";
+import HTMLLoader from "./FileLoaders/HTMLLoader.js";
 import Input from "./Input.js";
 import Scene from "./Scene.js";
+import { Socket } from "./Socket.js";
 import Vector2 from "./Vector2.js";
 export default class Window extends Event {
     constructor() {
@@ -26,57 +28,60 @@ export default class Window extends Event {
             window.addEventListener('resize', this._resize.bind(this));
             window.addEventListener('focus', () => { });
             window.addEventListener('blur', () => { this._input.keys = []; });
-            // //@ts-ignore undefined <- defined inside index.html
-            // connect()
+            //@ts-ignore undefined <- defined inside index.html
+            connect();
             this._allowedToRender = true;
             if (gameLoader)
                 gameLoader.style.display = "none";
             let updateInterval = setInterval(() => { this._update(); }, 1000 / 60);
             window.requestAnimationFrame(this._render.bind(this));
             let fpsInterval = setInterval(() => { this._fps = 0; }, 1000);
-            // clearInterval(updateInterval)
-            // clearInterval(fpsInterval)
-            // if(gameLoaderTitle) gameLoaderTitle.innerText = "Connecting to server"
-            // let socket = new Socket()
-            // socket.on('connected', () => {
-            //     console.log("connected :)")
-            //     new HTMLLoader('/Engine-5.0/JavaScript/Elements/login.html').on('load', (data: any) => {
-            //         //@ts-ignore
-            //         document.getElementById('login').insertAdjacentHTML('beforeend', data)
-            //         let elem = document.createElement('script')
-            //         elem.src = '/Engine-5.0/JavaScript/Elements/login.js'
-            //         //@ts-ignore
-            //         document.getElementById('login').appendChild(elem)
-            //         //document.getElementById('login').innerHTML = data
-            //     })
-            //     // this._allowedToRender = true
-            //     // window.requestAnimationFrame(this._render.bind(this))
-            //     // updateInterval = setInterval(() => {this._update()}, 1000/60)
-            //     // fpsInterval = setInterval(() => {this._fps = 0}, 1000)
-            //     // if(gameLoader) gameLoader.style.display = "none"
-            // })
-            // socket.on('disconnected', () => {
-            //     console.log("disconnected :(")
-            //     this._allowedToRender = false
-            //     clearInterval(updateInterval)
-            //     clearInterval(fpsInterval)
-            //     setTimeout(() => { this._canvas.clear() }, 1000/60)
-            //     if(gameLoader) gameLoader.style.display = "block"
-            // })
-            // socket.on('failed', () => {
-            //     console.log('Can\'t connect')
-            //     this._allowedToRender = false
-            //     clearInterval(updateInterval)
-            //     clearInterval(fpsInterval)
-            //     setTimeout(() => { this._canvas.clear() }, 1000/60)
-            //     if(gameLoader) gameLoader.style.display = "block"
-            // })
-            // socket.on('login', (data: any) => {
-            //     console.log(data)
-            // })
-            // socket.on('register', (data: any) => {
-            //     console.log(data)
-            // })
+            clearInterval(updateInterval);
+            clearInterval(fpsInterval);
+            if (gameLoaderTitle)
+                gameLoaderTitle.innerText = "Connecting to server";
+            let socket = new Socket();
+            socket.on('connected', () => {
+                console.log("connected :)");
+                new HTMLLoader('/Engine-5.0/JavaScript/Elements/login.html').on('load', (data) => {
+                    //@ts-ignore
+                    document.getElementById('login').insertAdjacentHTML('beforeend', data);
+                    let elem = document.createElement('script');
+                    elem.src = '/Engine-5.0/JavaScript/Elements/login.js';
+                    //@ts-ignore
+                    document.getElementById('login').appendChild(elem);
+                    //document.getElementById('login').innerHTML = data
+                });
+                // this._allowedToRender = true
+                // window.requestAnimationFrame(this._render.bind(this))
+                // updateInterval = setInterval(() => {this._update()}, 1000/60)
+                // fpsInterval = setInterval(() => {this._fps = 0}, 1000)
+                // if(gameLoader) gameLoader.style.display = "none"
+            });
+            socket.on('disconnected', () => {
+                console.log("disconnected :(");
+                this._allowedToRender = false;
+                clearInterval(updateInterval);
+                clearInterval(fpsInterval);
+                setTimeout(() => { this._canvas.clear(); }, 1000 / 60);
+                if (gameLoader)
+                    gameLoader.style.display = "block";
+            });
+            socket.on('failed', () => {
+                console.log('Can\'t connect');
+                this._allowedToRender = false;
+                clearInterval(updateInterval);
+                clearInterval(fpsInterval);
+                setTimeout(() => { this._canvas.clear(); }, 1000 / 60);
+                if (gameLoader)
+                    gameLoader.style.display = "block";
+            });
+            socket.on('login', (data) => {
+                console.log(data);
+            });
+            socket.on('register', (data) => {
+                console.log(data);
+            });
         });
     }
     _resize() {

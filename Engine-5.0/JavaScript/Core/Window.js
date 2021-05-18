@@ -16,6 +16,7 @@ export default class Window extends Event {
         this._displaySize = new Vector2(0, 0);
         this._allowedToRender = false;
         this._input = new Input();
+        //TODO reorder this so Input and everything starts initializing at succesfull register / login
         document.body.appendChild(this._canvas.element);
         let gameLoader = document.getElementById('gameLoader');
         let gameLoaderTitle = document.getElementById('gameLoaderTitle');

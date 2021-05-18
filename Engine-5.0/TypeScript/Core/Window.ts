@@ -21,6 +21,7 @@ export default class Window extends Event{
 
     constructor(){
         super()
+        //TODO reorder this so Input and everything starts initializing at succesfull register / login
         document.body.appendChild(this._canvas.element)
         let gameLoader = document.getElementById('gameLoader')
         let gameLoaderTitle = document.getElementById('gameLoaderTitle')

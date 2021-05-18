@@ -1,20 +1,20 @@
-let login = document.getElementById("TogglerLogin");
-let register = document.getElementById('TogglerRegister');
+loginToggler = document.getElementById("TogglerLogin");
+registerToggler = document.getElementById('TogglerRegister');
 
-let loginText = document.getElementById('loginText');
-let registerText = document.getElementById('RegisterText');
+loginText = document.getElementById('loginText');
+registerText = document.getElementById('RegisterText');
 
-let loginElement = document.getElementById('loginElement');
-let registerElement = document.getElementById('RegisterElement');
+loginElement = document.getElementById('loginElement');
+registerElement = document.getElementById('RegisterElement');
 
-login.onclick = () => {
+loginToggler.onclick = () => {
     registerText.classList.remove('active');
     loginText.classList.add('active');
     loginElement.classList.remove('hidden');
     registerElement.classList.add('hidden');
 }
 
-register.onclick = () => {
+registerToggler.onclick = () => {
     loginText.classList.remove('active');
     registerText.classList.add('active');
     registerElement.classList.remove('hidden');

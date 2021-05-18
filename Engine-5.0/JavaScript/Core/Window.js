@@ -59,6 +59,7 @@ export default class Window extends Event {
                 // if(gameLoader) gameLoader.style.display = "none"
             });
             socket.on('disconnected', () => {
+                var _a;
                 console.log("disconnected :(");
                 this._allowedToRender = false;
                 clearInterval(updateInterval);
@@ -66,6 +67,11 @@ export default class Window extends Event {
                 setTimeout(() => { this._canvas.clear(); }, 1000 / 60);
                 if (gameLoader)
                     gameLoader.style.display = "block";
+                //@ts-ignore
+                while (document.getElementById('login').childNodes.length > 0) {
+                    //@ts-ignore
+                    document.getElementById('login').childNodes[((_a = document.getElementById('login')) === null || _a === void 0 ? void 0 : _a.childNodes.length) - 1].remove();
+                }
             });
             socket.on('failed', () => {
                 console.log('Can\'t connect');

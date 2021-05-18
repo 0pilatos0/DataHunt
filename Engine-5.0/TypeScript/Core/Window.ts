@@ -68,6 +68,11 @@ export default class Window extends Event{
                 clearInterval(fpsInterval)
                 setTimeout(() => { this._canvas.clear() }, 1000/60)
                 if(gameLoader) gameLoader.style.display = "block"
+                //@ts-ignore
+                while(document.getElementById('login').childNodes.length > 0){
+                    //@ts-ignore
+                    document.getElementById('login').childNodes[document.getElementById('login')?.childNodes.length - 1].remove()
+                }
             })
 
             socket.on('failed', () => {

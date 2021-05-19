@@ -83,10 +83,16 @@ export default class Window extends Event {
                 if (gameLoader)
                     gameLoader.style.display = "block";
             });
-            socket.on('login', (data) => {
+            socket.on('succeededLogin', (data) => {
                 console.log(data);
             });
-            socket.on('register', (data) => {
+            socket.on('succeededRegister', (data) => {
+                console.log(data);
+            });
+            socket.on('failedRegister', (data) => {
+                console.log(data);
+            });
+            socket.on('failedLogin', (data) => {
                 console.log(data);
             });
         });

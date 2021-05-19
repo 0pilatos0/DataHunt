@@ -2,7 +2,7 @@ import Event from "./Event.js"
 
 export class Socket extends Event{
     public static socket: any
-    private _socket: any
+    private _socket: any = (window as any).socket
 
     constructor(){
         super()
@@ -11,6 +11,9 @@ export class Socket extends Event{
             this._socket = (window as any).socket
             if((window as any).socket) {
                 this.trigger('ready')
+                this._socket.onAny((e: any, args: any) => {
+                    this.trigger(e, args)
+                })
                 clearInterval(createSocketInterval)
             }
         }, 1)
@@ -23,12 +26,6 @@ export class Socket extends Event{
             })
             this._socket.on('disconnect', () => {
                 this.trigger('disconnected')
-            })
-            this._socket.on('login', (data: any) => {
-                this.trigger('login', data)
-            })
-            this._socket.on('register', (data: any) => {
-                this.trigger('register', data)
             })
         })
     }
@@ -45,4 +42,3 @@ export class Socket extends Event{
         this._socket.emit(message, data)
     }
 }
-

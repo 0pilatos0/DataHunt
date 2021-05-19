@@ -2,11 +2,15 @@ import Event from "./Event.js";
 export class Socket extends Event {
     constructor() {
         super();
+        this._socket = window.socket;
         Socket.socket = this;
         let createSocketInterval = setInterval(() => {
             this._socket = window.socket;
             if (window.socket) {
                 this.trigger('ready');
+                this._socket.onAny((e, args) => {
+                    this.trigger(e, args);
+                });
                 clearInterval(createSocketInterval);
             }
         }, 1);
@@ -19,12 +23,6 @@ export class Socket extends Event {
             });
             this._socket.on('disconnect', () => {
                 this.trigger('disconnected');
-            });
-            this._socket.on('login', (data) => {
-                this.trigger('login', data);
-            });
-            this._socket.on('register', (data) => {
-                this.trigger('register', data);
             });
         });
     }

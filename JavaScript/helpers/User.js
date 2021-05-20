@@ -29,7 +29,7 @@ module.exports.User = class {
     }
 
     static async characters(id){
-        return global.sql.query(`SELECT characters.id, class.name, stats.level, characters.name as char_name FROM characters INNER JOIN class ON class.id = characters.class_id INNER JOIN stats ON stats.id = characters.stats_id  where characters.user_id = ${id}`)
+        return global.sql.query(`SELECT characters.id, class.name, stats.level, characters.name as char_name FROM characters INNER JOIN class ON class.id = characters.class_id INNER JOIN stats ON stats.id = characters.stats_id where characters.user_id = ${id}`)
     }
 
     static async addToFeed(id, message){
@@ -82,7 +82,7 @@ module.exports.User = class {
   }
 
   static async getMutlipleFriendships(id){
-      return global.sql.query(`SELECT * FROM friends WHERE userA = (${user}) OR userB = (${user})`)
+      return global.sql.query(`SELECT * FROM friends WHERE userA = (${id}) OR userB = (${id})`)
   }
 
   static async getUserId(username){

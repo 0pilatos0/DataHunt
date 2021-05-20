@@ -1,33 +1,4 @@
-<?php
-
-include './../elements/header.php';
-
-if(empty($_SESSION["user"])){
-    echo "<script>location = \"http://datahunt.duckdns.org\";</script>";
-}
-
-$userinfo = $_SESSION["userinfo"];
-
-    if(isset($_GET["delete"])){
-        if($_GET["delete"] === "true"){
-            echo "
-            <div id=\"delete-account-overlay\" onclick='removeOverlay()' class=\"overlay delete-element\">
-                
-            </div>
-            <div class=\"delete-confirm delete-element\">
-                <h3>Are you sure you want to delete your account?</h3>
-                <button id=\"cancel\" onclick=\"removeOverlay()\" class=\"btn btn-cancel\">Cancel</button>
-                <a href=\"?delete=confirm\" class=\"btn btn-confirm\">Confirm</a>
-                </div>";
-        }
-        elseif($_GET["delete"] === "confirm"){
-            deleteAccount($_SESSION["user"]);
-            echo "<script>location = \"/\"</script>";
-        }
-    }
-
-?>
-
+{{DYNAMICDATA}}
         <div class="user-container">
             <div class="user-characters">
                 <div class="card-header">
@@ -35,9 +6,7 @@ $userinfo = $_SESSION["userinfo"];
                 </div>
                 <div>
                     <ul class="list-group list-group-flush">
-
-                        <?php showCharacters(characters($_SESSION["user"])); ?>
-
+                        {{CHARACTER}}
                     </ul>
                 </div>
             </div>
@@ -46,26 +15,10 @@ $userinfo = $_SESSION["userinfo"];
                 <div class="card-header">
                     <h3>Feed</h3>
                 </div>
-                <?php
-
-                    $feed = getFeed($userinfo["id"]);
-
-                    if(!empty($feed)){
-                        foreach($feed as $entry){
-                            echo "<div>
-                            <p style='font-size: 20px'>{$entry["message"]}</p>
-                            <p>{$entry["time"]}</p>
-                          </div>";
-                        }
-                    }
-                    else{
-                        echo "<i>Its quite empty here</i>";
-                    }
-
-                ?>
+                {{FEED}}
             </div>
 
-            <form class="user user-form" method="post">
+            <form action="user" class="user user-form" method="post">
                 <div>
                     <div class="card-header">
                         <h3>Change account</h3>
@@ -74,7 +27,7 @@ $userinfo = $_SESSION["userinfo"];
                         <li class="list-group-item">
                             <label for="username">Username</label>
                             <div class="col-sm-10">
-                                <input class="input form-control" name="username" id="username" value="<?php echo $userinfo["username"] ?>"><br>
+                                <input class="input form-control" name="username" id="username" value="{{USERNAME}}"><br>
                             </div>
                         </li>
                         <li class="list-group-item">
@@ -98,7 +51,7 @@ $userinfo = $_SESSION["userinfo"];
                         <li class="list-group-item">
                             <label for="email">Email</label>
                             <div class="col-sm-10">
-                                <input class="input form-control" name="email" id="email" value="<?php echo $userinfo["email"] ?>"><br>
+                                <input class="input form-control" name="email" id="email" value="{{EMAIL}}"><br>
                             </div>
                         </li>
                         <li class="list-group-item">
@@ -128,4 +81,3 @@ $userinfo = $_SESSION["userinfo"];
         }
     }
 </script>
-<?php include '../elements/footer.php' ?>

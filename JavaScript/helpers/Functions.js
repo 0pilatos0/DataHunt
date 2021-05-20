@@ -17,16 +17,30 @@ module.exports.Functions = class {
     }
     
     static showCharacters(characters){
-        for (i = 0; i < sizeof($characters); i++){
-            let c = characters[i]
+        if(characters.length){
+            let returnData = ''
+            for (let i = 0; i < characters.length; i++){
+                let c = characters[i]
+                returnData += `
+                <li class=\"list-group-item char-li\">
+                    <a class=\"char-link\" href=\"character?id=${c["id"]}\">
+                        <div class='char'>
+                            ${c["char_name"]}<br>Lvl ${c["level"]} - ${c["name"]}
+                        </div>
+                    </a>
+                </li>`
+            }
+            return returnData
+        }
+        else{
             return `
-            <li class=\"list-group-item char-li\">
-                <a class=\"char-link\" href=\"character?id={${c["id"]}}\">
-                    <div class='char'>
-                        {${c["char_name"]}}<br>Lvl {${c["level"]}} - {${c["name"]}}
-                    </div>
-                </a>
-            </li>`
+                <li class=\"list-group-item char-li\">
+                    <a class=\"char-link\" href=\"character?id=${characters["id"]}\">
+                        <div class='char'>
+                            ${characters["char_name"]}<br>Lvl ${characters["level"]} - ${characters["name"]}
+                        </div>
+                    </a>
+                </li>`
         }
     }
 
@@ -58,6 +72,6 @@ module.exports.Functions = class {
     }
 
     static calculateKD(k, d){
-        return Math.round(k/d, 2)
+        return Math.round(k/d * 100) / 100
     }
 }

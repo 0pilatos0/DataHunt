@@ -11,6 +11,157 @@ server.get('/', (req, res) => {
     
 })
 
+server.get('/character', async (req, res) => {
+    if(!req.session.user){
+        res.redirect('/')
+        return
+    }
+    let stats = await User.getStats(req.data.id)
+    req.vars.STATS = `${stats.name}, ${stats.level}`
+    req.vars.KD = `Your K/D (Kills divided by Deaths): ${Functions.calculateKD(stats.kills, stats.deaths)} <br> Health: ${stats.health} <br> Level: ${stats.level}`
+})
+
+server.get('/friends', async (req, res) => {
+    req.vars.FEEDBACK = req.session.friendFeedback
+    delete req.session.friendFeedback
+    if(!req.session.user) {
+        res.redirect('/')
+        return
+    }
+    let results = await User.getMutlipleFriendships(req.session.user)
+    for (let i = 0; i < results.length; i++) {
+        if(results[i].userA == req.session.user){
+            results[i].name = await User.getUsername(results[i]["userB"])
+        }
+        else{
+            results[i].name = await User.getUsername(results[i]["userA"])
+        }
+    }
+    req.vars.FRIENDS = ''
+    results.map(r => {
+        req.vars.FRIENDS += `<div class=\"card text-secondary w-75 mt-4\" style=\"width: 18rem;\">
+        <div class=\"card-body\">
+        <h5 class=\"card-title\">${r["name"].username}</h5>`
+        if(r["friendship"] == 0 && r["userA"] == req.session.user){
+            req.vars.FRIENDS += `<p class=\"card-text\">User hasn't replied to your request yet.</p>`
+        }
+        else if(r["friendship"] == 0 && r["userB"] == req.session.user){
+            req.vars.FRIENDS += Functions.createButtons(r["id"])
+        }
+        else if(r["friendship"] == 1){
+            req.vars.FRIENDS += `<p class=\"card-text\">You are friends.</p>`
+        }
+        req.vars.FRIENDS += `</div></div>`
+    })
+})
+
+server.post('/friends', async (req, res) => {
+    let user = await User.getUsername(req.session.user)
+    if(req.data["AccUsername"]){
+        let username = Functions.changeInput(req.data["AccUsername"])
+        let usernameRegex = /\w{5,29}/i
+        if(!username.match(usernameRegex)){
+            req.session.friendFeedback = `<div class=\"alert alert-danger\" role=\"alert\">The username doesn't follow our rules</div>`
+            res.redirect('/friends')
+        }
+        let friendId = await User.getUserId(username)
+        friendId = friendId.id
+        if(friendId){
+            let friendship = await User.getFriendship(req.session.user, friendId)
+            if(friendship){
+                req.session.friendFeedback = `<div class=\"alert alert-danger\" role=\"alert\">You are already friends with this user</div>`
+                if (friendship["friendship"] == 0 && friendship["userA"] == friendId) {
+                    await User.updateFriendship(friendship["id"], 1)
+                    res.redirect('/friends')
+                }
+            }
+            else if(friendId === false ){
+                req.session.friendFeedback = `<div class=\"alert alert-danger\" role=\"alert\">User doesn't exist</div>`
+                res.redirect('/friends')
+            }
+            else{
+                req.session.friendFeedback = `<div class=\"alert alert-success\" role=\"alert\">Adding you as a friend right now :)</div>`
+                await User.setFriendShip(req.session.user, friendId, 0)
+                res.redirect('/friends')
+            }
+        }
+        else if(req.data.btnradio === "AcceptRequest"){
+            await User.updateFriendship(req.data.id, 1)
+            let results = await User.getFriendship(null, null, req.data.id)
+            let friend
+            if(results["userA"] == req.session.user){
+                friend = results["userB"]
+            }
+            else{
+                friend = results["userA"]
+            }
+            await User.addToFeed(req.session.user, `${user} and ${User.getUsername(friend)} are now friends!`)
+            await User.addToFeed(friend, `${User.getUsername(friend)} are now friends!`)
+            res.redirect('/friends')
+        }
+        else if(req.data.btnradio === "DeclineRequest"){
+            await User.deleteFriendship(req.data.id)
+            res.redirect('/friends')
+        }
+        else{
+            req.session.friendFeedback = `<div class=\"alert alert-danger\" role=\"alert\">User doesn't exist</div>`
+            res.redirect('/friends')
+        }
+    }
+    res.redirect('/friends')
+})
+
+server.get('/user', async (req, res) => {
+    if(!req.session.user){
+        res.redirect('/')
+        return
+    }
+    let userinfo = req.session.userinfo
+    req.vars.USERNAME = userinfo["username"]
+    req.vars.EMAIL = userinfo["email"]
+    req.vars.DYNAMICDATA = ''
+    if(req.data.delete){
+        if(req.data.delete === "true"){
+            req.vars.DYNAMICDATA = `
+            <div id=\"delete-account-overlay\" onclick='removeOverlay()' class=\"overlay delete-element\">
+            </div>
+            <div class=\"delete-confirm delete-element\">
+            <h3>Are you sure you want to delete your account?</h3>
+            <button id=\"cancel\" onclick=\"removeOverlay()\" class=\"btn btn-cancel\">Cancel</button>
+            <a href=\"?delete=confirm\" class=\"btn btn-confirm\">Confirm</a>
+            </div>`
+        }
+        else if(req.data.delete === "confirm"){
+            await User.delete(req.session.user)
+            res.redirect('/')
+        }
+    }
+    req.vars.CHARACTER = Functions.showCharacters(await User.characters(req.session.user))
+    req.vars.FEED = ''
+    let feed = await User.getFeed(userinfo["id"])
+    if(feed.length){
+        feed.map(f => {
+            req.vars.FEED += `<div>
+                <p style='font-size: 20px'>${f["message"]}</p>
+                <p>${f["time"]}</p>
+            </div>`
+        })
+    }
+    else if(feed){
+        req.vars.FEED = '<i>Its quite empty here</i>'
+    }
+    else{
+        req.vars.FEED = `<div>
+                <p style='font-size: 20px'>${feed["message"]}</p>
+                <p>${feed["time"]}</p>
+            </div>`
+    }
+})
+
+server.post('/user', (req, res) => {
+
+})
+
 server.get('/logout', async (req, res) => {
     if(!req.session.user){
         res.redirect('/')

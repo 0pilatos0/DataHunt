@@ -121,6 +121,7 @@
                         $userinfo =  $_SESSION["userinfo"];
                         if($userinfo["role_id"]){
                             echo '<li><a id="admin" href="/Website/pages/admin">Admin</a></li>';
+                            echo '<li><a id="patchnotes" href="/Website/pages/creationPatchnotes">Patchnotes</a></li>';
                         }
                        echo '<li style="float:right"><a id="logout" href="/Website/pages/logout">Logout</a></li>';
                        echo '<li style="float:right"><a id="user" href="/Website/pages/user">User</a></li>';

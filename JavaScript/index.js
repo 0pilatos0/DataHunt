@@ -4,7 +4,7 @@ let server = new WebServer()
 
 server.get('/', (req, res) => {
     console.log(req.session)
-    
+    console.log(res.cookies())
 })
 
 server.get('/pizza', (req, res) => {

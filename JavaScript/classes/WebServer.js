@@ -33,6 +33,9 @@ module.exports.WebServer = class{
             res.destroySession = (id) => {
                 this.#sessions.splice(this.#sessions.indexOf(this.#sessions.find(s => s.id === id)), 1)
             }
+            res.cookies = () => {
+                return req.headers.cookie?.split(/;\s?/g)
+            }
             res.createSession = () => {
                 let cookies = req.headers.cookie?.split(/;\s?/g)
                 cookies?.map(c => {

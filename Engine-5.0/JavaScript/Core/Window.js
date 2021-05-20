@@ -84,15 +84,51 @@ export default class Window extends Event {
                     gameLoader.style.display = "block";
             });
             socket.on('succeededLogin', (data) => {
+                var _a, _b;
+                (_a = document.getElementById('error')) === null || _a === void 0 ? void 0 : _a.remove();
+                (_b = document.getElementById('success')) === null || _b === void 0 ? void 0 : _b.remove();
+                new HTMLLoader('/Engine-5.0/JavaScript/Elements/success.html').on('load', (html) => {
+                    var _a;
+                    html = html.replace('{{MESSAGE}}', data.message);
+                    //@ts-ignore
+                    (_a = document.getElementById('messagebox')) === null || _a === void 0 ? void 0 : _a.insertAdjacentElement('afterbegin', data.message);
+                });
                 console.log(data);
             });
             socket.on('succeededRegister', (data) => {
+                var _a, _b;
+                (_a = document.getElementById('error')) === null || _a === void 0 ? void 0 : _a.remove();
+                (_b = document.getElementById('success')) === null || _b === void 0 ? void 0 : _b.remove();
+                new HTMLLoader('/Engine-5.0/JavaScript/Elements/success.html').on('load', (html) => {
+                    var _a;
+                    html = html.replace('{{MESSAGE}}', data.message);
+                    //@ts-ignore
+                    (_a = document.getElementById('messagebox')) === null || _a === void 0 ? void 0 : _a.insertAdjacentElement('afterbegin', data.message);
+                });
                 console.log(data);
             });
             socket.on('failedRegister', (data) => {
+                var _a, _b;
+                (_a = document.getElementById('success')) === null || _a === void 0 ? void 0 : _a.remove();
+                (_b = document.getElementById('error')) === null || _b === void 0 ? void 0 : _b.remove();
+                new HTMLLoader('/Engine-5.0/JavaScript/Elements/error.html').on('load', (html) => {
+                    var _a;
+                    html = html.replace('{{MESSAGE}}', data.message);
+                    //@ts-ignore
+                    (_a = document.getElementById('messagebox')) === null || _a === void 0 ? void 0 : _a.insertAdjacentElement('afterbegin', data.message);
+                });
                 console.log(data);
             });
             socket.on('failedLogin', (data) => {
+                var _a, _b;
+                (_a = document.getElementById('success')) === null || _a === void 0 ? void 0 : _a.remove();
+                (_b = document.getElementById('error')) === null || _b === void 0 ? void 0 : _b.remove();
+                new HTMLLoader('/Engine-5.0/JavaScript/Elements/error.html').on('load', (html) => {
+                    var _a;
+                    html = html.replace('{{MESSAGE}}', data.message);
+                    //@ts-ignore
+                    (_a = document.getElementById('messagebox')) === null || _a === void 0 ? void 0 : _a.insertAdjacentElement('afterbegin', data.message);
+                });
                 console.log(data);
             });
         });

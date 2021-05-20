@@ -8,20 +8,18 @@ if (!$userinfo["role_id"]) {
     echo "<script>location = \"http://datahunt.duckdns.org\";</script>";
 }
 ?>
+    <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+    <div id="editor"></div>
 
-    <div id="editor">
-        <p>Here goes the initial content of the editor.</p>
-    </div>
-    <button type="button" id="editorSubmit">Submit</button>
-    <script src="https://cdn.ckeditor.com/ckeditor5/27.1.0/classic/ckeditor.js"></script>
+    <button type="button" onclick="getData()">Submit</button>
+    <script src="//cdn.quilljs.com/1.3.6/quill.js"></script>
+    <script src="//cdn.quilljs.com/1.3.6/quill.min.js"></script>
     <script src="./../js/editor.js"></script>
-    <script>
-        editorSubmit.onclick = () => {
-            let data = getData();
-            <?php
-            echo "<script>document.writeln(data)</script>";
-            ?>
-        }
-    </script>
+
+<?php
+    if(isset($_POST['data']) && $_POST['data'] !== '<p><br></p>'){
+        print_r($_POST['data']);
+    }
+?>
 
 <?php include '../elements/footer.php'; ?>

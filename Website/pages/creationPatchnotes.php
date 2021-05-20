@@ -18,7 +18,7 @@ if (!$userinfo["role_id"]) {
 
 <?php
     if(isset($_POST['data']) && $_POST['data'] !== '<p><br></p>'){
-        print_r($_POST['data']);
+        makePatchnote($_POST['data']);
     }
 ?>
 

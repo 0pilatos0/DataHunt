@@ -4,15 +4,17 @@ const fs = require('fs')
 const path = require('path')
 const port = process.env.PORT || 3000
 const qs = require('querystring')
+const { SQL } = require('./SQL')
 
 module.exports.WebServer = class{
+    #sql = new SQL()
     #publicPath = path.join(__dirname, '../public')
     #gets = [{url:'/404'}]
     #posts = []
     #sessions = []
     #requestListener = (req, res) => {}
 
-    constructor(){ 
+    constructor(){
         this.init()
     }
 
@@ -125,14 +127,14 @@ module.exports.WebServer = class{
                                             req.vars[v.replace(/[{}]/g, "")] = v
                                         })
                                     }
-                                    req.html = html
-                                    if(get.callback) get.callback(req, res)
                                     if(typeof cookies === "undefined" || cookies.find(c => !c.includes('JSSESSID'))) {
                                         let data = req.session
                                         let session = res.createSession()
                                         req.session = Object.assign(req.session, data)
                                         this.#sessions[this.#sessions.indexOf(session)] = req.session
                                     }
+                                    req.html = html
+                                    if(get.callback) get.callback(req, res)
                                     if(req.html.match(/{{\w*}}/g)){
                                         req.html.match(/{{\w*}}/g).map(v => {
                                             req.html = req.html.replace(v, req.vars[v.replace(/[{}]/g, "")] || v)
@@ -254,8 +256,11 @@ module.exports.WebServer = class{
     }
 
     run(){
-        http.createServer(this.#requestListener).listen(port, () => {
-            console.log(`Listening on http://localhost:${port}`)
+        this.#sql.connect()
+        this.#sql.on('connected', () => {
+            http.createServer(this.#requestListener).listen(port, () => {
+                console.log(`Listening on http://localhost:${port}`)
+            })
         })
     }
 

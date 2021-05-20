@@ -203,3 +203,7 @@
     padding: 0;
     line-height: 1.2em;
 }
+
+.ck-editor__main {
+    color: #fe35bb;
+}

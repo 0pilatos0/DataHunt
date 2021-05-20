@@ -53,9 +53,9 @@
         </div>
         <div class="main-leaderboard">
           <ol>
-            <l1>1. Izanagi</li>
-            <l1>2. </li>
-            <l1>3. </li>
+            <li>1. Izanagi</li>
+            <li>2. </li>
+            <li>3. </li>
           </ol>
         </div>
       </div>

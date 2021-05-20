@@ -203,7 +203,7 @@ function makePatchnote($text)
 {
     $dbh = db();
 
-    $stmt = $dbh->prepare("INSERT INTO patchnotes (note) VALUES (':text')");
+    $stmt = $dbh->prepare("INSERT INTO patchnotes (note) VALUES (:text)");
     $stmt->bindParam(':text', $text);
     $stmt->execute();
     $dbh = null;

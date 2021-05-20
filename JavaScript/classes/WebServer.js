@@ -205,13 +205,25 @@ module.exports.WebServer = class{
             }
             if(req.method == "GET" && !req.url.includes('.html') && req.url.includes('.')){
                 if(fs.existsSync(path.join(this.#publicPath, req.url))){
-                    let fileStream = fs.createReadStream(path.join(this.#publicPath, req.url), "UTF-8")
                     if(req.url.match("\.css$")){
                         res.writeHead(200, {"Content-Type": "text/css"})
                     }
                     else if(req.url.match("\.js$")){
                         res.writeHead(200, {"Content-Type": "text/javascript"})
                     }
+                    else if(req.url.match("\.gif")){
+                        res.writeHead(200, {"Content-Type": "image/gif"})
+                    }
+                    else if(req.url.match("\.jpg") || req.url.match("\.jpeg")){
+                        res.writeHead(200, {"Content-Type": "image/jpeg"})
+                    }
+                    else if(req.url.match("\.png")){
+                        res.writeHead(200, {"Content-Type": "image/png"})
+                    }
+                    else{
+                        return
+                    }
+                    let fileStream = fs.createReadStream(path.join(this.#publicPath, req.url))
                     fileStream.pipe(res)
                 }
                 else{

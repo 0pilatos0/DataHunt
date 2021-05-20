@@ -5,6 +5,7 @@ const path = require('path')
 const port = process.env.PORT || 3000
 const qs = require('querystring')
 const { SQL } = require('./SQL')
+const { User } = require('../helpers/User')
 
 module.exports.WebServer = class{
     #sql = new SQL()
@@ -19,7 +20,7 @@ module.exports.WebServer = class{
     }
 
     init(){
-        this.#requestListener = (req, res) => {
+        this.#requestListener = async (req, res) => {
             res.writeHead(200, {"Access-Control-Allow-Origin": "*"})
             res.redirect = (url) => {
                 res.writeHead(302, {'Location': url})
@@ -69,6 +70,10 @@ module.exports.WebServer = class{
                 req.session = this.#sessions.find(s => s.id === cookies.find(c => c.includes('JSSESSID')).split('=', 2)[1])
                 return this.#sessions.find(s => s.id === cookies.find(c => c.includes('JSSESSID')).split('=', 2)[1])
             }
+            let cookies = req.headers.cookie?.split(/;\s?/g)
+            if(cookies){
+                if(cookies.find(c => c.includes('JSSESSID')) && !this.#sessions.find(s => s.id === cookies.find(c => c.includes('JSSESSID')).split('=', 2)[1])) res.clearCookie('JSSESSID')
+            }
             if(req.url.includes('.html') || !req.url.includes('.')){
                 let url = req.url.substring(0, req.url.indexOf('?') > -1 ? req.url.indexOf('?') : req.url.length)
                 let args = req.url.indexOf('?') > -1 ? req.url.substring(req.url.indexOf('?') + 1, req.url.length).split("&") : []
@@ -96,8 +101,8 @@ module.exports.WebServer = class{
                             if(rightUrl === true){get = g; return true}
                         }
                     })
+                    let baseUrlPath = ''
                     if(get){
-                        req.params = {}
                         let tUrl = get.url.substring(1, get.url.length).split('/')
                         while(tUrl.indexOf('*') > -1){
                             let index = tUrl.indexOf('*')
@@ -107,80 +112,102 @@ module.exports.WebServer = class{
                             req.params[varObject.varname] = urls[index]
                             tUrl[index] = '^'
                         }
-                        req.data = {}
-                        Object.keys(args).map(a => {
-                            req.data[a] = args[a]
-                        })
-                        let baseUrlPath = get.url
+                        baseUrlPath = get.url
                         if(!baseUrlPath.includes('.html')) baseUrlPath = `${baseUrlPath}.html`
                         if(baseUrlPath.includes('/.html')) baseUrlPath = baseUrlPath.replace('/.html', '.html')
                         baseUrlPath = path.join(this.#publicPath, `pages/${baseUrlPath}`)
-                        //#region session
-                        let cookies = req.headers.cookie?.split(/;\s?/g)
-                        if(cookies) req.session = this.#sessions.find(s => s.id === cookies.find(c => c.includes('JSSESSID')).split('=', 2)[1]) || {}
-                        else req.session = {}
-                        //#endregion session
-                        let htmlPath = path.join(this.#publicPath, `pages/${pathUrl}`)
-                        if(fs.existsSync(htmlPath) || fs.existsSync(baseUrlPath)){
-                            fs.readFile(path.join(this.#publicPath, `pages/template.html`), 'UTF-8', (err, template) => {
-                                fs.readFile(fs.existsSync(htmlPath) ? htmlPath : baseUrlPath, 'UTF-8', (err, html) => {
-                                    req.vars = []
-                                    if(html.match(/{{\w*}}/g)){
-                                        html.match(/{{\w*}}/g).map(v => {
-                                            req.vars[v.replace(/[{}]/g, "")] = v
-                                        })
-                                    }
-                                    if(typeof cookies === "undefined" || cookies.find(c => !c.includes('JSSESSID'))) {
-                                        let data = req.session
-                                        let session = res.createSession()
-                                        req.session = Object.assign(req.session, data)
-                                        this.#sessions[this.#sessions.indexOf(session)] = req.session
-                                    }
-                                    req.html = html
-                                    if(get.callback) get.callback(req, res)
-                                    if(req.html.match(/{{\w*}}/g)){
-                                        req.html.match(/{{\w*}}/g).map(v => {
-                                            req.html = req.html.replace(v, req.vars[v.replace(/[{}]/g, "")] || v)
-                                        })
-                                    }
-                                    if(req.html.match(/<script\b[^>]*>[\s\S]*?<\/script>|<link\b[^>]*>[\s\S]*?<\/link>|<style\b[^>]*>[\s\S]*?<\/style>/gm)){
-                                        let headData = req.html.match(/<script\b[^>]*>[\s\S]*?<\/script>|<link\b[^>]*>[\s\S]*?<\/link>|<style\b[^>]*>[\s\S]*?<\/style>/gm)
-                                        let lines = req.html.split('\r\n')
-                                        headData.map(h => {
-                                            lines.map(l => {
-                                                lines[lines.indexOf(l)] = l.replace(h, '')
-                                            })
-                                        })
-                                        req.html = lines.join('\r\n')
-                                        req.html = req.html.replace(/<[\w\s\d]*><\/[\w\s\d]*>/g, '')
-                                        template = template.replace('{{HEAD}}', headData.toString().replace(/>,</g , '>\r\n<'))
-                                    }
-                                    else template = template.replace('{{HEAD}}', '')
-                                    //res.writeHead(200, {"Content-Type": "text/html"})
-                                    res.end(template.replace('{{BODY}}', req.html))
-                                })
-                            })
-                        }
-                        else{
-                            if(get.callback) get.callback(req, res)
-                            if(typeof cookies === "undefined" || cookies.find(c => !c.includes('JSSESSID'))) {
-                                let data = req.session
-                                let session = res.createSession()
-                                req.session = Object.assign(req.session, data)
-                                this.#sessions[this.#sessions.indexOf(session)] = req.session
+                    }
+                    req.params = {}
+                    req.data = {}
+                    Object.keys(args).map(a => {
+                        req.data[a] = args[a]
+                    })
+                    //#region session
+                    if(cookies) req.session = this.#sessions.find(s => s.id === cookies.find(c => c.includes('JSSESSID')).split('=', 2)[1]) || {}
+                    else req.session = {}
+                    //#endregion session
+                    let htmlPath = path.join(this.#publicPath, `pages/${pathUrl}`)
+                    if(fs.existsSync(htmlPath) || fs.existsSync(baseUrlPath)){
+                        fs.readFile(path.join(this.#publicPath, `pages/template.html`), 'UTF-8', async (err, template) => {
+                            //#region template server side added data
+                            let templateReplaceData = ''
+                            if(req.session.user){
+                                req.session.userinfo = await User.info(req.session.user)
+                                let userinfo = req.session.userinfo
+                                if(userinfo["role_id"]){
+                                    templateReplaceData += '<li><a id="admin" href="/admin">Admin</a></li>'
+                                    templateReplaceData += '<li><a id="creationPatchnotes" href="/creationPatchnotes">Patchnotes</a></li>'
+                                }
+                                templateReplaceData += '<li style="float:right"><a id="logout" href="/logout">Logout</a></li>'
+                                templateReplaceData += '<li style="float:right"><a id="user" href="/user">User</a></li>'
+                                templateReplaceData += '<li style="float:right"><a id="friends" href="/friends">Friends</a></li>'
                             }
-                            if(Object.keys(req.params).length === 0) this.#error(req, res)
                             else{
-                                req.data = {}
-                                Object.keys(args).map(a => {
-                                    req.data[a] = args[a]
-                                })
-                                //res.writeHead(200, {"Content-Type": "application/json"})
-                                res.end(JSON.stringify(req.params))
+                                templateReplaceData += `
+                                    <li style="float:right"><a id="register" href="/register">Registration</a></li>
+                                    <li style="float:right"><a id="login" href="/login">Login</a></li>`
                             }
+                            template = template.replace('{{DYNAMICHEADER}}' , templateReplaceData)
+                            template = template.replace('{{CHATWINDOW}}', fs.readFileSync(`${path.join(__dirname, '../elements/chatWindow.html')}`))
+                            //#endregion
+                            fs.readFile(fs.existsSync(htmlPath) ? htmlPath : baseUrlPath, 'UTF-8', async (err, html) => {
+                                req.vars = []
+                                if(html.match(/{{\w*}}/g)){
+                                    html.match(/{{\w*}}/g).map(v => {
+                                        req.vars[v.replace(/[{}]/g, "")] = v
+                                    })
+                                }
+                                if(typeof cookies === "undefined" || cookies.find(c => !c.includes('JSSESSID'))) {
+                                    let data = req.session
+                                    let session = res.createSession()
+                                    req.session = Object.assign(req.session, data)
+                                    this.#sessions[this.#sessions.indexOf(session)] = req.session
+                                }
+                                req.html = html
+                                if(get?.callback) await get.callback(req, res)
+                                if(req.html.match(/{{\w*}}/g)){
+                                    req.html.match(/{{\w*}}/g).map(v => {
+                                        req.html = req.html.replace(v, req.vars[v.replace(/[{}]/g, "")] || '') //So the var shows empty
+                                    })
+                                }
+                                if(req.html.match(/<script\b[^>]*>[\s\S]*?<\/script>|<link\b[^>]*>[\s\S]*?<\/link>|<style\b[^>]*>[\s\S]*?<\/style>/gm)){
+                                    let headData = req.html.match(/<script\b[^>]*>[\s\S]*?<\/script>|<link\b[^>]*>[\s\S]*?<\/link>|<style\b[^>]*>[\s\S]*?<\/style>/gm)
+                                    let lines = req.html.split('\r\n')
+                                    headData.map(h => {
+                                        lines.map(l => {
+                                            lines[lines.indexOf(l)] = l.replace(h, '')
+                                        })
+                                    })
+                                    req.html = lines.join('\r\n')
+                                    req.html = req.html.replace(/<[\w\s\d]*><\/[\w\s\d]*>/g, '')
+                                    template = template.replace('{{HEAD}}', headData.toString().replace(/>,</g , '>\r\n<'))
+                                }
+                                else template = template.replace('{{HEAD}}', '')
+                                //res.writeHead(200, {"Content-Type": "text/html"})
+                                res.end(template.replace('{{BODY}}', req.html))
+                            })
+                        })
+                    }
+                    else{
+                        if(get?.callback) await get.callback(req, res)
+                        if(typeof cookies === "undefined" || cookies.find(c => !c.includes('JSSESSID'))) {
+                            let data = req.session
+                            let session = res.createSession()
+                            req.session = Object.assign(req.session, data)
+                            this.#sessions[this.#sessions.indexOf(session)] = req.session
                         }
-                    } 
-                    else this.#error(req, res)
+                        if(Object.keys(req.params).length === 0) this.#error(req, res)
+                        else{
+                            req.data = {}
+                            Object.keys(args).map(a => {
+                                req.data[a] = args[a]
+                            })
+                            //res.writeHead(200, {"Content-Type": "application/json"})
+                            res.end(JSON.stringify(req.params))
+                        }
+                    }
+                    // } 
+                    // else this.#error(req, res)
                 }
                 else if(req.method == "POST"){
                     let post = this.#posts.find(p => p.url === url)
@@ -189,10 +216,19 @@ module.exports.WebServer = class{
                         req.on('data', (data) => {
                             body += data
                         })
-                        req.on('end', () => {
-                            res.writeHead(200, {"Content-Type": "application/json"})
+                        req.on('end', async () => {
+                            //res.writeHead(200, {"Content-Type": "application/json"})
                             req.data = qs.parse(body)
-                            post.callback(req, res)
+                            //#region session
+                            req.session = this.#sessions.find(s => s.id === cookies.find(c => c.includes('JSSESSID')).split('=', 2)[1]) || {}
+                            if(typeof cookies === "undefined" || cookies.find(c => !c.includes('JSSESSID'))) {
+                                let data = req.session
+                                let session = res.createSession()
+                                req.session = Object.assign(req.session, data)
+                                this.#sessions[this.#sessions.indexOf(session)] = req.session
+                            }
+                            //#endregion session
+                            await post.callback(req, res)
                             res.end(JSON.stringify(req.data))
                         })
                     }

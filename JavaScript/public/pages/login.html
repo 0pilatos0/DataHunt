@@ -1,0 +1,36 @@
+<script src="/js/functions.js" defer></script>
+
+<div class="content">
+    <div id="container" >
+        <img class="login-img" src="https://via.placeholder.com/800x427.png?text=Hier+komt+coole+afbeelding+van+game" alt="">
+        <form action="login" class="formLogin" method="post" style="width: 30rem;">
+            <div>
+                <div class="card-header">
+                    <h3>Login</h3>
+                </div>
+                {{FEEDBACK}}
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item">
+                        <label for="AccUsername" class="col-sm-1 col-form-label">Username</label>
+                        <div class="col-sm-10">
+                            <input type="text" name="AccUsername" class="input form-control" id="username" value="{{USERNAME}}"><br>
+                        </div>
+                    </li>
+                    <li class="list-group-item">
+                        <label for="AccPassword" class="col-sm-1 col-form-label">Password</label>
+                        <div class="col-sm-10">
+                            <input type="password" name="AccPassword" class="input form-control" id="password"><br>
+                        </div>
+                    </li>
+                    <li class="list-group-item">
+                        <label for="AccRemember" class="col-sm-9 col-form-label">Remember me</label>
+                        <input type="checkbox" name="AccRemember" id="AccRemember">
+                    </li>
+                    <li class="list-group-item">
+                        <input type="submit" class="btn btn-primary" value="Log In">
+                    </li>
+                </ul>
+            </div>
+        </form>
+    </div>
+</div>

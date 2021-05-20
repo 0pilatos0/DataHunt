@@ -28,6 +28,5 @@ function getDataFromTheEditor() {
 }
 
 function getData() {
-    // const data = editor.data;
     console.log(getDataFromTheEditor());
 }

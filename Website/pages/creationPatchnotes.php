@@ -12,8 +12,16 @@ if (!$userinfo["role_id"]) {
     <div id="editor">
         <p>Here goes the initial content of the editor.</p>
     </div>
-    <button type="button" onclick="getData()">Submit</button>
+    <button type="button" id="editorSubmit">Submit</button>
     <script src="https://cdn.ckeditor.com/ckeditor5/27.1.0/classic/ckeditor.js"></script>
     <script src="./../js/editor.js"></script>
+    <script>
+        editorSubmit.onclick = () => {
+            let data = getData();
+            <?php
+            echo "<script>document.writeln(data)</script>";
+            ?>
+        }
+    </script>
 
 <?php include '../elements/footer.php'; ?>

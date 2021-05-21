@@ -196,14 +196,17 @@ module.exports.WebServer = class{
                             req.session = Object.assign(req.session, data)
                             this.#sessions[this.#sessions.indexOf(session)] = req.session
                         }
-                        if(Object.keys(req.params).length === 0) this.#error(req, res)
-                        else{
+                        //if(Object.keys(req.params).length === 0) this.#error(req, res)
+                        if(Object.keys(req.params).length > 0){
                             req.data = {}
                             Object.keys(args).map(a => {
                                 req.data[a] = args[a]
                             })
                             //res.writeHead(200, {"Content-Type": "application/json"})
                             res.end(JSON.stringify(req.params))
+                        }
+                        else{
+                            res.end()
                         }
                     }
                     // } 

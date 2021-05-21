@@ -11,6 +11,36 @@ server.get('/', (req, res) => {
     
 })
 
+server.get('/creationPatchnotes', (req, res) => {
+    if(!req.session.user){
+        res.redirect('/')
+        return
+    }
+    if(!req.session.userinfo.role_id){
+        res.redirect('/')
+        return
+    }
+})
+
+server.post('/creationPatchnotes', (req, res) => {
+    if(req.data.data && req.data.data !== '<p><br></p>'){
+        User.makePatchnote(req.data.data)
+    }
+})
+
+server.get('/verification', async (req, res) => {
+    if(req.session.user){
+        res.redirect('/')
+        return
+    }
+    let verificationToken = decodeURIComponent(req.data.veri)
+    let id
+    let data = await global.sql.query(`SELECT verifytoken, id, name FROM users WHERE verifytoken = '${verificationToken}'`)
+    id = data.id
+    await global.sql.query(`UPDATE users SET verifytoken = '', verified = 1 WHERE id = ${id}`)
+    req.vars.FEEDBACK = "<h2>Thank you for verifying!</h2>"
+})
+
 server.get('/character', async (req, res) => {
     if(!req.session.user){
         res.redirect('/')
@@ -38,21 +68,23 @@ server.get('/friends', async (req, res) => {
         }
     }
     req.vars.FRIENDS = ''
-    results.map(r => {
-        req.vars.FRIENDS += `<div class=\"card text-secondary w-75 mt-4\" style=\"width: 18rem;\">
-        <div class=\"card-body\">
-        <h5 class=\"card-title\">${r["name"].username}</h5>`
-        if(r["friendship"] == 0 && r["userA"] == req.session.user){
-            req.vars.FRIENDS += `<p class=\"card-text\">User hasn't replied to your request yet.</p>`
-        }
-        else if(r["friendship"] == 0 && r["userB"] == req.session.user){
-            req.vars.FRIENDS += Functions.createButtons(r["id"])
-        }
-        else if(r["friendship"] == 1){
-            req.vars.FRIENDS += `<p class=\"card-text\">You are friends.</p>`
-        }
-        req.vars.FRIENDS += `</div></div>`
-    })
+    if(results.length > 0){
+        results.map(r => {
+            req.vars.FRIENDS += `<div class=\"card text-secondary w-75 mt-4\" style=\"width: 18rem;\">
+            <div class=\"card-body\">
+            <h5 class=\"card-title\">${r["name"].username}</h5>`
+            if(r["friendship"] == 0 && r["userA"] == req.session.user){
+                req.vars.FRIENDS += `<p class=\"card-text\">User hasn't replied to your request yet.</p>`
+            }
+            else if(r["friendship"] == 0 && r["userB"] == req.session.user){
+                req.vars.FRIENDS += Functions.createButtons(r["id"])
+            }
+            else if(r["friendship"] == 1){
+                req.vars.FRIENDS += `<p class=\"card-text\">You are friends.</p>`
+            }
+            req.vars.FRIENDS += `</div></div>`
+        })
+    }
 })
 
 server.post('/friends', async (req, res) => {
@@ -134,12 +166,13 @@ server.get('/user', async (req, res) => {
         else if(req.data.delete === "confirm"){
             await User.delete(req.session.user)
             res.redirect('/')
+            return
         }
     }
     req.vars.CHARACTER = Functions.showCharacters(await User.characters(req.session.user))
     req.vars.FEED = ''
     let feed = await User.getFeed(userinfo["id"])
-    if(feed.length){
+    if(feed.length > 0){
         feed.map(f => {
             req.vars.FEED += `<div>
                 <p style='font-size: 20px'>${f["message"]}</p>
@@ -147,14 +180,14 @@ server.get('/user', async (req, res) => {
             </div>`
         })
     }
-    else if(feed){
-        req.vars.FEED = '<i>Its quite empty here</i>'
-    }
-    else{
+    else if(feed.message){
         req.vars.FEED = `<div>
                 <p style='font-size: 20px'>${feed["message"]}</p>
                 <p>${feed["time"]}</p>
             </div>`
+    }
+    else{
+        req.vars.FEED = '<i>Its quite empty here</i>'
     }
 })
 
@@ -165,18 +198,20 @@ server.post('/user', (req, res) => {
 server.get('/logout', async (req, res) => {
     if(!req.session.user){
         res.redirect('/')
+        return
     }
     await global.sql.query(`DELETE FROM logintokens WHERE user_id = ${req.session.user}`)
     Object.keys(req.session).map(k => {
         if(k != 'id') delete req.session[k]
     })
     res.redirect('/')
-    res.end()
+    return
 })
 
 server.get('/register', (req, res) => {
     if(req.session.user){
         res.redirect('/')
+        return
     }
     req.vars.FEEDBACK = req.session.registerFeedback
     req.vars.NAME = req.session.name
@@ -250,13 +285,14 @@ server.post('/register', async (req, res) => {
     let user = await User.get(username)
     await global.sql.query(`INSERT INTO logintokens (user_id, token) VALUES (${user.id}, '${verificationToken}')`)
     await global.sql.query(`INSERT INTO user_roles (user_id, role_id) VALUES (${user.id}, 0)`)
-    await Mailer.sendMail({to:email, subject:'Verify email Datahunt', html:fs.readFileSync(`../Mail/htmlmail.html`, {encoding:'utf8', flag:'r'}).replace('{TOKEN}', verificationToken)})
+    await Mailer.sendMail({to:email, subject:'Verify email Datahunt', html:fs.readFileSync(`../Mail/htmltestmail.html`, {encoding:'utf8', flag:'r'}).replace('{TOKEN}', encodeURIComponent(verificationToken)).replace('{{HOST}}', process.env.PORT ? `${process.env.HOST}:${process.env.PORT}` : `${process.env.HOST}`)})
     res.redirect('/')
 })
 
 server.get('/login', (req, res) => {
     if(req.session.user){
         res.redirect('/')
+        return
     }
     req.vars.FEEDBACK = req.session.loginFeedback
     req.vars.USERNAME = req.session.username
@@ -300,7 +336,10 @@ server.post('/login', async (req, res) => {
 })
 
 server.get('/admin', async (req, res) => {
-    if(!req.session.userinfo || !req.session.userinfo["role_id"]) res.redirect('/')
+    if(!req.session.userinfo || !req.session.userinfo["role_id"]) {
+        res.redirect('/')
+        return
+    }
     req.vars["DYNAMICDATA"] = ''
     if(req.data.delete){
         if(req.data.delete === "true"){
@@ -311,7 +350,7 @@ server.get('/admin', async (req, res) => {
                 <div class=\"delete-confirm delete-element\">
                     <h3>Are you sure you want to delete your account?</h3>
                     <button id=\"cancel\" onclick=\"removeOverlay()\" class=\"btn btn-cancel\">Cancel</button>
-                    <a href=\"?delete=confirm&id={$_GET["id"]}\" class=\"btn btn-confirm\">Confirm</a>
+                    <a href=\"?delete=confirm&id=${req.data.id}\" class=\"btn btn-confirm\">Confirm</a>
                 </div>`
         }
         else if(req.data.delete === "confirm"){

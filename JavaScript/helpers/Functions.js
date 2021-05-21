@@ -17,7 +17,7 @@ module.exports.Functions = class {
     }
     
     static showCharacters(characters){
-        if(characters.length){
+        if(characters.length > 0){
             let returnData = ''
             for (let i = 0; i < characters.length; i++){
                 let c = characters[i]
@@ -32,7 +32,7 @@ module.exports.Functions = class {
             }
             return returnData
         }
-        else{
+        else if(characters.id){
             return `
                 <li class=\"list-group-item char-li\">
                     <a class=\"char-link\" href=\"character?id=${characters["id"]}\">

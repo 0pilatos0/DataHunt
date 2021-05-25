@@ -28,11 +28,10 @@ if(isset($_GET["delete"])){
         <h1>Admin Panel</h1>
         <div id="buttons">
             <button onclick="show('usertable')">usertable</button>
-
-            <!-- <button onclick="show('patchnotes')">Patchnotes</button> -->
+            <button onclick="show('patchnotes')">patchnotes</button>
 
         </div>
-        <div id="usertable" class="hide">
+        <div id="usertable">
             <h1>User Table</h1>
             <table>
                 <tr>
@@ -67,6 +66,23 @@ if(isset($_GET["delete"])){
 
                 ?>
             </table>
+        </div>
+        <div id="patchnotes" class="hide">
+            <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+            <div id="editor">
+
+            </div>
+
+            <button type="button" class="btn btn-block btn-primary" onclick="getData()">Submit</button>
+            <script src="//cdn.quilljs.com/1.3.6/quill.js"></script>
+            <script src="//cdn.quilljs.com/1.3.6/quill.min.js"></script>
+            <script src="./../js/editor.js"></script>
+
+            <?php
+            if(isset($_POST['data']) && $_POST['data'] !== '<p><br></p>'){
+                makePatchnote($_POST['data']);
+            }
+            ?>
         </div>
 
     </div>

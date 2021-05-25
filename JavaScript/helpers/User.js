@@ -100,4 +100,8 @@ module.exports.User = class {
   static async get(username){
       return global.sql.query(`SELECT * FROM users WHERE username = '${username}'`)
   }
+
+  static async getPatchnotes(){
+      return global.sql.query(`SELECT * FROM patchnotes ORDER BY id DESC`)
+  }
 }

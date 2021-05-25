@@ -382,4 +382,24 @@ server.get('/admin', async (req, res) => {
     })
 })
 
+server.get('/patchnotes', async (req, res)=>{
+    let patchnotes = await User.getPatchnotes()
+    req.vars.PATCHNOTES = ""
+    if(patchnotes.length > 1){
+        req.vars.LATESTPATCH = patchnotes[0]['note']
+        for (let i=1; i<patchnotes.length; i++){
+            req.vars.PATCHNOTES += `
+<button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample${i}" aria-expanded="false" aria-controls="collapseExample${i}">${patchnotes[i]['date_created']}</button>
+<br>
+<br>
+<div class="collapse" id="collapseExample${i}">
+    ${patchnotes[i]['note']}
+</div>
+`
+        }
+    }else{
+        req.vars.LATESTPATCH = patchnotes['note']
+    }
+})
+
 server.run()

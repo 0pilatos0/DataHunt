@@ -78,3 +78,8 @@ function createButtons ($id) {
 function calculateKD ($K, $D){
     return round($K/$D, 2);
 }
+
+function previewLatestPatch(){
+    $patch = getLatestPatchnote();
+    echo $patch[0]['note'];
+}

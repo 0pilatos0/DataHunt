@@ -23,13 +23,7 @@
         <div class="main-image-one">
           <img src="./Website/images/image_one.png" alt="image from our game">
         </div>
-        <div class="main-patchnotes">
-          <h1>Patch 3704</h1>
-          <p>Welcome to the patchnotes for the 3704 patch.</p>
-          <p>The aim of the patch is to allow more unit and upgrade options while also improving the factional balance. A brief explanation of each change is found below. </p>
-          <p>We wish you good luck and much fun playing with the new patch!</p>                                
-          <p>-- The Balance Team</p>
-        </div>
+        <?php previewLatestPatch()?>
         <div class="main-update">
         <h1>Update 1/may/2021</h1>
           <p>We have some interesting news for you about the new update, so let's jump right into it.</p>

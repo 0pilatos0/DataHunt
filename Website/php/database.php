@@ -250,3 +250,15 @@ function getPatchnotes()
 
     return $result;
 }
+
+function getLatestPatchnote()
+{
+    $dbh = db();
+
+    $stmt = $dbh->prepare("SELECT * FROM patchnotes ORDER BY id DESC LIMIT 0, 1");
+    $stmt->execute();
+    $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    $dbh = null;
+
+    return $result;
+}

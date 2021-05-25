@@ -26,8 +26,11 @@ if(isset($_GET["delete"])){
 ?>
     <div id="container">
         <h1>Admin Panel</h1>
-        <a href="#showtable">Usertable</a>
-        <div id="usertable" class="hide">
+        <div id="buttons">
+            <button onclick="show('usertable')">Usertable</button>
+            <button onclick="show('patchnotes')">Patchnotes</button>
+        </div>
+        <div>
             <h1>User Table</h1>
             <table>
                 <tr>
@@ -67,16 +70,18 @@ if(isset($_GET["delete"])){
     </div>
     <script>
 
+        let test = document.getElementById("buttons").children;
+
         function removeOverlay(){
             let f = document.getElementsByClassName("delete-element");
             while (f.length > 0){
                 f[0].remove();
             }
         }
-
-        if(location.href.search('showtable')){
-            document.getElementById("usertable").classList.remove("hide");
-            document.getElementById("usertable").classList.add("show");
+        function show(div){
+            document.getElementById(div).classList.add("show");
+            document.getElementById(div).classList.remove("hide");
         }
+
     </script>
 <?php include '../elements/footer.php'; ?>

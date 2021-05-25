@@ -321,6 +321,7 @@ server.post('/login', async (req, res) => {
         return
     }
     let user = await global.sql.query(`SELECT * FROM users WHERE username = ('${username}') AND enabled = 1 and verified = 1`)
+    user.password = user.password.replace('$2y', '$2b')
     if(Salter.verifyPassword(password, user.password)){
         req.session.user = user.id
         if(req.data["AccRemember"] === "on"){

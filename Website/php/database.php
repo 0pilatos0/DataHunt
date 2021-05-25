@@ -1,5 +1,5 @@
 <?php
-require "D:\school\\xampp\htdocs\sites\DataHunt\\env.php";
+require $_SERVER["DOCUMENT_ROOT"] . "/env.php";
 
 function db()
 {

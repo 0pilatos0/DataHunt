@@ -208,3 +208,15 @@ function makePatchnote($text)
     $stmt->execute();
     $dbh = null;
 }
+
+function getPatchnotes()
+{
+    $dbh = db();
+
+    $stmt = $dbh->prepare("SELECT * FROM patchnotes ORDER BY id DESC");
+    $stmt->execute();
+    $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    $dbh = null;
+
+    return $result;
+}

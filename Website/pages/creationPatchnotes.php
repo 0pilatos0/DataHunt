@@ -11,7 +11,7 @@ if (!$userinfo["role_id"]) {
     <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
     <div id="editor"></div>
 
-    <button type="button" onclick="getData()">Submit</button>
+    <button type="button" class="btn btn-block btn-primary" onclick="getData()">Submit</button>
     <script src="//cdn.quilljs.com/1.3.6/quill.js"></script>
     <script src="//cdn.quilljs.com/1.3.6/quill.min.js"></script>
     <script src="./../js/editor.js"></script>

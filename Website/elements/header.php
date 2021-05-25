@@ -132,6 +132,7 @@
                     }
                 ?>
                 <li style="float:right"><a href="#news">Game</a></li>
+                <li style="float:right"><a href="/Website/pages/patchnotes">patchnotes</a></li>
 
             </ul>
         </nav>

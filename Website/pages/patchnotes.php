@@ -1,10 +1,4 @@
-<?php
-include '../elements/header.php';
-
-if (empty($_SESSION["user"])) {
-    echo "<script>location = \"http://datahunt.duckdns.org\";</script>";
-}
-?>
+<?php include '../elements/header.php'; ?>
 <div id="patchnoteContainer">
     <?php
     $patchnotes = getPatchnotes();

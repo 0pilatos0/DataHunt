@@ -43,7 +43,7 @@ if(isset($_GET["ban"])){
     }
 }
 if(isset($_POST["date"])){
-    //banUser($_POST);
+    banUser($_POST);
 }
 
 ?>

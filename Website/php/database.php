@@ -15,7 +15,17 @@ function userInfo($param){
     $result = $stmt->fetch(PDO::FETCH_ASSOC);
     $dbh = null;
     return $result;
+}
 
+function checkBan($param){
+    $dbh = db();
+
+    $stmt = $dbh->prepare("SELECT * FROM users_ban where user_id = :id");
+    $stmt->bindParam(':id', $param);
+    $stmt->execute();
+    $result = $stmt->fetch(PDO::FETCH_ASSOC);
+    $dbh = null;
+    return $result;
 }
 
 function deleteUser($param){

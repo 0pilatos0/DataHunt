@@ -117,6 +117,13 @@
                     if(isset($_SESSION['user']) && !empty($_SESSION['user'])) {
                         $_SESSION["userinfo"] = userInfo($_SESSION["user"]);
                         $userinfo =  $_SESSION["userinfo"];
+                        $baninfo = checkBan($userinfo["id"]);
+                        if(empty($baninfo)){
+                            if($baninfo["ban_until"] > date($dateformat)){
+                                resetSession();
+                            }
+                        }
+
                         if($userinfo["role_id"]){
                             echo '<li><a id="admin" href="/Website/pages/admin">Admin</a></li>';
                             echo '<li><a id="creationPatchnotes" href="/Website/pages/creationPatchnotes">Patchnotes</a></li>';

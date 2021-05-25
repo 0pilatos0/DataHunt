@@ -1,4 +1,6 @@
 <?php
+
+$dateformat = "Y-m-d H:i:s";
 function setSessionValue($index, $value)
 {
     $_SESSION[$index] = $value;

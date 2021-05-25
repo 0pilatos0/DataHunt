@@ -82,10 +82,9 @@ if(isset($_GET["delete"])){
         function show(div){
             for(let i = 0; i < buttons.length; i++){
                 document.getElementById(buttons[i]).classList.add("hide");
-                document.getElementById(div).classList.add("show");
-                document.getElementById(div).classList.remove("hide");
             }
-
+            document.getElementById(div).classList.add("show");
+            document.getElementById(div).classList.remove("hide");
         }
 
     </script>

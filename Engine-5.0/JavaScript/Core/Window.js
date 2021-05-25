@@ -91,7 +91,7 @@ export default class Window extends Event {
                     var _a;
                     html = html.replace('{{MESSAGE}}', data.message);
                     //@ts-ignore
-                    (_a = document.getElementById('messagebox')) === null || _a === void 0 ? void 0 : _a.insertAdjacentElement('afterbegin', data.message);
+                    (_a = document.getElementById('messagebox')) === null || _a === void 0 ? void 0 : _a.innerHTML = html;
                 });
                 console.log(data);
             });
@@ -103,7 +103,7 @@ export default class Window extends Event {
                     var _a;
                     html = html.replace('{{MESSAGE}}', data.message);
                     //@ts-ignore
-                    (_a = document.getElementById('messagebox')) === null || _a === void 0 ? void 0 : _a.insertAdjacentElement('afterbegin', data.message);
+                    (_a = document.getElementById('messagebox')) === null || _a === void 0 ? void 0 : _a.innerHTML = html;
                 });
                 console.log(data);
             });
@@ -115,7 +115,7 @@ export default class Window extends Event {
                     var _a;
                     html = html.replace('{{MESSAGE}}', data.message);
                     //@ts-ignore
-                    (_a = document.getElementById('messagebox')) === null || _a === void 0 ? void 0 : _a.insertAdjacentElement('afterbegin', data.message);
+                    (_a = document.getElementById('messagebox')) === null || _a === void 0 ? void 0 : _a.innerHTML = html;
                 });
                 console.log(data);
             });
@@ -123,11 +123,12 @@ export default class Window extends Event {
                 var _a, _b;
                 (_a = document.getElementById('success')) === null || _a === void 0 ? void 0 : _a.remove();
                 (_b = document.getElementById('error')) === null || _b === void 0 ? void 0 : _b.remove();
+                let messagebox = document.getElementById('messagebox');
                 new HTMLLoader('/Engine-5.0/JavaScript/Elements/error.html').on('load', (html) => {
                     var _a;
                     html = html.replace('{{MESSAGE}}', data.message);
                     //@ts-ignore
-                    (_a = document.getElementById('messagebox')) === null || _a === void 0 ? void 0 : _a.insertAdjacentElement('afterbegin', data.message);
+                    (_a = document.getElementById('messagebox')) === null || _a === void 0 ? void 0 : _a.innerHTML = html;
                 });
                 console.log(data);
             });

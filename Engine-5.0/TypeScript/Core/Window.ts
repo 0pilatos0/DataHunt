@@ -91,7 +91,7 @@ export default class Window extends Event{
                 new HTMLLoader('/Engine-5.0/JavaScript/Elements/success.html').on('load', (html: any) => {
                     html = html.replace('{{MESSAGE}}', data.message)
                     //@ts-ignore
-                    document.getElementById('messagebox')?.insertAdjacentElement('afterbegin', data.message)
+                    document.getElementById('messagebox')?.innerHTML = html
                 })
                 console.log(data)
             })
@@ -102,7 +102,7 @@ export default class Window extends Event{
                 new HTMLLoader('/Engine-5.0/JavaScript/Elements/success.html').on('load', (html: any) => {
                     html = html.replace('{{MESSAGE}}', data.message)
                     //@ts-ignore
-                    document.getElementById('messagebox')?.insertAdjacentElement('afterbegin', data.message)
+                    document.getElementById('messagebox')?.innerHTML = html
                 })
                 console.log(data)
             })
@@ -113,7 +113,7 @@ export default class Window extends Event{
                 new HTMLLoader('/Engine-5.0/JavaScript/Elements/error.html').on('load', (html: any) => {
                     html = html.replace('{{MESSAGE}}', data.message)
                     //@ts-ignore
-                    document.getElementById('messagebox')?.insertAdjacentElement('afterbegin', data.message)
+                    document.getElementById('messagebox')?.innerHTML = html
                 })
                 console.log(data)
             })
@@ -121,10 +121,11 @@ export default class Window extends Event{
             socket.on('failedLogin', (data: any) => {
                 document.getElementById('success')?.remove()
                 document.getElementById('error')?.remove()
+                let messagebox = document.getElementById('messagebox')
                 new HTMLLoader('/Engine-5.0/JavaScript/Elements/error.html').on('load', (html: any) => {
                     html = html.replace('{{MESSAGE}}', data.message)
                     //@ts-ignore
-                    document.getElementById('messagebox')?.insertAdjacentElement('afterbegin', data.message)
+                    document.getElementById('messagebox')?.innerHTML = html
                 })
                 console.log(data)
             })

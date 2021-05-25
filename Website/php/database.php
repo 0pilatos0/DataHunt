@@ -37,6 +37,17 @@ function deleteUser($param){
     $dbh = null;
 }
 
+function ban($id, $by, $date){
+    $dbh = db();
+
+    $stmt = $dbh->prepare("INSERT INTO `users_ban` (user_id, ban_by, ban_until) VALUES (:id, :by, :date)");
+    $stmt->bindParam(':id', $id);
+    $stmt->bindParam(':by', $by);
+    $stmt->bindParam(':date', $date);
+    $stmt->execute();
+    $dbh = null;
+}
+
 function getUsers(){
     $dbh = db();
 

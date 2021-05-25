@@ -22,6 +22,29 @@ if(isset($_GET["delete"])){
         echo "<script>location = \"/admin\"</script>";
     }
 }
+if(isset($_GET["ban"])){
+    if($_GET["ban"] === "true"){
+        echo "
+            <div id=\"delete-account-overlay\" onclick='removeOverlay()' class=\"overlay delete-element\">
+                
+            </div>
+            <div class=\"delete-confirm delete-element\">
+                <h3>Ban user</h3>
+                <form method='post' target='_self'>
+                <label for='id'>User ID</label>
+                <input id=\"id\" type='number' value='{$_GET{"ID"}}'>
+                <label for='date'>Ban until</label>
+                <input id=\"date\" type='date'>
+                <input class='hide' id=\"banBy\" value='{$userinfo["id"]}'>
+                <button class=\"btn btn-confirm\">Confirm</button>
+                <button id=\"cancel\" onclick=\"removeOverlay()\" class=\"btn btn-cancel\">Cancel</button>
+                </form>
+            </div>";
+    }
+}
+if(isset($_POST["date"])){
+    //banUser($_POST);
+}
 
 ?>
     <div id="container">

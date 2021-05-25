@@ -24,6 +24,14 @@ function resetSession()
 function adminDelete($id){
     deleteUser($id);
 }
+
+function banUser($params){
+    $id = $params["id"];
+    $by = $params["banBy"];
+    $date = $params["date"];
+    ban($id, $by, $date);
+}
+
 function deleteAccount($id){
     deleteUser($id);
     resetSession();

@@ -28,7 +28,9 @@ if(isset($_GET["delete"])){
         <h1>Admin Panel</h1>
         <div id="buttons">
             <button onclick="show('usertable')">Usertable</button>
-            <button onclick="show('patchnotes')">Patchnotes</button>
+
+            <!-- <button onclick="show('patchnotes')">Patchnotes</button> -->
+
         </div>
         <div id="usertable" class="hide">
             <h1>User Table</h1>

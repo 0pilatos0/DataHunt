@@ -70,7 +70,7 @@ if(isset($_GET["delete"])){
     </div>
     <script>
 
-        let buttons = document.getElementById("buttons").children;
+
 
 
         function removeOverlay(){
@@ -80,8 +80,9 @@ if(isset($_GET["delete"])){
             }
         }
         function show(div){
+            let buttons = document.getElementById("buttons").children;
             for(let i = 0; i < buttons.length; i++){
-                document.getElementById(buttons[i]).classList.add("hide");
+                document.getElementById(buttons[i].innerHTML).classList.add("hide");
             }
             document.getElementById(div).classList.add("show");
             document.getElementById(div).classList.remove("hide");

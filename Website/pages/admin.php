@@ -26,8 +26,8 @@ if(isset($_GET["delete"])){
 ?>
     <div id="container">
         <h1>Admin Panel</h1>
-
-        <div>
+        <a href="#usertable"></a>
+        <div id="usertable" style="display: none">
             <h1>User Table</h1>
             <table>
                 <tr>
@@ -72,6 +72,10 @@ if(isset($_GET["delete"])){
             while (f.length > 0){
                 f[0].remove();
             }
+        }
+
+        if(location.href.search('#usertable')){
+            document.getElementById("usertable").style.display = "block";
         }
     </script>
 <?php include '../elements/footer.php'; ?>

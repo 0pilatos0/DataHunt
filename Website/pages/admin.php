@@ -27,7 +27,7 @@ if(isset($_GET["delete"])){
     <div id="container">
         <h1>Admin Panel</h1>
         <div id="buttons">
-            <button onclick="show('usertable')">Usertable</button>
+            <button onclick="show('usertable')">usertable</button>
 
             <!-- <button onclick="show('patchnotes')">Patchnotes</button> -->
 
@@ -72,9 +72,6 @@ if(isset($_GET["delete"])){
     </div>
     <script>
 
-
-
-
         function removeOverlay(){
             let f = document.getElementsByClassName("delete-element");
             while (f.length > 0){
@@ -86,7 +83,6 @@ if(isset($_GET["delete"])){
             for(let i = 0; i < buttons.length; i++){
                 document.getElementById(buttons[i].innerHTML).classList.add("hide");
             }
-            document.getElementById(div).classList.add("show");
             document.getElementById(div).classList.remove("hide");
         }
 

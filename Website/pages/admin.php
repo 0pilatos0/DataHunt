@@ -26,7 +26,7 @@ if(isset($_GET["delete"])){
 ?>
     <div id="container">
         <h1>Admin Panel</h1>
-        <a href="#usertable">Usertable</a>
+        <a href="#showtable">Usertable</a>
         <div id="usertable" class="hide">
             <h1>User Table</h1>
             <table>
@@ -74,7 +74,7 @@ if(isset($_GET["delete"])){
             }
         }
 
-        if(location.href.search('usertable')){
+        if(location.href.search('showtable')){
             document.getElementById("usertable").classList.remove("hide");
             document.getElementById("usertable").classList.add("show");
         }

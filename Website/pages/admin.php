@@ -30,7 +30,7 @@ if(isset($_GET["delete"])){
             <button onclick="show('usertable')">Usertable</button>
             <button onclick="show('patchnotes')">Patchnotes</button>
         </div>
-        <div>
+        <div id="usertable" class="hide">
             <h1>User Table</h1>
             <table>
                 <tr>
@@ -70,7 +70,8 @@ if(isset($_GET["delete"])){
     </div>
     <script>
 
-        let test = document.getElementById("buttons").children;
+        let buttons = document.getElementById("buttons").children;
+
 
         function removeOverlay(){
             let f = document.getElementsByClassName("delete-element");
@@ -79,8 +80,12 @@ if(isset($_GET["delete"])){
             }
         }
         function show(div){
-            document.getElementById(div).classList.add("show");
-            document.getElementById(div).classList.remove("hide");
+            for(let i = 0; i < buttons.length; i++){
+                document.getElementById(buttons[i]).classList.add("hide");
+                document.getElementById(div).classList.add("show");
+                document.getElementById(div).classList.remove("hide");
+            }
+
         }
 
     </script>

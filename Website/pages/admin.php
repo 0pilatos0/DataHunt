@@ -32,7 +32,7 @@ if(isset($_GET["ban"])){
                 <h3>Ban user</h3>
                 <form method='post' target='_self'>
                 <label for='id'>User ID</label>
-                <input id=\"id\" type='number' value='{$_GET{"ID"}}'>
+                <input id=\"id\" type='number' value='{$_GET["ID"]}'>
                 <label for='date'>Ban until</label>
                 <input id=\"date\" type='date'>
                 <input class='hide' id=\"banBy\" value='{$userinfo["id"]}'>

@@ -118,7 +118,7 @@ if(isset($_POST["date"])){
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                        <a><i class="fas fa-trash"></i></a>
+                        <a class="btn btn-confirm">Confirm</a>
                     </div>
                 </div>
             </div>
@@ -150,7 +150,7 @@ if(isset($_POST["date"])){
             var modalBodyInput = exampleModal.querySelector('.modal-body input');
 
             var a = exampleModal.querySelector('.modal-footer a');
-            a.setAttribute('href', '?delete=true&id='+recipient);
+            a.setAttribute('href', '?delete=confirm&id='+recipient);
 
             modalBodyInput.value = recipient
         });

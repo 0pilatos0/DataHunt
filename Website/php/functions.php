@@ -1,4 +1,6 @@
 <?php
+
+$dateformat = "Y-m-d H:i:s";
 function setSessionValue($index, $value)
 {
     $_SESSION[$index] = $value;
@@ -19,6 +21,17 @@ function resetSession()
 {
     session_unset();
 }
+function adminDelete($id){
+    deleteUser($id);
+}
+
+function banUser($params){
+    $id = $params["id"];
+    $by = $params["banBy"];
+    $date = $params["date"];
+    ban($id, $by, $date);
+}
+
 function deleteAccount($id){
     deleteUser($id);
     resetSession();
@@ -63,5 +76,10 @@ function createButtons ($id) {
 }
 
 function calculateKD ($K, $D){
-    return $K/$D;
+    return round($K/$D, 2);
+}
+
+function previewLatestPatch(){
+    $patch = getLatestPatchnote();
+    echo $patch[0]['note'];
 }

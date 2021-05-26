@@ -2,7 +2,7 @@
     include '../elements/header.php';
 
     if(!empty($_SESSION["user"])){
-        echo "<script>location = \"http://live.datahunt.duckdns.org\";</script>";
+        echo "<script>location = \"http://datahunt.duckdns.org\";</script>";
     }
 ?>
 <script src="../functions.js" defer></script>
@@ -108,7 +108,7 @@
                 die();
             }
             if ($_POST["AccPassword"] !== $_POST["AccPasswordCheck"]) {
-                echo "<div class=\"alert alert-danger\" role=\"alert\">asswords don't match!</div>";
+                echo "<div class=\"alert alert-danger\" role=\"alert\">Passwords don't match!</div>";
                 die();
             }
 
@@ -129,11 +129,15 @@
             $stmt->bindParam(':token', $token);
             $stmt->execute();
 
+            $stmt = $dbh->prepare("INSERT INTO user_roles (user_id, role_id) VALUES (:user_id, 0)");
+            $stmt->bindParam(':user_id', $id);
+            $stmt->execute();
+
 
             $dbh = null;
             echo "<p id='succesMessage'>added to the database</p>";
             sendVerificationMail($email, $name, $verificationtoken);
-            echo "<script>location = \"http://live.datahunt.duckdns.org/\";</script>";
+            echo "<script>location = \"http://datahunt.duckdns.org/\";</script>";
         } catch (PDOException $e) {
             print "Error!: " . $e->getMessage() . "<br/>";
             die();

@@ -1,12 +1,14 @@
 <?php
 require $_SERVER["DOCUMENT_ROOT"] . "/env.php";
 
-function db(){
-   return new PDO("mysql:host=" . getenv("MYSQLHOST") . ";" . "dbname=" . getenv("MYSQLDATABASE") . ";", getenv("MYSQLUSERNAME"), getenv("MYSQLPASSWORD"));
+function db()
+{
+    return new PDO("mysql:host=" . getenv("MYSQLHOST") . ";" . "dbname=" . getenv("MYSQLDATABASE") . ";", getenv("MYSQLUSERNAME"), getenv("MYSQLPASSWORD"));
 
 }
 
-function userInfo($param){
+function userInfo($param)
+{
     $dbh = db();
 
     $stmt = $dbh->prepare("SELECT users.*, user_roles.role_id FROM users INNER JOIN user_roles where users.id = :id AND user_roles.user_id = :id");
@@ -15,14 +17,36 @@ function userInfo($param){
     $result = $stmt->fetch(PDO::FETCH_ASSOC);
     $dbh = null;
     return $result;
-
 }
 
-function deleteUser($param){
+function checkBan($param){
+    $dbh = db();
+
+    $stmt = $dbh->prepare("SELECT * FROM users_ban where user_id = :id");
+    $stmt->bindParam(':id', $param);
+    $stmt->execute();
+    $result = $stmt->fetch(PDO::FETCH_ASSOC);
+    $dbh = null;
+    return $result;
+}
+
+function deleteUser($param)
+{
     $dbh = db();
 
     $stmt = $dbh->prepare("DELETE FROM users where id = :id");
     $stmt->bindParam(':id', $param);
+    $stmt->execute();
+    $dbh = null;
+}
+
+function ban($id, $by, $date){
+    $dbh = db();
+
+    $stmt = $dbh->prepare("INSERT INTO `users_ban` (user_id, ban_by, ban_until) VALUES (:id, :by, :date)");
+    $stmt->bindParam(':id', $id);
+    $stmt->bindParam(':by', $by);
+    $stmt->bindParam(':date', $date);
     $stmt->execute();
     $dbh = null;
 }
@@ -40,7 +64,7 @@ function getUsers(){
 /**
  * getStats
  * @param int
- * 
+ *
  * gets your current selected characters stats!
  * kills & deaths, level and
  *
@@ -52,14 +76,16 @@ function getStats($param)
     $dbh = db();
 
     $stmt = $dbh->prepare("SELECT characters.kills, characters.deaths, characters.name,  stats.health, stats.level, class.name FROM characters INNER JOIN stats ON stats.id = characters.stats_id INNER JOIN class ON class.id = characters.class_id  WHERE characters.id = :param");
-    $stmt->bindParam(':param', $param);$stmt->execute();
+    $stmt->bindParam(':param', $param);
+    $stmt->execute();
     $dbh = null;
     $result = $stmt->fetchAll(PDO::FETCH_NUM);
     $dbh = null;
     return $result;
 }
 
-function characters($param){
+function characters($param)
+{
     $dbh = db();
 
     $stmt = $dbh->prepare("SELECT characters.id, class.name, stats.level, characters.name as char_name FROM characters INNER JOIN class ON class.id = characters.class_id INNER JOIN stats ON stats.id = characters.stats_id  where characters.user_id = :id");
@@ -71,7 +97,8 @@ function characters($param){
 
 }
 
-function addToFeed($id, $message){
+function addToFeed($id, $message)
+{
     $dbh = db();
 
     $stmt = $dbh->prepare("INSERT INTO `users_feed` (user_id, message) VALUES (:id, :message)");
@@ -80,7 +107,9 @@ function addToFeed($id, $message){
     $stmt->execute();
     $dbh = null;
 }
-function getFeed($id){
+
+function getFeed($id)
+{
     $dbh = db();
 
     $stmt = $dbh->prepare("SELECT * FROM users_feed where user_id = :id");
@@ -139,11 +168,11 @@ function updateFriendship($friendshipID, $friendship)
 function getFriendship($userA, $userB, $id)
 {
     $dbh = db();
-    if($id == null){
+    if ($id == null) {
         $stmt = $dbh->prepare("SELECT * FROM friends WHERE userA = (:userA) AND userB = (:userB) OR userA = (:userB) AND userB = (:userA)");
         $stmt->bindParam(':userA', $userA);
         $stmt->bindParam(':userB', $userB);
-    }else{
+    } else {
         $stmt = $dbh->prepare("SELECT * FROM friends WHERE id = :id");
         $stmt->bindParam(':id', $id);
     }
@@ -154,7 +183,8 @@ function getFriendship($userA, $userB, $id)
     return $results;
 }
 
-function deleteFriendship ($param) {
+function deleteFriendship($param)
+{
     $dbh = db();
     $stmt = $dbh->prepare("DELETE FROM friends WHERE id=:id;");
     $stmt->bindParam(':id', $param);
@@ -196,5 +226,39 @@ function getUsername($param)
     $stmt->execute();
     $result = $stmt->fetch(PDO::FETCH_NUM);
     $dbh = null;
+    return $result;
+}
+
+function makePatchnote($text)
+{
+    $dbh = db();
+
+    $stmt = $dbh->prepare("INSERT INTO patchnotes (note) VALUES (:text)");
+    $stmt->bindParam(':text', $text);
+    $stmt->execute();
+    $dbh = null;
+}
+
+function getPatchnotes()
+{
+    $dbh = db();
+
+    $stmt = $dbh->prepare("SELECT * FROM patchnotes ORDER BY id DESC");
+    $stmt->execute();
+    $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    $dbh = null;
+
+    return $result;
+}
+
+function getLatestPatchnote()
+{
+    $dbh = db();
+
+    $stmt = $dbh->prepare("SELECT * FROM patchnotes ORDER BY id DESC LIMIT 0, 1");
+    $stmt->execute();
+    $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    $dbh = null;
+
     return $result;
 }

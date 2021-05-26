@@ -1,0 +1,68 @@
+<style>
+    form{
+        font-family: 'Roboto', sans-serif;
+        margin-left: auto;
+        margin-top: 30px;
+    }
+    .list-group{
+        color: black;
+    }
+    .list-group-item{
+        padding: .2rem 1.5rem;
+        background-color: #DBDBDB;
+    }
+    .card-header{
+        background-color: rgb(61, 61, 61);
+    }
+    #container img{
+        float: left;
+        margin-right: 15px;
+    }
+    #container form{
+        display: block;
+    }
+
+</style>
+<div class="content">
+    <div id="container" >
+        <img src="https://via.placeholder.com/800x640.png?text=Hier+komt+coole+afbeelding+van+game" alt="">
+        <form method="post" style="width: 30rem;" class="formLogin" action="register">
+            <div>
+            <div class="card-header">
+                <h3>Registration</h3>
+            </div>
+            {{FEEDBACK}}
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item"><label for="AccName" class="col-sm-1 col-form-label">Name</label>
+                    <div class="col-sm-10">
+                        <input type="text" name="AccName" id="irlname" class="input form-control" value="{{NAME}}"><br>
+                    </div>
+                </li>
+                <li class="list-group-item"><label for="AccUsername" class="col-sm-1 col-form-label">Username</label>
+                    <div class="col-sm-10">
+                        <input type="text" name="AccUsername" id="username" class="input form-control" value="{{USERNAME}}"><br>
+                    </div>
+                <li class="list-group-item"><label for="AccEmail" class="col-sm-1 col-form-label">Email</label>
+                    <div class="col-sm-10">
+                        <input type="text" name="AccEmail" id="mail" class="input form-control" value="{{EMAIL}}"><br>
+                    </div>
+                </li>
+                <li class="list-group-item"><label for="AccPassword" class="col-sm-1 col-form-label">Password</label>
+                    <div class="col-sm-10">
+                        <input type="password" name="AccPassword" id="password" class="input form-control"><br>
+                    </div>
+                </li>
+                <li class="list-group-item"><label for="AccPasswordCheck" class="col-sm-6 col-form-label">Password
+                        check</label>
+                    <div class="col-sm-10">
+                        <input type="password" name="AccPasswordCheck" id="passwordCheck" class="input form-control"><br>
+                    </div>
+                </li>
+                <li class="list-group-item">
+                    <input type="submit" class="btn btn-primary" value="Create Account">
+                </li>
+            </ul>
+        </div>
+    </form>
+    </div>
+</div>

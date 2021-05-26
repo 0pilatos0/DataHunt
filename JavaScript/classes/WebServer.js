@@ -71,7 +71,7 @@ module.exports.WebServer = class{
                 return this.#sessions.find(s => s.id === cookies.find(c => c.includes('JSSESSID')).split('=', 2)[1])
             }
             let cookies = req.headers.cookie?.split(/;\s?/g)
-            if(cookies){
+            if(cookies.length > 0 && cookies){
                 if(cookies.find(c => c.includes('JSSESSID')) && !this.#sessions.find(s => s.id === cookies.find(c => c.includes('JSSESSID')).split('=', 2)[1])) res.clearCookie('JSSESSID')
             }
             if(req.url.includes('.html') || !req.url.includes('.')){
@@ -123,7 +123,7 @@ module.exports.WebServer = class{
                         req.data[a] = args[a]
                     })
                     //#region session
-                    if(cookies) req.session = this.#sessions.find(s => s.id === cookies.find(c => c.includes('JSSESSID')).split('=', 2)[1]) || {}
+                    if(cookies.length > 0) req.session = this.#sessions.find(s => s.id === cookies.find(c => c.includes('JSSESSID')).split('=', 2)[1]) || {}
                     else req.session = {}
                     //#endregion session
                     let htmlPath = path.join(this.#publicPath, `pages/${pathUrl}`)

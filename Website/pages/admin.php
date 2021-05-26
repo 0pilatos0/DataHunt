@@ -40,7 +40,7 @@ if(isset($_GET["ban"])){
                     </div>
                     <div class=\"card-footer\">
                         <button type=\"submit\" class=\"btn btn-info\">Confirm</button>
-                        <button type=\"submit\" class=\"btn btn-default float-right\">Cancel</button>
+                        <button onclick=\"removeOverlay()\" class=\"btn btn-default float-right\">Cancel</button>
                     </div>
                 </form>
             </div>

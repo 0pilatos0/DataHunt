@@ -1,6 +1,6 @@
 .nk-image-slider {
   position: relative;
-  height: 360px;
+  max-height: 360px;
   overflow: hidden;
   background-color: #232930;
   border-bottom: 3px solid #3d3d3d;

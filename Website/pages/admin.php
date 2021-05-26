@@ -59,23 +59,40 @@ if(isset($_POST["date"]) && !empty($_POST["date"])){
             <button onclick="show('usertable')">usertable</button>
             <button onclick="show('patchnotes')">patchnotes</button>
         </div>
-        <div id="usertable">
-            <h1>User Table</h1>
-            <table>
-                <tr>
-                    <th>User ID</th>
-                    <th>Name</th>
-                    <th>Username</th>
-                    <th>Email</th>
-                    <th>Enabled</th>
-                    <th>Verified</th>
-                    <th>Role</th>
-                    <th></th>
-                </tr>
-                <?php
+        <div id="usertable" class="card">
+            <div class="card-header">
+                <h3 class="card-title">User Table</h3>
 
-                foreach(getUsers() as $user){
-                    echo "<tr>
+                <div class="card-tools">
+                    <div class="input-group input-group-sm" style="width: 150px;">
+                        <input type="text" name="table_search" class="form-control float-right" placeholder="Search">
+
+                        <div class="input-group-append">
+                            <button type="submit" class="btn btn-default"><i class="fas fa-search"></i></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- /.card-header -->
+            <div class="card-body table-responsive p-0">
+                <table class="table table-hover">
+                    <thead>
+                    <tr>
+                        <th>User ID</th>
+                        <th>Name</th>
+                        <th>Username</th>
+                        <th>Email</th>
+                        <th>Enabled</th>
+                        <th>Verified</th>
+                        <th>Role</th>
+                        <th></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <?php
+
+                    foreach(getUsers() as $user){
+                        echo "<tr>
                     <td>{$user["id"]}</td>
                     <td>{$user["name"]}</td>
                     <td>{$user["username"]}</td>
@@ -86,20 +103,23 @@ if(isset($_POST["date"]) && !empty($_POST["date"])){
                     
                     <td>
                     ";
-                    if(!$user["role_id"] >= $userinfo["role_id"]){
-                        echo "
+                        if(!$user["role_id"] >= $userinfo["role_id"]){
+                            echo "
                         <a class='btn btn-primary' href=\"?ban=true&id={$user["id"]}\">Ban</a>
                         <button type=\"button\" class=\"btn btn-primary\" data-bs-toggle=\"modal\" data-bs-target=\"#deleteUser\" data-bs-whatever=\"{$user["id"]}\">Delete</button>
                         ";
-                    }
-                    echo "
+                        }
+                        echo "
                     </td>
                     </tr>";
-                }
+                    }
 
 
-                ?>
-            </table>
+                    ?>
+                    </tbody>
+                </table>
+            </div>
+            <!-- /.card-body -->
         </div>
         <div class="modal fade" id="deleteUser" tabindex="-1" aria-labelledby="deleteUserLabel" aria-hidden="true">
             <div class="modal-dialog">
@@ -117,8 +137,8 @@ if(isset($_POST["date"]) && !empty($_POST["date"])){
                         </form>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
                         <a class="btn btn-default">Confirm</a>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
                     </div>
                 </div>
             </div>

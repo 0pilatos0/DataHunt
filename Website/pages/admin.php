@@ -15,7 +15,7 @@ if(isset($_GET["delete"])){
                 <h3>Are you sure you want to delete your account?</h3>
                 <button id=\"cancel\" onclick=\"removeOverlay()\" class=\"btn btn-cancel\">Cancel</button>
                 <a href=\"?delete=confirm&id={$_GET["id"]}\" class=\"btn btn-confirm\">Confirm</a>
-                </div>";
+            </div>";
     }
     elseif($_GET["delete"] === "confirm"){
         adminDelete($_GET["id"]);
@@ -29,7 +29,7 @@ if(isset($_GET["ban"])){
             
                 
             </div>
-            <div class=\"card card-info\">
+            <div class=\"card card-info delete-confirm delete-element\">
                  <div class=\"card-header\">
                     <h3 class=\"card-title\">Ban User</h3>
                 </div>

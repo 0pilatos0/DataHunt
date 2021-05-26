@@ -27,16 +27,16 @@ if(isset($_GET["ban"])){
                         <div class=\"form-group row\">
                             <label for=\"id\" class=\"col-sm-2 col-form-label\">User ID</label>
                             <div class=\"col-sm-10\">
-                                <input class=\"form-control\" id=\"id\" type='number' value='{$_GET["id"]}'>
+                                <input class=\"form-control\" id=\"id\" name='id' type='number' value='{$_GET["id"]}'>
                             </div>
                         </div>
                         <div class=\"form-group row\">
                             <label for=\"date\" class=\"col-sm-2 col-form-label\">Ban Until</label>
                             <div class=\"col-sm-10\">
-                                <input type=\"date\" class=\"form-control\" id=\"date\">
+                                <input type=\"date\" name='date' class=\"form-control\" id=\"date\">
                             </div>
                         </div>
-                        <input class='hide' id=\"banBy\" value='{$userinfo["id"]}'>
+                        <input class='hide' id=\"banBy\" name='banBy' value='{$userinfo["id"]}'>
                     </div>
                     <div class=\"card-footer\">
                         <button type=\"submit\" class=\"btn btn-info\">Confirm</button>
@@ -47,7 +47,7 @@ if(isset($_GET["ban"])){
             ";
     }
 }
-if(isset($_POST["date"])){
+if(isset($_POST["date"]) && !empty($_POST["date"])){
     banUser($_POST);
     echo "<script>location = \"/admin\"</script>";
 }

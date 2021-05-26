@@ -1,9 +1,7 @@
 import Canvas from "./Canvas.js";
 import Event from "./Event.js";
-import HTMLLoader from "./FileLoaders/HTMLLoader.js";
 import Input from "./Input.js";
 import Scene from "./Scene.js";
-import { Socket } from "./Socket.js";
 import Vector2 from "./Vector2.js";
 export default class Window extends Event {
     constructor() {
@@ -29,109 +27,97 @@ export default class Window extends Event {
             window.addEventListener('resize', this._resize.bind(this));
             window.addEventListener('focus', () => { });
             window.addEventListener('blur', () => { this._input.keys = []; });
-            //@ts-ignore undefined <- defined inside index.html
-            connect();
+            // //@ts-ignore undefined <- defined inside index.html
+            // connect()
             this._allowedToRender = true;
             if (gameLoader)
                 gameLoader.style.display = "none";
             let updateInterval = setInterval(() => { this._update(); }, 1000 / 60);
             window.requestAnimationFrame(this._render.bind(this));
             let fpsInterval = setInterval(() => { this._fps = 0; }, 1000);
-            clearInterval(updateInterval);
-            clearInterval(fpsInterval);
-            if (gameLoaderTitle)
-                gameLoaderTitle.innerText = "Connecting to server";
-            let socket = new Socket();
-            socket.on('connected', () => {
-                console.log("connected :)");
-                new HTMLLoader('/Engine-5.0/JavaScript/Elements/login.html').on('load', (data) => {
-                    //@ts-ignore
-                    document.getElementById('login').insertAdjacentHTML('beforeend', data);
-                    let elem = document.createElement('script');
-                    elem.src = '/Engine-5.0/JavaScript/Elements/login.js';
-                    //@ts-ignore
-                    document.getElementById('login').appendChild(elem);
-                    //document.getElementById('login').innerHTML = data
-                });
-                // this._allowedToRender = true
-                // window.requestAnimationFrame(this._render.bind(this))
-                // updateInterval = setInterval(() => {this._update()}, 1000/60)
-                // fpsInterval = setInterval(() => {this._fps = 0}, 1000)
-                // if(gameLoader) gameLoader.style.display = "none"
-            });
-            socket.on('disconnected', () => {
-                var _a;
-                console.log("disconnected :(");
-                this._allowedToRender = false;
-                clearInterval(updateInterval);
-                clearInterval(fpsInterval);
-                setTimeout(() => { this._canvas.clear(); }, 1000 / 60);
-                if (gameLoader)
-                    gameLoader.style.display = "block";
-                //@ts-ignore
-                while (document.getElementById('login').childNodes.length > 0) {
-                    //@ts-ignore
-                    document.getElementById('login').childNodes[((_a = document.getElementById('login')) === null || _a === void 0 ? void 0 : _a.childNodes.length) - 1].remove();
-                }
-            });
-            socket.on('failed', () => {
-                console.log('Can\'t connect');
-                this._allowedToRender = false;
-                clearInterval(updateInterval);
-                clearInterval(fpsInterval);
-                setTimeout(() => { this._canvas.clear(); }, 1000 / 60);
-                if (gameLoader)
-                    gameLoader.style.display = "block";
-            });
-            socket.on('succeededLogin', (data) => {
-                var _a, _b;
-                (_a = document.getElementById('error')) === null || _a === void 0 ? void 0 : _a.remove();
-                (_b = document.getElementById('success')) === null || _b === void 0 ? void 0 : _b.remove();
-                new HTMLLoader('/Engine-5.0/JavaScript/Elements/success.html').on('load', (html) => {
-                    var _a;
-                    html = html.replace('{{MESSAGE}}', data.message);
-                    //@ts-ignore
-                    (_a = document.getElementById('messagebox')) === null || _a === void 0 ? void 0 : _a.innerHTML = html;
-                });
-                console.log(data);
-            });
-            socket.on('succeededRegister', (data) => {
-                var _a, _b;
-                (_a = document.getElementById('error')) === null || _a === void 0 ? void 0 : _a.remove();
-                (_b = document.getElementById('success')) === null || _b === void 0 ? void 0 : _b.remove();
-                new HTMLLoader('/Engine-5.0/JavaScript/Elements/success.html').on('load', (html) => {
-                    var _a;
-                    html = html.replace('{{MESSAGE}}', data.message);
-                    //@ts-ignore
-                    (_a = document.getElementById('messagebox')) === null || _a === void 0 ? void 0 : _a.innerHTML = html;
-                });
-                console.log(data);
-            });
-            socket.on('failedRegister', (data) => {
-                var _a, _b;
-                (_a = document.getElementById('success')) === null || _a === void 0 ? void 0 : _a.remove();
-                (_b = document.getElementById('error')) === null || _b === void 0 ? void 0 : _b.remove();
-                new HTMLLoader('/Engine-5.0/JavaScript/Elements/error.html').on('load', (html) => {
-                    var _a;
-                    html = html.replace('{{MESSAGE}}', data.message);
-                    //@ts-ignore
-                    (_a = document.getElementById('messagebox')) === null || _a === void 0 ? void 0 : _a.innerHTML = html;
-                });
-                console.log(data);
-            });
-            socket.on('failedLogin', (data) => {
-                var _a, _b;
-                (_a = document.getElementById('success')) === null || _a === void 0 ? void 0 : _a.remove();
-                (_b = document.getElementById('error')) === null || _b === void 0 ? void 0 : _b.remove();
-                let messagebox = document.getElementById('messagebox');
-                new HTMLLoader('/Engine-5.0/JavaScript/Elements/error.html').on('load', (html) => {
-                    var _a;
-                    html = html.replace('{{MESSAGE}}', data.message);
-                    //@ts-ignore
-                    (_a = document.getElementById('messagebox')) === null || _a === void 0 ? void 0 : _a.innerHTML = html;
-                });
-                console.log(data);
-            });
+            // clearInterval(updateInterval)
+            // clearInterval(fpsInterval)
+            // if(gameLoaderTitle) gameLoaderTitle.innerText = "Connecting to server"
+            // let socket = new Socket()
+            // socket.on('connected', () => {
+            //     console.log("connected :)")
+            //     new HTMLLoader('/Engine-5.0/JavaScript/Elements/login.html').on('load', (data: any) => {
+            //         //@ts-ignore
+            //         document.getElementById('login').insertAdjacentHTML('beforeend', data)
+            //         let elem = document.createElement('script')
+            //         elem.src = '/Engine-5.0/JavaScript/Elements/login.js'
+            //         //@ts-ignore
+            //         document.getElementById('login').appendChild(elem)
+            //         //document.getElementById('login').innerHTML = data
+            //     })
+            //     // this._allowedToRender = true
+            //     // window.requestAnimationFrame(this._render.bind(this))
+            //     // updateInterval = setInterval(() => {this._update()}, 1000/60)
+            //     // fpsInterval = setInterval(() => {this._fps = 0}, 1000)
+            //     // if(gameLoader) gameLoader.style.display = "none"
+            // })
+            // socket.on('disconnected', () => {
+            //     console.log("disconnected :(")
+            //     this._allowedToRender = false
+            //     clearInterval(updateInterval)
+            //     clearInterval(fpsInterval)
+            //     setTimeout(() => { this._canvas.clear() }, 1000/60)
+            //     if(gameLoader) gameLoader.style.display = "block"
+            //     //@ts-ignore
+            //     while(document.getElementById('login').childNodes.length > 0){
+            //         //@ts-ignore
+            //         document.getElementById('login').childNodes[document.getElementById('login')?.childNodes.length - 1].remove()
+            //     }
+            // })
+            // socket.on('failed', () => {
+            //     console.log('Can\'t connect')
+            //     this._allowedToRender = false
+            //     clearInterval(updateInterval)
+            //     clearInterval(fpsInterval)
+            //     setTimeout(() => { this._canvas.clear() }, 1000/60)
+            //     if(gameLoader) gameLoader.style.display = "block"
+            // })
+            // socket.on('succeededLogin', (data: any) => {
+            //     document.getElementById('error')?.remove()
+            //     document.getElementById('success')?.remove()
+            //     new HTMLLoader('/Engine-5.0/JavaScript/Elements/success.html').on('load', (html: any) => {
+            //         html = html.replace('{{MESSAGE}}', data.message)
+            //         //@ts-ignore
+            //         document.getElementById('messagebox')?.innerHTML = html
+            //     })
+            //     console.log(data)
+            // })
+            // socket.on('succeededRegister', (data: any) => {
+            //     document.getElementById('error')?.remove()
+            //     document.getElementById('success')?.remove()
+            //     new HTMLLoader('/Engine-5.0/JavaScript/Elements/success.html').on('load', (html: any) => {
+            //         html = html.replace('{{MESSAGE}}', data.message)
+            //         //@ts-ignore
+            //         document.getElementById('messagebox')?.innerHTML = html
+            //     })
+            //     console.log(data)
+            // })
+            // socket.on('failedRegister', (data: any) => {
+            //     document.getElementById('success')?.remove()
+            //     document.getElementById('error')?.remove()
+            //     new HTMLLoader('/Engine-5.0/JavaScript/Elements/error.html').on('load', (html: any) => {
+            //         html = html.replace('{{MESSAGE}}', data.message)
+            //         //@ts-ignore
+            //         document.getElementById('messagebox')?.innerHTML = html
+            //     })
+            //     console.log(data)
+            // })
+            // socket.on('failedLogin', (data: any) => {
+            //     document.getElementById('success')?.remove()
+            //     document.getElementById('error')?.remove()
+            //     let messagebox = document.getElementById('messagebox')
+            //     new HTMLLoader('/Engine-5.0/JavaScript/Elements/error.html').on('load', (html: any) => {
+            //         html = html.replace('{{MESSAGE}}', data.message)
+            //         //@ts-ignore
+            //         document.getElementById('messagebox')?.innerHTML = html
+            //     })
+            //     console.log(data)
+            // })
         });
     }
     _resize() {

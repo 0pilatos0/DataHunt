@@ -49,6 +49,7 @@ if(isset($_GET["ban"])){
 }
 if(isset($_POST["date"])){
     banUser($_POST);
+    echo "<script>location = \"../admin\"</script>";
 }
 
 ?>

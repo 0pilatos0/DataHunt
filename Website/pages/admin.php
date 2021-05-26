@@ -118,7 +118,7 @@ if(isset($_POST["date"]) && !empty($_POST["date"])){
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                        <a class="btn btn-confirm">Confirm</a>
+                        <a class="btn btn-default">Confirm</a>
                     </div>
                 </div>
             </div>

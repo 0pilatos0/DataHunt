@@ -15,6 +15,7 @@
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/inventory.css">
     <link rel="stylesheet" href="css/login.css">
+    <link rel="stylesheet" href="css/pauseMenu.css">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js" integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf" crossorigin="anonymous"></script>
     <script> let connect = () => {window.socket = io('localhost:3000', {'reconnection': true, 'reconnectionDelay': 1000, 'reconnectionDelayMax': 2000})} </script>
 </head>
@@ -26,5 +27,6 @@
     </div>
     <div id="inventory" class="hidden"></div>
     <div id="login"></div>
+    <div id="pauseMenu"></div>
 </body>
 </html>

@@ -38,7 +38,7 @@ export class Socket extends Event{
         return this._socket.disconnected
     }
 
-    public emit(message: string, data: any){
+    public emit(message: string, data?: any){
         this._socket.emit(message, data)
     }
 }

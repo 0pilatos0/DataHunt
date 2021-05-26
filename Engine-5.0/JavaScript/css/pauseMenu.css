@@ -1,0 +1,13 @@
+#pauseMenu{
+    position: absolute;
+    
+}
+
+#pauseMenu ul{
+    padding: 0;
+    margin: 0;
+}
+
+#pauseMenu li{
+    list-style: none;
+}

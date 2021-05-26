@@ -8,7 +8,7 @@ if(!$userinfo["role_id"]){
 if(isset($_GET["delete"])){
     if($_GET["delete"] === "confirm"){
         adminDelete($_GET["id"]);
-        echo "<script>location = \"website/pages/admin\"</script>";
+        echo "<script>location = \"../admin\"</script>";
     }
 }
 if(isset($_GET["ban"])){

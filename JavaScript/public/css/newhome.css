@@ -73,3 +73,62 @@
 .text-main-1 {
   font-size: 15px;
 }
+
+.waw a {
+  text-decoration: none;
+  color: inherit;
+}
+.waw li {
+  list-style-type: none;
+}
+.waw ul {
+  margin: 0;
+  padding: 0;
+}
+.waw img {
+  max-width: 100%;
+  height: 80%;
+}
+.cta {
+  background: #232930;
+  color: white;
+  position: relative;
+  overflow: hidden;
+  text-align: center;
+  padding: 40px 0px;
+}
+.cta:after {
+  content: "";
+  display: block;
+  position: absolute;
+  top: -40px;
+  right: -40px;
+  bottom: -40px;
+  left: -40px;
+  background: rgba(255, 255, 255, 0.1);
+  transform: rotate(30deg);
+}
+.cta .container {
+  position: relative;
+  z-index: 10;
+}
+.cta h2 {
+  margin-bottom: 40px;
+  font-size: 15px;
+}
+.cta h1 {
+  font-size: 30px;
+}
+.btn {
+  display: inline-block;
+  padding: 15px 30px;
+  border-radius: 50px;
+  color: #fff;
+  border: 1px solid #fff;
+  transition: 200ms;
+  background: transparent;
+  cursor: pointer;
+}
+.btn .fa {
+  margin-left: 10px;
+}

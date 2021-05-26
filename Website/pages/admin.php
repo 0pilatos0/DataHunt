@@ -11,7 +11,7 @@ if(isset($_GET["delete"])){
             <div id=\"delete-account-overlay\" onclick='removeOverlay()' class=\"overlay delete-element\">
                 
             </div>
-            <div class=\"modal delete-confirm delete-element\" tabindex=\"-1\">
+            <div class=\"modal delete-confirm delete-element\">
                 <div class=\"modal-dialog\">
                     <div class=\"modal-content\">
                         <div class=\"modal-header\">

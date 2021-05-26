@@ -11,11 +11,24 @@ if(isset($_GET["delete"])){
             <div id=\"delete-account-overlay\" onclick='removeOverlay()' class=\"overlay delete-element\">
                 
             </div>
-            <div class=\"delete-confirm delete-element\">
-                <h3>Are you sure you want to delete your account?</h3>
-                <button id=\"cancel\" onclick=\"removeOverlay()\" class=\"btn btn-cancel\">Cancel</button>
-                <a href=\"?delete=confirm&id={$_GET["id"]}\" class=\"btn btn-confirm\">Confirm</a>
-            </div>";
+            <div class=\"modal delete-confirm delete-element\" tabindex=\"-1\">
+                <div class=\"modal-dialog\">
+                    <div class=\"modal-content\">
+                        <div class=\"modal-header\">
+                            <h3>Are you sure you want to delete this account?</h3>
+                            <button type=\"button\" class=\"btn-close\" data-bs-dismiss=\"modal\" aria-label=\"Close\"></button>
+                        </div>
+                        <div class=\"modal-body\">
+                            <p>User ID: {$_GET["id"]}</p>
+                        </div>
+                        <div class=\"modal-footer\">
+                            <button id=\"cancel\" onclick=\"removeOverlay()\" class=\"btn btn-cancel\">Cancel</button>
+                            <a href='delete=confirm&id={$_GET["id"]}' class='btn btn-confirm'>Confirm</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            ";
     }
     elseif($_GET["delete"] === "confirm"){
         adminDelete($_GET["id"]);
@@ -50,7 +63,7 @@ if(isset($_GET["ban"])){
                         <input class='hide' id=\"banBy\" value='{$userinfo["id"]}'>
                     </div>
                     <div class=\"card-footer\">
-                        <button type=\"submit\" class=\"btn btn-info\">Sign in</button>
+                        <button type=\"submit\" class=\"btn btn-info\">Confirm</button>
                         <button type=\"submit\" class=\"btn btn-default float-right\">Cancel</button>
                     </div>
                 </form>
@@ -96,8 +109,13 @@ if(isset($_POST["date"])){
                     <td>{$user["role_id"]}</td>
                     
                     <td>
-                    <a href=\"?ban=true&id={$user["id"]}\"><i class=\"fas fa-ban\"></i></a>
-                    <a href=\"?delete=true&id={$user["id"]}\"><i class=\"fas fa-trash\"></i></a>
+                    ";
+                    if(!$user["role_id"] >= $userinfo["role_id"]){
+                        echo "
+                        <a href=\"?ban=true&id={$user["id"]}\"><i class=\"fas fa-ban\"></i></a>
+                        <a href=\"?delete=true&id={$user["id"]}\"><i class=\"fas fa-trash\"></i></a>";
+                    }
+                    echo "
                     </td>
                     </tr>";
                 }

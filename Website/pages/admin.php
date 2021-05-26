@@ -88,7 +88,7 @@ if(isset($_POST["date"])){
                     ";
                     if(!$user["role_id"] >= $userinfo["role_id"]){
                         echo "
-                        <a href=\"?ban=true&id={$user["id"]}\"><i class=\"fas fa-ban\"></i></a>
+                        <a class='btn btn-primary' href=\"?ban=true&id={$user["id"]}\">Ban</a>
                         <button type=\"button\" class=\"btn btn-primary\" data-bs-toggle=\"modal\" data-bs-target=\"#deleteUser\" data-bs-whatever=\"{$user["id"]}\">Delete</button>
                         ";
                     }
@@ -105,7 +105,7 @@ if(isset($_POST["date"])){
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="deleteUserLabel">New message</h5>
+                        <h5 class="modal-title" id="deleteUserLabel" style="color: black;">Delete user</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">

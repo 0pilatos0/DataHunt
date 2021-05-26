@@ -22,7 +22,7 @@ if(isset($_GET["ban"])){
                  <div class=\"card-header\">
                     <h3 class=\"card-title\">Ban User</h3>
                 </div>
-                <form class=\"form-horizontal\ target=\"_self\">
+                <form class=\"form-horizontal\" target=\"_self\" method='post'>
                     <div class=\"card-body\">
                         <div class=\"form-group row\">
                             <label for=\"id\" class=\"col-sm-2 col-form-label\">User ID</label>
@@ -57,7 +57,6 @@ if(isset($_POST["date"])){
         <div id="buttons">
             <button onclick="show('usertable')">usertable</button>
             <button onclick="show('patchnotes')">patchnotes</button>
-
         </div>
         <div id="usertable">
             <h1>User Table</h1>

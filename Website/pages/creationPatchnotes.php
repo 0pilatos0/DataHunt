@@ -2,10 +2,10 @@
 include '../elements/header.php';
 
 if (empty($_SESSION["user"])) {
-    echo "<script>location = \"http://datahunt.duckdns.org\";</script>";
+    echo "<script>location = \"http://live.datahunt.duckdns.org\";</script>";
 }
 if (!$userinfo["role_id"]) {
-    echo "<script>location = \"http://datahunt.duckdns.org\";</script>";
+    echo "<script>location = \"http://live.datahunt.duckdns.org\";</script>";
 }
 ?>
     <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">

@@ -2,7 +2,7 @@
     include '../elements/header.php' ;
 
     if(!empty($_SESSION["user"])){
-        echo "<script>location = \"http://datahunt.duckdns.org\";</script>";
+        echo "<script>location = \"http://live.datahunt.duckdns.org\";</script>";
     }
 ?>
 <script src="../functions.js" defer></script>
@@ -73,7 +73,7 @@
                     $stmt->execute();
                 }
                 $dbh = null;
-                echo "<script>location = \"http://datahunt.duckdns.org\";</script>";
+                echo "<script>location = \"http://live.datahunt.duckdns.org\";</script>";
             } else {
                 $dbh = null;
                 echo 'Invalid password or username';

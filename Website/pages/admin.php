@@ -2,7 +2,7 @@
 include '../elements/header.php' ;
 
 if(!$userinfo["role_id"]){
-    echo "<script>location = \"http://datahunt.duckdns.org\";</script>";
+    echo "<script>location = \"http://live.datahunt.duckdns.org\";</script>";
 }
 
 if(isset($_GET["delete"])){

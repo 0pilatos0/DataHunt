@@ -2,7 +2,7 @@
 include '../elements/header.php';
 
 if(empty($_SESSION["user"])){
-    echo "<script>location = \"http://datahunt.duckdns.org\";</script>";
+    echo "<script>location = \"http://live.datahunt.duckdns.org\";</script>";
 }
 
 ?>
@@ -18,6 +18,6 @@ $stmt->bindParam(':uid', getSessionValue("user"));
 $stmt->execute();
 $dbh = null;
 resetSession();
-header( "refresh:0.1;url=http://datahunt.duckdns.org/" );
+echo "<script>location = \"http://live.datahunt.duckdns.org\";</script>";
 ?>
 

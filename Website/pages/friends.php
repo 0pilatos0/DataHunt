@@ -3,7 +3,7 @@
 include './../elements/header.php';
 
 if (empty($_SESSION["user"])) {
-    echo "<script>location = \"http://datahunt.duckdns.org\";</script>";
+    echo "<script>location = \"http://live.datahunt.duckdns.org\";</script>";
 }
 
 $results = getMultipleFriendships($_SESSION["user"]);
@@ -72,14 +72,14 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
             echo "you are already friends with this users";
             if ($friendship["friendship"] == 0 && $friendship["userA"] == $friendId) {
                 updateFriendship($friendship["id"], 1);
-                echo "<script>location = \"http://datahunt.duckdns.org/Website/pages/friends\";</script>";
+                echo "<script>location = \"http://live.datahunt.duckdns.org/Website/pages/friends\";</script>";
             }
         } elseif ($friendId === false) {
             echo "user doesn't exist";
         } else {
             echo "adding you as a friend right now :)";
             setFriendship($_SESSION["user"], $friendId[0], 0);
-            echo "<script>location = \"http://datahunt.duckdns.org/Website/pages/friends\";</script>";
+            echo "<script>location = \"http://live.datahunt.duckdns.org/Website/pages/friends\";</script>";
         }
     } elseif ($_POST["btnradio"] == "AcceptRequest") {
         updateFriendship($_POST['id'], 1);
@@ -93,10 +93,10 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
 
         addToFeed($_SESSION["user"], $user[0] . " and " . getUsername($friend)[0] . " are now friends!");
         addToFeed($friend, getUsername($friend)[0] . " and " . $user[0] . " are now friends!");
-        echo "<script>location = \"http://datahunt.duckdns.org/Website/pages/friends\";</script>";
+        echo "<script>location = \"http://live.datahunt.duckdns.org/Website/pages/friends\";</script>";
     } elseif ($_POST["btnradio"] == "DeclineRequest") {
         deleteFriendship($_POST['id']);
-        echo "<script>location = \"http://datahunt.duckdns.org/Website/pages/friends\";</script>";
+        echo "<script>location = \"http://live.datahunt.duckdns.org/Website/pages/friends\";</script>";
     }
 }
 ?>

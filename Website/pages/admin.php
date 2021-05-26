@@ -23,36 +23,39 @@ if(isset($_GET["delete"])){
     }
 }
 if(isset($_GET["ban"])){
-    if($_GET["ban"] === "true"){
+    if ($_GET["ban"] === "true") {
         echo "
             <div id=\"delete-account-overlay\" onclick='removeOverlay()' class=\"overlay delete-element\">
-                <div class=\"card card-info\">
-                    <div class=\"card-header\">
-                        <h3 class=\"card-title\">Ban User</h3>
-                    </div>
-                    <form class=\"form-horizontal\ target=\"_self\">
-                        <div class=\"card-body\">
-                            <div class=\"form-group row\">
-                                <label for=\"id\" class=\"col-sm-2 col-form-label\">User ID</label>
-                                <div class=\"col-sm-10\">
-                                    <input class=\"form-control\" id=\"id\" type='number' value='{$_GET["id"]}'>
-                                </div>
-                            </div>
-                            <div class=\"form-group row\">
-                                <label for=\"date\" class=\"col-sm-2 col-form-label\">Ban Until</label>
-                                 <div class=\"col-sm-10\">
-                                    <input type=\"date\" class=\"form-control\" id=\"date\">
-                                 </div>
-                            </div>
-                            <input class='hide' id=\"banBy\" value='{$userinfo["id"]}'>
-                        </div>
-                        <div class=\"card-footer\">
-                            <button type=\"submit\" class=\"btn btn-info\">Sign in</button>
-                            <button type=\"submit\" class=\"btn btn-default float-right\">Cancel</button>
-                        </div>
-                    </form>
+            
+                
+            </div>
+            <div class=\"card card-info\">
+                 <div class=\"card-header\">
+                    <h3 class=\"card-title\">Ban User</h3>
                 </div>
-            </div>";
+                <form class=\"form-horizontal\ target=\"_self\">
+                    <div class=\"card-body\">
+                        <div class=\"form-group row\">
+                            <label for=\"id\" class=\"col-sm-2 col-form-label\">User ID</label>
+                            <div class=\"col-sm-10\">
+                                <input class=\"form-control\" id=\"id\" type='number' value='{$_GET["id"]}'>
+                            </div>
+                        </div>
+                        <div class=\"form-group row\">
+                            <label for=\"date\" class=\"col-sm-2 col-form-label\">Ban Until</label>
+                            <div class=\"col-sm-10\">
+                                <input type=\"date\" class=\"form-control\" id=\"date\">
+                            </div>
+                        </div>
+                        <input class='hide' id=\"banBy\" value='{$userinfo["id"]}'>
+                    </div>
+                    <div class=\"card-footer\">
+                        <button type=\"submit\" class=\"btn btn-info\">Sign in</button>
+                        <button type=\"submit\" class=\"btn btn-default float-right\">Cancel</button>
+                    </div>
+                </form>
+            </div>
+            ";
     }
 }
 if(isset($_POST["date"])){

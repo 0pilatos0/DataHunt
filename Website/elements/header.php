@@ -108,7 +108,7 @@
                 
                   comment gemaakt op "2021-04-13"
                 -->
-                <li><a id="home"href="/index.php">Home</a></li>
+                <li><a id="home" href="/index.php">Home</a></li>
                 <li><a id="updates" href="/Website/pages/updates">Updates</a></li>
                 <?php
                     session_start();
@@ -126,7 +126,6 @@
 
                         if($userinfo["role_id"]){
                             echo '<li><a id="admin" href="/Website/pages/admin">Admin</a></li>';
-                            echo '<li><a id="creationPatchnotes" href="/Website/pages/creationPatchnotes">Patchnotes</a></li>';
                         }
                        echo '<li style="float:right"><a id="logout" href="/Website/pages/logout">Logout</a></li>';
                        echo '<li style="float:right"><a id="user" href="/Website/pages/user">User</a></li>';
@@ -139,7 +138,7 @@
                     }
                 ?>
                 <li style="float:right"><a href="#news">Game</a></li>
-                <li style="float:right"><a href="/Website/pages/patchnotes">patchnotes</a></li>
+                <li style="float:right"><a href="/Website/pages/patchnotes">Patchnotes</a></li>
 
             </ul>
         </nav>

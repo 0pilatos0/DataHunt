@@ -22,7 +22,7 @@ if(isset($_GET["ban"])){
                  <div class=\"card-header\">
                     <h3 class=\"card-title\">Ban User</h3>
                 </div>
-                <form class=\"form-horizontal\" target=\"#\" method='post'>
+                <form class=\"form-horizontal\" method='post'>
                     <div class=\"card-body\">
                         <div class=\"form-group row\">
                             <label for=\"id\" class=\"col-sm-2 col-form-label\">User ID</label>
@@ -49,7 +49,7 @@ if(isset($_GET["ban"])){
 }
 if(isset($_POST["date"])){
     banUser($_POST);
-    echo "<script>location = \"../admin\"</script>";
+    echo "<script>location = \"/admin\"</script>";
 }
 
 ?>

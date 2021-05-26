@@ -118,7 +118,7 @@
                         $_SESSION["userinfo"] = userInfo($_SESSION["user"]);
                         $userinfo =  $_SESSION["userinfo"];
                         $baninfo = checkBan($userinfo["id"]);
-                        if(empty($baninfo)){
+                        if(!empty($baninfo)){
                             if($baninfo["ban_until"] > date($dateformat)){
                                 resetSession();
                             }

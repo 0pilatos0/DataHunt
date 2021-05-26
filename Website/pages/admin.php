@@ -11,11 +11,24 @@ if(isset($_GET["delete"])){
             <div id=\"delete-account-overlay\" onclick='removeOverlay()' class=\"overlay delete-element\">
                 
             </div>
-            <div class=\"delete-confirm delete-element\">
-                <h3>Are you sure you want to delete your account?</h3>
-                <button id=\"cancel\" onclick=\"removeOverlay()\" class=\"btn btn-cancel\">Cancel</button>
-                <a href=\"?delete=confirm&id={$_GET["id"]}\" class=\"btn btn-confirm\">Confirm</a>
-                </div>";
+            <div class=\"modal delete-confirm delete-element\">
+                <div class=\"modal-dialog\">
+                    <div class=\"modal-content\">
+                        <div class=\"modal-header\">
+                            <h3>Are you sure you want to delete this account?</h3>
+                            <button type=\"button\" class=\"btn-close\" data-bs-dismiss=\"modal\" aria-label=\"Close\"></button>
+                        </div>
+                        <div class=\"modal-body\">
+                            <p>User ID: {$_GET["id"]}</p>
+                        </div>
+                        <div class=\"modal-footer\">
+                            <button id=\"cancel\" onclick=\"removeOverlay()\" class=\"btn btn-cancel\">Cancel</button>
+                            <a href='delete=confirm&id={$_GET["id"]}' class='btn btn-confirm'>Confirm</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            ";
     }
     elseif($_GET["delete"] === "confirm"){
         adminDelete($_GET["id"]);
@@ -23,23 +36,39 @@ if(isset($_GET["delete"])){
     }
 }
 if(isset($_GET["ban"])){
-    if($_GET["ban"] === "true"){
+    if ($_GET["ban"] === "true") {
         echo "
             <div id=\"delete-account-overlay\" onclick='removeOverlay()' class=\"overlay delete-element\">
+            
                 
             </div>
-            <div class=\"delete-confirm delete-element\">
-                <h3>Ban user</h3>
-                <form method='post' target='_self'>
-                <label for='id'>User ID</label>
-                <input id=\"id\" type='number' value='{$_GET["id"]}'>
-                <label for='date'>Ban until</label>
-                <input id=\"date\" type='date'>
-                <input class='hide' id=\"banBy\" value='{$userinfo["id"]}'>
-                <button class=\"btn btn-confirm\">Confirm</button>
-                <button id=\"cancel\" onclick=\"removeOverlay()\" class=\"btn btn-cancel\">Cancel</button>
+            <div class=\"card card-info delete-confirm delete-element\">
+                 <div class=\"card-header\">
+                    <h3 class=\"card-title\">Ban User</h3>
+                </div>
+                <form class=\"form-horizontal\ target=\"_self\">
+                    <div class=\"card-body\">
+                        <div class=\"form-group row\">
+                            <label for=\"id\" class=\"col-sm-2 col-form-label\">User ID</label>
+                            <div class=\"col-sm-10\">
+                                <input class=\"form-control\" id=\"id\" type='number' value='{$_GET["id"]}'>
+                            </div>
+                        </div>
+                        <div class=\"form-group row\">
+                            <label for=\"date\" class=\"col-sm-2 col-form-label\">Ban Until</label>
+                            <div class=\"col-sm-10\">
+                                <input type=\"date\" class=\"form-control\" id=\"date\">
+                            </div>
+                        </div>
+                        <input class='hide' id=\"banBy\" value='{$userinfo["id"]}'>
+                    </div>
+                    <div class=\"card-footer\">
+                        <button type=\"submit\" class=\"btn btn-info\">Confirm</button>
+                        <button type=\"submit\" class=\"btn btn-default float-right\">Cancel</button>
+                    </div>
                 </form>
-            </div>";
+            </div>
+            ";
     }
 }
 if(isset($_POST["date"])){
@@ -80,8 +109,13 @@ if(isset($_POST["date"])){
                     <td>{$user["role_id"]}</td>
                     
                     <td>
-                    <a href=\"?ban=true&id={$user["id"]}\"><i class=\"fas fa-ban\"></i></a>
-                    <a href=\"?delete=true&id={$user["id"]}\"><i class=\"fas fa-trash\"></i></a>
+                    ";
+                    if(!$user["role_id"] >= $userinfo["role_id"]){
+                        echo "
+                        <a href=\"?ban=true&id={$user["id"]}\"><i class=\"fas fa-ban\"></i></a>
+                        <a href=\"?delete=true&id={$user["id"]}\"><i class=\"fas fa-trash\"></i></a>";
+                    }
+                    echo "
                     </td>
                     </tr>";
                 }

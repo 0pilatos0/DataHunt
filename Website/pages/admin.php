@@ -8,7 +8,7 @@ if(!$userinfo["role_id"]){
 if(isset($_GET["delete"])){
     if($_GET["delete"] === "confirm"){
         adminDelete($_GET["id"]);
-        echo "<script>location = \"../admin\"</script>";
+        echo "<script>location = \"/Website/pages/admin\"</script>";
     }
 }
 if(isset($_GET["ban"])){
@@ -49,7 +49,7 @@ if(isset($_GET["ban"])){
 }
 if(isset($_POST["date"]) && !empty($_POST["date"])){
     banUser($_POST);
-    echo "<script>location = \"/admin\"</script>";
+    echo "<script>location = \"/Website/pages/admin\"</script>";
 }
 
 ?>

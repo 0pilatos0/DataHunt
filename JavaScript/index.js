@@ -285,7 +285,7 @@ server.post('/register', async (req, res) => {
     let user = await User.get(username)
     await global.sql.query(`INSERT INTO logintokens (user_id, token) VALUES (${user.id}, '${verificationToken}')`)
     await global.sql.query(`INSERT INTO user_roles (user_id, role_id) VALUES (${user.id}, 0)`)
-    await Mailer.sendMail({to:email, subject:'Verify email Datahunt', html:fs.readFileSync(`../Mail/htmltestmail.html`, {encoding:'utf8', flag:'r'}).replace('{TOKEN}', encodeURIComponent(verificationToken)).replace('{{HOST}}', process.env.PORT ? `${process.env.HOST}:${process.env.PORT}` : `${process.env.HOST}`)})
+    await Mailer.sendMail({to:email, subject:'Verify email Datahunt', html:fs.readFileSync(`../Mail/htmltestmail.html`, {encoding:'utf8', flag:'r'}).replace('{TOKEN}', encodeURIComponent(verificationToken)).replace('{{HOST}}', process.env.PORT ? `${process.env.HOST}:${process.env.PORT}` : `${process.env.HOST}:3000`)})
     res.redirect('/')
 })
 

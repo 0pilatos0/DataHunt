@@ -6,31 +6,7 @@ if(!$userinfo["role_id"]){
 }
 
 if(isset($_GET["delete"])){
-    if($_GET["delete"] === "true"){
-        echo "
-            <div id=\"delete-account-overlay\" onclick='removeOverlay()' class=\"overlay delete-element\">
-                
-            </div>
-            <div class=\"modal delete-confirm delete-element\">
-                <div class=\"modal-dialog\">
-                    <div class=\"modal-content\">
-                        <div class=\"modal-header\">
-                            <h3>Are you sure you want to delete this account?</h3>
-                            <button type=\"button\" class=\"btn-close\" data-bs-dismiss=\"modal\" aria-label=\"Close\"></button>
-                        </div>
-                        <div class=\"modal-body\">
-                            <p>User ID: {$_GET["id"]}</p>
-                        </div>
-                        <div class=\"modal-footer\">
-                            <button id=\"cancel\" onclick=\"removeOverlay()\" class=\"btn btn-cancel\">Cancel</button>
-                            <a href='delete=confirm&id={$_GET["id"]}' class='btn btn-confirm'>Confirm</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            ";
-    }
-    elseif($_GET["delete"] === "confirm"){
+    if($_GET["delete"] === "confirm"){
         adminDelete($_GET["id"]);
         echo "<script>location = \"/admin\"</script>";
     }
@@ -113,7 +89,8 @@ if(isset($_POST["date"])){
                     if(!$user["role_id"] >= $userinfo["role_id"]){
                         echo "
                         <a href=\"?ban=true&id={$user["id"]}\"><i class=\"fas fa-ban\"></i></a>
-                        <a href=\"?delete=true&id={$user["id"]}\"><i class=\"fas fa-trash\"></i></a>";
+                        <button type=\"button\" class=\"btn btn-primary\" data-bs-toggle=\"modal\" data-bs-target=\"#deleteUser\" data-bs-whatever=\"{$user["id"]}\">Delete</button>
+                        ";
                     }
                     echo "
                     </td>
@@ -123,6 +100,28 @@ if(isset($_POST["date"])){
 
                 ?>
             </table>
+        </div>
+        <div class="modal fade" id="deleteUser" tabindex="-1" aria-labelledby="deleteUserLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="deleteUserLabel">New message</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form>
+                            <div class="mb-3">
+                                <label for="recipient-name" class="col-form-label">User ID</label>
+                                <input type="text" class="form-control" id="recipient-name">
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                        <a><i class="fas fa-trash"></i></a>
+                    </div>
+                </div>
+            </div>
         </div>
         <div id="patchnotes" class="hide">
             <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
@@ -144,6 +143,17 @@ if(isset($_POST["date"])){
 
     </div>
     <script>
+        var exampleModal = document.getElementById('deleteUser');
+        exampleModal.addEventListener('show.bs.modal', function (event) {
+            var button = event.relatedTarget;
+            var recipient = button.getAttribute('data-bs-whatever');
+            var modalBodyInput = exampleModal.querySelector('.modal-body input');
+
+            var a = exampleModal.querySelector('.modal-footer a');
+            a.setAttribute('href', '?delete=true&id='+recipient);
+
+            modalBodyInput.value = recipient
+        });
 
         function removeOverlay(){
             let f = document.getElementsByClassName("delete-element");

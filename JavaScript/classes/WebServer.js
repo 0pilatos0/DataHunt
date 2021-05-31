@@ -147,6 +147,26 @@ module.exports.WebServer = class{
                                     <li style="float:right"><a id="register" href="/register">Registration</a></li>
                                     <li style="float:right"><a id="login" href="/login">Login</a></li>`
                             }
+                            if(req.session.alert){
+
+                                let alertReplaceData = ""
+                                let alertData = req.session.alert;
+
+                                alertReplaceData += '' +
+                                    '<div class="alert ' + alertData["type"] + '">\n' +
+                                   alertData["message"] +
+                                    '</div>'
+                                alertReplaceData += `<script>
+                                    window.setTimeout(function() {
+                                        $(".alert").fadeTo(500, 0).slideUp(500, function(){
+                                            $(this).remove();
+                                        });
+                                    }, 4000);
+                                </script>`
+                                template = template.replace('{{ALERT}}' , alertReplaceData)
+                                delete req.session.alert;
+
+                            }
                             template = template.replace('{{DYNAMICHEADER}}' , templateReplaceData)
                             template = template.replace('{{CHATWINDOW}}', fs.readFileSync(`${path.join(__dirname, '../elements/chatWindow.html')}`))
                             //#endregion

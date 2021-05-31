@@ -22,9 +22,10 @@ server.get('/creationPatchnotes', (req, res) => {
     }
 })
 
-server.post('/creationPatchnotes', (req, res) => {
+server.post('/creationPatchnotes', async (req, res) => {
     if(req.data.data && req.data.data !== '<p><br></p>'){
-        User.makePatchnote(req.data.data)
+        console.log(req.data.data);
+        //await User.makePatchnote(req.data.title, req.data.data);
     }
 })
 

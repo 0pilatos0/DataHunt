@@ -1,5 +1,12 @@
 <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
-<div id="editor"></div>
+<div class="form-group row">
+    <label for="inputTitle" class="col-sm-1 col-form-label" id="inputTitleLabel">Title:</label>
+    <div class="col-sm-11">
+        <h1><input type="email" class="form-control" id="inputTitle" placeholder="Patch"></h1>
+    </div>
+</div>
+<div id="editor">
+</div>
 
 <button type="button" onclick="getData()">Submit</button>
 <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>

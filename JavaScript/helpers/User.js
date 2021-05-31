@@ -93,8 +93,8 @@ module.exports.User = class {
       return global.sql.query(`SELECT username FROM users where id = ${id}`)
   }
 
-  static async makePatchnote(text){
-    return global.sql.query(`INSERT INTO patchnotes (note) VALUES ('${text}')`)
+  static async makePatchnote(title, text){
+    return global.sql.query(`INSERT INTO patchnotes (title, note) VALUES ('${title}, ${text}')`)
   }
 
   static async get(username){

@@ -147,11 +147,9 @@ module.exports.WebServer = class{
                                     <li style="float:right"><a id="register" href="/register">Registration</a></li>
                                     <li style="float:right"><a id="login" href="/login">Login</a></li>`
                             }
+                            let alertReplaceData = ""
                             if(req.session.alert){
-
-                                let alertReplaceData = ""
                                 let alertData = req.session.alert;
-
                                 alertReplaceData += '' +
                                     '<div class="alert ' + alertData["type"] + '">\n' +
                                    alertData["message"] +
@@ -163,10 +161,9 @@ module.exports.WebServer = class{
                                         });
                                     }, 4000);
                                 </script>`
-                                template = template.replace('{{ALERT}}' , alertReplaceData)
                                 delete req.session.alert;
-
                             }
+                            template = template.replace('{{ALERT}}' , alertReplaceData)
                             template = template.replace('{{DYNAMICHEADER}}' , templateReplaceData)
                             template = template.replace('{{CHATWINDOW}}', fs.readFileSync(`${path.join(__dirname, '../elements/chatWindow.html')}`))
                             //#endregion

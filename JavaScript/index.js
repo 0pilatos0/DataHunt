@@ -8,10 +8,16 @@ const fs = require('fs')
 let server = new WebServer()
 
 server.get('/', (req, res) => {
+    
+})
+
+server.get('/test', (req, res) => {
     req.session.alert = {
         type: "alert-success",
         message: "test alert"
     }
+    res.redirect('/')
+    return
 })
 
 server.get('/creationPatchnotes', (req, res) => {

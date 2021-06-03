@@ -1,6 +1,6 @@
 import Event from "./Event.js"
 
-export default class Inventory extends Event{
+export default class AudioPlayer extends Event{
     
     private _isPlaying : boolean = false
     private _audio : HTMLAudioElement

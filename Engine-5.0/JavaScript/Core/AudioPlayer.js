@@ -1,5 +1,5 @@
 import Event from "./Event.js";
-export default class Inventory extends Event {
+export default class AudioPlayer extends Event {
     // @ts-ignore: Object is possibly 'null'.
     constructor() {
         super();

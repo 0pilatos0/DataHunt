@@ -1,71 +1,67 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
-    <meta charset="UTF-8">
+  <head>
+    <meta charset="UTF-8" />
     <title>AudioPlayer demo</title>
     <script src="../../Engine/Core/audio-player.js"></script>
+  </head>
 
-</head>
-
-<body>
-    <H1>Demo Voor de Audio Class</H1>
+  <body>
+    <h1>Demo Voor de Audio Class</h1>
     <div class="buttons">
-        <button id="play">Play</button>
-        <button id="pause">Pause</button>
-        <button id="Restart">restart</button>
-        <button id="Mute">Mute</button>
-        <button id="up">audio Up</button>
-        <button id="down">audio Down</button>
-        <button id="een">audio op 1</button>
-        <button id="twee">audio op 0.5</button>
-        <button id="drie">audio op 0</button>
-        <button id="on">Debug on</button>
-        <button id="off">Debug off</button>
-
+      <button id="play">Play</button>
+      <button id="pause">Pause</button>
+      <button id="Restart">restart</button>
+      <button id="Mute">Mute</button>
+      <button id="up">audio Up</button>
+      <button id="down">audio Down</button>
+      <button id="een">audio op 1</button>
+      <button id="twee">audio op 0.5</button>
+      <button id="drie">audio op 0</button>
+      <button id="on">Debug on</button>
+      <button id="off">Debug off</button>
     </div>
-
-    <img src="https://thumbs.gfycat.com/AcrobaticClearGoldfish-size_restricted.gif" alt="">
     <script>
-        audioPlayer.setSource("./BackgroundMusic.mp3");
-        var qs = function (selector) {
-            return document.querySelector(selector);
-        };
+      let audioPlayer = new AudioPlayer();
 
-        qs('#play').onclick = function () {
-            audioPlayer.play();
-        }
-        qs('#pause').onclick = function () {
-            audioPlayer.pause();
-        }
-        qs('#Restart').onclick = function () {
-            audioPlayer.restart();
-        }
-        qs('#Mute').onclick = function () {
-            audioPlayer.mute();
-        }
-        qs('#up').onclick = function () {
-            audioPlayer.audioUP();
-        }
-        qs('#down').onclick = function () {
-            audioPlayer.audioDown();
-        }
-        qs('#een').onclick = function () {
-            audioPlayer.Setaudiolevel(1);
-        }
-        qs('#twee').onclick = function () {
-            audioPlayer.Setaudiolevel(0.5);
-        }
-        qs('#drie').onclick = function () {
-            audioPlayer.Setaudiolevel(0);
-        }
-        qs('#on').onclick = function () {
-            audioPlayer.enablelogging(true);
-        }
-        qs('#off').onclick = function () {
-            audioPlayer.enablelogging(false);
-        }
+      audioPlayer.setSource("./BackgroundMusic.mp3");
+      var qs = function (selector) {
+        return document.querySelector(selector);
+      };
+
+      qs("#play").onclick = function () {
+        audioPlayer.play();
+      };
+      qs("#pause").onclick = function () {
+        audioPlayer.pause();
+      };
+      qs("#Restart").onclick = function () {
+        audioPlayer.restart();
+      };
+      qs("#Mute").onclick = function () {
+        audioPlayer.mute();
+      };
+      qs("#up").onclick = function () {
+        audioPlayer.audioUP();
+      };
+      qs("#down").onclick = function () {
+        audioPlayer.audioDown();
+      };
+      qs("#een").onclick = function () {
+        audioPlayer.Setaudiolevel(1);
+      };
+      qs("#twee").onclick = function () {
+        audioPlayer.Setaudiolevel(0.5);
+      };
+      qs("#drie").onclick = function () {
+        audioPlayer.Setaudiolevel(0);
+      };
+      qs("#on").onclick = function () {
+        audioPlayer.enablelogging(true);
+      };
+      qs("#off").onclick = function () {
+        audioPlayer.enablelogging(false);
+      };
     </script>
-</body>
-
+  </body>
 </html>

@@ -18,8 +18,6 @@
       <button id="een">audio op 1</button>
       <button id="twee">audio op 0.5</button>
       <button id="drie">audio op 0</button>
-      <button id="on">Debug on</button>
-      <button id="off">Debug off</button>
     </div>
     <script>
       let audioPlayer = new AudioPlayer();
@@ -55,12 +53,6 @@
       };
       qs("#drie").onclick = function () {
         audioPlayer.Setaudiolevel(0);
-      };
-      qs("#on").onclick = function () {
-        audioPlayer.enablelogging(true);
-      };
-      qs("#off").onclick = function () {
-        audioPlayer.enablelogging(false);
       };
     </script>
   </body>

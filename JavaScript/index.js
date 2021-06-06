@@ -32,9 +32,19 @@ server.get('/creationPatchnotes', (req, res) => {
 })
 
 server.post('/creationPatchnotes', async (req, res) => {
-    if(req.data.data && req.data.data !== '<p><br></p>'){
-        console.log(req.data.data);
-        //await User.makePatchnote(req.data.title, req.data.data);
+    if(req.data.editorTitle !== "" && req.data.data !== "<p><br></p>"){
+        await User.makePatchnote(req.data.editorTitle, req.data.data);
+        req.session.alert = {
+            type: "alert-info",
+            message: "Successfully created patchnote"
+        }
+        res.redirect('/patchnotes')
+    }else{
+        req.session.alert = {
+            type: "alert-danger",
+            message: "Could not create patchnote, because data was not sufficient"
+        }
+        res.redirect('/creationPatchnotes')
     }
 })
 
@@ -396,16 +406,20 @@ server.get('/patchnotes', async (req, res)=>{
     let patchnotes = await User.getPatchnotes()
     req.vars.PATCHNOTES = ""
     if(patchnotes.length > 1){
-        req.vars.LATESTPATCH = patchnotes[0]['note']
+        req.vars.LATESTPATCH = `
+        <h1>${patchnotes[0]['title']}
+        `
+
         for (let i=1; i<patchnotes.length; i++){
             req.vars.PATCHNOTES += `
-<button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample${i}" aria-expanded="false" aria-controls="collapseExample${i}">${patchnotes[i]['date_created']}</button>
-<br>
-<br>
-<div class="collapse" id="collapseExample${i}">
-    ${patchnotes[i]['note']}
-</div>
-`
+            <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample${i}" aria-expanded="false" aria-controls="collapseExample${i}">${patchnotes[i]['date_created'].toLocaleDateString()}</button>
+            <br>
+            <br>
+            <div class="collapse" id="collapseExample${i}">
+                <h1>${patchnotes[i]['title']}</h1>
+                ${patchnotes[i]['note']}
+            </div>
+            `
         }
     }else{
         req.vars.LATESTPATCH = patchnotes['note']

@@ -94,7 +94,12 @@ module.exports.User = class {
   }
 
   static async makePatchnote(title, text){
-    return global.sql.query(`INSERT INTO patchnotes (title, note) VALUES ('${title}, ${text}')`)
+      return new Promise((resolve, reject) => {
+          global.sql.con.query(`INSERT INTO patchnotes (title, note) VALUES (?, ?)`, [title, text], (error, result) => {
+              console.log(error);
+              return resolve(result)
+          })
+      })
   }
 
   static async get(username){

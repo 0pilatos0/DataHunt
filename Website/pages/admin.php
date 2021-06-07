@@ -133,6 +133,7 @@ if(isset($_POST["date"]) && !empty($_POST["date"])){
                 </div>
             </div>
         </div>
+
         <div id="patchnotes" class="hide">
             <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
             <div id="editor">
@@ -153,6 +154,7 @@ if(isset($_POST["date"]) && !empty($_POST["date"])){
 
     </div>
     <script>
+        //popup changes data everytime its opened
         var exampleModal = document.getElementById('deleteUser');
         exampleModal.addEventListener('show.bs.modal', function (event) {
             var button = event.relatedTarget;
@@ -162,7 +164,7 @@ if(isset($_POST["date"]) && !empty($_POST["date"])){
             var a = exampleModal.querySelector('.modal-footer a');
             a.setAttribute('href', '?delete=confirm&id='+recipient);
 
-            modalBodyInput.value = recipient
+            modalBodyInput.value = recipient;
         });
 
         function removeOverlay(){

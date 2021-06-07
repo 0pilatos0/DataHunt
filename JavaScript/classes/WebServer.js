@@ -186,19 +186,20 @@ module.exports.WebServer = class{
                                         req.html = req.html.replace(v, req.vars[v.replace(/[{}]/g, "")] || '') //So the var shows empty
                                     })
                                 }
-                                if(req.html.match(/<script\b[^>]*>[\s\S]*?<\/script>|<link\b[^>]*>[\s\S]*?<\/link>|<style\b[^>]*>[\s\S]*?<\/style>/gm)){
-                                    let headData = req.html.match(/<script\b[^>]*>[\s\S]*?<\/script>|<link\b[^>]*>[\s\S]*?<\/link>|<style\b[^>]*>[\s\S]*?<\/style>/gm)
-                                    let lines = req.html.split('\r\n')
-                                    headData.map(h => {
-                                        lines.map(l => {
-                                            lines[lines.indexOf(l)] = l.replace(h, '')
-                                        })
-                                    })
-                                    req.html = lines.join('\r\n')
-                                    req.html = req.html.replace(/<[\w\s\d]*><\/[\w\s\d]*>/g, '')
-                                    template = template.replace('{{HEAD}}', headData.toString().replace(/>,</g , '>\r\n<'))
-                                }
-                                else template = template.replace('{{HEAD}}', '')
+                                // if(req.html.match(/<script\b[^>]*>[\s\S]*?<\/script>|<link\b[^>]*>[\s\S]*?<\/link>|<style\b[^>]*>[\s\S]*?<\/style>/gm)){
+                                //     let headData = req.html.match(/<script\b[^>]*>[\s\S]*?<\/script>|<link\b[^>]*>[\s\S]*?<\/link>|<style\b[^>]*>[\s\S]*?<\/style>/gm)
+                                //     let lines = req.html.split('\r\n')
+                                //     headData.map(h => {
+                                //         lines.map(l => {
+                                //             lines[lines.indexOf(l)] = l.replace(h, '')
+                                //         })
+                                //     })
+                                //     req.html = lines.join('\r\n')
+                                //     req.html = req.html.replace(/<[\w\s\d]*><\/[\w\s\d]*>/g, '')
+                                //     template = template.replace('{{HEAD}}', headData.toString().replace(/>,</g , '>\r\n<'))
+                                // }
+                                // else 
+                                template = template.replace('{{HEAD}}', '')
                                 //res.writeHead(200, {"Content-Type": "text/html"})
                                 res.end(template.replace('{{BODY}}', req.html))
                             })

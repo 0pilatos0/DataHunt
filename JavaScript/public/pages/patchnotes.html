@@ -1,11 +1,51 @@
-<div id="patchnoteContainer">
-    <div id="latestPatch">
-        <h2>Latest Patchnotes: </h2>
-        {{LATESTPATCH}}
-    </div>
+<div class="container" style="padding-top: 30px">
+  <div class="row">
+    <div class="col-md-8">
+      <div id="patchnoteContainer">
+        <div id="latestPatch">
+          <h2>Latest Patchnotes:</h2>
+          {{LATESTPATCH}}
+        </div>
 
-    <div id="normalPatch">
-        <h2>Older Patchnotes:</h2>
-        {{PATCHNOTES}}
-</div>
+        <div id="normalPatch">
+          <h2>Older Patchnotes:</h2>
+          {{PATCHNOTES}}
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <!-- Search Widget -->
+      <div class="card mb-4">
+        <h5 class="card-header">Search</h5>
+        <div class="card-body">
+          <form name="search" action="#" method="post">
+            <div class="input-group">
+              <input
+                type="text"
+                name="searchtitle"
+                class="form-control"
+                placeholder="Search for..."
+                required=""
+              />
+              <span class="input-group-btn">
+                <button class="btn btn-secondary" type="submit">Go!</button>
+              </span>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <!-- Categories Widget -->
+
+      <!-- Side Widget -->
+      <div class="card my-4">
+        <h5 class="card-header">Recent News</h5>
+        <div class="card-body">
+          <ul class="mb-0">
+            <li></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>

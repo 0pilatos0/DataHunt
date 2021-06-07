@@ -5,6 +5,7 @@ const { Functions } = require('./helpers/Functions.js')
 const { User } = require('./helpers/User.js')
 const { Mailer } = require('./classes/Mailer.js')
 const fs = require('fs')
+const { HTMLFileReader } = require('./classes/HTMLFileReader.js')
 let server = new WebServer()
 
 server.get('/', (req, res) => {

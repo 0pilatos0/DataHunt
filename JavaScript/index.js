@@ -34,12 +34,16 @@ server.get('/creationPatchnotes', (req, res) => {
 
 server.post('/admin', async (req, res) => {
     if(req.data.ban){
-        req.session.modal = "testBan"
+        let reader = new HTMLFileReader('./elements/modal.html')
+        reader.vars.TITLE = "Ban Modal"
+        req.session.modal = reader.finish()
         res.redirect('/admin')
         return;
     }
     if(req.data.delete){
-        req.session.modal = "testDelete"
+        let reader = new HTMLFileReader('./elements/modal.html')
+        reader.vars.TITLE = "Delete Modal"
+        req.session.modal = reader.finish()
         res.redirect('/admin')
         return;
     }
@@ -407,13 +411,13 @@ server.get('/admin', async (req, res) => {
             <td>${user["role_id"]}</td>
             
             <td>
-            <form method="post">
+            <form method="post" style="display: inline-block;">
                 <input type="hidden" value="${user["id"]}" name="ban">
-                <button type="submit">Ban</button>
+                <button class="btn btn-primary" type="submit">Ban</button>
             </form>
-            <form method="post">
+            <form method="post" style="display: inline-block;">
                 <input type="hidden" value="${user["id"]}" name="delete">
-                <button type="submit">Delete</button>
+                <button class="btn btn-primary" type="submit">Delete</button>
             </form>
             </td>
             </tr>

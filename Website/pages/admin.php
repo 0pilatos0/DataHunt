@@ -134,6 +134,7 @@ if(isset($_POST["date"]) && !empty($_POST["date"])){
             </div>
         </div>
 
+
         <div id="patchnotes" class="hide">
             <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
             <div id="editor">

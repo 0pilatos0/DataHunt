@@ -31,7 +31,17 @@ server.get('/creationPatchnotes', (req, res) => {
     }
 })
 
-server.post('/creationPatchnotes', async (req, res) => {
+server.post('/admin', async (req, res) => {
+    if(req.data.ban){
+        req.session.modal = "testBan"
+        res.redirect('/admin')
+        return;
+    }
+    if(req.data.delete){
+        req.session.modal = "testDelete"
+        res.redirect('/admin')
+        return;
+    }
     if(req.data.editorTitle !== "" && req.data.data !== "<p><br></p>"){
         await User.makePatchnote(req.data.editorTitle, req.data.data);
         req.session.alert = {
@@ -362,6 +372,8 @@ server.get('/admin', async (req, res) => {
         return
     }
     req.vars["DYNAMICDATA"] = ''
+    req.vars.MODAL = req.session.modal
+    delete req.session.modal
     if(req.data.delete){
         if(req.data.delete === "true"){
             req.vars["DYNAMICDATA"] = `
@@ -394,8 +406,14 @@ server.get('/admin', async (req, res) => {
             <td>${user["role_id"]}</td>
             
             <td>
-            <a href=\"?ban=true&id=${user["id"]}\"><i class=\"fas fa-ban\"></i></a>
-            <a href=\"?delete=true&id=${user["id"]}\"><i class=\"fas fa-trash\"></i></a>
+            <form method="post">
+                <input type="hidden" value="${user["id"]}" name="ban">
+                <button type="submit">Ban</button>
+            </form>
+            <form method="post">
+                <input type="hidden" value="${user["id"]}" name="delete">
+                <button type="submit">Delete</button>
+            </form>
             </td>
             </tr>
         `
@@ -407,7 +425,8 @@ server.get('/patchnotes', async (req, res)=>{
     req.vars.PATCHNOTES = ""
     if(patchnotes.length > 1){
         req.vars.LATESTPATCH = `
-        <h1>${patchnotes[0]['title']}
+        <h1>${patchnotes[0]['title']}</h1>
+         ${patchnotes[0]['note']}
         `
 
         for (let i=1; i<patchnotes.length; i++){
@@ -422,7 +441,10 @@ server.get('/patchnotes', async (req, res)=>{
             `
         }
     }else{
-        req.vars.LATESTPATCH = patchnotes['note']
+        req.vars.LATESTPATCH = `
+        <h1>${patchnotes[0]['title']}</h1>
+         ${patchnotes[0]['note']}
+        `
     }
 })
 

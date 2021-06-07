@@ -136,7 +136,6 @@ module.exports.WebServer = class{
                                 let userinfo = req.session.userinfo
                                 if(userinfo["role_id"]){
                                     templateReplaceData += '<li><a id="admin" href="/admin">Admin</a></li>'
-                                    templateReplaceData += '<li><a id="creationPatchnotes" href="/creationPatchnotes">Patchnotes</a></li>'
                                 }
                                 templateReplaceData += '<li style="float:right"><a id="logout" href="/logout">Logout</a></li>'
                                 templateReplaceData += '<li style="float:right"><a id="user" href="/user">User</a></li>'

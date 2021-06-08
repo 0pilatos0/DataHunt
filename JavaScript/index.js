@@ -432,10 +432,10 @@ server.get('/admin', async (req, res) => {
 server.get('/patchnotes', async (req, res)=>{
     let patchnotes = await User.getPatchnotes()
     req.vars.PATCHNOTES = ""
-
     if(patchnotes.length > 1){
+        let myDate = new Date(patchnotes[0]['date_created']);
         req.vars.LATESTPATCH = `
-        <h1 style="display: inline;">${patchnotes[0]['title']}</h1>`
+        <h1 style="display: inline;">${patchnotes[0]['title']} - ${myDate.getHours()}:${myDate.getMinutes()}</h1>`
         if(req.session.userinfo && req.session.userinfo["role_id"]){
             req.vars.LATESTPATCH += `
             <div class="patchnotesButtons" id="${patchnotes[0]['id']}">
@@ -464,8 +464,9 @@ server.get('/patchnotes', async (req, res)=>{
             `
         }
     }else{
+        let myDate = new Date(patchnotes['date_created']);
         req.vars.LATESTPATCH = `
-        <h1>${patchnotes['title']}</h1>`
+        <h1 style="display: inline;">${patchnotes['title']} - ${myDate.getHours()}:${myDate.getMinutes()}</h1>`
         if(req.session.userinfo && req.session.userinfo["role_id"]){
             req.vars.LATESTPATCH += `
             <div class="patchnotesButtons" id="${patchnotes['id']}">
@@ -473,8 +474,7 @@ server.get('/patchnotes', async (req, res)=>{
                 <i style="color: #fe0026;" class="fas fa-trash"></i>
             </div>`
         }
-         req.vars.LATESTPATCH +=`${patchnotes['note']}
-        `
+         req.vars.LATESTPATCH +=`<br>${patchnotes['note']}`
     }
 })
 

@@ -2,6 +2,10 @@
   <div class="row">
     <div class="col-md-8">
       <div id="patchnoteContainer">
+        <form id="patchnoteForm" method="post">
+          <input type="hidden" id="patchnoteFormEdit" name="edit">
+          <input type="hidden" id="patchnoteFormDelete" name="delete">
+        </form>
         <div id="latestPatch">
           <h2>Latest Patchnotes:</h2>
           {{LATESTPATCH}}
@@ -49,3 +53,23 @@
     </div>
   </div>
 </div>
+
+<script>
+  let editElements = document.getElementsByClassName("fa-edit");
+  let deleteElements = document.getElementsByClassName("fa-trash");
+  let formEdit = document.getElementById("patchnoteFormEdit");
+  let formDelete = document.getElementById("patchnoteFormDelete");
+  for (let i=0; i<editElements.length; i++){
+    editElements[i].onclick=()=> {
+      formEdit.value = editElements[i].parentNode.id;
+      document.getElementById("patchnoteForm").submit();
+    }
+  }
+  for (let i=0; i<deleteElements.length; i++){
+    deleteElements[i].onclick=()=>{
+      formDelete.value = deleteElements[i].parentNode.id;
+      document.getElementById("patchnoteForm").submit();
+    }
+  }
+
+</script>

@@ -434,15 +434,27 @@ server.get('/patchnotes', async (req, res)=>{
     req.vars.PATCHNOTES = ""
     if(patchnotes.length > 1){
         req.vars.LATESTPATCH = `
-        <h1>${patchnotes[0]['title']}</h1>
-         ${patchnotes[0]['note']}
-        `
+        <h1 style="display: inline;">${patchnotes[0]['title']}</h1>`
+        if(req.session.userinfo && req.session.userinfo["role_id"]){
+            req.vars.LATESTPATCH += `
+            <div class="patchnotesButtons" id="${patchnotes[0]['id']}">
+                <i style="color: #50b64e" class="far fa-edit"></i>
+                <i style="color: #fe0026;" class="fas fa-trash"></i>
+            </div>`
+        }
+        req.vars.LATESTPATCH += `${patchnotes[0]['note']}`
 
         for (let i=1; i<patchnotes.length; i++){
             req.vars.PATCHNOTES += `
-            <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample${i}" aria-expanded="false" aria-controls="collapseExample${i}">${patchnotes[i]['date_created'].toLocaleDateString()}</button>
-            <br>
-            <br>
+            <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample${i}" aria-expanded="false" aria-controls="collapseExample${i}"  style="display: inline;">${patchnotes[i]['date_created'].toLocaleDateString()}</button>`
+            if(req.session.userinfo && req.session.userinfo["role_id"]){
+                req.vars.PATCHNOTES += `
+            <div class="patchnotesButtons" id="${patchnotes[i]['id']}">
+                <i style="color: #50b64e" class="far fa-edit"></i>
+                <i style="color: #fe0026;" class="fas fa-trash"></i>
+            </div>`
+            }
+            req.vars.PATCHNOTES +=`<br>
             <div class="collapse" id="collapseExample${i}">
                 <h1>${patchnotes[i]['title']}</h1>
                 ${patchnotes[i]['note']}
@@ -451,10 +463,31 @@ server.get('/patchnotes', async (req, res)=>{
         }
     }else{
         req.vars.LATESTPATCH = `
-        <h1>${patchnotes[0]['title']}</h1>
-         ${patchnotes[0]['note']}
+        <h1>${patchnotes[0]['title']}</h1>`
+        if(req.session.userinfo && req.session.userinfo["role_id"]){
+            req.vars.LATESTPATCH += `
+            <div class="patchnotesButtons" id="${patchnotes[0]['id']}">
+                <i style="color: #50b64e" class="far fa-edit"></i>
+                <i style="color: #fe0026;" class="fas fa-trash"></i>
+            </div>`
+        }
+         req.vars.LATESTPATCH +=`${patchnotes[0]['note']}
         `
     }
 })
+
+server.post("/patchnotes", async (req, res)=>{
+    if(req.data.edit){
+        console.log(req.data.edit);
+    }
+    if(req.data.delete){
+        User.deletePatchnote(req.data.delete);
+        req.session.alert = {
+            type: "alert-success",
+            message: `Deleted patch: ${req.data.delete}`
+        }
+    }
+    res.redirect("/patchnotes");
+});
 
 server.run()

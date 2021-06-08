@@ -227,3 +227,7 @@
   align-items: center;
   left: 0;
 }
+
+.patchnotesButtons {
+  display: inline;
+}

@@ -107,10 +107,14 @@ module.exports.User = class {
   }
 
   static async getPatchnotes(){
-      return global.sql.query(`SELECT * FROM patchnotes ORDER BY id DESC`)
+      return global.sql.query(`SELECT * FROM patchnotes WHERE deleted = 0 ORDER BY id DESC;`)
   }
 
-    static async getASingularePatchnote(){
-        return global.sql.query(`SELECT * FROM patchnotes ORDER BY id DESC LIMIT 1`)
-    }
+  static async getASingularePatchnote(){
+      return global.sql.query(`SELECT * FROM patchnotes WHERE deleted = 0 ORDER BY id DESC LIMIT 1`)
+  }
+
+  static async deletePatchnote(id){
+      return global.sql.query(`UPDATE patchnotes SET deleted=1 WHERE id=${id} AND deleted=0;`)
+  }
 }

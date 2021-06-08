@@ -47,10 +47,28 @@ server.post('/admin', async (req, res) => {
     if(req.data.delete){
         let reader = new HTMLFileReader('./elements/modal.html')
         reader.vars.TITLE = "Delete Modal"
+        reader.vars.BODY = `<p>Are you sure you want to delete the user with the ID: ${req.data.delete}?</p>`
+        reader.vars.CONFIRM = `
+                        <form method="post" style="display: inline-block;">
+                        <input type="hidden" value="${req.data.delete}" name="deleteConfirm">
+                        <button class="btn btn-primary" type="submit">Delete</button>
+                        </form>`
         req.session.modal = reader.finish()
         res.redirect('/admin')
         return;
     }
+    if(req.data.deleteConfirm){
+        await Functions.adminDelete(req.data.deleteConfirm)
+        req.session.alert = {
+            type: "alert-info",
+            message: `Successfully deleted user with ID: ${req.data.deleteConfirm}`
+        }
+        res.redirect('/admin')
+        return;
+    }
+
+
+
     if(req.data.editorTitle !== "" && req.data.data !== "<p><br></p>"){
         await User.makePatchnote(req.data.editorTitle, req.data.data);
         req.session.alert = {
@@ -395,11 +413,6 @@ server.get('/admin', async (req, res) => {
                     <a href=\"?delete=confirm&id=${req.data.id}\" class=\"btn btn-confirm\">Confirm</a>
                 </div>`
         }
-        else if(req.data.delete === "confirm"){
-            req.vars["DYNAMICDATA"] = ''
-            await Functions.adminDelete(req.data.id)
-            res.redirect('/admin')
-        }
     }
     req.vars["USERS"] = ""
     let users = await User.getMultiple()
@@ -415,14 +428,19 @@ server.get('/admin', async (req, res) => {
             <td>${user["role_id"]}</td>
             
             <td>
-            <form method="post" style="display: inline-block;">
+            `
+            if(req.session.userinfo.role_id > user.role_id){
+                req.vars["USERS"] += `
+                <form method="post" style="display: inline-block;">
                 <input type="hidden" value="${user["id"]}" name="ban">
                 <button class="btn btn-primary" type="submit">Ban</button>
-            </form>
-            <form method="post" style="display: inline-block;">
+                </form>
+                <form method="post" style="display: inline-block;">
                 <input type="hidden" value="${user["id"]}" name="delete">
                 <button class="btn btn-primary" type="submit">Delete</button>
-            </form>
+                </form>`
+            }
+            `
             </td>
             </tr>
         `

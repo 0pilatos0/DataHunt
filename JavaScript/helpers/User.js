@@ -109,4 +109,8 @@ module.exports.User = class {
   static async getPatchnotes(){
       return global.sql.query(`SELECT * FROM patchnotes ORDER BY id DESC`)
   }
+
+    static async getASingularePatchnote(){
+        return global.sql.query(`SELECT * FROM patchnotes ORDER BY id DESC LIMIT 1`)
+    }
 }

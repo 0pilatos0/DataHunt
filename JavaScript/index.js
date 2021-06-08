@@ -8,8 +8,12 @@ const fs = require('fs')
 const { HTMLFileReader } = require('./classes/HTMLFileReader.js')
 let server = new WebServer()
 
-server.get('/', (req, res) => {
-    
+server.get('/', async (req, res) => {
+    let patchnote = await User.getASingularePatchnote()
+    var myDate = new Date(patchnote['date_created']);
+    req.vars.PATCHTITLE = `Latest Patch: ${patchnote['title']}`
+    req.vars.PATCHDATE = `${myDate.getDate()}/${myDate.getMonth() + 1}/${myDate.getFullYear()}`
+
 })
 
 server.get('/test', (req, res) => {

@@ -432,6 +432,7 @@ server.get('/admin', async (req, res) => {
 server.get('/patchnotes', async (req, res)=>{
     let patchnotes = await User.getPatchnotes()
     req.vars.PATCHNOTES = ""
+
     if(patchnotes.length > 1){
         req.vars.LATESTPATCH = `
         <h1 style="display: inline;">${patchnotes[0]['title']}</h1>`
@@ -478,16 +479,42 @@ server.get('/patchnotes', async (req, res)=>{
 
 server.post("/patchnotes", async (req, res)=>{
     if(req.data.edit){
-        console.log(req.data.edit);
+        req.session.patchnoteId = req.data.edit;
+        res.redirect("/editPatchnote");
     }
     if(req.data.delete){
         User.deletePatchnote(req.data.delete);
         req.session.alert = {
             type: "alert-success",
             message: `Deleted patch: ${req.data.delete}`
-        }
+        };
+        res.redirect("/patchnotes");
     }
-    res.redirect("/patchnotes");
+});
+
+server.get("/editPatchnote", async (req, res)=>{
+    let patchnoteData = await User.getASingularePatchnote(req.session.patchnoteId);
+    req.vars.TITLE = patchnoteData.title;
+    req.vars.DATA = patchnoteData.note.toString();
+});
+
+server.post("/editPatchnote", async (req, res)=>{
+    if(req.data.editorTitle !== "" && req.data.data !== "<p><br></p>"){
+        await User.updatePatchnote(req.session.patchnoteId, req.data.editorTitle, req.data.data);
+        req.session.alert = {
+            type: "alert-info",
+            message: "Successfully changed patchnote"
+        };
+        delete req.session.patchnoteId;
+        res.redirect('/patchnotes')
+    }else{
+        req.session.alert = {
+            type: "alert-danger",
+            message: "Could not edit patchnote, because data was not sufficient"
+        };
+        delete req.session.patchnoteId;
+        res.redirect('/patchnotes')
+    }
 });
 
 server.run()

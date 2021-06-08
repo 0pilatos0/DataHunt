@@ -3,7 +3,6 @@ var toolbarOptions = [
     ['bold', 'italic', 'underline', 'strike'],
     ['code-block'],
 
-    [{ 'header': 1 }, { 'header': 2 }],
     [{ 'list': 'ordered'}, { 'list': 'bullet' }],
     [{ 'script': 'sub'}, { 'script': 'super' }],
     [{ 'header': [1, 2, 3, 4, false] }],
@@ -33,4 +32,9 @@ function getData() {
     element.appendChild(input);
     document.body.appendChild(element);
     element.submit();
+}
+
+function putData(title, data) {
+    document.getElementById('inputTitle').value = title;
+    document.getElementsByClassName('ql-editor')[0].innerHTML = data;
 }

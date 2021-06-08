@@ -96,7 +96,6 @@ module.exports.User = class {
   static async makePatchnote(title, text){
       return new Promise((resolve, reject) => {
           global.sql.con.query(`INSERT INTO patchnotes (title, note) VALUES (?, ?)`, [title, text], (error, result) => {
-              console.log(error);
               return resolve(result)
           })
       })
@@ -110,11 +109,23 @@ module.exports.User = class {
       return global.sql.query(`SELECT * FROM patchnotes WHERE deleted = 0 ORDER BY id DESC;`)
   }
 
-  static async getASingularePatchnote(){
-      return global.sql.query(`SELECT * FROM patchnotes WHERE deleted = 0 ORDER BY id DESC LIMIT 1`)
+  static async getASingularePatchnote(id=null){
+      if(id){
+          return global.sql.query(`SELECT * FROM patchnotes WHERE deleted = 0 AND id = ${id} ORDER BY id DESC LIMIT 1`)
+      }else{
+          return global.sql.query(`SELECT * FROM patchnotes WHERE deleted = 0 ORDER BY id DESC LIMIT 1`)
+      }
   }
 
   static async deletePatchnote(id){
       return global.sql.query(`UPDATE patchnotes SET deleted=1 WHERE id=${id} AND deleted=0;`)
+  }
+
+  static async updatePatchnote(id, title, text){
+      return new Promise((resolve, reject) => {
+          global.sql.con.query(`update patchnotes set title=?, note=? WHERE id=?;`, [title, text, id], (error, result) => {
+              return resolve(result)
+          })
+      })
   }
 }

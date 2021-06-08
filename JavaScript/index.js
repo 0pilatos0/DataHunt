@@ -10,6 +10,7 @@ let server = new WebServer()
 
 server.get('/', async (req, res) => {
     let patchnote = await User.getASingularePatchnote();
+    let myDate = new Date(patchnote['date_created']);
     req.vars.PATCHTITLE = `Latest Patch: ${patchnote['title']}`;
     req.vars.PATCHDATE = `${myDate.getDate()}/${myDate.getMonth() + 1}/${myDate.getFullYear()} - ${myDate.getHours()}:${myDate.getMinutes()}`
 

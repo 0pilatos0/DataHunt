@@ -9,10 +9,9 @@ const { HTMLFileReader } = require('./classes/HTMLFileReader.js')
 let server = new WebServer()
 
 server.get('/', async (req, res) => {
-    let patchnote = await User.getASingularePatchnote()
-    var myDate = new Date(patchnote['date_created']);
-    req.vars.PATCHTITLE = `Latest Patch: ${patchnote['title']}`
-    req.vars.PATCHDATE = `${myDate.getDate()}/${myDate.getMonth() + 1}/${myDate.getFullYear()}`
+    let patchnote = await User.getASingularePatchnote();
+    req.vars.PATCHTITLE = `Latest Patch: ${patchnote['title']}`;
+    req.vars.PATCHDATE = `${myDate.getDate()}/${myDate.getMonth() + 1}/${myDate.getFullYear()} - ${myDate.getHours()}:${myDate.getMinutes()}`
 
 })
 
@@ -446,8 +445,9 @@ server.get('/patchnotes', async (req, res)=>{
         req.vars.LATESTPATCH += `${patchnotes[0]['note']}`
 
         for (let i=1; i<patchnotes.length; i++){
+            let myDate = new Date(patchnotes[i]['date_created']);
             req.vars.PATCHNOTES += `
-            <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample${i}" aria-expanded="false" aria-controls="collapseExample${i}"  style="display: inline;">${patchnotes[i]['date_created'].toLocaleDateString()}</button>`
+            <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample${i}" aria-expanded="false" aria-controls="collapseExample${i}"  style="display: inline;">${myDate.getDate()}/${myDate.getMonth() + 1}/${myDate.getFullYear()} - ${myDate.getHours()}:${myDate.getMinutes()}</button>`
             if(req.session.userinfo && req.session.userinfo["role_id"]){
                 req.vars.PATCHNOTES += `
             <div class="patchnotesButtons" id="${patchnotes[i]['id']}">

@@ -465,15 +465,15 @@ server.get('/patchnotes', async (req, res)=>{
         }
     }else{
         req.vars.LATESTPATCH = `
-        <h1>${patchnotes[0]['title']}</h1>`
+        <h1>${patchnotes['title']}</h1>`
         if(req.session.userinfo && req.session.userinfo["role_id"]){
             req.vars.LATESTPATCH += `
-            <div class="patchnotesButtons" id="${patchnotes[0]['id']}">
+            <div class="patchnotesButtons" id="${patchnotes['id']}">
                 <i style="color: #50b64e" class="far fa-edit"></i>
                 <i style="color: #fe0026;" class="fas fa-trash"></i>
             </div>`
         }
-         req.vars.LATESTPATCH +=`${patchnotes[0]['note']}
+         req.vars.LATESTPATCH +=`${patchnotes['note']}
         `
     }
 })

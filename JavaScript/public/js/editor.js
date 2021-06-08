@@ -1,7 +1,7 @@
 var container = document.getElementById('editor');
 var toolbarOptions = [
     ['bold', 'italic', 'underline', 'strike'],
-    ['blockquote', 'code-block'],
+    ['code-block'],
 
     [{ 'header': 1 }, { 'header': 2 }],
     [{ 'list': 'ordered'}, { 'list': 'bullet' }],
@@ -11,8 +11,6 @@ var toolbarOptions = [
     [{ 'color': [] }, { 'background': [] }],
 
     ['link', 'image'],
-
-    [{ 'align': [] }],
 
     ['clean']
 ];

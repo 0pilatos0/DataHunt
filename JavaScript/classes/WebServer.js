@@ -71,7 +71,7 @@ module.exports.WebServer = class{
                 return this.#sessions.find(s => s.id === cookies.find(c => c.includes('JSSESSID')).split('=', 2)[1])
             }
             let cookies = req.headers.cookie?.split(/;\s?/g)
-            if(cookies.length > 0 && cookies){
+            if(cookies){
                 if(cookies.find(c => c.includes('JSSESSID')) && !this.#sessions.find(s => s.id === cookies.find(c => c.includes('JSSESSID')).split('=', 2)[1])) res.clearCookie('JSSESSID')
             }
             if(req.url.includes('.html') || !req.url.includes('.')){
@@ -123,7 +123,7 @@ module.exports.WebServer = class{
                         req.data[a] = args[a]
                     })
                     //#region session
-                    if(cookies.length > 0) req.session = this.#sessions.find(s => s.id === cookies.find(c => c.includes('JSSESSID')).split('=', 2)[1]) || {}
+                    if(cookies) req.session = this.#sessions.find(s => s.id === cookies.find(c => c.includes('JSSESSID'))?.split('=', 2)[1]) || {}
                     else req.session = {}
                     //#endregion session
                     let htmlPath = path.join(this.#publicPath, `pages/${pathUrl}`)
@@ -136,7 +136,6 @@ module.exports.WebServer = class{
                                 let userinfo = req.session.userinfo
                                 if(userinfo["role_id"]){
                                     templateReplaceData += '<li><a id="admin" href="/admin">Admin</a></li>'
-                                    templateReplaceData += '<li><a id="creationPatchnotes" href="/creationPatchnotes">Patchnotes</a></li>'
                                 }
                                 templateReplaceData += '<li style="float:right"><a id="logout" href="/logout">Logout</a></li>'
                                 templateReplaceData += '<li style="float:right"><a id="user" href="/user">User</a></li>'
@@ -147,6 +146,23 @@ module.exports.WebServer = class{
                                     <li style="float:right"><a id="register" href="/register">Registration</a></li>
                                     <li style="float:right"><a id="login" href="/login">Login</a></li>`
                             }
+                            let alertReplaceData = ""
+                            if(req.session.alert){
+                                let alertData = req.session.alert;
+                                alertReplaceData += '' +
+                                    '<div class="alert ' + alertData["type"] + '">\n' +
+                                   alertData["message"] +
+                                    '</div>'
+                                alertReplaceData += `<script>
+                                    window.setTimeout(function() {
+                                        $(".alert").fadeTo(500, 0).slideUp(500, function(){
+                                            $(this).remove();
+                                        });
+                                    }, 4000);
+                                </script>`
+                                delete req.session.alert;
+                            }
+                            template = template.replace('{{ALERT}}' , alertReplaceData)
                             template = template.replace('{{DYNAMICHEADER}}' , templateReplaceData)
                             template = template.replace('{{CHATWINDOW}}', fs.readFileSync(`${path.join(__dirname, '../elements/chatWindow.html')}`))
                             //#endregion
@@ -170,19 +186,20 @@ module.exports.WebServer = class{
                                         req.html = req.html.replace(v, req.vars[v.replace(/[{}]/g, "")] || '') //So the var shows empty
                                     })
                                 }
-                                if(req.html.match(/<script\b[^>]*>[\s\S]*?<\/script>|<link\b[^>]*>[\s\S]*?<\/link>|<style\b[^>]*>[\s\S]*?<\/style>/gm)){
-                                    let headData = req.html.match(/<script\b[^>]*>[\s\S]*?<\/script>|<link\b[^>]*>[\s\S]*?<\/link>|<style\b[^>]*>[\s\S]*?<\/style>/gm)
-                                    let lines = req.html.split('\r\n')
-                                    headData.map(h => {
-                                        lines.map(l => {
-                                            lines[lines.indexOf(l)] = l.replace(h, '')
-                                        })
-                                    })
-                                    req.html = lines.join('\r\n')
-                                    req.html = req.html.replace(/<[\w\s\d]*><\/[\w\s\d]*>/g, '')
-                                    template = template.replace('{{HEAD}}', headData.toString().replace(/>,</g , '>\r\n<'))
-                                }
-                                else template = template.replace('{{HEAD}}', '')
+                                // if(req.html.match(/<script\b[^>]*>[\s\S]*?<\/script>|<link\b[^>]*>[\s\S]*?<\/link>|<style\b[^>]*>[\s\S]*?<\/style>/gm)){
+                                //     let headData = req.html.match(/<script\b[^>]*>[\s\S]*?<\/script>|<link\b[^>]*>[\s\S]*?<\/link>|<style\b[^>]*>[\s\S]*?<\/style>/gm)
+                                //     let lines = req.html.split('\r\n')
+                                //     headData.map(h => {
+                                //         lines.map(l => {
+                                //             lines[lines.indexOf(l)] = l.replace(h, '')
+                                //         })
+                                //     })
+                                //     req.html = lines.join('\r\n')
+                                //     req.html = req.html.replace(/<[\w\s\d]*><\/[\w\s\d]*>/g, '')
+                                //     template = template.replace('{{HEAD}}', headData.toString().replace(/>,</g , '>\r\n<'))
+                                // }
+                                // else 
+                                template = template.replace('{{HEAD}}', '')
                                 //res.writeHead(200, {"Content-Type": "text/html"})
                                 res.end(template.replace('{{BODY}}', req.html))
                             })

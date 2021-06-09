@@ -93,8 +93,12 @@ module.exports.User = class {
       return global.sql.query(`SELECT username FROM users where id = ${id}`)
   }
 
-  static async makePatchnote(text){
-    return global.sql.query(`INSERT INTO patchnotes (note) VALUES ('${text}')`)
+  static async makePatchnote(title, text){
+      return new Promise((resolve, reject) => {
+          global.sql.con.query(`INSERT INTO patchnotes (title, note) VALUES (?, ?)`, [title, text], (error, result) => {
+              return resolve(result)
+          })
+      })
   }
 
   static async get(username){
@@ -102,6 +106,37 @@ module.exports.User = class {
   }
 
   static async getPatchnotes(){
-      return global.sql.query(`SELECT * FROM patchnotes ORDER BY id DESC`)
+      return global.sql.query(`SELECT * FROM patchnotes WHERE deleted = 0 ORDER BY id DESC;`)
   }
+
+  static async getASingularePatchnote(id=null){
+      if(id){
+          return global.sql.query(`SELECT * FROM patchnotes WHERE deleted = 0 AND id = ${id} ORDER BY id DESC LIMIT 1`)
+      }else{
+          return global.sql.query(`SELECT * FROM patchnotes WHERE deleted = 0 ORDER BY id DESC LIMIT 1`)
+      }
+  }
+
+  static async deletePatchnote(id){
+      return global.sql.query(`UPDATE patchnotes SET deleted=1 WHERE id=${id} AND deleted=0;`)
+  }
+
+  static async updatePatchnote(id, title, text){
+      return new Promise((resolve, reject) => {
+          global.sql.con.query(`update patchnotes set title=?, note=? WHERE id=?;`, [title, text, id], (error, result) => {
+              return resolve(result)
+          })
+      })
+  }
+  static async ban(id, by, date){
+      return global.sql.query(`INSERT INTO users_ban (user_id, ban_by, ban_until) VALUES (${id}, ${by}, '${date}')`)
+  }
+  static async checkBan(id){
+        return global.sql.query(`SELECT * FROM users_ban where user_id = ${id}`);
+  }
+  static async checkAllBan(){
+        return global.sql.query(`SELECT * FROM users_ban`);
+  }
+
 }
+

@@ -5,10 +5,24 @@ const { Functions } = require('./helpers/Functions.js')
 const { User } = require('./helpers/User.js')
 const { Mailer } = require('./classes/Mailer.js')
 const fs = require('fs')
+const { HTMLFileReader } = require('./classes/HTMLFileReader.js')
 let server = new WebServer()
 
-server.get('/', (req, res) => {
-    
+server.get('/', async (req, res) => {
+    let patchnote = await User.getASingularePatchnote();
+    let myDate = new Date(patchnote['date_created']);
+    req.vars.PATCHTITLE = `Latest Patch: ${patchnote['title']}`;
+    req.vars.PATCHDATE = `${myDate.getDate()}/${myDate.getMonth() + 1}/${myDate.getFullYear()} - ${myDate.getHours()}:${myDate.getMinutes()}`
+
+})
+
+server.get('/test', (req, res) => {
+    req.session.alert = {
+        type: "alert-success",
+        message: "test alert"
+    }
+    res.redirect('/')
+    return
 })
 
 server.get('/creationPatchnotes', (req, res) => {
@@ -22,9 +36,65 @@ server.get('/creationPatchnotes', (req, res) => {
     }
 })
 
-server.post('/creationPatchnotes', (req, res) => {
-    if(req.data.data && req.data.data !== '<p><br></p>'){
-        User.makePatchnote(req.data.data)
+server.post('/admin', async (req, res) => {
+    if(req.data.ban){
+        let reader = new HTMLFileReader('./elements/modal.html')
+        reader.vars.TITLE = "Ban Modal"
+        reader.vars.BODY = `
+                        <p>Ban the user with the ID: ${req.data.ban}?</p>
+                        <form id="banForm" method="post">
+                        <input type="hidden" value="${req.data.ban}" name="id">
+                        <label for="banConfirm">Datum</label>
+                        <input type="date" name="banConfirm">
+                        </form>`
+        reader.vars.CONFIRM = `<button onclick="banForm.submit()">Confirm</button>`
+        req.session.modal = reader.finish()
+        res.redirect('/admin')
+        return;
+    }
+    if(req.data.banConfirm){
+        await User.ban(req.data.id, req.session.userinfo.id, req.data.banConfirm)
+        res.redirect('/admin')
+        return;
+    }
+    if(req.data.delete){
+        let reader = new HTMLFileReader('./elements/modal.html')
+        reader.vars.TITLE = "Delete Modal"
+        reader.vars.BODY = `<p>Are you sure you want to delete the user with the ID: ${req.data.delete}?</p>`
+        reader.vars.CONFIRM = `
+                        <form method="post" style="display: inline-block;">
+                        <input type="hidden" value="${req.data.delete}" name="deleteConfirm">
+                        <button class="btn btn-primary" type="submit">Delete</button>
+                        </form>`
+        req.session.modal = reader.finish()
+        res.redirect('/admin')
+        return;
+    }
+    if(req.data.deleteConfirm){
+        await Functions.adminDelete(req.data.deleteConfirm)
+        req.session.alert = {
+            type: "alert-info",
+            message: `Successfully deleted user with ID: ${req.data.deleteConfirm}`
+        }
+        res.redirect('/admin')
+        return;
+    }
+
+
+
+    if(req.data.editorTitle !== "" && req.data.data !== "<p><br></p>"){
+        await User.makePatchnote(req.data.editorTitle, req.data.data);
+        req.session.alert = {
+            type: "alert-info",
+            message: "Successfully created patchnote"
+        }
+        res.redirect('/patchnotes')
+    }else{
+        req.session.alert = {
+            type: "alert-danger",
+            message: "Could not create patchnote, because data was not sufficient"
+        }
+        res.redirect('/creationPatchnotes')
     }
 })
 
@@ -342,27 +412,11 @@ server.get('/admin', async (req, res) => {
         return
     }
     req.vars["DYNAMICDATA"] = ''
-    if(req.data.delete){
-        if(req.data.delete === "true"){
-            req.vars["DYNAMICDATA"] = `
-                <div id=\"delete-account-overlay\" onclick='removeOverlay()' class=\"overlay delete-element\">
-                    
-                </div>
-                <div class=\"delete-confirm delete-element\">
-                    <h3>Are you sure you want to delete your account?</h3>
-                    <button id=\"cancel\" onclick=\"removeOverlay()\" class=\"btn btn-cancel\">Cancel</button>
-                    <a href=\"?delete=confirm&id=${req.data.id}\" class=\"btn btn-confirm\">Confirm</a>
-                </div>`
-        }
-        else if(req.data.delete === "confirm"){
-            req.vars["DYNAMICDATA"] = ''
-            await Functions.adminDelete(req.data.id)
-            res.redirect('/admin')
-        }
-    }
+    req.vars.MODAL = req.session.modal
+    delete req.session.modal
     req.vars["USERS"] = ""
     let users = await User.getMultiple()
-    users.map(user => {
+    await users.map(user => {
         req.vars["USERS"] += `
             <tr>
             <td>${user["id"]}</td>
@@ -372,10 +426,28 @@ server.get('/admin', async (req, res) => {
             <td>${user["enabled"]}</td>
             <td>${user["verified"]}</td>
             <td>${user["role_id"]}</td>
+            <td>
+            `
+
+
+            req.vars["USERS"] +=`
+            </td>
             
             <td>
-            <a href=\"?ban=true&id=${user["id"]}\"><i class=\"fas fa-ban\"></i></a>
-            <a href=\"?delete=true&id=${user["id"]}\"><i class=\"fas fa-trash\"></i></a>
+            `
+            if(req.session.userinfo.role_id > user.role_id){
+
+                req.vars["USERS"] += `
+                <form method="post" style="display: inline-block;">
+                <input type="hidden" value="${user["id"]}" name="ban">
+                <button class="btn btn-primary" type="submit">Ban</button>
+                </form>
+                <form method="post" style="display: inline-block;">
+                <input type="hidden" value="${user["id"]}" name="delete">
+                <button class="btn btn-primary" type="submit">Delete</button>
+                </form>`
+            }
+        req.vars["USERS"] +=`
             </td>
             </tr>
         `
@@ -385,21 +457,111 @@ server.get('/admin', async (req, res) => {
 server.get('/patchnotes', async (req, res)=>{
     let patchnotes = await User.getPatchnotes()
     req.vars.PATCHNOTES = ""
+    req.vars.MODAL = req.session.modal
+    delete req.session.modal
     if(patchnotes.length > 1){
-        req.vars.LATESTPATCH = patchnotes[0]['note']
+        let myDate = new Date(patchnotes[0]['date_created']);
+        req.vars.LATESTPATCH = `
+        <h1 style="display: inline;">${patchnotes[0]['title']} - ${myDate.getHours()}:${myDate.getMinutes()}</h1>`
+        if(req.session.userinfo && req.session.userinfo["role_id"]){
+            req.vars.LATESTPATCH += `
+            <div class="patchnotesButtons" id="${patchnotes[0]['id']}">
+                <i style="color: #50b64e" class="far fa-edit"></i>
+                <i style="color: #fe0026;" class="fas fa-trash"></i>
+            </div>`
+        }
+        req.vars.LATESTPATCH += `${patchnotes[0]['note']}`
+
         for (let i=1; i<patchnotes.length; i++){
+            let myDate = new Date(patchnotes[i]['date_created']);
             req.vars.PATCHNOTES += `
-<button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample${i}" aria-expanded="false" aria-controls="collapseExample${i}">${patchnotes[i]['date_created']}</button>
-<br>
-<br>
-<div class="collapse" id="collapseExample${i}">
-    ${patchnotes[i]['note']}
-</div>
-`
+            <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample${i}" aria-expanded="false" aria-controls="collapseExample${i}"  style="display: inline;">${myDate.getDate()}/${myDate.getMonth() + 1}/${myDate.getFullYear()} - ${myDate.getHours()}:${myDate.getMinutes()}</button>`
+            if(req.session.userinfo && req.session.userinfo["role_id"]){
+                req.vars.PATCHNOTES += `
+            <div class="patchnotesButtons" id="${patchnotes[i]['id']}">
+                <i style="color: #50b64e" class="far fa-edit"></i>
+                <i style="color: #fe0026;" class="fas fa-trash"></i>
+            </div>`
+            }
+            req.vars.PATCHNOTES +=`<br>
+            <div class="collapse" id="collapseExample${i}">
+                <h1>${patchnotes[i]['title']}</h1>
+                ${patchnotes[i]['note']}
+            </div>
+            `
         }
     }else{
-        req.vars.LATESTPATCH = patchnotes['note']
+        if(patchnotes.id){
+            let myDate = new Date(patchnotes['date_created']);
+            req.vars.LATESTPATCH = `
+            <h1 style="display: inline;">${patchnotes['title']} - ${myDate.getHours()}:${myDate.getMinutes()}</h1>`
+            if(req.session.userinfo && req.session.userinfo["role_id"]){
+                req.vars.LATESTPATCH += `
+                <div class="patchnotesButtons" id="${patchnotes['id']}">
+                    <i style="color: #50b64e" class="far fa-edit"></i>
+                    <i style="color: #fe0026;" class="fas fa-trash"></i>
+                </div>`
+            }
+            req.vars.LATESTPATCH +=`<br>${patchnotes['note']}`
+        }
+        else{
+            req.vars.LATESTPATCH = ``
+        }
     }
 })
+
+server.post("/patchnotes", async (req, res)=>{
+    if(req.data.edit){
+        req.session.patchnoteId = req.data.edit;
+        res.redirect("/editPatchnote");
+    }
+    if(req.data.delete){
+        let reader = new HTMLFileReader('./elements/modal.html')
+        reader.vars.TITLE = "Delete Patchnote"
+        reader.vars.BODY = `<p>Are you sure you want to delete patchnote with the ID: ${req.data.delete}?</p>`
+        reader.vars.CONFIRM = `
+                        <form method="post" style="display: inline-block;">
+                        <input type="hidden" value="${req.data.delete}" name="deleteConfirm">
+                        <button class="btn btn-primary" type="submit">Delete</button>
+                        </form>`
+        req.session.modal = reader.finish()
+        res.redirect('/patchnotes')
+        return;
+    }
+    if(req.data.deleteConfirm){
+        await User.deletePatchnote(req.data.deleteConfirm);
+        req.session.alert = {
+            type: "alert-success",
+            message: `Deleted patch: ${req.data.deleteConfirm}`
+        };
+        res.redirect("/patchnotes");
+        return;
+    }
+});
+
+server.get("/editPatchnote", async (req, res)=>{
+    let patchnoteData = await User.getASingularePatchnote(req.session.patchnoteId);
+    req.vars.TITLE = patchnoteData.title;
+    req.vars.DATA = patchnoteData.note.toString();
+});
+
+server.post("/editPatchnote", async (req, res)=>{
+    if(req.data.editorTitle !== "" && req.data.data !== "<p><br></p>"){
+        await User.updatePatchnote(req.session.patchnoteId, req.data.editorTitle, req.data.data);
+        req.session.alert = {
+            type: "alert-info",
+            message: "Successfully changed patchnote"
+        };
+        delete req.session.patchnoteId;
+        res.redirect('/patchnotes')
+    }else{
+        req.session.alert = {
+            type: "alert-danger",
+            message: "Could not edit patchnote, because data was not sufficient"
+        };
+        delete req.session.patchnoteId;
+        res.redirect('/patchnotes')
+    }
+});
 
 server.run()

@@ -1,32 +1,40 @@
-let theEditor;
+var container = document.getElementById('editor');
+var toolbarOptions = [
+    ['bold', 'italic', 'underline', 'strike'],
+    ['code-block'],
 
-ClassicEditor
-    .create(document.querySelector('#editor'), {
-        toolbar: {
-            items: [
-                'heading', '|',
-                'bold', 'italic', '|',
-                'link', '|',
-                'outdent', 'indent', '|',
-                'bulletedList', 'numberedList', '|',
-                'insertTable', '|',
-                'uploadImage', 'blockQuote', '|',
-                'undo', 'redo'
-            ],
-            shouldNotGroupWhenFull: true
-        }
-    })
-    .then(editor => {
-        theEditor = editor;
-    })
-    .catch(error => {
-        console.error(error);
-    });
+    [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+    [{ 'script': 'sub'}, { 'script': 'super' }],
+    [{ 'header': [1, 2, 3, 4, false] }],
 
-function getDataFromTheEditor() {
-    return theEditor.getData();
-}
+    [{ 'color': [] }, { 'background': [] }],
+
+    ['link', 'image'],
+
+    ['clean']
+];
+
+var quill = new Quill('#editor', {
+    modules: {
+        toolbar: toolbarOptions
+    },
+    theme: 'snow'
+});
+
+var editor = new Quill('#editor', options);
 
 function getData() {
-    console.log(getDataFromTheEditor());
+    let element = document.getElementById('form');
+    let input = document.createElement("input");
+    input.value = document.getElementsByClassName('ql-editor')[0].innerHTML;
+    input.name = 'data';
+    element.method = 'POST';
+    element.appendChild(input);
+    document.body.appendChild(element);
+    element.submit();
+}
+
+function putData(title, data) {
+    document.getElementById('inputTitle').value = title;
+    document.getElementsByClassName('ql-editor')[0].innerHTML = data;
 }

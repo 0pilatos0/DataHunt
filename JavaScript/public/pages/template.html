@@ -11,8 +11,9 @@
     <script src="https://kit.fontawesome.com/b7ec31b3a5.js" crossorigin="anonymous"></script>
     <link href="/css/datahunt.css" type="text/css" rel="stylesheet">
     <script defer src="/js/functions.js"></script>
-    <script defer src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js" integrity="sha384-b5kHyXgcpbZJO/tY9Ul7kGkf1S0CWuKcCD38l8YkeH8z8QjE0GmW1gYU5S9FOnJ0" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js" integrity="sha384-b5kHyXgcpbZJO/tY9Ul7kGkf1S0CWuKcCD38l8YkeH8z8QjE0GmW1gYU5S9FOnJ0" crossorigin="anonymous"></script>
     <title>DataHunt</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <style>
         body {
             background-color: #333333;
@@ -76,12 +77,13 @@
         <nav class="navigation">
             <h1 class="bold">DATAHUNT</h1>
             <ul>
-                <li><a id="home"href="/">Home</a></li>
-                <li><a id="updates" href="/updates">Updates</a></li>
+                <li><a href="/">Home</a></li>
+                <li><a href="/patchnotes">Patchnotes</a></li>
                 {{DYNAMICHEADER}}
                 <li style="float:right"><a href="#news">Game</a></li>
             </ul>
         </nav>
+        {{ALERT}}
         {{BODY}}
         {{CHATWINDOW}}
         <footer id="footer">

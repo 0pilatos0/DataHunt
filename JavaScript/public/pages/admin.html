@@ -1,30 +1,68 @@
 {{DYNAMICDATA}}
 <div id="container">
     <h1>Admin Panel</h1>
-
-    <div>
-        <h1>User Table</h1>
-        <table>
-            <tr>
-                <th>User ID</th>
-                <th>Name</th>
-                <th>Username</th>
-                <th>Email</th>
-                <th>Enabled</th>
-                <th>Verified</th>
-                <th>Role</th>
-                <th></th>
-            </tr>
-            {{USERS}}
-        </table>
+    <div id="buttons">
+        <button onclick="show('usertable')">usertable</button>
+        <button onclick="show('patchnotes')">patchnotes</button>
     </div>
+
+    <div id="usertable" class="card">
+        <div class="card-header">
+            <h3 class="card-title">User Table</h3>
+        </div>
+        <!-- /.card-header -->
+        <div class="card-body table-responsive p-0">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>User ID</th>
+                        <th>Name</th>
+                        <th>Username</th>
+                        <th>Email</th>
+                        <th>Enabled</th>
+                        <th>Verified</th>
+                        <th>Role</th>
+                        <th>Banned until</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                {{USERS}}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div id="patchnotes" class="hide">
+
+        <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+        <form id="form">
+            <div class="form-group row">
+                <label for="inputTitle" class="col-sm-12 col-form-label" id="inputTitleLabel">Title:</label>
+                <div class="col-sm-12">
+                    <h1><input type="text" class="form-control" id="inputTitle" placeholder="Patch" name="editorTitle"></h1>
+                </div>
+            </div>
+        </form>
+
+        <div id="editor">
+        </div>
+
+        <button type="button" onclick="getData()">Submit</button>
+        <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
+        <script defer src="/js/editor.js"></script>
+
+    </div>
+
+    {{MODAL}}
 
 </div>
 <script>
-    function removeOverlay(){
-        let f = document.getElementsByClassName("delete-element");
-        while (f.length > 0){
-            f[0].remove();
+    function show(div){
+        let buttons = document.getElementById("buttons").children;
+        for(let i = 0; i < buttons.length; i++){
+            document.getElementById(buttons[i].innerHTML).classList.add("hide");
         }
+        document.getElementById(div).classList.remove("hide");
     }
 </script>

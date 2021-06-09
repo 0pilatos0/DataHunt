@@ -1,11 +1,76 @@
-<div id="patchnoteContainer">
-    <div id="latestPatch">
-        <h2>Latest Patchnotes: </h2>
-        {{LATESTPATCH}}
-    </div>
+<div class="container" style="padding-top: 30px">
+  <div class="row">
+    <div class="col-md-8">
+      <div id="patchnoteContainer">
+        <form id="patchnoteForm" method="post">
+          <input type="hidden" id="patchnoteFormEdit" name="edit">
+          <input type="hidden" id="patchnoteFormDelete" name="delete">
+        </form>
+        <div id="latestPatch">
+          <h2>Latest Patchnotes:</h2>
+          {{LATESTPATCH}}
+        </div>
 
-    <div id="normalPatch">
-        <h2>Older Patchnotes:</h2>
-        {{PATCHNOTES}}
+        <div id="normalPatch">
+          <h2>Older Patchnotes:</h2>
+          {{PATCHNOTES}}
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <!-- Search Widget -->
+      <div class="card mb-4">
+        <h5 class="card-header">Search</h5>
+        <div class="card-body">
+          <form name="search" action="#" method="post">
+            <div class="input-group">
+              <input
+                type="text"
+                name="searchtitle"
+                class="form-control"
+                placeholder="Search for..."
+                required=""
+              />
+              <span class="input-group-btn">
+                <button class="btn btn-secondary" type="submit">Go!</button>
+              </span>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <!-- Categories Widget -->
+
+      <!-- Side Widget -->
+      <div class="card my-4">
+        <h5 class="card-header">Recent News</h5>
+        <div class="card-body">
+          <ul class="mb-0">
+            <li></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
-</div>
+{{MODAL}}
+
+<script>
+  let editElements = document.getElementsByClassName("fa-edit");
+  let deleteElements = document.getElementsByClassName("fa-trash");
+  let formEdit = document.getElementById("patchnoteFormEdit");
+  let formDelete = document.getElementById("patchnoteFormDelete");
+  for (let i=0; i<editElements.length; i++){
+    editElements[i].onclick=()=> {
+      formEdit.value = editElements[i].parentNode.id;
+      document.getElementById("patchnoteForm").submit();
+    }
+  }
+  for (let i=0; i<deleteElements.length; i++){
+    deleteElements[i].onclick=()=>{
+      formDelete.value = deleteElements[i].parentNode.id;
+      document.getElementById("patchnoteForm").submit();
+    }
+  }
+
+</script>

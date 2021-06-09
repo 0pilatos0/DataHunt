@@ -128,4 +128,15 @@ module.exports.User = class {
           })
       })
   }
+  static async ban(id, by, date){
+      return global.sql.query(`INSERT INTO users_ban (user_id, ban_by, ban_until) VALUES (${id}, ${by}, '${date}')`)
+  }
+  static async checkBan(id){
+        return global.sql.query(`SELECT * FROM users_ban where user_id = ${id}`);
+  }
+  static async checkAllBan(){
+        return global.sql.query(`SELECT * FROM users_ban`);
+  }
+
 }
+

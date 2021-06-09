@@ -40,7 +40,20 @@ server.post('/admin', async (req, res) => {
     if(req.data.ban){
         let reader = new HTMLFileReader('./elements/modal.html')
         reader.vars.TITLE = "Ban Modal"
+        reader.vars.BODY = `
+                        <p>Ban the user with the ID: ${req.data.ban}?</p>
+                        <form id="banForm" method="post">
+                        <input type="hidden" value="${req.data.ban}" name="id">
+                        <label for="banConfirm">Datum</label>
+                        <input type="date" name="banConfirm">
+                        </form>`
+        reader.vars.CONFIRM = `<button onclick="banForm.submit()">Confirm</button>`
         req.session.modal = reader.finish()
+        res.redirect('/admin')
+        return;
+    }
+    if(req.data.banConfirm){
+        await User.ban(req.data.id, req.session.userinfo.id, req.data.banConfirm)
         res.redirect('/admin')
         return;
     }
@@ -401,22 +414,9 @@ server.get('/admin', async (req, res) => {
     req.vars["DYNAMICDATA"] = ''
     req.vars.MODAL = req.session.modal
     delete req.session.modal
-    if(req.data.delete){
-        if(req.data.delete === "true"){
-            req.vars["DYNAMICDATA"] = `
-                <div id=\"delete-account-overlay\" onclick='removeOverlay()' class=\"overlay delete-element\">
-                    
-                </div>
-                <div class=\"delete-confirm delete-element\">
-                    <h3>Are you sure you want to delete your account?</h3>
-                    <button id=\"cancel\" onclick=\"removeOverlay()\" class=\"btn btn-cancel\">Cancel</button>
-                    <a href=\"?delete=confirm&id=${req.data.id}\" class=\"btn btn-confirm\">Confirm</a>
-                </div>`
-        }
-    }
     req.vars["USERS"] = ""
     let users = await User.getMultiple()
-    users.map(user => {
+    await users.map(user => {
         req.vars["USERS"] += `
             <tr>
             <td>${user["id"]}</td>
@@ -426,10 +426,17 @@ server.get('/admin', async (req, res) => {
             <td>${user["enabled"]}</td>
             <td>${user["verified"]}</td>
             <td>${user["role_id"]}</td>
+            <td>
+            `
+
+
+            req.vars["USERS"] +=`
+            </td>
             
             <td>
             `
             if(req.session.userinfo.role_id > user.role_id){
+
                 req.vars["USERS"] += `
                 <form method="post" style="display: inline-block;">
                 <input type="hidden" value="${user["id"]}" name="ban">
@@ -440,7 +447,7 @@ server.get('/admin', async (req, res) => {
                 <button class="btn btn-primary" type="submit">Delete</button>
                 </form>`
             }
-            `
+        req.vars["USERS"] +=`
             </td>
             </tr>
         `

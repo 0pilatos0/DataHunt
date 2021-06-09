@@ -235,3 +235,7 @@
 .ql-syntax {
   background-color: #23241f;
 }
+
+.fa-trash:hover, .fa-edit:hover{
+  cursor:pointer;
+}

@@ -450,6 +450,8 @@ server.get('/admin', async (req, res) => {
 server.get('/patchnotes', async (req, res)=>{
     let patchnotes = await User.getPatchnotes()
     req.vars.PATCHNOTES = ""
+    req.vars.MODAL = req.session.modal
+    delete req.session.modal
     if(patchnotes.length > 1){
         let myDate = new Date(patchnotes[0]['date_created']);
         req.vars.LATESTPATCH = `
@@ -502,12 +504,26 @@ server.post("/patchnotes", async (req, res)=>{
         res.redirect("/editPatchnote");
     }
     if(req.data.delete){
-        User.deletePatchnote(req.data.delete);
+        let reader = new HTMLFileReader('./elements/modal.html')
+        reader.vars.TITLE = "Delete Patchnote"
+        reader.vars.BODY = `<p>Are you sure you want to delete patchnote with the ID: ${req.data.delete}?</p>`
+        reader.vars.CONFIRM = `
+                        <form method="post" style="display: inline-block;">
+                        <input type="hidden" value="${req.data.delete}" name="deleteConfirm">
+                        <button class="btn btn-primary" type="submit">Delete</button>
+                        </form>`
+        req.session.modal = reader.finish()
+        res.redirect('/patchnotes')
+        return;
+    }
+    if(req.data.deleteConfirm){
+        await User.deletePatchnote(req.data.deleteConfirm);
         req.session.alert = {
             type: "alert-success",
-            message: `Deleted patch: ${req.data.delete}`
+            message: `Deleted patch: ${req.data.deleteConfirm}`
         };
         res.redirect("/patchnotes");
+        return;
     }
 });
 

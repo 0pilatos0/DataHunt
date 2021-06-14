@@ -41,10 +41,26 @@ server.post("/admin", async (req, res) => {
   if (req.data.ban) {
     let reader = new HTMLFileReader("./elements/modal.html");
     reader.vars.TITLE = "Ban Modal";
+    reader.vars.BODY = `
+                        <form id="banModal" method="post">
+                        <input type="date" name="date">
+                        <input type="hidden" name="banConfirm" value="${req.data.ban}">
+                        </form>`
+    reader.vars.CONFIRM = `<button class="btn btn-primary" onclick="banModal.submit()">Confirm</button>`
     req.session.modal = reader.finish();
     res.redirect("/admin");
     return;
   }
+  if(req.data.banConfirm){
+    User.ban(req.data.banConfirm, req.session.userinfo.id, req.data.date)
+    req.session.alert = {
+      type: "alert-info",
+      message: `Successfully banned user with ID: ${req.data.banConfirm}`,
+    };
+    res.redirect("/admin");
+    return;
+  }
+
   if (req.data.delete) {
     let reader = new HTMLFileReader("./elements/modal.html");
     reader.vars.TITLE = "Delete Modal";
@@ -433,22 +449,10 @@ server.get("/admin", async (req, res) => {
   }
   req.vars["DYNAMICDATA"] = "";
   req.vars.MODAL = req.session.modal;
-  delete req.session.modal;
-  if (req.data.delete) {
-    if (req.data.delete === "true") {
-      req.vars["DYNAMICDATA"] = `
-                <div id=\"delete-account-overlay\" onclick='removeOverlay()' class=\"overlay delete-element\">
-                    
-                </div>
-                <div class=\"delete-confirm delete-element\">
-                    <h3>Are you sure you want to delete your account?</h3>
-                    <button id=\"cancel\" onclick=\"removeOverlay()\" class=\"btn btn-cancel\">Cancel</button>
-                    <a href=\"?delete=confirm&id=${req.data.id}\" class=\"btn btn-confirm\">Confirm</a>
-                </div>`;
-    }
-  }
+  delete req.session.modal
   req.vars["USERS"] = "";
   let users = await User.getMultiple();
+  let bans = await User.checkAllBan();
   users.map((user) => {
     req.vars["USERS"] += `
             <tr>
@@ -459,11 +463,34 @@ server.get("/admin", async (req, res) => {
             <td>${user["enabled"]}</td>
             <td>${user["verified"]}</td>
             <td>${user["role_id"]}</td>
-            
+            <td>
+            `
+
+            if(typeof bans.length !== "undefined"){
+              let ban = (bans.find(b => {
+                if(b.user_id === user.id){
+                  return b
+                }
+
+              }))
+              if(ban){
+                let date = new Date(`${ban.ban_until} UTC`)
+                req.vars["USERS"] += `${date.getUTCFullYear() + "-" + (date.getUTCMonth()+1) +  "-" + date.getUTCDate()}`
+              }
+            }
+            else{
+              if(bans.user_id === user.id){
+                let date = new Date(bans.ban_until)
+                req.vars["USERS"] += `${date.getUTCFullYear() + "-" + (date.getUTCMonth()+1) +  "-" + date.getUTCDate()}`
+
+              }
+            }
+            req.vars["USERS"] += `
+            </td>
             <td>
             `;
-    if (req.session.userinfo.role_id > user.role_id) {
-      req.vars["USERS"] += `
+            if (req.session.userinfo.role_id > user.role_id) {
+                req.vars["USERS"] += `
                 <form method="post" style="display: inline-block;">
                 <input type="hidden" value="${user["id"]}" name="ban">
                 <button class="btn btn-primary" type="submit">Ban</button>

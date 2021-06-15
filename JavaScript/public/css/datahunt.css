@@ -73,6 +73,10 @@
   margin: 0;
 }
 
+#pictureOutput {
+  display: none;
+}
+
 .user-form {
   grid-area: form1;
 }

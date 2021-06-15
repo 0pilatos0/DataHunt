@@ -1,4 +1,6 @@
-{{DYNAMICDATA}}
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.js" integrity="sha512-ooSWpxJsiXe6t4+PPjCgYmVfr1NS5QXJACcR/FPpsdm6kqG1FmQ2SVyg2RXeVuCRBLr0lWHnWJP6Zs1Efvxzww==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css" integrity="sha512-0SPWAwpC/17yYyZ/4HSllgaK7/gg9OlVozq8K7rf3J8LvCjYEEIfzzpnA2/SSjpGIunCSD18r3UhvDcu/xncWA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+        {{DYNAMICDATA}}
         <div class="user-container">
             <div class="user-characters">
                 <div class="card-header">
@@ -64,7 +66,7 @@
                     </div>
                 </form>
 
-                <form method="post" class="picture-form">
+                <form id="pictureForm" method="post" class="picture-form">
                     <div>
                         <div class="card-header picture-header">
                             <h3>Change profile picture</h3>
@@ -73,9 +75,11 @@
                             <li class="list-group-item">
                                 <label for="pictureInput">Upload a picture</label>
                                 <div class="col-sm-10">
-                                    <input id="pictureInput" type="file" accept="image/jpeg, image/png" class="input form-control" name="picture"><br>
+                                    <input id="pictureInput" type="file" accept="image/jpeg, image/png" class="input form-control"><br>
+                                    <input id="picture" type="hidden" name="picture">
                                 </div>
-                                <img id="pictureOutput" alt="Output from the uploaded picture">
+                                <div id="pictureOutputHolder"></div>         
+                                <button class="btn btn-primary" type="submit" id="pictureSubmit">Submit</button>
                             </li>
                         </ul>
 
@@ -92,6 +96,7 @@
 
         </div>
 <script>
+    let cropper
 
     function removeOverlay(){
         let f = document.getElementsByClassName("delete-element");
@@ -101,7 +106,34 @@
     }
 
     pictureInput.onchange= function(e){
-        pictureOutput.src = URL.createObjectURL(e.target.files[0]);
+        let pictureOutput = document.createElement('img')
         pictureOutput.style.display = "block";
+        pictureOutput.id = "pictureOutput"
+        pictureOutput.src = URL.createObjectURL(e.target.files[0]);
+        pictureOutputHolder.innerHTML = ""
+        pictureOutputHolder.appendChild(pictureOutput)
+        pictureSubmit.style.display = "block"
+        reCreateCropper()
+    }
+
+    pictureSubmit.onclick = (e) => {
+        e.preventDefault()
+        picture.value = cropper.getCroppedCanvas().toDataURL("image/png")
+        pictureForm.submit()
+    }
+
+    function reCreateCropper(){
+        cropper = new Cropper(pictureOutput, {
+            aspectRatio: 1 / 1
+        })
     }
 </script>
+
+<style>
+    .cropper-view-box {
+        border-radius: 50%;
+    }
+    .cropper-face {
+        background-color:inherit !important;
+    }
+</style>

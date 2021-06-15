@@ -77,6 +77,10 @@
   display: none;
 }
 
+#pictureSubmit {
+  display: none;
+}
+
 .user-form {
   grid-area: form1;
 }

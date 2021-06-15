@@ -41,8 +41,8 @@
 .user-container {
   display: grid;
   grid-template-areas:
-    "char feed form1"
-    "friends feed form1";
+    "left feed form1"
+    "left feed form1";
   grid-template-rows: auto 1fr;
   grid-template-columns: 20% 1fr 30%;
 }
@@ -73,6 +73,10 @@
   margin: 0;
 }
 
+.user-left-section {
+  grid-area: left;
+}
+
 #pictureOutput {
   display: none;
 }
@@ -95,6 +99,11 @@
 
 .user-characters {
   grid-area: char;
+}
+
+#profilePicture {
+  width: 100%;
+  height: 100%;
 }
 
 .user-feed {

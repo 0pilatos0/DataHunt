@@ -178,4 +178,39 @@ module.exports.User = class {
   static async getAdBase() {
     return global.sql.query(`SELECT * FROM ad`);
   }
+  static async setProfilePicture(picture, uid) {
+    return new Promise((resolve, reject) => {
+      global.sql.con.query(
+        `INSERT INTO profile_pictures (image, user_id) VALUES (?, ?)`,
+        [picture, uid],
+        (error, result) => {
+          return resolve(result);
+        }
+      );
+    });
+  }
+
+  static async getProfilePicture(uid) {
+    return global.sql.query(
+      `SELECT * FROM profile_pictures WHERE user_id = ${uid}`
+    );
+  }
+
+  static async getProfilePictureId(uid) {
+    return global.sql.query(
+      `SELECT id FROM profile_pictures WHERE user_id = ${uid}`
+    );
+  }
+
+  static async updateProfilePicture(picture, uid) {
+    return new Promise((resolve, reject) => {
+      global.sql.con.query(
+        `update profile_pictures set image=?, updated_at=? WHERE user_id=?;`,
+        [picture, new Date(Date.now()), uid],
+        (error, result) => {
+          return resolve(result);
+        }
+      );
+    });
+  }
 };

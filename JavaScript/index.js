@@ -228,6 +228,18 @@ server.get("/user", async (req, res) => {
   req.vars.USERNAME = userinfo["username"];
   req.vars.EMAIL = userinfo["email"];
   req.vars.DYNAMICDATA = "";
+  req.vars.PROFILEPICTURE = ``;
+  if(await User.getProfilePictureId(req.session.userinfo.id)){
+    let picture = await User.getProfilePicture(req.session.userinfo.id);
+    req.vars.PROFILEPICTURE += `
+      <div class="user">
+         <div class="card-header">
+             <h3>Profile Picture</h3>
+             <img id="profilePicture" src="${picture.image}">
+         </div>
+      </div>
+`;
+  }
   if (req.data.delete) {
     if (req.data.delete === "true") {
       req.vars.DYNAMICDATA = `
@@ -266,7 +278,30 @@ server.get("/user", async (req, res) => {
   }
 });
 
-server.post("/user", (req, res) => {});
+server.post("/user", async (req, res) => {
+  if (!req.session.userinfo){
+    res.redirect("/");
+    return
+  }
+
+  if(req.data.picture) {
+    if(!User.getProfilePictureId(req.session.userinfo.id)){
+      await User.setProfilePicture(req.data.picture, req.session.userinfo.id);
+      req.session.alert = {
+        type: "alert-info",
+        message: "Successfully made your profile picture",
+      };
+      res.redirect("/user");
+    }else{
+      await User.updateProfilePicture(req.data.picture, req.session.userinfo.id);
+      req.session.alert = {
+        type: "alert-info",
+        message: "Successfully updated your profile picture",
+      };
+      res.redirect("/user");
+    }
+  }
+});
 
 server.get("/logout", async (req, res) => {
   if (!req.session.user) {

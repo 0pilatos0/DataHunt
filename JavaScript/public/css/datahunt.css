@@ -26,8 +26,12 @@
   background-color: #dbdbdb;
 }
 
-.card-header {
-  background-color: rgb(61, 61, 61);
+  .card-header {
+    background-color: rgb(61, 61, 61);
+  }
+
+.picture-header {
+  background-color: #595959;
 }
 
 #container form {
@@ -37,8 +41,8 @@
 .user-container {
   display: grid;
   grid-template-areas:
-    "char feed form"
-    "friends feed form";
+    "char feed form1"
+    "friends feed form1";
   grid-template-rows: auto 1fr;
   grid-template-columns: 20% 1fr 30%;
 }
@@ -70,7 +74,15 @@
 }
 
 .user-form {
-  grid-area: form;
+  grid-area: form1;
+}
+
+.picture-form {
+  margin-top: 1em;
+}
+
+.image-form {
+  grid-area: form2;
 }
 
 .user-characters {
@@ -83,6 +95,7 @@
 
 .user-friend {
   grid-area: friends;
+  margin-top: 1em;
 }
 .overlay {
   top: 0px;

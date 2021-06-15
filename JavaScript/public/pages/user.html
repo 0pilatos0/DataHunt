@@ -18,51 +18,70 @@
                 {{FEED}}
             </div>
 
-            <form action="user" class="user user-form" method="post">
-                <div>
-                    <div class="card-header">
-                        <h3>Change account</h3>
+            <div class="user user-form">
+                <form action="user" method="post">
+                    <div>
+                        <div class="card-header">
+                            <h3>Change account</h3>
+                        </div>
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item">
+                                <label for="username">Username</label>
+                                <div class="col-sm-10">
+                                    <input class="input form-control" name="username" id="username" value="{{USERNAME}}"><br>
+                                </div>
+                            </li>
+                            <li class="list-group-item">
+                                <label for="oldPassword">Old password</label>
+                                <div class="col-sm-10">
+                                    <input class="input form-control" name="oldPassword" id="oldPassword" value="" type="password"><br>
+                                </div>
+                            </li>
+                            <li class="list-group-item">
+                                <label for="newPassword1">New password</label>
+                                <div class="col-sm-10">
+                                    <input class="input form-control" name="newPassword1" id="newPassword1" value="" type="password"><br>
+                                </div>
+                            </li>
+                            <li class="list-group-item">
+                                <label for="newPassword2">Verify new password</label>
+                                <div class="col-sm-10">
+                                    <input class="input form-control" name="newPassword2" id="newPassword2" value="" type="password"><br>
+                                </div>
+                            </li>
+                            <li class="list-group-item">
+                                <label for="email">Email</label>
+                                <div class="col-sm-10">
+                                    <input class="input form-control" name="email" id="email" value="{{EMAIL}}"><br>
+                                </div>
+                            </li>
+                            <li class="list-group-item">
+                                <input type="submit" class="btn btn-primary" value="Save changes">
+                                <a class="btn btn-primary" href="?delete=true">Delete account</a>
+                            </li>
+                        </ul>
+
                     </div>
-                    <ul class="list-group list-group-flush">
-                        <li class="list-group-item">
-                            <label for="username">Username</label>
-                            <div class="col-sm-10">
-                                <input class="input form-control" name="username" id="username" value="{{USERNAME}}"><br>
-                            </div>
-                        </li>
-                        <li class="list-group-item">
-                            <label for="oldPassword">Old password</label>
-                            <div class="col-sm-10">
-                                <input class="input form-control" name="oldPassword" id="oldPassword" value="" type="password"><br>
-                            </div>
-                        </li>
-                        <li class="list-group-item">
-                            <label for="newPassword1">New password</label>
-                            <div class="col-sm-10">
-                                <input class="input form-control" name="newPassword1" id="newPassword1" value="" type="password"><br>
-                            </div>
-                        </li>
-                        <li class="list-group-item">
-                            <label for="newPassword2">Verify new password</label>
-                            <div class="col-sm-10">
-                                <input class="input form-control" name="newPassword2" id="newPassword2" value="" type="password"><br>
-                            </div>
-                        </li>
-                        <li class="list-group-item">
-                            <label for="email">Email</label>
-                            <div class="col-sm-10">
-                                <input class="input form-control" name="email" id="email" value="{{EMAIL}}"><br>
-                            </div>
-                        </li>
-                        <li class="list-group-item">
-                            <input type="submit" class="btn btn-primary" value="Save changes">
-                            <a class="btn btn-primary" href="?delete=true">Delete account</a>
-                        </li>
-                    </ul>
+                </form>
 
-                </div>
-            </form>
+                <form method="post" class="picture-form">
+                    <div>
+                        <div class="card-header picture-header">
+                            <h3>Change profile picture</h3>
+                        </div>
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item">
+                                <label for="pictureInput">Upload a picture</label>
+                                <div class="col-sm-10">
+                                    <input id="pictureInput" type="file" accept="image/jpeg, image/png" class="input form-control" name="picture"><br>
+                                </div>
+                                <img id="pictureOutput" alt="Output from the uploaded picture">
+                            </li>
+                        </ul>
 
+                    </div>
+                </form>
+            </div>
 
             <div class="user user-friend">
                 <div class="card-header">
@@ -79,5 +98,9 @@
         while (f.length > 0){
             f[0].remove();
         }
+    }
+
+    pictureInput.onchange= function(e){
+        pictureOutput.src = URL.createObjectURL(e.target.files[0]);
     }
 </script>

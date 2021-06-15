@@ -45,14 +45,14 @@ server.post("/admin", async (req, res) => {
                         <form id="banModal" method="post">
                         <input type="date" name="date">
                         <input type="hidden" name="banConfirm" value="${req.data.ban}">
-                        </form>`
-    reader.vars.CONFIRM = `<button class="btn btn-primary" onclick="banModal.submit()">Confirm</button>`
+                        </form>`;
+    reader.vars.CONFIRM = `<button class="btn btn-primary" onclick="banModal.submit()">Confirm</button>`;
     req.session.modal = reader.finish();
     res.redirect("/admin");
     return;
   }
-  if(req.data.banConfirm){
-    User.ban(req.data.banConfirm, req.session.userinfo.id, req.data.date)
+  if (req.data.banConfirm) {
+    User.ban(req.data.banConfirm, req.session.userinfo.id, req.data.date);
     req.session.alert = {
       type: "alert-info",
       message: `Successfully banned user with ID: ${req.data.banConfirm}`,
@@ -447,9 +447,16 @@ server.get("/admin", async (req, res) => {
     res.redirect("/");
     return;
   }
+
+  // Hier word de BaseURL dingen opgehaald
+  req.vars.AdBaseUrl = "";
+  let adBase = await User.getAdBase();
+  console.log(adBase["image"]);
+  req.vars.AdBaseUrl = adBase["image"];
+
   req.vars["DYNAMICDATA"] = "";
   req.vars.MODAL = req.session.modal;
-  delete req.session.modal
+  delete req.session.modal;
   req.vars["USERS"] = "";
   let users = await User.getMultiple();
   let bans = await User.checkAllBan();
@@ -464,33 +471,42 @@ server.get("/admin", async (req, res) => {
             <td>${user["verified"]}</td>
             <td>${user["role_id"]}</td>
             <td>
-            `
+            `;
 
-            if(typeof bans.length !== "undefined"){
-              let ban = (bans.find(b => {
-                if(b.user_id === user.id){
-                  return b
-                }
-
-              }))
-              if(ban){
-                let date = new Date(`${ban.ban_until} UTC`)
-                req.vars["USERS"] += `${date.getUTCFullYear() + "-" + (date.getUTCMonth()+1) +  "-" + date.getUTCDate()}`
-              }
-            }
-            else{
-              if(bans.user_id === user.id){
-                let date = new Date(bans.ban_until)
-                req.vars["USERS"] += `${date.getUTCFullYear() + "-" + (date.getUTCMonth()+1) +  "-" + date.getUTCDate()}`
-
-              }
-            }
-            req.vars["USERS"] += `
+    if (typeof bans.length !== "undefined") {
+      let ban = bans.find((b) => {
+        if (b.user_id === user.id) {
+          return b;
+        }
+      });
+      if (ban) {
+        let date = new Date(`${ban.ban_until} UTC`);
+        req.vars["USERS"] += `${
+          date.getUTCFullYear() +
+          "-" +
+          (date.getUTCMonth() + 1) +
+          "-" +
+          date.getUTCDate()
+        }`;
+      }
+    } else {
+      if (bans.user_id === user.id) {
+        let date = new Date(bans.ban_until);
+        req.vars["USERS"] += `${
+          date.getUTCFullYear() +
+          "-" +
+          (date.getUTCMonth() + 1) +
+          "-" +
+          date.getUTCDate()
+        }`;
+      }
+    }
+    req.vars["USERS"] += `
             </td>
             <td>
             `;
-            if (req.session.userinfo.role_id > user.role_id) {
-                req.vars["USERS"] += `
+    if (req.session.userinfo.role_id > user.role_id) {
+      req.vars["USERS"] += `
                 <form method="post" style="display: inline-block;">
                 <input type="hidden" value="${user["id"]}" name="ban">
                 <button class="btn btn-primary" type="submit">Ban</button>

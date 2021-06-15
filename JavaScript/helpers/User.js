@@ -1,61 +1,71 @@
 module.exports.User = class {
-    constructor(){
+  constructor() {}
 
-    }
+  static async info(id) {
+    return global.sql.query(
+      `SELECT users.*, user_roles.role_id FROM users INNER JOIN user_roles where users.id = ${id} AND user_roles.user_id = ${id}`
+    );
+  }
 
-    static async info(id){
-        return global.sql.query(`SELECT users.*, user_roles.role_id FROM users INNER JOIN user_roles where users.id = ${id} AND user_roles.user_id = ${id}`)
-    }
+  static async delete(id) {
+    return global.sql.query(`DELETE FROM users where id = ${id}`);
+  }
 
-    static async delete(id){
-        return global.sql.query(`DELETE FROM users where id = ${id}`)
-    }
+  static async getMultiple() {
+    return global.sql.query(
+      `SELECT users.*, user_roles.role_id FROM users INNER JOIN user_roles WHERE users.id = user_roles.user_id`
+    );
+  }
 
-    static async getMultiple(){
-        return global.sql.query(`SELECT users.*, user_roles.role_id FROM users INNER JOIN user_roles WHERE users.id = user_roles.user_id`)
-    }
+  /**
+   * getStats
+   * @param int
+   *
+   * gets your current selected characters stats!
+   * kills & deaths, level and
+   *
+   * @return array
+   */
+  static async getStats(id) {
+    return global.sql.query(
+      `SELECT characters.kills, characters.deaths, characters.name, stats.health, stats.level, class.name FROM characters INNER JOIN stats ON stats.id = characters.stats_id INNER JOIN class ON class.id = characters.class_id  WHERE characters.id = ${id}`
+    );
+  }
 
-    /**
-    * getStats
-    * @param int
-    * 
-    * gets your current selected characters stats!
-    * kills & deaths, level and
-    *
-    * @return array
-    */
-    static async getStats(id){
-        return global.sql.query(`SELECT characters.kills, characters.deaths, characters.name, stats.health, stats.level, class.name FROM characters INNER JOIN stats ON stats.id = characters.stats_id INNER JOIN class ON class.id = characters.class_id  WHERE characters.id = ${id}`)
-    }
+  static async characters(id) {
+    return global.sql.query(
+      `SELECT characters.id, class.name, stats.level, characters.name as char_name FROM characters INNER JOIN class ON class.id = characters.class_id INNER JOIN stats ON stats.id = characters.stats_id where characters.user_id = ${id}`
+    );
+  }
 
-    static async characters(id){
-        return global.sql.query(`SELECT characters.id, class.name, stats.level, characters.name as char_name FROM characters INNER JOIN class ON class.id = characters.class_id INNER JOIN stats ON stats.id = characters.stats_id where characters.user_id = ${id}`)
-    }
+  static async addToFeed(id, message) {
+    return global.sql.query(
+      `INSERT INTO users_feed (user_id, message) VALUES (${id}, ${message})`
+    );
+  }
 
-    static async addToFeed(id, message){
-        return global.sql.query(`INSERT INTO users_feed (user_id, message) VALUES (${id}, ${message})`)
-    }
+  static async getFeed(id) {
+    return global.sql.query(`SELECT * FROM users_feed where user_id = ${id}`);
+  }
 
-    static async getFeed(id){
-        return global.sql.query(`SELECT * FROM users_feed where user_id = ${id}`)
-    }
-
-    /**
-    * set friendship
-    * @param int
-    * @param int
-    * @param int
-    *
-    * userA will always be the person that send the request first!
-    * 0 = userA send request userB didn't accept nor decline
-    * 1 = userA and UserB are friends
-    *
-    * @return void
-    */
-   static async setFriendShip(userA, userB, friendship){
-       return global.sql.query(`INSERT INTO friends (userA, userB, friendship) VALUES (${userA}, ${userB}, ${friendship})`)
-   }
-   /**
+  /**
+   * set friendship
+   * @param int
+   * @param int
+   * @param int
+   *
+   * userA will always be the person that send the request first!
+   * 0 = userA send request userB didn't accept nor decline
+   * 1 = userA and UserB are friends
+   *
+   * @return void
+   */
+  static async setFriendShip(userA, userB, friendship) {
+    return global.sql.query(
+      `INSERT INTO friends (userA, userB, friendship) VALUES (${userA}, ${userB}, ${friendship})`
+    );
+  }
+  /**
    * updatefriendship
    * @param int
    * @param int
@@ -64,79 +74,108 @@ module.exports.User = class {
    *
    * @return void
    */
-  static async updateFriendship(friendshipID, friendship){
-    return global.sql.query(`UPDATE friends SET friendship=${friendship} WHERE id=${friendshipID}`)
+  static async updateFriendship(friendshipID, friendship) {
+    return global.sql.query(
+      `UPDATE friends SET friendship=${friendship} WHERE id=${friendshipID}`
+    );
   }
 
-  static async getFriendship(userA, userB, id = null){
-    if(id == null){
-        return global.sql.query(`SELECT * FROM friends WHERE userA = (${userA}) AND userB = (${userB}) OR userA = (${userB}) AND userB = (${userA})`)
+  static async getFriendship(userA, userB, id = null) {
+    if (id == null) {
+      return global.sql.query(
+        `SELECT * FROM friends WHERE userA = (${userA}) AND userB = (${userB}) OR userA = (${userB}) AND userB = (${userA})`
+      );
+    } else {
+      return global.sql.query(`SELECT * FROM friends WHERE id = ${id}`);
     }
-    else{
-        return global.sql.query(`SELECT * FROM friends WHERE id = ${id}`)
+  }
+
+  static async deleteFriendship(id) {
+    return global.sql.query(`DELETE FROM friends WHERE id=${id}`);
+  }
+
+  static async getMutlipleFriendships(id) {
+    return global.sql.query(
+      `SELECT * FROM friends WHERE userA = (${id}) OR userB = (${id})`
+    );
+  }
+
+  static async getUserId(username) {
+    return global.sql.query(
+      `SELECT id FROM users where username = '${username}'`
+    );
+  }
+
+  static async getUsername(id) {
+    return global.sql.query(`SELECT username FROM users where id = ${id}`);
+  }
+
+  static async makePatchnote(title, text) {
+    return new Promise((resolve, reject) => {
+      global.sql.con.query(
+        `INSERT INTO patchnotes (title, note) VALUES (?, ?)`,
+        [title, text],
+        (error, result) => {
+          return resolve(result);
+        }
+      );
+    });
+  }
+
+  static async get(username) {
+    return global.sql.query(
+      `SELECT * FROM users WHERE username = '${username}'`
+    );
+  }
+
+  static async getPatchnotes() {
+    return global.sql.query(
+      `SELECT * FROM patchnotes WHERE deleted = 0 ORDER BY id DESC;`
+    );
+  }
+
+  static async getASingularePatchnote(id = null) {
+    if (id) {
+      return global.sql.query(
+        `SELECT * FROM patchnotes WHERE deleted = 0 AND id = ${id} ORDER BY id DESC LIMIT 1`
+      );
+    } else {
+      return global.sql.query(
+        `SELECT * FROM patchnotes WHERE deleted = 0 ORDER BY id DESC LIMIT 1`
+      );
     }
   }
 
-  static async deleteFriendship(id){
-    return global.sql.query(`DELETE FROM friends WHERE id=${id}`)
+  static async deletePatchnote(id) {
+    return global.sql.query(
+      `UPDATE patchnotes SET deleted=1 WHERE id=${id} AND deleted=0;`
+    );
   }
 
-  static async getMutlipleFriendships(id){
-      return global.sql.query(`SELECT * FROM friends WHERE userA = (${id}) OR userB = (${id})`)
+  static async updatePatchnote(id, title, text) {
+    return new Promise((resolve, reject) => {
+      global.sql.con.query(
+        `update patchnotes set title=?, note=? WHERE id=?;`,
+        [title, text, id],
+        (error, result) => {
+          return resolve(result);
+        }
+      );
+    });
+  }
+  static async ban(id, by, date) {
+    return global.sql.query(
+      `INSERT INTO users_ban (user_id, ban_by, ban_until) VALUES (${id}, ${by}, '${date}')`
+    );
+  }
+  static async checkBan(id) {
+    return global.sql.query(`SELECT * FROM users_ban where user_id = ${id}`);
+  }
+  static async checkAllBan() {
+    return global.sql.query(`SELECT * FROM users_ban`);
   }
 
-  static async getUserId(username){
-    return global.sql.query(`SELECT id FROM users where username = '${username}'`)
+  static async getAdBase() {
+    return global.sql.query(`SELECT * FROM ad`);
   }
-
-  static async getUsername(id){
-      return global.sql.query(`SELECT username FROM users where id = ${id}`)
-  }
-
-  static async makePatchnote(title, text){
-      return new Promise((resolve, reject) => {
-          global.sql.con.query(`INSERT INTO patchnotes (title, note) VALUES (?, ?)`, [title, text], (error, result) => {
-              return resolve(result)
-          })
-      })
-  }
-
-  static async get(username){
-      return global.sql.query(`SELECT * FROM users WHERE username = '${username}'`)
-  }
-
-  static async getPatchnotes(){
-      return global.sql.query(`SELECT * FROM patchnotes WHERE deleted = 0 ORDER BY id DESC;`)
-  }
-
-  static async getASingularePatchnote(id=null){
-      if(id){
-          return global.sql.query(`SELECT * FROM patchnotes WHERE deleted = 0 AND id = ${id} ORDER BY id DESC LIMIT 1`)
-      }else{
-          return global.sql.query(`SELECT * FROM patchnotes WHERE deleted = 0 ORDER BY id DESC LIMIT 1`)
-      }
-  }
-
-  static async deletePatchnote(id){
-      return global.sql.query(`UPDATE patchnotes SET deleted=1 WHERE id=${id} AND deleted=0;`)
-  }
-
-  static async updatePatchnote(id, title, text){
-      return new Promise((resolve, reject) => {
-          global.sql.con.query(`update patchnotes set title=?, note=? WHERE id=?;`, [title, text, id], (error, result) => {
-              return resolve(result)
-          })
-      })
-  }
-  static async ban(id, by, date){
-      return global.sql.query(`INSERT INTO users_ban (user_id, ban_by, ban_until) VALUES (${id}, ${by}, '${date}')`)
-  }
-  static async checkBan(id){
-        return global.sql.query(`SELECT * FROM users_ban where user_id = ${id}`);
-  }
-  static async checkAllBan(){
-        return global.sql.query(`SELECT * FROM users_ban`);
-  }
-
-}
-
+};

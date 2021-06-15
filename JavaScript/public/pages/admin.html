@@ -1,68 +1,120 @@
 {{DYNAMICDATA}}
 <div id="container">
-    <h1>Admin Panel</h1>
-    <div id="buttons">
-        <button onclick="show('usertable')">usertable</button>
-        <button onclick="show('patchnotes')">patchnotes</button>
+  <h1>Admin Panel</h1>
+  <div id="buttons">
+    <button onclick="show('usertable')">usertable</button>
+    <button onclick="show('patchnotes')">patchnotes</button>
+    <button onclick="show('addmanager')">addmanager</button>
+  </div>
+
+  <div id="usertable" class="card">
+    <div class="card-header">
+      <h3 class="card-title">User Table</h3>
     </div>
-
-    <div id="usertable" class="card">
-        <div class="card-header">
-            <h3 class="card-title">User Table</h3>
-        </div>
-        <!-- /.card-header -->
-        <div class="card-body table-responsive p-0">
-            <table class="table table-hover">
-                <thead>
-                    <tr>
-                        <th>User ID</th>
-                        <th>Name</th>
-                        <th>Username</th>
-                        <th>Email</th>
-                        <th>Enabled</th>
-                        <th>Verified</th>
-                        <th>Role</th>
-                        <th>Banned until</th>
-                        <th></th>
-                    </tr>
-                </thead>
-                <tbody>
-                {{USERS}}
-                </tbody>
-            </table>
-        </div>
+    <!-- /.card-header -->
+    <div class="card-body table-responsive p-0">
+      <table class="table table-hover">
+        <thead>
+          <tr>
+            <th>User ID</th>
+            <th>Name</th>
+            <th>Username</th>
+            <th>Email</th>
+            <th>Enabled</th>
+            <th>Verified</th>
+            <th>Role</th>
+            <th>Banned until</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          {{USERS}}
+        </tbody>
+      </table>
     </div>
+  </div>
 
-    <div id="patchnotes" class="hide">
+  <div id="patchnotes" class="hide">
+    <link
+      href="https://cdn.quilljs.com/1.3.6/quill.snow.css"
+      rel="stylesheet"
+    />
+    <form id="form">
+      <div class="form-group row">
+        <label
+          for="inputTitle"
+          class="col-sm-12 col-form-label"
+          id="inputTitleLabel"
+          >Title:</label
+        >
+        <div class="col-sm-12">
+          <h1>
+            <input
+              type="text"
+              class="form-control"
+              id="inputTitle"
+              placeholder="Patch"
+              name="editorTitle"
+            />
+          </h1>
+        </div>
+      </div>
+    </form>
 
-        <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
-        <form id="form">
-            <div class="form-group row">
-                <label for="inputTitle" class="col-sm-12 col-form-label" id="inputTitleLabel">Title:</label>
-                <div class="col-sm-12">
-                    <h1><input type="text" class="form-control" id="inputTitle" placeholder="Patch" name="editorTitle"></h1>
-                </div>
+    <div id="editor"></div>
+
+    <button type="button" onclick="getData()">Submit</button>
+    <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
+    <script defer src="/js/editor.js"></script>
+  </div>
+
+  <div id="addmanager" class="hide">
+    <div class="card-header">
+      <h3 class="card-title">User add</h3>
+    </div>
+    <div class="container">
+      <div class="row">
+        <div class="col-md-8">
+          <form action="#">
+            <div class="form-group">
+              <label for="exampleFormControlInput1">Title</label>
+              <input
+                type="email"
+                class="form-control"
+                id="exampleFormControlInput1"
+                placeholder="Game add"
+              />
             </div>
-        </form>
-
-        <div id="editor">
+            <div class="form-group">
+              <br />
+              <label for="exampleFormControlFile1" style=""
+                >Upload your image if you wish to change it</label
+              >
+              <br />
+              <input
+                type="file"
+                class="form-control-file"
+                id="exampleFormControlFile1"
+              />
+            </div>
+            <br />
+            <button type="submit" class="btn btn-primary">Sign in</button>
+          </form>
         </div>
-
-        <button type="button" onclick="getData()">Submit</button>
-        <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
-        <script defer src="/js/editor.js"></script>
-
+        <div class="col-md-4">
+          <img src="{{AdBaseUrl}}" style="width: 100%;" alt="No image selected"></img>
+        </div>
+      </div>
     </div>
-
-    {{MODAL}}
-
+  </div>
+  {{MODAL}}
 </div>
 <script>
-    function show(div){
-        let buttons = document.getElementById("buttons").children;
-        for(let i = 0; i < buttons.length; i++){
-            document.getElementById(buttons[i].innerHTML).classList.add("hide");
-        }
-        document.getElementById(div).classList.remove("hide");
+  function show(div) {
+    let buttons = document.getElementById("buttons").children;
+    for (let i = 0; i < buttons.length; i++) {
+      document.getElementById(buttons[i].innerHTML).classList.add("hide");
     }
+    document.getElementById(div).classList.remove("hide");
+  }
 </script>

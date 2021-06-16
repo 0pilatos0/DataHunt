@@ -75,18 +75,20 @@
     <div class="container">
       <div class="row">
         <div class="col-md-8">
+
+
           <form method="POST">
             <div class="form-group">
               <label for="AdTitleform1">Title</label>
               <input
                 type="text"
                 class="form-control"
-                id="AdTitleform1"
+                id="adTitleForm1"
                 placeholder="Game ad"
-                name = "AdTitleform1"
+                name = "adTitleForm1"
                 required
               />
-            </div>
+            </div><hr>
             <div class="form-group">
               <label for="AdFileForm1" style=""
                 >Upload your image if you wish to change it</label
@@ -96,15 +98,18 @@
                 type="file"
                 class="form-control-file"
                 id="AdFileForm1"
+                name="adFileForm1"
               />
-            </div>
+            </div><hr>
             <div class="form-group">
                 <label for="AdUrlForm1">Redirect URL</label>
                 <input
                   type="text"
                   class="form-control"
-                  id="AdUrlForm1"
+                  id="adUrlForm1"
                   placeholder="Game ad"
+                  name="adUrlForm1"
+                  required
                 />
               </div>
             <br />
@@ -112,6 +117,7 @@
             <button class="btn btn-warning" onclick="">Preview</button>
             <button class="btn btn-danger" onclick=""> Delete Ad</button><br><br>
           </form>
+          {{FILLFORM}}
         </div>
         <div class="col-md-4">
           <img src="{{AdBaseUrl}}" style="width: 100%;" alt="No image selected"></img>

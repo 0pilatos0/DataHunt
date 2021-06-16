@@ -116,14 +116,19 @@ server.post("/admin", async (req, res) => {
   }
 
   // Ad gedeelte
-  if (req.data.AdTitleform1) {
-    console.log(req.data.AdTitleform1);
-
+  if (req.data.adTitleForm1 || req.data.adUrlForm1 || req.data.adFileForm1) {
+    await User.setAd(
+      req.data.adTitleForm1,
+      req.data.adUrlForm1,
+      1,
+      req.data.adFileForm1
+    );
     req.session.show = "<script> show('admanager') </script>";
     res.redirect("/admin");
 
     return;
   }
+
   if (req.data.editorTitle && req.data.data) {
     if (req.data.editorTitle !== "" && req.data.data !== "<p><br></p>") {
       await User.makePatchnote(req.data.editorTitle, req.data.data);
@@ -529,11 +534,20 @@ server.get("/admin", async (req, res) => {
   }
 
   // Hier word de BaseURL dingen opgehaald
+  let latestAD = await User.getAd();
   req.vars.AdBaseUrl = "";
   req.vars.SHOW = req.session.show;
   delete req.session.show;
-  let adBase = await User.getAdBase();
-  req.vars.AdBaseUrl = adBase["image"];
+  req.vars.AdBaseUrl = latestAD["image"];
+
+  // Ophalen van huidige variables ad page
+  req.vars.FILLFORM = "";
+  req.vars.FILLFORM =
+    `<script>document.getElementById('adTitleForm1').value = "` +
+    latestAD["title"] +
+    `"; document.getElementById('adUrlForm1').value = "` +
+    latestAD["redirectURL"] +
+    `";</script>`;
 
   req.vars["DYNAMICDATA"] = "";
   req.vars.MODAL = req.session.modal;

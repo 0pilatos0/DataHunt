@@ -175,9 +175,17 @@ module.exports.User = class {
     return global.sql.query(`SELECT * FROM users_ban`);
   }
 
-  static async getAdBase() {
-    return global.sql.query(`SELECT * FROM ad`);
+  static async getAd() {
+    return global.sql.query(`SELECT * FROM ad ORDER BY id DESC LIMIT 1 `);
   }
+
+  //TODO deze sql dingetje is een grote fout en zorgt voor een error
+  static async setAd(title, redirect, active, image) {
+    return global.sql.query(
+      `INSERT INTO ad(title, redirectURL, active, image) VALUES (${title}, ${redirect}, ${active} ${image}) `
+    );
+  }
+
   static async setProfilePicture(picture, uid) {
     return new Promise((resolve, reject) => {
       global.sql.con.query(

@@ -285,7 +285,7 @@ server.post("/user", async (req, res) => {
   }
 
   if(req.data.picture) {
-    if(!User.getProfilePictureId(req.session.userinfo.id)){
+    if(!await User.getProfilePictureId(req.session.userinfo.id)){
       await User.setProfilePicture(req.data.picture, req.session.userinfo.id);
       req.session.alert = {
         type: "alert-info",
@@ -486,7 +486,6 @@ server.get("/admin", async (req, res) => {
   // Hier word de BaseURL dingen opgehaald
   req.vars.AdBaseUrl = "";
   let adBase = await User.getAdBase();
-  console.log(adBase["image"]);
   req.vars.AdBaseUrl = adBase["image"];
 
   req.vars["DYNAMICDATA"] = "";

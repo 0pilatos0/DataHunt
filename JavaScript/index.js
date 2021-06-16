@@ -13,7 +13,7 @@ server.get("/", async (req, res) => {
   let myDate = new Date(patchnote["date_created"]);
   req.vars.PATCHTITLE = `Patch: ${patchnote["title"]}`;
   req.vars.PATCHDATE = `${myDate.getDate()}/${
-    myDate.getMonth() + 1
+      myDate.getMonth() + 1
   }/${myDate.getFullYear()} - ${myDate.getHours()}:${myDate.getMinutes()}`;
 });
 
@@ -114,6 +114,28 @@ server.post("/admin", async (req, res) => {
     res.redirect("/admin");
     return;
   }
+  if(req.data.unban){
+    let reader = new HTMLFileReader("./elements/modal.html");
+    reader.vars.TITLE = "Unban Modal";
+    reader.vars.BODY = `<p>Are you sure you want to unban the user with the ID: ${req.data.unban}?</p>`;
+    reader.vars.CONFIRM = `
+                        <form method="post" style="display: inline-block;">
+                        <input type="hidden" value="${req.data.unban}" name="unbanConfirm">
+                        <button class="btn btn-primary" type="submit">Unban</button>
+                        </form>`;
+    req.session.modal = reader.finish();
+    res.redirect("/admin");
+    return;
+  }
+  if(req.data.unbanConfirm){
+    await User.unban(req.data.unbanConfirm)
+    req.session.alert = {
+      type: "alert-info",
+      message: `Successfully unbanned user with ID: ${req.data.unbanConfirm}`,
+    };
+    res.redirect("/admin");
+    return;
+  }
 
   console.log(req.data);
   // Ad gedeelte
@@ -121,10 +143,10 @@ server.post("/admin", async (req, res) => {
     //TODO crasht de pagina als niet alle waardes gevuld zijn
     await User.disableAllAds();
     await User.setAd(
-      req.data.adTitleForm1,
-      req.data.adUrlForm1,
-      1,
-      req.data.adFileForm1
+        req.data.adTitleForm1,
+        req.data.adUrlForm1,
+        1,
+        req.data.adFileForm1
     );
     req.session.show = "<script> show('admanager') </script>";
     res.redirect("/admin");
@@ -158,11 +180,11 @@ server.get("/verification", async (req, res) => {
   let verificationToken = decodeURIComponent(req.data.veri);
   let id;
   let data = await global.sql.query(
-    `SELECT verifytoken, id, name FROM users WHERE verifytoken = '${verificationToken}'`
+      `SELECT verifytoken, id, name FROM users WHERE verifytoken = '${verificationToken}'`
   );
   id = data.id;
   await global.sql.query(
-    `UPDATE users SET verifytoken = '', verified = 1 WHERE id = ${id}`
+      `UPDATE users SET verifytoken = '', verified = 1 WHERE id = ${id}`
   );
   req.vars.FEEDBACK = "<h2>Thank you for verifying!</h2>";
 });
@@ -175,8 +197,8 @@ server.get("/character", async (req, res) => {
   let stats = await User.getStats(req.data.id);
   req.vars.STATS = `${stats.name}, ${stats.level}`;
   req.vars.KD = `Your K/D (Kills divided by Deaths): ${Functions.calculateKD(
-    stats.kills,
-    stats.deaths
+      stats.kills,
+      stats.deaths
   )} <br> Health: ${stats.health} <br> Level: ${stats.level}`;
 });
 
@@ -250,12 +272,12 @@ server.post("/friends", async (req, res) => {
         friend = results["userA"];
       }
       await User.addToFeed(
-        req.session.user,
-        `${user} and ${User.getUsername(friend)} are now friends!`
+          req.session.user,
+          `${user} and ${User.getUsername(friend)} are now friends!`
       );
       await User.addToFeed(
-        friend,
-        `${User.getUsername(friend)} are now friends!`
+          friend,
+          `${User.getUsername(friend)} are now friends!`
       );
       res.redirect("/friends");
     } else if (req.data.btnradio === "DeclineRequest") {
@@ -307,7 +329,7 @@ server.get("/user", async (req, res) => {
     }
   }
   req.vars.CHARACTER = Functions.showCharacters(
-    await User.characters(req.session.user)
+      await User.characters(req.session.user)
   );
   req.vars.FEED = "";
   let feed = await User.getFeed(userinfo["id"]);
@@ -344,8 +366,8 @@ server.post("/user", async (req, res) => {
       res.redirect("/user");
     } else {
       await User.updateProfilePicture(
-        req.data.picture,
-        req.session.userinfo.id
+          req.data.picture,
+          req.session.userinfo.id
       );
       req.session.alert = {
         type: "alert-info",
@@ -362,7 +384,7 @@ server.get("/logout", async (req, res) => {
     return;
   }
   await global.sql.query(
-    `DELETE FROM logintokens WHERE user_id = ${req.session.user}`
+      `DELETE FROM logintokens WHERE user_id = ${req.session.user}`
   );
   Object.keys(req.session).map((k) => {
     if (k != "id") delete req.session[k];
@@ -390,15 +412,15 @@ server.post("/register", async (req, res) => {
   let username = Functions.changeInput(req.data["AccUsername"]);
   let email = Functions.changeInput(req.data["AccEmail"]);
   let password = Salter.hashPassword(
-    Functions.changeInput(req.data["AccPassword"])
+      Functions.changeInput(req.data["AccPassword"])
   );
   let verificationToken = Salter.generateRandomToken();
   let nameRegex = /^[a-z ,.\'-]+$/i;
   let usernameRegex = /\w{5,29}/i;
   let emailRegex =
-    /(?:[a-z0-9!#$%&\'*+\/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&\'*+\/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9]))\.){3}(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9])|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])/;
+      /(?:[a-z0-9!#$%&\'*+\/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&\'*+\/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9]))\.){3}(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9])|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])/;
   let passwordRegex =
-    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
   if (!name.match(nameRegex)) {
     req.session.username = username;
     req.session.name = name;
@@ -449,30 +471,30 @@ server.post("/register", async (req, res) => {
     return;
   }
   await global.sql.query(
-    `INSERT INTO users (name, username, email, password, verifytoken) VALUES ('${name}', '${username}', '${email}', '${password}', '${verificationToken}')`
+      `INSERT INTO users (name, username, email, password, verifytoken) VALUES ('${name}', '${username}', '${email}', '${password}', '${verificationToken}')`
   );
   let user = await User.get(username);
   await global.sql.query(
-    `INSERT INTO logintokens (user_id, token) VALUES (${user.id}, '${verificationToken}')`
+      `INSERT INTO logintokens (user_id, token) VALUES (${user.id}, '${verificationToken}')`
   );
   await global.sql.query(
-    `INSERT INTO user_roles (user_id, role_id) VALUES (${user.id}, 0)`
+      `INSERT INTO user_roles (user_id, role_id) VALUES (${user.id}, 0)`
   );
   await Mailer.sendMail({
     to: email,
     subject: "Verify email Datahunt",
     html: fs
-      .readFileSync(`../Mail/htmltestmail.html`, {
-        encoding: "utf8",
-        flag: "r",
-      })
-      .replace("{TOKEN}", encodeURIComponent(verificationToken))
-      .replace(
-        "{{HOST}}",
-        process.env.PORT
-          ? `${process.env.HOST}:${process.env.PORT}`
-          : `${process.env.HOST}:3000`
-      ),
+        .readFileSync(`../Mail/htmltestmail.html`, {
+          encoding: "utf8",
+          flag: "r",
+        })
+        .replace("{TOKEN}", encodeURIComponent(verificationToken))
+        .replace(
+            "{{HOST}}",
+            process.env.PORT
+                ? `${process.env.HOST}:${process.env.PORT}`
+                : `${process.env.HOST}:3000`
+        ),
   });
   res.redirect("/");
 });
@@ -495,7 +517,7 @@ server.post("/login", async (req, res) => {
   res.cookie("token", token);
   let usernameRegex = /\w{5,29}/i;
   let passwordRegex =
-    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
   req.session.loginFeedback = "";
   if (!username.match(usernameRegex)) {
     req.session.loginFeedback += `<div class=\"alert alert-danger\" role=\"alert\">Your username doesn't follow our rules!</div>`;
@@ -510,16 +532,16 @@ server.post("/login", async (req, res) => {
     return;
   }
   let user = await global.sql.query(
-    `SELECT * FROM users WHERE username = ('${username}') AND enabled = 1 and verified = 1`
+      `SELECT * FROM users WHERE username = ('${username}') AND enabled = 1 and verified = 1`
   );
   user.password = user.password.replace("$2y", "$2b");
   if (Salter.verifyPassword(password, user.password)) {
     req.session.user = user.id;
     if (req.data["AccRemember"] === "on") {
       await global.sql.query(
-        `INSERT INTO logintokens (user_id, token) VALUES (${
-          user.id
-        }, '${Salter.generateRandomToken()}')`
+          `INSERT INTO logintokens (user_id, token) VALUES (${
+              user.id
+          }, '${Salter.generateRandomToken()}')`
       );
       res.redirect("/");
     }
@@ -546,11 +568,11 @@ server.get("/admin", async (req, res) => {
   // Ophalen van huidige variables ad page
   req.vars.FILLFORM = "";
   req.vars.FILLFORM =
-    `<script>document.getElementById('adTitleForm1').value = "` +
-    latestAD["title"] +
-    `"; document.getElementById('adUrlForm1').value = "` +
-    latestAD["redirectURL"] +
-    `";</script>`;
+      `<script>document.getElementById('adTitleForm1').value = "` +
+      latestAD["title"] +
+      `"; document.getElementById('adUrlForm1').value = "` +
+      latestAD["redirectURL"] +
+      `";</script>`;
 
   req.vars["DYNAMICDATA"] = "";
   req.vars.MODAL = req.session.modal;
@@ -570,32 +592,33 @@ server.get("/admin", async (req, res) => {
             <td>${user["role_id"]}</td>
             <td>
             `;
-
+    let banned = false;
     if (typeof bans.length !== "undefined") {
       let ban = bans.find((b) => {
         if (b.user_id === user.id) {
+          banned = true;
           return b;
         }
       });
       if (ban) {
         let date = new Date(`${ban.ban_until} UTC`);
         req.vars["USERS"] += `${
-          date.getUTCFullYear() +
-          "-" +
-          (date.getUTCMonth() + 1) +
-          "-" +
-          date.getUTCDate()
+            date.getUTCFullYear() +
+            "-" +
+            (date.getUTCMonth() + 1) +
+            "-" +
+            date.getUTCDate()
         }`;
       }
     } else {
       if (bans.user_id === user.id) {
         let date = new Date(bans.ban_until);
         req.vars["USERS"] += `${
-          date.getUTCFullYear() +
-          "-" +
-          (date.getUTCMonth() + 1) +
-          "-" +
-          date.getUTCDate()
+            date.getUTCFullYear() +
+            "-" +
+            (date.getUTCMonth() + 1) +
+            "-" +
+            date.getUTCDate()
         }`;
       }
     }
@@ -604,17 +627,26 @@ server.get("/admin", async (req, res) => {
             <td>
             `;
     if (req.session.userinfo.role_id > user.role_id) {
+
+      if(banned){
+        req.vars["USERS"] += `
+                    <form method="post" style="display: inline-block;">
+                    <input type="hidden" value="${user["id"]}" name="unban">
+                    <button class="btn btn-primary" type="submit">Unban</button>
+                    </form>`
+      }else{
+        req.vars["USERS"] += `
+                <form method="post" style="display: inline-block;">
+                    <input type="hidden" value="${user["id"]}" name="ban">
+                    <button class="btn btn-primary" type="submit">Ban</button>
+                    </form>`
+      }
       req.vars["USERS"] += `
                 <form method="post" style="display: inline-block;">
-                <input type="hidden" value="${user["id"]}" name="ban">
-                <button class="btn btn-primary" type="submit">Ban</button>
-                </form>
-                <form method="post" style="display: inline-block;">
                 <input type="hidden" value="${user["id"]}" name="delete">
-                <button class="btn btn-primary" type="submit">Delete</button>
-                </form>`;
+                <button class="btn btn-primary" type="submit">Delete</button>`
     }
-    `
+    req.vars["USERS"] +=`
             </td>
             </tr>
         `;
@@ -630,8 +662,8 @@ server.get("/patchnotes", async (req, res) => {
     let myDate = new Date(patchnotes[0]["date_created"]);
     req.vars.LATESTPATCH = `
         <h1 style="display: inline;">${
-          patchnotes[0]["title"]
-        } - ${myDate.getHours()}:${myDate.getMinutes()}</h1>`;
+        patchnotes[0]["title"]
+    } - ${myDate.getHours()}:${myDate.getMinutes()}</h1>`;
     if (req.session.userinfo && req.session.userinfo["role_id"]) {
       req.vars.LATESTPATCH += `
             <div class="patchnotesButtons" id="${patchnotes[0]["id"]}">
@@ -645,7 +677,7 @@ server.get("/patchnotes", async (req, res) => {
       let myDate = new Date(patchnotes[i]["date_created"]);
       req.vars.PATCHNOTES += `
             <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample${i}" aria-expanded="false" aria-controls="collapseExample${i}"  style="display: inline;">${myDate.getDate()}/${
-        myDate.getMonth() + 1
+          myDate.getMonth() + 1
       }/${myDate.getFullYear()} - ${myDate.getHours()}:${myDate.getMinutes()}</button>`;
       if (req.session.userinfo && req.session.userinfo["role_id"]) {
         req.vars.PATCHNOTES += `
@@ -666,8 +698,8 @@ server.get("/patchnotes", async (req, res) => {
       let myDate = new Date(patchnotes["date_created"]);
       req.vars.LATESTPATCH = `
             <h1 style="display: inline;">${
-              patchnotes["title"]
-            } - ${myDate.getHours()}:${myDate.getMinutes()}</h1>`;
+          patchnotes["title"]
+      } - ${myDate.getHours()}:${myDate.getMinutes()}</h1>`;
       if (req.session.userinfo && req.session.userinfo["role_id"]) {
         req.vars.LATESTPATCH += `
                 <div class="patchnotesButtons" id="${patchnotes["id"]}">
@@ -713,7 +745,7 @@ server.post("/patchnotes", async (req, res) => {
 
 server.get("/editPatchnote", async (req, res) => {
   let patchnoteData = await User.getASingularePatchnote(
-    req.session.patchnoteId
+      req.session.patchnoteId
   );
   req.vars.TITLE = patchnoteData.title;
   req.vars.DATA = patchnoteData.note.toString();
@@ -722,9 +754,9 @@ server.get("/editPatchnote", async (req, res) => {
 server.post("/editPatchnote", async (req, res) => {
   if (req.data.editorTitle !== "" && req.data.data !== "<p><br></p>") {
     await User.updatePatchnote(
-      req.session.patchnoteId,
-      req.data.editorTitle,
-      req.data.data
+        req.session.patchnoteId,
+        req.data.editorTitle,
+        req.data.data
     );
     req.session.alert = {
       type: "alert-info",

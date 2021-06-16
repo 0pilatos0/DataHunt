@@ -174,7 +174,9 @@ module.exports.User = class {
   static async checkAllBan() {
     return global.sql.query(`SELECT * FROM users_ban`);
   }
-
+  static async unban(id){
+    return global.sql.query(`DELETE FROM users_ban where user_id = ${id}`)
+  }
   static async getAd() {
     return global.sql.query(`SELECT * FROM ad ORDER BY id DESC LIMIT 1 `);
   }

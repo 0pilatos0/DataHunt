@@ -75,14 +75,16 @@
     <div class="container">
       <div class="row">
         <div class="col-md-8">
-          <form action="#">
+          <form method="POST">
             <div class="form-group">
               <label for="AdTitleform1">Title</label>
               <input
-                type="email"
+                type="text"
                 class="form-control"
                 id="AdTitleform1"
                 placeholder="Game ad"
+                name = "AdTitleform1"
+                required
               />
             </div>
             <div class="form-group">
@@ -99,7 +101,7 @@
             <div class="form-group">
                 <label for="AdUrlForm1">Redirect URL</label>
                 <input
-                  type="email"
+                  type="text"
                   class="form-control"
                   id="AdUrlForm1"
                   placeholder="Game ad"
@@ -108,7 +110,7 @@
             <br />
             <button type="submit" class="btn btn-primary">Submit</button>
             <button class="btn btn-warning" onclick="">Preview</button>
-            <button class="btn btn-danger" onclick=""> Delete Ad</button>
+            <button class="btn btn-danger" onclick=""> Delete Ad</button><br><br>
           </form>
         </div>
         <div class="col-md-4">
@@ -128,3 +130,4 @@
     document.getElementById(div).classList.remove("hide");
   }
 </script>
+{{SHOW}}

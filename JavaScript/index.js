@@ -115,8 +115,11 @@ server.post("/admin", async (req, res) => {
     return;
   }
 
+  console.log(req.data);
   // Ad gedeelte
-  if (req.data.adTitleForm1 || req.data.adUrlForm1 || req.data.adFileForm1) {
+  if (req.data.adTitleForm1 && req.data.adUrlForm1 && req.data.adFileForm1) {
+    //TODO crasht de pagina als niet alle waardes gevuld zijn
+    await User.disableAllAds();
     await User.setAd(
       req.data.adTitleForm1,
       req.data.adUrlForm1,

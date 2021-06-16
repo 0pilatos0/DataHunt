@@ -178,11 +178,13 @@ module.exports.User = class {
   static async getAd() {
     return global.sql.query(`SELECT * FROM ad ORDER BY id DESC LIMIT 1 `);
   }
-
+  static async disableAllAds() {
+    return global.sql.query(`UPDATE ad SET active=0`);
+  }
   //TODO deze sql dingetje is een grote fout en zorgt voor een error
   static async setAd(title, redirect, active, image) {
     return global.sql.query(
-      `INSERT INTO ad(title, redirectURL, active, image) VALUES (${title}, ${redirect}, ${active} ${image}) `
+      `INSERT INTO ad(title, redirectURL, active, image) VALUES ('${title}', '${redirect}', ${active}, '${image}') `
     );
   }
 

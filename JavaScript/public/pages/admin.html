@@ -98,8 +98,8 @@
                 type="file"
                 class="form-control-file"
                 id="AdFileForm1"
-                name="adFileForm1"
               />
+              <input type="hidden" name="adFileForm1" id="hiddenFileUrl">
             </div><hr>
             <div class="form-group">
                 <label for="AdUrlForm1">Redirect URL</label>
@@ -134,6 +134,11 @@
       document.getElementById(buttons[i].innerHTML).classList.add("hide");
     }
     document.getElementById(div).classList.remove("hide");
+  }
+  AdFileForm1.onchange= async function(e){
+    console.log(e.target.files[0]);
+    let base64String = await toBase64(e.target.files[0]);
+    document.getElementById("hiddenFileUrl").value = base64String;
   }
 </script>
 {{SHOW}}

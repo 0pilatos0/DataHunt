@@ -214,6 +214,12 @@ module.exports.User = class {
     );
   }
 
+  static async getAllProfilePictures() {
+    return global.sql.query(
+      `SELECT * FROM profile_pictures`
+    );
+  }
+
   static async updateProfilePicture(picture, uid) {
     return new Promise((resolve, reject) => {
       global.sql.con.query(

@@ -204,6 +204,7 @@ server.get("/character", async (req, res) => {
 
 server.get("/friends", async (req, res) => {
   req.vars.FEEDBACK = req.session.friendFeedback;
+  let pictures = await User.getAllProfilePictures();
   delete req.session.friendFeedback;
   if (!req.session.user) {
     res.redirect("/");
@@ -220,15 +221,29 @@ server.get("/friends", async (req, res) => {
   req.vars.FRIENDS = "";
   if (results.length > 0) {
     results.map((r) => {
+      let picture = pictures.find((p)=>{
+        if(r.userA == req.session.userinfo.id){
+          return p.user_id == r.userB;
+        }else {
+          return p.user_id == r.userA;
+        }
+      });
       req.vars.FRIENDS += `<div class=\"card text-secondary w-75 mt-4\" style=\"width: 18rem;\">
-            <div class=\"card-body\">
-            <h5 class=\"card-title\">${r["name"].username}</h5>`;
+            <div class=\"card-body\">`
+      if(picture){
+        req.vars.FRIENDS += `
+                <img class="friendsPictures" src="${picture.image}">
+          `
+      }
+      req.vars.FRIENDS += `<h5 class=\"card-title\">${r["name"].username}</h5>`;
       if (r["friendship"] == 0 && r["userA"] == req.session.user) {
         req.vars.FRIENDS += `<p class=\"card-text\">User hasn't replied to your request yet.</p>`;
       } else if (r["friendship"] == 0 && r["userB"] == req.session.user) {
         req.vars.FRIENDS += Functions.createButtons(r["id"]);
       } else if (r["friendship"] == 1) {
-        req.vars.FRIENDS += `<p class=\"card-text\">You are friends.</p>`;
+        req.vars.FRIENDS += `
+<p class=\"card-text\">You are friends.</p>
+`;
       }
       req.vars.FRIENDS += `</div></div>`;
     });

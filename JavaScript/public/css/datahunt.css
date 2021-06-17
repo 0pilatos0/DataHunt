@@ -172,6 +172,12 @@
   grid-area: form;
 }
 
+.friendsPictures {
+  width: 64px;
+  height: 64px;
+  float: right;
+}
+
 .statsContainer {
   margin-top: 25px;
   margin-left: 25px;

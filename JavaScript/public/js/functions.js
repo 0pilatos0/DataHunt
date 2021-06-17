@@ -55,3 +55,30 @@ function toBase64(file) {
     reader.onerror = (error) => reject(error);
   });
 }
+
+let keys = [];
+
+document.body.onkeydown = (e)=>{
+    if(keys.indexOf(e.key) == -1){
+        keys.push(e.key)
+        if (keys.indexOf("r") > -1 && keys.indexOf("g") > -1 && keys.indexOf("b") > -1) {
+            rgb()
+        }
+    }
+}
+
+document.body.onkeyup = (e)=>{
+    keys.splice(keys.indexOf(e.key), 1)
+}
+
+function rgb() {
+    if(document.body.getElementsByTagName("*")[0].classList.contains("rgb")){
+        for (let i=0; i<document.body.getElementsByTagName("*").length; i++){
+            document.body.getElementsByTagName("*")[i].classList.remove("rgb");
+        }
+    }else{
+        for (let i=0; i<document.body.getElementsByTagName("*").length; i++){
+            document.body.getElementsByTagName("*")[i].classList.add("rgb");
+        }
+    }
+}

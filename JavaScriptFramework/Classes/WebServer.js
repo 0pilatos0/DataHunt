@@ -91,11 +91,8 @@ module.exports = class WebServer{
     constructor() {
         new SQL()
         global.ws = this
-    }
-
-    listen(port = process.env.PORT){
-        this.#http.listen(port, process.env.HOST, () => {
-            console.log(`Listening on http://${process.env.HOST}:${port}`)
+        this.#http.listen(process.env.PORT, process.env.HOST, () => {
+            console.log(`Listening on http://localhost:${process.env.PORT}`)
         })
     }
 

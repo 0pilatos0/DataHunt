@@ -7,8 +7,8 @@ const Patchnotes = require('./Routes/Patchnotes')
 const Admin = require('./Routes/Admin');
 const Friends = require("./Routes/Friends");
 
-let ws = new WebServer()
-ws.listen()
+new WebServer()
+
 new Home()
 new User()
 new Patchnotes()

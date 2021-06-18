@@ -110,7 +110,7 @@ module.exports = class HomeController extends Controller{
                 id: userinfo.id
             }
         })
-        if(req.data["AccUsername"]){
+        if(req.data.has('AccUsername')){
             let username = InputParser.parse(req.data["AccUsername"])
             if(!username.match(Regex.Username)){
                 new Feedback({

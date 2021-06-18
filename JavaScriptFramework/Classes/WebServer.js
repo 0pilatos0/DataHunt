@@ -69,6 +69,9 @@ module.exports = class WebServer{
                 })
                 tReq.on('end', async () => {
                     req.data = qs.parse(body)
+                    req.data.has = (name) => {
+                        return Object.keys(req.data).includes(name)
+                    }
                     if(postCallback){
                         await postCallback(req, res)
                         res.end(JSON.stringify(req.data))

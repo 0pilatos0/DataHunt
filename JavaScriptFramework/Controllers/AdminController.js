@@ -235,8 +235,7 @@ module.exports = class AdminController extends Controller{
             return
         }
 
-        if(req.data.adTitleForm1 && req.data.adUrlForm1 && req.data.adFileForm1){
-            //TODO crasht de pagina als niet alle waardes gevuld zijn
+        if(req.data.has('adTitleForm1') && req.data.has('adUrlForm1') && req.data.has('adFileForm1')){
             await Ad.update({
                 data:{
                     active: 0
@@ -253,7 +252,7 @@ module.exports = class AdminController extends Controller{
             return
         }
 
-        if(typeof req.data.editorTitle !== undefined && req.data.data){
+        if(req.data.has('editorTitle') && req.data.has('data')){
             if(req.data.editorTitle !== "" && req.data.data !== "<p><br></p>"){
                 await Patchnote.create({
                     title: req.data.editorTitle,

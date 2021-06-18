@@ -1,0 +1,318 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+
+.rgb {
+  animation: color-change 8s infinite;
+}
+
+@keyframes color-change {
+  0% {
+    color: blue;
+  }
+  10% {
+    color: #8e44ad;
+  }
+  20% {
+    color: #1abc9c;
+  }
+  30% {
+    color: #d35400;
+  }
+  40% {
+    color: blue;
+  }
+  50% {
+    color: #34495e;
+  }
+  60% {
+    color: blue;
+  }
+  70% {
+    color: #2980b9;
+  }
+  80% {
+    color: #f1c40f;
+  }
+  90% {
+    color: #2980b9;
+  }
+  100% {
+    color: pink;
+  }
+}
+
+.content {
+  padding-top: 20px;
+  padding-top: 20px;
+}
+
+.formLogin {
+  font-family: "Roboto", sans-serif;
+  margin-left: auto;
+  margin-top: 30px;
+}
+
+.list-group {
+  color: black;
+}
+
+.login-img {
+  float: left;
+}
+
+.list-group-item {
+  padding: 0.7rem 1.5rem;
+  background-color: #dbdbdb;
+}
+
+  .card-header {
+    background-color: rgb(61, 61, 61);
+  }
+
+.picture-header {
+  background-color: #595959;
+}
+
+#container form {
+  display: block;
+}
+
+.user-container {
+  display: grid;
+  grid-template-areas:
+    "left feed form1"
+    "left feed form1";
+  grid-template-rows: auto 1fr;
+  grid-template-columns: 20% 1fr 30%;
+}
+
+.char-link,
+.char-li {
+  padding: 0px;
+  margin: 0;
+  text-decoration: none;
+  color: black;
+}
+
+.char {
+  padding: 10px;
+}
+
+.char-li:hover,
+.char-li > a:hover {
+  background-color: #8e8e8e;
+  color: black;
+}
+.hide {
+  display: none;
+}
+
+.user {
+  padding: 0;
+  margin: 0;
+}
+
+.user-left-section {
+  grid-area: left;
+}
+
+#pictureOutput {
+  display: none;
+}
+
+#pictureSubmit {
+  display: none;
+}
+
+.user-form {
+  grid-area: form1;
+}
+
+.picture-form {
+  margin-top: 1em;
+}
+
+.image-form {
+  grid-area: form2;
+}
+
+.user-characters {
+  grid-area: char;
+}
+
+#profilePicture {
+  width: 100%;
+  height: 100%;
+}
+
+.user-feed {
+  grid-area: feed;
+}
+
+.user-friend {
+  grid-area: friends;
+  margin-top: 1em;
+}
+.overlay {
+  top: 0px;
+  right: 0px;
+  bottom: 0px;
+  left: 0px;
+  z-index: 1;
+  animation-name: opacity;
+  animation-duration: 1s;
+  animation-fill-mode: forwards;
+  position: absolute;
+  background-color: black;
+}
+.delete-confirm {
+  top: -500px;
+  width: 700px;
+  height: 250px;
+  left: calc(50% - 350px);
+  text-align: center;
+  color: black;
+  position: absolute;
+  animation-name: deleteconfirm;
+  animation-duration: 2s;
+  z-index: 2;
+  animation-fill-mode: forwards;
+  background-color: white;
+}
+@keyframes deleteconfirm {
+  from {
+    top: -500px;
+  }
+  to {
+    top: 150px;
+  }
+}
+
+@keyframes opacity {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 70%;
+  }
+}
+
+#friendsContainer {
+  display: grid;
+  grid-template-areas: "friends form";
+  grid-template-columns: 60% 40%;
+}
+
+#friendsMenu {
+  grid-area: friends;
+}
+
+#friendsForm {
+  grid-area: form;
+}
+
+.friendsPictures {
+  width: 64px;
+  height: 64px;
+  float: right;
+}
+
+.statsContainer {
+  margin-top: 25px;
+  margin-left: 25px;
+}
+
+.contentGrid {
+  display: grid;
+  grid-template-areas:
+    "intro intro"
+    "image1 patchnotes"
+    "update image2"
+    "whitespace whitespace"
+    "event event"
+    "leaderboard leaderboard";
+  grid-template-rows: auto 1fr;
+  grid-template-columns: 10% 1fr 10%;
+  width: 90%;
+}
+
+.main-intro {
+  grid-area: intro;
+  text-align: center;
+}
+
+.main-intro h2 {
+  text-align: center;
+}
+
+.main-image-one {
+  grid-area: image1;
+  width: 60%;
+}
+
+.main-patchnotes {
+  grid-area: patchnotes;
+  width: 40%;
+}
+
+.main-update {
+  grid-area: update;
+  width: 40%;
+}
+
+.main-image-two {
+  grid-area: image2;
+  width: 60%;
+}
+
+.main-patchnotes {
+  grid-area: patchnotes;
+  width: 40%;
+}
+
+.main-nothingness {
+  grid-area: whitespace;
+  width: 100%;
+  background-color: lavender;
+  height: 35px;
+  display: block;
+}
+
+.main-events {
+  grid-area: event;
+}
+
+.main-leaderboard {
+  grid-area: leaderboard;
+  margin: 0;
+  padding: 0;
+  line-height: 1.2em;
+}
+
+.ck-editor__main {
+  color: #fe35bb;
+}
+
+#footer {
+  position: absolute;
+  width: 100%;
+  height: 2.5rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  left: 0;
+}
+
+.patchnotesButtons {
+  display: inline;
+}
+
+.ql-syntax {
+  background-color: #23241f;
+}
+
+.fa-trash:hover, .fa-edit:hover{
+  cursor:pointer;
+}

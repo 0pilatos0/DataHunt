@@ -53,7 +53,7 @@ module.exports = class WebServer{
                 //Handles HTML Get requests
                 let getCallback = this.#getMatchingCallback(this.#gets, req, res)
                 if(getCallback){
-                    global.templateCallback(req, res)
+                    await global.templateCallback(req, res)
                     await getCallback(req, res)
                     this.#sessions[req.cookies['JSSESSID']] = req.session
                     res.end()

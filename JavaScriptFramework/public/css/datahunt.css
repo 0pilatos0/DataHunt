@@ -320,3 +320,6 @@
 .fa-trash:hover, .fa-edit:hover{
   cursor:pointer;
 }
+.dropdown-item{
+  padding: 0px; !important;
+}

@@ -34,7 +34,7 @@ module.exports = class Response{
         templatePage.vars.CHATWINDOW = global.chatwindow || ""
         templatePage.vars.DYNAMICHEADER = global.dynamicheader || ""
         if(!path.extname(pageName)) this.send(templatePage.data)
-        else console.error("Please don't provide a extension")
+        else console.error("Please don't provide an extension")
     }
 
     async cookie(name, value, maxAge =  30 * 24 * 3600){

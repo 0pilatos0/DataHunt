@@ -1,6 +1,6 @@
 const HTMLFileLoader = require("../Classes/HTMLFileLoader")
 
-module.exports = class Modal{
+module.exports = class AdView{
     constructor({title, body, confirm, session}){
         let modalPage = new HTMLFileLoader(`${__dirname}/../Elements/adView.html`)
         modalPage.vars.TITLE = title

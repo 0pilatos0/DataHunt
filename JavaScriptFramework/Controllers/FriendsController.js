@@ -83,6 +83,7 @@ module.exports = class HomeController extends Controller{
                     <form method="post" id="Accept${f.id}">
                         <input type="hidden" name="action" value="accept">
                         <input type="hidden" name="id" value="${f.id}">
+                        <input type="hidden" name="friendName" value="${f.name}">
                         <button class="friendButton btn btn-outline-success" onclick="(e)=>{
                             Accept${f.id}.submit();
                         }">Accept</button>
@@ -91,6 +92,7 @@ module.exports = class HomeController extends Controller{
                     <form method="post" id="Decline${f.id}">
                         <input type="hidden" name="action" value="decline">
                         <input type="hidden" name="id" value="${f.id}">
+                        <input type="hidden" name="friendName" value="${f.name}">
                         <button class="friendButton btn btn-outline-danger" onclick="(e)=>{
                             Decline${f.id}.submit();
                         }">Decline</button>
@@ -107,12 +109,12 @@ module.exports = class HomeController extends Controller{
     }
 
     static async HandleFriendsPost(req, res){
-        if(req.data.has('action') && req.data.has('id')) {
+        if(req.data.has('action') && req.data.has('id') && req.data.has(friendName)) {
             if (req.data.action === "accept") {
                 Friend.acceptFriendship(req.data.id);
                 new Feedback({
                     type: 'success',
-                    message: `accepted user as friend`,
+                    message: `accepted ${req.data.friendName} as friend`,
                     session: req.session
                 })
                 res.redirect('/friends')
@@ -121,7 +123,7 @@ module.exports = class HomeController extends Controller{
                 Friend.declineFriendship(req.data.id);
                 new Feedback({
                     type: 'success',
-                    message: `declined user as friend`,
+                    message: `declined ${req.data.friendName} as friend`,
                     session: req.session
                 })
                 res.redirect('/friends')

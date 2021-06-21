@@ -55,6 +55,10 @@ module.exports = class PatchnotesController extends Controller{
     }
 
     static async HandlePatchnotesPost(req, res){
+        if(!req.session.userinfo){
+            res.redirect('/')
+            return
+          }
         if(req.data.edit){
             req.session.patchnoteId = req.data.edit
             res.redirect('/editPatchnote')
@@ -126,6 +130,10 @@ module.exports = class PatchnotesController extends Controller{
     }
 
     static async HandleEditPatchnotePost(req, res){
+        if(!req.session.userinfo){
+            res.redirect('/')
+            return
+          }
         if(req.data.editorTitle !== "" && req.data.data !== "<p><br></p>"){
             await Patchnote.update({
                 where:{

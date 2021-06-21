@@ -105,6 +105,10 @@ module.exports = class AdminController extends Controller {
   }
 
   static async HandleAdminPost(req, res) {
+    if(!req.session.userinfo){
+      res.redirect('/')
+      return
+    }
     if (req.data.ban) {
       let user = await User.find({
         where: {

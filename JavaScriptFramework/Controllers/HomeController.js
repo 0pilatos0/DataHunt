@@ -62,6 +62,10 @@ module.exports = class HomeController extends Controller {
   }
 
   static async HandlePostLogin(req, res) {
+    if(req.session.userinfo){
+      res.redirect('/')
+      return
+    }
     let username = InputParser.parse(req.data["AccUsername"]);
     let password = InputParser.parse(req.data["AccPassword"]);
     let token = Salter.generateRandomToken();
@@ -116,6 +120,10 @@ module.exports = class HomeController extends Controller {
   }
 
   static async HandlePostRegister(req, res) {
+    if(req.session.userinfo){
+      res.redirect('/')
+      return
+    }
     let name = InputParser.parse(req.data["AccName"]);
     let username = InputParser.parse(req.data["AccUsername"]);
     let email = InputParser.parse(req.data["AccEmail"]);
@@ -211,11 +219,16 @@ module.exports = class HomeController extends Controller {
     Object.keys(req.session).map((k) => {
       delete req.session[k];
     });
+    delete req.session.userinfo
     res.redirect("/");
     return;
   }
 
   static async HandleVerification(req, res) {
+    if(!req.session.userinfo){
+      res.redirect('/')
+      return
+    }
     if (req.session.userinfo) {
       res.redirect("/");
       return;

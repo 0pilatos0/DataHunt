@@ -107,6 +107,10 @@ module.exports = class HomeController extends Controller{
     }
 
     static async HandleFriendsPost(req, res){
+        if(!req.session.userinfo){
+            res.redirect('/')
+            return
+          }
         let userinfo = req.session.userinfo
         let user = await User.find({
             select: [

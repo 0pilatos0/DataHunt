@@ -18,6 +18,7 @@ module.exports = class HomeController extends Controller{
             return
         }
         let userinfo = req.session.userinfo
+
         let friends = await Friend.select({
             where: {
                 userA: `${userinfo.id} OR userB = ${userinfo.id}`,
@@ -78,16 +79,21 @@ module.exports = class HomeController extends Controller{
             else if(!f.friendship && f.userB == userinfo.id){
                 friendsHTML += `
                     <p class="card-text">You have an incoming friend request.</p>
-                    <form method="POST">
-                        <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
-                            <input type="radio" class="btn-check" name="btnradio" id="${f.id}btnradio1" autocomplete="off" checked value="AcceptRequest">
-                            <label class="btn btn-outline-success" for="${f.id}btnradio1">Accept</label>
-            
-                            <input type="radio" class="btn-check" name="btnradio" id="${f.id}btnradio2" autocomplete="off" value="DeclineRequest">
-                            <label class="btn btn-outline-danger" for="${f.id}btnradio2">Decline</label>
-                        </div>
-                        <input type="submit" class="btn btn-primary" value="Confirm">
+
+                    <form method="post" id="Accept${f.id}">
+                        <input type="hidden" name="action" value="accept">
                         <input type="hidden" name="id" value="${f.id}">
+                        <button class="friendButton btn btn-outline-success" onclick="(e)=>{
+                            Accept${f.id}.submit();
+                        }">Accept</button>
+                    </form>
+
+                    <form method="post" id="Decline${f.id}">
+                        <input type="hidden" name="action" value="decline">
+                        <input type="hidden" name="id" value="${f.id}">
+                        <button class="friendButton btn btn-outline-danger" onclick="(e)=>{
+                            Decline${f.id}.submit();
+                        }">Decline</button>
                     </form>`
             }
             else if(f.friendship){
@@ -101,6 +107,29 @@ module.exports = class HomeController extends Controller{
     }
 
     static async HandleFriendsPost(req, res){
+        if(req.data.has('action') && req.data.has('id')) {
+            if (req.data.action === "accept") {
+                Friend.acceptFriendship(req.data.id);
+                new Feedback({
+                    type: 'success',
+                    message: `accepted user as friend`,
+                    session: req.session
+                })
+                res.redirect('/friends')
+                return
+            } else if (req.data.action === "decline") {
+                Friend.declineFriendship(req.data.id);
+                new Feedback({
+                    type: 'success',
+                    message: `declined user as friend`,
+                    session: req.session
+                })
+                res.redirect('/friends')
+                return
+            }
+        }
+
+
         let userinfo = req.session.userinfo
         let user = await User.find({
             select: [

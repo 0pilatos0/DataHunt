@@ -209,6 +209,10 @@
   grid-area: friends;
 }
 
+#friendButton {
+  display: inline-block;
+}
+
 #friendsForm {
   grid-area: form;
 }

@@ -5,6 +5,7 @@ const Ad = require("../Models/Ad");
 const Patchnote = require("../Models/Patchnote");
 const Feedback = require("../Helpers/Feedback");
 const Modal = require("../Helpers/Modal");
+const AdView = require("../Helpers/AdView");
 
 module.exports = class AdminController extends Controller {
   constructor() {
@@ -96,9 +97,11 @@ module.exports = class AdminController extends Controller {
         req.session.note !== "<p><br></p>" && req.session.note
           ? req.session.note
           : "",
+      ADVIEW: req.session.adView || "",
     });
     delete req.session.patchnoteTitle;
     delete req.session.note;
+    delete req.session.adView;
   }
 
   static async HandleAdminPost(req, res) {
@@ -236,11 +239,27 @@ module.exports = class AdminController extends Controller {
       res.redirect("/admin");
       return;
     }
-
     if (
       req.data.has("adTitleForm1") &&
       req.data.has("adUrlForm1") &&
-      req.data.has("adFileForm1")
+      req.data.has("adFileForm1") &&
+      req.data.has("adPreview")
+    ) {
+      new AdView({
+        title: `${req.data.adTitleForm1}`,
+        body: `<img src="${req.data.adFileForm1}"></img>`,
+        confirm: `<a class="btn btn-secondary" href="${req.data.adUrlForm1}">Read More</a>`,
+        session: req.session,
+      });
+      req.session.show = `<script>show('admanager')</script>`;
+      res.redirect("/admin");
+      return;
+    }
+    if (
+      req.data.has("adTitleForm1") &&
+      req.data.has("adUrlForm1") &&
+      req.data.has("adFileForm1") &&
+      req.data.has("adSubmit")
     ) {
       await Ad.update({
         data: {

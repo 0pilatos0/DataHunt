@@ -1,23 +1,34 @@
+<div
+  class="modal fade"
+  id="popupModal"
+  tabindex="-1"
+  aria-labelledby="popup"
+  aria-hidden="true"
+>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" style="color: black">{{TITLE}}</h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body" style="color: black">{{BODY}}</div>
+      <div class="modal-footer">
+        {{CONFIRM}}
 
-<div class="modal fade" id="popupModal" tabindex="-1" aria-labelledby="popup" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" style="color: black;">{{TITLE}}</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body" style="color: black;">
-                {{BODY}}
-            </div>
-            <div class="modal-footer">
-                {{CONFIRM}}
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-            </div>
-        </div>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+          Close
+        </button>
+      </div>
     </div>
+  </div>
 </div>
 
 <script>
-    let modal = new bootstrap.Modal(document.getElementById('popupModal'))
-    modal.show()
+  let modal = new bootstrap.Modal(document.getElementById("popupModal"));
+  modal.show();
 </script>

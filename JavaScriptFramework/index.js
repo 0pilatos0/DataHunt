@@ -15,6 +15,7 @@ new User()
 new Patchnotes()
 new Admin()
 new Friends()
+
 //Handle setting the template data
 global.templateCallback = async (req, res) => {
     global.alert = ''
@@ -26,19 +27,17 @@ global.templateCallback = async (req, res) => {
             global.dynamicheader += '<li><a id="admin" href="/admin">Admin</a></li>'
         }
         picture = await ProfilePicture.getPicture(req.session.userinfo.id)
-        global.dynamicheader += '' +
-            '<li style="float:right;">' +
-            '<a class="nav-link dropdown-toggle" href="#" id="navbarDarkDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false" style="padding: 3px;">' +
-            `<img style="max-height: 46px;" src="${picture.image}"> ` + req.session.userinfo.username +
-            '</a>' +
-            '' +
-            '<ul class="dropdown-menu" aria-labelledby="navbarDarkDropdownMenuLink">\n' +
-            '<li style="float:right" class="dropdown-item"><a id="user" href="/user">User</a></li>\n' +
-            '<li style="float:right" class="dropdown-item"><a id="friends" href="/friends">Friends</a></li>' +
-            '<li style="float:right" class="dropdown-item"><a id="logout" href="/logout">Logout</a></li>' +
-            '</ul>' +
-            '</li>'
-
+        global.dynamicheader += `
+            <li style="float:right;">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDarkDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false" style="padding: 3px;">
+                    <img style="max-height: 46px;" src="${picture.image}"> ${req.session.userinfo.username}
+                </a>
+                <ul class="dropdown-menu" aria-labelledby="navbarDarkDropdownMenuLink">
+                    <li style="float:right" class="dropdown-item"><a id="user" href="/user">User</a></li>
+                    <li style="float:right" class="dropdown-item"><a id="friends" href="/friends">Friends</a></li>
+                    <li style="float:right" class="dropdown-item"><a id="logout" href="/logout">Logout</a></li>
+                </ul>
+            </li>`
     }
     else{
         global.dynamicheader += `<li style="float:right"><a id="register" href="/register">Registration</a></li>`

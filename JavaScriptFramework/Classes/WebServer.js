@@ -42,7 +42,7 @@ module.exports = class WebServer{
                     jsSessID += Math.random().toString(36).substring(7)
                 }
                 jsSessID = jsSessID.substring(0, 54)
-                res.cookie('JSSESSID', jsSessID)
+                await res.cookie('JSSESSID', jsSessID)
                 this.#sessions[jsSessID] = {}
                 req.session = this.#sessions[jsSessID]
             }

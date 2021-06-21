@@ -8,7 +8,5 @@ module.exports = class Admin extends Route{
         this.get('/admin', AdminController.HandleAdmin)
 
         this.post('/admin', AdminController.HandleAdminPost)
-
-        this.get('/creationPatchnotes', AdminController.HandleCreatePatchnotes)
     }
 }

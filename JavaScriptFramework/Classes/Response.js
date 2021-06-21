@@ -37,10 +37,9 @@ module.exports = class Response{
         else console.error("Please don't provide an extension")
     }
 
-    async cookie(name, value, maxAge =  30 * 24 * 3600){
+    cookie(name, value, maxAge = 30 * 24 * 3600){
         this.#response.writeHead(200, {
-            'Set-Cookie': `${name}=${value}`,
-            'Max-Age': maxAge
+            'Set-Cookie': `${name}=${value}; Max-Age=${maxAge}`
         })
     }
 

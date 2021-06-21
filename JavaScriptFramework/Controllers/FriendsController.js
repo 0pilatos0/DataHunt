@@ -83,7 +83,6 @@ module.exports = class HomeController extends Controller{
                     <form method="post" id="Accept${f.id}">
                         <input type="hidden" name="action" value="accept">
                         <input type="hidden" name="id" value="${f.id}">
-                        <input type="hidden" name="friendName" value="${f.name}">
                         <button class="friendButton btn btn-outline-success" onclick="(e)=>{
                             Accept${f.id}.submit();
                         }">Accept</button>
@@ -92,7 +91,6 @@ module.exports = class HomeController extends Controller{
                     <form method="post" id="Decline${f.id}">
                         <input type="hidden" name="action" value="decline">
                         <input type="hidden" name="id" value="${f.id}">
-                        <input type="hidden" name="friendName" value="${f.name}">
                         <button class="friendButton btn btn-outline-danger" onclick="(e)=>{
                             Decline${f.id}.submit();
                         }">Decline</button>
@@ -109,29 +107,6 @@ module.exports = class HomeController extends Controller{
     }
 
     static async HandleFriendsPost(req, res){
-        if(req.data.has('action') && req.data.has('id') && req.data.has(friendName)) {
-            if (req.data.action === "accept") {
-                Friend.acceptFriendship(req.data.id);
-                new Feedback({
-                    type: 'success',
-                    message: `accepted ${req.data.friendName} as friend`,
-                    session: req.session
-                })
-                res.redirect('/friends')
-                return
-            } else if (req.data.action === "decline") {
-                Friend.declineFriendship(req.data.id);
-                new Feedback({
-                    type: 'success',
-                    message: `declined ${req.data.friendName} as friend`,
-                    session: req.session
-                })
-                res.redirect('/friends')
-                return
-            }
-        }
-
-
         let userinfo = req.session.userinfo
         let user = await User.find({
             select: [
@@ -141,6 +116,58 @@ module.exports = class HomeController extends Controller{
                 id: userinfo.id
             }
         })
+        if(req.data.has('action') && req.data.has('id')) {
+            if (req.data.action === "accept") {
+                await Friend.acceptFriendship(req.data.id);
+                let friendship = await Friend.find({
+                    where: {
+                        id: req.data.id
+                    }
+                })
+                let friend
+                if(friendship.userA == userinfo.id){
+                    friend = friendship.userB
+                    friend = await User.find({
+                        where: {
+                            id: friend
+                        }
+                    })
+                }
+                else{
+                    friend = friendship.userA
+                    friend = await User.find({
+                        where: {
+                            id: friend
+                        }
+                    })
+                }
+                await Feed.create({
+                    user_id: userinfo.id,
+                    message: `You and ${friend.username} are now friends!`
+                })
+                await Feed.create({
+                    user_id: friend.id,
+                    message: `You and ${user.username} are now friends!`
+                })
+                new Feedback({
+                    type: 'success',
+                    message: `Accepted ${friend.username} as friend`,
+                    session: req.session
+                })
+                res.redirect('/friends')
+                return
+            } else if (req.data.action === "decline") {
+                await Friend.declineFriendship(req.data.id);
+                new Feedback({
+                    type: 'success',
+                    message: `Declined ${req.data.friendName} as friend`,
+                    session: req.session
+                })
+                res.redirect('/friends')
+                return
+            }
+        }
+
         if(req.data.has('AccUsername')){
             let username = InputParser.parse(req.data["AccUsername"])
             if(!username.match(Regex.Username)){
@@ -226,62 +253,6 @@ module.exports = class HomeController extends Controller{
                     return
                 }
             }
-        }
-        else if(req.data.btnradio == "AcceptRequest"){
-            await Friend.update({
-                data:{
-                    friendship: 1
-                },
-                where: {
-                    id: req.data.id
-                }
-            })
-            let friendship = await Friend.find({
-                where: {
-                    id: req.data.id
-                }
-            })
-            let friend
-            if(friendship.userA == userinfo.id){
-                friend = friendship.userB
-                friend = await User.find({
-                    where: {
-                        id: friend
-                    }
-                })
-            }
-            else{
-                friend = friendship.userA
-                friend = await User.find({
-                    where: {
-                        id: friend
-                    }
-                })
-            }
-            await Feed.create({
-                user_id: userinfo.id,
-                message: `You and ${friend.username} are now friends!`
-            })
-            await Feed.create({
-                user_id: friend.id,
-                message: `You and ${user.username} are now friends!`
-            })
-            res.redirect('/friends')
-            return
-        }
-        else if(req.data.btnradio == "DeclineRequest"){
-            await Friend.delete({
-                where: {
-                    id: req.data.id
-                }
-            })
-            new Feedback({
-                type: 'success',
-                message: 'Successfully declined friendship',
-                session: req.session
-            })
-            res.redirect('/friends')
-            return
         }
     }
 }

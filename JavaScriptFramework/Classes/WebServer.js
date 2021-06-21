@@ -42,14 +42,13 @@ module.exports = class WebServer{
                     jsSessID += Math.random().toString(36).substring(7)
                 }
                 jsSessID = jsSessID.substring(0, 54)
-                await res.cookie('JSSESSID', jsSessID)
+                res.cookie('JSSESSID', jsSessID)
                 this.#sessions[jsSessID] = {}
                 req.session = this.#sessions[jsSessID]
             }
             //Handles HTML Files
             req.params = []
             if(req.method == "GET"){
-                tRes.writeHead(200, {'Content-Type': 'text/html'})
                 //Handles HTML Get requests
                 let getCallback = this.#getMatchingCallback(this.#gets, req, res)
                 if(getCallback){

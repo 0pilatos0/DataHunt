@@ -249,12 +249,17 @@ module.exports = class AdminController extends Controller {
       req.data.has("adFileForm1") &&
       req.data.has("adPreview")
     ) {
-      new AdView({
-        title: `${req.data.adTitleForm1}`,
-        body: `<img src="${req.data.adFileForm1}"></img>`,
-        confirm: `<a class="btn btn-secondary" href="${req.data.adUrlForm1}">Read More</a>`,
-        session: req.session,
-      });
+      // new AdView({
+      //   title: `${req.data.adTitleForm1}`,
+      //   body: `<img src="${req.data.adFileForm1}"></img>`,
+      //   confirm: `<a class="btn btn-secondary" href="${req.data.adUrlForm1}">Read More</a>`,
+      //   session: req.session,
+      // });
+      new Feedback({
+        type: 'danger',
+        message: 'You must have uploaded a picture before being able to preview it.',
+        session: req.session
+      })
       req.session.show = `<script>show('admanager')</script>`;
       res.redirect("/admin");
       return;

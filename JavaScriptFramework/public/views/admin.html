@@ -116,7 +116,7 @@
               </div>
             <br />
             <button type="submit" class="btn btn-primary" name="adSubmit">Submit</button>
-            <button class="btn btn-warning" onclick="" name="adPreview">Preview</button>
+            <button class="btn btn-warning" onclick="" name="adPreview" id="adPreview">Preview</button>
             <button class="btn btn-danger" onclick="" name="adDelete"> Delete Ad</button><br><br>
           </form>
           {{FILLFORM}}
@@ -139,9 +139,42 @@
     document.getElementById(div).classList.remove("hide");
   }
   AdFileForm1.onchange= async function(e){
-    console.log(e.target.files[0]);
     let base64String = await toBase64(e.target.files[0]);
     document.getElementById("hiddenFileUrl").value = base64String;
+    resetPreviewOnClick(base64String)
   }
+
+  function showModal(){
+    let modal = new bootstrap.Modal(document.getElementById('popupModal'))
+    modal.show()
+  }
+
+  function resetPreviewOnClick(base64String){
+    adPreview.onclick = (e) => {
+      if(!base64String) return
+      e.preventDefault()
+      document.body.insertAdjacentHTML('beforeend', `
+      <div class="modal fade" id="popupModal" tabindex="-1" aria-labelledby="popup" aria-hidden="true">
+          <div class="modal-dialog">
+              <div class="modal-content">
+                  <div class="modal-header">
+                      <h5 class="modal-title" style="color: black;">Ad of the week</h5>
+                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                  </div>
+                  <div class="modal-body" style="color: black;">
+                      <img src=${base64String}>
+                  </div>
+                  <div class="modal-footer">
+                      <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                  </div>
+              </div>
+          </div>
+      </div>
+      `)
+      showModal()
+    }
+  }
+
+  resetPreviewOnClick()
 </script>
 {{SHOW}}

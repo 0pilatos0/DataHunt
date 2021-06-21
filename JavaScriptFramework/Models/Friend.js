@@ -11,15 +11,15 @@ module.exports = class Friend extends Model{
                 friendship:1
             },
             where:{
-                id:id
+                id
             }
         })
     }
 
     static async declineFriendship(id){
         this.delete({
-            where:{
-                id:id
+            where: {
+                id
             }
         })
     }

@@ -10,6 +10,13 @@ module.exports = class ProfilePicture extends Model{
     }
 
     static async getPicture(id){
-        return this.find({where:{"user_id":id}, "select":["image"]})
+        return this.find({
+            where:{
+                "user_id": id
+            },
+            "select":[
+                "image"
+            ]
+        })
     }
 }

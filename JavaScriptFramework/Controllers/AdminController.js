@@ -20,13 +20,21 @@ module.exports = class AdminController extends Controller {
     let ad = await Ad.last();
     let showHTML = req.session.show || "";
     delete req.session.show;
-    let adImgUrl = ad.image;
-    let fillFormHTML = `
-            <script>
-                document.getElementById('adTitleForm1').value = "${ad.title}";
-                document.getElementById('adUrlForm1').value = "${ad.redirectURL}";
-                document.getElementById('hiddenFileUrl').value = "${ad.image}";
-            </script>`;
+    let adImgUrl = "";
+    let fillFormHTML = "";
+    let specmess = "";
+    if (ad.active == 1) {
+      fillFormHTML = `
+      <script>
+          document.getElementById('adTitleForm1').value = "${ad.title}";
+          document.getElementById('adUrlForm1').value = "${ad.redirectURL}";
+          document.getElementById('hiddenFileUrl').value = "${ad.image}";
+      </script>`;
+      adImgUrl = ad.image;
+    } else {
+      specmess = "(Currently no active ads)";
+    }
+
     let modalHTML = req.session.modal || "";
     delete req.session.modal;
     let usersHMTL = "";
@@ -92,6 +100,7 @@ module.exports = class AdminController extends Controller {
       MODAL: modalHTML,
       FILLFORM: fillFormHTML,
       AdBaseUrl: adImgUrl,
+      SPECMESS: specmess,
       TITLE: req.session.patchnoteTitle || "",
       DATA:
         req.session.note !== "<p><br></p>" && req.session.note
@@ -105,9 +114,9 @@ module.exports = class AdminController extends Controller {
   }
 
   static async HandleAdminPost(req, res) {
-    if(!req.session.userinfo){
-      res.redirect('/')
-      return
+    if (!req.session.userinfo) {
+      res.redirect("/");
+      return;
     }
     if (req.data.ban) {
       let user = await User.find({
@@ -256,10 +265,29 @@ module.exports = class AdminController extends Controller {
       //   session: req.session,
       // });
       new Feedback({
-        type: 'danger',
-        message: 'You must have uploaded a picture before being able to preview it.',
-        session: req.session
-      })
+        type: "danger",
+        message:
+          "You must have uploaded a picture before being able to preview it.",
+        session: req.session,
+      });
+      req.session.show = `<script>show('admanager')</script>`;
+      res.redirect("/admin");
+      return;
+    }
+    if (req.data.has("adDelete")) {
+      await Ad.update({
+        where: {
+          active: 1,
+        },
+        data: {
+          active: 0,
+        },
+      });
+      new Feedback({
+        type: "info",
+        message: "All ads are now disabled",
+        session: req.session,
+      });
       req.session.show = `<script>show('admanager')</script>`;
       res.redirect("/admin");
       return;

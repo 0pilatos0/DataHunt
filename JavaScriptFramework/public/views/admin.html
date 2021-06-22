@@ -122,7 +122,7 @@
           {{FILLFORM}}
         </div>
         <div class="col-md-4">
-          <img src="{{AdBaseUrl}}" style="width: 100%;" alt="No image selected"></img>
+          <img src="{{AdBaseUrl}}" style="width: 100%;" alt="No image selected" id="adImg"></img>
         </div>
       </div>
     </div>
@@ -175,6 +175,6 @@
     }
   }
 
-  resetPreviewOnClick()
+  resetPreviewOnClick(adImg.src)
 </script>
 {{SHOW}}

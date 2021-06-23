@@ -30,7 +30,7 @@ global.templateCallback = async (req, res) => {
         global.dynamicheader += `
             <li style="float:right;">
                 <a class="nav-link dropdown-toggle" href="#" id="navbarDarkDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false" style="padding: 3px;">
-                    <img style="max-height: 46px;" src="${picture.image}"> ${req.session.userinfo.username}
+                    <img style="max-height: 46px;" src="${picture.image}" alt="Not found" onerror=this.src="public/img/profile-placeholder.png"> ${req.session.userinfo.username}
                 </a>
                 <ul class="dropdown-menu" aria-labelledby="navbarDarkDropdownMenuLink">
                     <li style="float:right" class="dropdown-item"><a id="user" href="/user">User</a></li>

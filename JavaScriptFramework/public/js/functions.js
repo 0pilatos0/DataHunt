@@ -59,40 +59,40 @@ function toBase64(file) {
 let keys = [];
 
 window.onkeydown = (e)=>{
-  if(keys.indexOf(e.key) == -1){
-      keys.push(e.key)
-      if (keys.indexOf("r") > -1 && keys.indexOf("g") > -1 && keys.indexOf("b") > -1) {
-        rgb()
-      }
-  }
+    if(keys.indexOf(e.key) == -1){
+        keys.push(e.key)
+        if (keys.indexOf("r") > -1 && keys.indexOf("g") > -1 && keys.indexOf("b") > -1) {
+          rgb()
+        }
+    }
 }
 
 window.onkeyup = (e)=>{
-  keys.splice(keys.indexOf(e.key), 1)
+    keys.splice(keys.indexOf(e.key), 1)
 }
 
 window.onload = () => {
-if(getRgb() === "true") rgb()
+  if(getRgb() === "true") rgb()
 }
 
 function setRgb(bool){
-localStorage.setItem('rgb', bool)
+  localStorage.setItem('rgb', bool)
 }
 
 function getRgb(){
-return localStorage.getItem('rgb')
+  return localStorage.getItem('rgb')
 }
 
 function rgb() {
-  if(document.body.getElementsByTagName("*")[0].classList.contains("rgb")){
-      for (let i=0; i<document.body.getElementsByTagName("*").length; i++){
-          document.body.getElementsByTagName("*")[i].classList.remove("rgb");
-      }
-      setRgb(false)
-  }else{
-      for (let i=0; i<document.body.getElementsByTagName("*").length; i++){
-          document.body.getElementsByTagName("*")[i].classList.add("rgb");
-      }
-      setRgb(true)
-  }
+    if(document.body.getElementsByTagName("*")[0].classList.contains("rgb")){
+        for (let i=0; i<document.body.getElementsByTagName("*").length; i++){
+            document.body.getElementsByTagName("*")[i].classList.remove("rgb");
+        }
+        setRgb(false)
+    }else{
+        for (let i=0; i<document.body.getElementsByTagName("*").length; i++){
+            document.body.getElementsByTagName("*")[i].classList.add("rgb");
+        }
+        setRgb(true)
+    }
 }

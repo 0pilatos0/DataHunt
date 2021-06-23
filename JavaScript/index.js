@@ -13,7 +13,7 @@ server.get("/", async (req, res) => {
   let myDate = new Date(patchnote["date_created"]);
   req.vars.PATCHTITLE = `Patch: ${patchnote["title"]}`;
   req.vars.PATCHDATE = `${myDate.getDate()}/${
-    myDate.getMonth() + 1
+      myDate.getMonth() + 1
   }/${myDate.getFullYear()} - ${myDate.getHours()}:${myDate.getMinutes()}`;
 });
 
@@ -25,6 +25,37 @@ server.get("/test", (req, res) => {
   res.redirect("/");
   return;
 });
+
+server.get("/ad", (req, res) => {
+  let cookies = res.cookies();
+  let tCookies = [];
+  cookies.map((c) => {
+    let splittedCookie = c.split("=", 2);
+    tCookies[splittedCookie[0]] = splittedCookie[1];
+  });
+  cookies = tCookies;
+  if (cookies.sawAd && cookies.sawAd === "false") {
+    res.cookie("sawAd", "true");
+  } else if (!cookies.sawAd) {
+    let reader = new HTMLFileReader("./elements/modal.html");
+    reader.vars.TITLE = "AD of the week";
+    reader.vars.BODY = `<img src="data:image/jpeg;base64,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"></img>`;
+    reader.vars.CONFIRM = ``;
+    req.session.modal = reader.finish();
+    res.cookie("sawAd", "true");
+    setTimeout(() => {
+      res.redirect("/ad");
+    }, 100);
+  }
+  req.vars.AD = req.session.modal;
+  delete req.session.modal;
+});
+
+server.get("/removeAd", (req, res) => {
+  res.clearCookie("sawAd");
+});
+
+server.post("/ad", (req, res) => {});
 
 server.get("/creationPatchnotes", (req, res) => {
   if (!req.session.user) {
@@ -41,10 +72,26 @@ server.post("/admin", async (req, res) => {
   if (req.data.ban) {
     let reader = new HTMLFileReader("./elements/modal.html");
     reader.vars.TITLE = "Ban Modal";
+    reader.vars.BODY = `
+                        <form id="banModal" method="post">
+                        <input type="date" name="date">
+                        <input type="hidden" name="banConfirm" value="${req.data.ban}">
+                        </form>`;
+    reader.vars.CONFIRM = `<button class="btn btn-primary" onclick="banModal.submit()">Confirm</button>`;
     req.session.modal = reader.finish();
     res.redirect("/admin");
     return;
   }
+  if (req.data.banConfirm) {
+    User.ban(req.data.banConfirm, req.session.userinfo.id, req.data.date);
+    req.session.alert = {
+      type: "alert-info",
+      message: `Successfully banned user with ID: ${req.data.banConfirm}`,
+    };
+    res.redirect("/admin");
+    return;
+  }
+
   if (req.data.delete) {
     let reader = new HTMLFileReader("./elements/modal.html");
     reader.vars.TITLE = "Delete Modal";
@@ -67,20 +114,61 @@ server.post("/admin", async (req, res) => {
     res.redirect("/admin");
     return;
   }
-
-  if (req.data.editorTitle !== "" && req.data.data !== "<p><br></p>") {
-    await User.makePatchnote(req.data.editorTitle, req.data.data);
+  if(req.data.unban){
+    let reader = new HTMLFileReader("./elements/modal.html");
+    reader.vars.TITLE = "Unban Modal";
+    reader.vars.BODY = `<p>Are you sure you want to unban the user with the ID: ${req.data.unban}?</p>`;
+    reader.vars.CONFIRM = `
+                        <form method="post" style="display: inline-block;">
+                        <input type="hidden" value="${req.data.unban}" name="unbanConfirm">
+                        <button class="btn btn-primary" type="submit">Unban</button>
+                        </form>`;
+    req.session.modal = reader.finish();
+    res.redirect("/admin");
+    return;
+  }
+  if(req.data.unbanConfirm){
+    await User.unban(req.data.unbanConfirm)
     req.session.alert = {
       type: "alert-info",
-      message: "Successfully created patchnote",
+      message: `Successfully unbanned user with ID: ${req.data.unbanConfirm}`,
     };
-    res.redirect("/patchnotes");
-  } else {
-    req.session.alert = {
-      type: "alert-danger",
-      message: "Could not create patchnote, because data was not sufficient",
-    };
-    res.redirect("/creationPatchnotes");
+    res.redirect("/admin");
+    return;
+  }
+
+  console.log(req.data);
+  // Ad gedeelte
+  if (req.data.adTitleForm1 && req.data.adUrlForm1 && req.data.adFileForm1) {
+    //TODO crasht de pagina als niet alle waardes gevuld zijn
+    await User.disableAllAds();
+    await User.setAd(
+        req.data.adTitleForm1,
+        req.data.adUrlForm1,
+        1,
+        req.data.adFileForm1
+    );
+    req.session.show = "<script> show('admanager') </script>";
+    res.redirect("/admin");
+
+    return;
+  }
+
+  if (req.data.editorTitle && req.data.data) {
+    if (req.data.editorTitle !== "" && req.data.data !== "<p><br></p>") {
+      await User.makePatchnote(req.data.editorTitle, req.data.data);
+      req.session.alert = {
+        type: "alert-info",
+        message: "Successfully created patchnote",
+      };
+      res.redirect("/patchnotes");
+    } else {
+      req.session.alert = {
+        type: "alert-danger",
+        message: "Could not create patchnote, because data was not sufficient",
+      };
+      res.redirect("/creationPatchnotes");
+    }
   }
 });
 
@@ -92,11 +180,11 @@ server.get("/verification", async (req, res) => {
   let verificationToken = decodeURIComponent(req.data.veri);
   let id;
   let data = await global.sql.query(
-    `SELECT verifytoken, id, name FROM users WHERE verifytoken = '${verificationToken}'`
+      `SELECT verifytoken, id, name FROM users WHERE verifytoken = '${verificationToken}'`
   );
   id = data.id;
   await global.sql.query(
-    `UPDATE users SET verifytoken = '', verified = 1 WHERE id = ${id}`
+      `UPDATE users SET verifytoken = '', verified = 1 WHERE id = ${id}`
   );
   req.vars.FEEDBACK = "<h2>Thank you for verifying!</h2>";
 });
@@ -109,13 +197,14 @@ server.get("/character", async (req, res) => {
   let stats = await User.getStats(req.data.id);
   req.vars.STATS = `${stats.name}, ${stats.level}`;
   req.vars.KD = `Your K/D (Kills divided by Deaths): ${Functions.calculateKD(
-    stats.kills,
-    stats.deaths
+      stats.kills,
+      stats.deaths
   )} <br> Health: ${stats.health} <br> Level: ${stats.level}`;
 });
 
 server.get("/friends", async (req, res) => {
   req.vars.FEEDBACK = req.session.friendFeedback;
+  let pictures = await User.getAllProfilePictures();
   delete req.session.friendFeedback;
   if (!req.session.user) {
     res.redirect("/");
@@ -132,15 +221,29 @@ server.get("/friends", async (req, res) => {
   req.vars.FRIENDS = "";
   if (results.length > 0) {
     results.map((r) => {
+      let picture = pictures.find((p)=>{
+        if(r.userA == req.session.userinfo.id){
+          return p.user_id == r.userB;
+        }else {
+          return p.user_id == r.userA;
+        }
+      });
       req.vars.FRIENDS += `<div class=\"card text-secondary w-75 mt-4\" style=\"width: 18rem;\">
-            <div class=\"card-body\">
-            <h5 class=\"card-title\">${r["name"].username}</h5>`;
+            <div class=\"card-body\">`
+      if(picture){
+        req.vars.FRIENDS += `
+                <img class="friendsPictures" src="${picture.image}">
+          `
+      }
+      req.vars.FRIENDS += `<h5 class=\"card-title\">${r["name"].username}</h5>`;
       if (r["friendship"] == 0 && r["userA"] == req.session.user) {
         req.vars.FRIENDS += `<p class=\"card-text\">User hasn't replied to your request yet.</p>`;
       } else if (r["friendship"] == 0 && r["userB"] == req.session.user) {
         req.vars.FRIENDS += Functions.createButtons(r["id"]);
       } else if (r["friendship"] == 1) {
-        req.vars.FRIENDS += `<p class=\"card-text\">You are friends.</p>`;
+        req.vars.FRIENDS += `
+<p class=\"card-text\">You are friends.</p>
+`;
       }
       req.vars.FRIENDS += `</div></div>`;
     });
@@ -184,12 +287,12 @@ server.post("/friends", async (req, res) => {
         friend = results["userA"];
       }
       await User.addToFeed(
-        req.session.user,
-        `${user} and ${User.getUsername(friend)} are now friends!`
+          req.session.user,
+          `${user} and ${User.getUsername(friend)} are now friends!`
       );
       await User.addToFeed(
-        friend,
-        `${User.getUsername(friend)} are now friends!`
+          friend,
+          `${User.getUsername(friend)} are now friends!`
       );
       res.redirect("/friends");
     } else if (req.data.btnradio === "DeclineRequest") {
@@ -212,6 +315,18 @@ server.get("/user", async (req, res) => {
   req.vars.USERNAME = userinfo["username"];
   req.vars.EMAIL = userinfo["email"];
   req.vars.DYNAMICDATA = "";
+  req.vars.PROFILEPICTURE = ``;
+  if (await User.getProfilePictureId(req.session.userinfo.id)) {
+    let picture = await User.getProfilePicture(req.session.userinfo.id);
+    req.vars.PROFILEPICTURE += `
+      <div class="user">
+         <div class="card-header">
+             <h3>Profile Picture</h3>
+             <img id="profilePicture" src="${picture.image}">
+         </div>
+      </div>
+`;
+  }
   if (req.data.delete) {
     if (req.data.delete === "true") {
       req.vars.DYNAMICDATA = `
@@ -229,7 +344,7 @@ server.get("/user", async (req, res) => {
     }
   }
   req.vars.CHARACTER = Functions.showCharacters(
-    await User.characters(req.session.user)
+      await User.characters(req.session.user)
   );
   req.vars.FEED = "";
   let feed = await User.getFeed(userinfo["id"]);
@@ -250,7 +365,33 @@ server.get("/user", async (req, res) => {
   }
 });
 
-server.post("/user", (req, res) => {});
+server.post("/user", async (req, res) => {
+  if (!req.session.userinfo) {
+    res.redirect("/");
+    return;
+  }
+
+  if (req.data.picture) {
+    if (!(await User.getProfilePictureId(req.session.userinfo.id))) {
+      await User.setProfilePicture(req.data.picture, req.session.userinfo.id);
+      req.session.alert = {
+        type: "alert-info",
+        message: "Successfully made your profile picture",
+      };
+      res.redirect("/user");
+    } else {
+      await User.updateProfilePicture(
+          req.data.picture,
+          req.session.userinfo.id
+      );
+      req.session.alert = {
+        type: "alert-info",
+        message: "Successfully updated your profile picture",
+      };
+      res.redirect("/user");
+    }
+  }
+});
 
 server.get("/logout", async (req, res) => {
   if (!req.session.user) {
@@ -258,7 +399,7 @@ server.get("/logout", async (req, res) => {
     return;
   }
   await global.sql.query(
-    `DELETE FROM logintokens WHERE user_id = ${req.session.user}`
+      `DELETE FROM logintokens WHERE user_id = ${req.session.user}`
   );
   Object.keys(req.session).map((k) => {
     if (k != "id") delete req.session[k];
@@ -286,15 +427,15 @@ server.post("/register", async (req, res) => {
   let username = Functions.changeInput(req.data["AccUsername"]);
   let email = Functions.changeInput(req.data["AccEmail"]);
   let password = Salter.hashPassword(
-    Functions.changeInput(req.data["AccPassword"])
+      Functions.changeInput(req.data["AccPassword"])
   );
   let verificationToken = Salter.generateRandomToken();
   let nameRegex = /^[a-z ,.\'-]+$/i;
   let usernameRegex = /\w{5,29}/i;
   let emailRegex =
-    /(?:[a-z0-9!#$%&\'*+\/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&\'*+\/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9]))\.){3}(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9])|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])/;
+      /(?:[a-z0-9!#$%&\'*+\/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&\'*+\/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9]))\.){3}(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9])|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])/;
   let passwordRegex =
-    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
   if (!name.match(nameRegex)) {
     req.session.username = username;
     req.session.name = name;
@@ -345,30 +486,30 @@ server.post("/register", async (req, res) => {
     return;
   }
   await global.sql.query(
-    `INSERT INTO users (name, username, email, password, verifytoken) VALUES ('${name}', '${username}', '${email}', '${password}', '${verificationToken}')`
+      `INSERT INTO users (name, username, email, password, verifytoken) VALUES ('${name}', '${username}', '${email}', '${password}', '${verificationToken}')`
   );
   let user = await User.get(username);
   await global.sql.query(
-    `INSERT INTO logintokens (user_id, token) VALUES (${user.id}, '${verificationToken}')`
+      `INSERT INTO logintokens (user_id, token) VALUES (${user.id}, '${verificationToken}')`
   );
   await global.sql.query(
-    `INSERT INTO user_roles (user_id, role_id) VALUES (${user.id}, 0)`
+      `INSERT INTO user_roles (user_id, role_id) VALUES (${user.id}, 0)`
   );
   await Mailer.sendMail({
     to: email,
     subject: "Verify email Datahunt",
     html: fs
-      .readFileSync(`../Mail/htmltestmail.html`, {
-        encoding: "utf8",
-        flag: "r",
-      })
-      .replace("{TOKEN}", encodeURIComponent(verificationToken))
-      .replace(
-        "{{HOST}}",
-        process.env.PORT
-          ? `${process.env.HOST}:${process.env.PORT}`
-          : `${process.env.HOST}:3000`
-      ),
+        .readFileSync(`../Mail/htmltestmail.html`, {
+          encoding: "utf8",
+          flag: "r",
+        })
+        .replace("{TOKEN}", encodeURIComponent(verificationToken))
+        .replace(
+            "{{HOST}}",
+            process.env.PORT
+                ? `${process.env.HOST}:${process.env.PORT}`
+                : `${process.env.HOST}:3000`
+        ),
   });
   res.redirect("/");
 });
@@ -391,7 +532,7 @@ server.post("/login", async (req, res) => {
   res.cookie("token", token);
   let usernameRegex = /\w{5,29}/i;
   let passwordRegex =
-    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
   req.session.loginFeedback = "";
   if (!username.match(usernameRegex)) {
     req.session.loginFeedback += `<div class=\"alert alert-danger\" role=\"alert\">Your username doesn't follow our rules!</div>`;
@@ -406,16 +547,16 @@ server.post("/login", async (req, res) => {
     return;
   }
   let user = await global.sql.query(
-    `SELECT * FROM users WHERE username = ('${username}') AND enabled = 1 and verified = 1`
+      `SELECT * FROM users WHERE username = ('${username}') AND enabled = 1 and verified = 1`
   );
   user.password = user.password.replace("$2y", "$2b");
   if (Salter.verifyPassword(password, user.password)) {
     req.session.user = user.id;
     if (req.data["AccRemember"] === "on") {
       await global.sql.query(
-        `INSERT INTO logintokens (user_id, token) VALUES (${
-          user.id
-        }, '${Salter.generateRandomToken()}')`
+          `INSERT INTO logintokens (user_id, token) VALUES (${
+              user.id
+          }, '${Salter.generateRandomToken()}')`
       );
       res.redirect("/");
     }
@@ -431,24 +572,29 @@ server.get("/admin", async (req, res) => {
     res.redirect("/");
     return;
   }
+
+  // Hier word de BaseURL dingen opgehaald
+  let latestAD = await User.getAd();
+  req.vars.AdBaseUrl = "";
+  req.vars.SHOW = req.session.show;
+  delete req.session.show;
+  req.vars.AdBaseUrl = latestAD["image"];
+
+  // Ophalen van huidige variables ad page
+  req.vars.FILLFORM = "";
+  req.vars.FILLFORM =
+      `<script>document.getElementById('adTitleForm1').value = "` +
+      latestAD["title"] +
+      `"; document.getElementById('adUrlForm1').value = "` +
+      latestAD["redirectURL"] +
+      `";</script>`;
+
   req.vars["DYNAMICDATA"] = "";
   req.vars.MODAL = req.session.modal;
   delete req.session.modal;
-  if (req.data.delete) {
-    if (req.data.delete === "true") {
-      req.vars["DYNAMICDATA"] = `
-                <div id=\"delete-account-overlay\" onclick='removeOverlay()' class=\"overlay delete-element\">
-                    
-                </div>
-                <div class=\"delete-confirm delete-element\">
-                    <h3>Are you sure you want to delete your account?</h3>
-                    <button id=\"cancel\" onclick=\"removeOverlay()\" class=\"btn btn-cancel\">Cancel</button>
-                    <a href=\"?delete=confirm&id=${req.data.id}\" class=\"btn btn-confirm\">Confirm</a>
-                </div>`;
-    }
-  }
   req.vars["USERS"] = "";
   let users = await User.getMultiple();
+  let bans = await User.checkAllBan();
   users.map((user) => {
     req.vars["USERS"] += `
             <tr>
@@ -459,21 +605,63 @@ server.get("/admin", async (req, res) => {
             <td>${user["enabled"]}</td>
             <td>${user["verified"]}</td>
             <td>${user["role_id"]}</td>
-            
+            <td>
+            `;
+    let banned = false;
+    if (typeof bans.length !== "undefined") {
+      let ban = bans.find((b) => {
+        if (b.user_id === user.id) {
+          banned = true;
+          return b;
+        }
+      });
+      if (ban) {
+        let date = new Date(`${ban.ban_until} UTC`);
+        req.vars["USERS"] += `${
+            date.getUTCFullYear() +
+            "-" +
+            (date.getUTCMonth() + 1) +
+            "-" +
+            date.getUTCDate()
+        }`;
+      }
+    } else {
+      if (bans.user_id === user.id) {
+        let date = new Date(bans.ban_until);
+        req.vars["USERS"] += `${
+            date.getUTCFullYear() +
+            "-" +
+            (date.getUTCMonth() + 1) +
+            "-" +
+            date.getUTCDate()
+        }`;
+      }
+    }
+    req.vars["USERS"] += `
+            </td>
             <td>
             `;
     if (req.session.userinfo.role_id > user.role_id) {
+
+      if(banned){
+        req.vars["USERS"] += `
+                    <form method="post" style="display: inline-block;">
+                    <input type="hidden" value="${user["id"]}" name="unban">
+                    <button class="btn btn-primary" type="submit">Unban</button>
+                    </form>`
+      }else{
+        req.vars["USERS"] += `
+                <form method="post" style="display: inline-block;">
+                    <input type="hidden" value="${user["id"]}" name="ban">
+                    <button class="btn btn-primary" type="submit">Ban</button>
+                    </form>`
+      }
       req.vars["USERS"] += `
                 <form method="post" style="display: inline-block;">
-                <input type="hidden" value="${user["id"]}" name="ban">
-                <button class="btn btn-primary" type="submit">Ban</button>
-                </form>
-                <form method="post" style="display: inline-block;">
                 <input type="hidden" value="${user["id"]}" name="delete">
-                <button class="btn btn-primary" type="submit">Delete</button>
-                </form>`;
+                <button class="btn btn-primary" type="submit">Delete</button>`
     }
-    `
+    req.vars["USERS"] +=`
             </td>
             </tr>
         `;
@@ -489,8 +677,8 @@ server.get("/patchnotes", async (req, res) => {
     let myDate = new Date(patchnotes[0]["date_created"]);
     req.vars.LATESTPATCH = `
         <h1 style="display: inline;">${
-          patchnotes[0]["title"]
-        } - ${myDate.getHours()}:${myDate.getMinutes()}</h1>`;
+        patchnotes[0]["title"]
+    } - ${myDate.getHours()}:${myDate.getMinutes()}</h1>`;
     if (req.session.userinfo && req.session.userinfo["role_id"]) {
       req.vars.LATESTPATCH += `
             <div class="patchnotesButtons" id="${patchnotes[0]["id"]}">
@@ -504,7 +692,7 @@ server.get("/patchnotes", async (req, res) => {
       let myDate = new Date(patchnotes[i]["date_created"]);
       req.vars.PATCHNOTES += `
             <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample${i}" aria-expanded="false" aria-controls="collapseExample${i}"  style="display: inline;">${myDate.getDate()}/${
-        myDate.getMonth() + 1
+          myDate.getMonth() + 1
       }/${myDate.getFullYear()} - ${myDate.getHours()}:${myDate.getMinutes()}</button>`;
       if (req.session.userinfo && req.session.userinfo["role_id"]) {
         req.vars.PATCHNOTES += `
@@ -525,8 +713,8 @@ server.get("/patchnotes", async (req, res) => {
       let myDate = new Date(patchnotes["date_created"]);
       req.vars.LATESTPATCH = `
             <h1 style="display: inline;">${
-              patchnotes["title"]
-            } - ${myDate.getHours()}:${myDate.getMinutes()}</h1>`;
+          patchnotes["title"]
+      } - ${myDate.getHours()}:${myDate.getMinutes()}</h1>`;
       if (req.session.userinfo && req.session.userinfo["role_id"]) {
         req.vars.LATESTPATCH += `
                 <div class="patchnotesButtons" id="${patchnotes["id"]}">
@@ -572,7 +760,7 @@ server.post("/patchnotes", async (req, res) => {
 
 server.get("/editPatchnote", async (req, res) => {
   let patchnoteData = await User.getASingularePatchnote(
-    req.session.patchnoteId
+      req.session.patchnoteId
   );
   req.vars.TITLE = patchnoteData.title;
   req.vars.DATA = patchnoteData.note.toString();
@@ -581,9 +769,9 @@ server.get("/editPatchnote", async (req, res) => {
 server.post("/editPatchnote", async (req, res) => {
   if (req.data.editorTitle !== "" && req.data.data !== "<p><br></p>") {
     await User.updatePatchnote(
-      req.session.patchnoteId,
-      req.data.editorTitle,
-      req.data.data
+        req.session.patchnoteId,
+        req.data.editorTitle,
+        req.data.data
     );
     req.session.alert = {
       type: "alert-info",

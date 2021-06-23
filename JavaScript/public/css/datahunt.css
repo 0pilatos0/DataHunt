@@ -2,6 +2,47 @@
   margin: 0;
   padding: 0;
 }
+
+.rgb {
+  animation: color-change 8s infinite;
+}
+
+@keyframes color-change {
+  0% {
+    color: blue;
+  }
+  10% {
+    color: #8e44ad;
+  }
+  20% {
+    color: #1abc9c;
+  }
+  30% {
+    color: #d35400;
+  }
+  40% {
+    color: blue;
+  }
+  50% {
+    color: #34495e;
+  }
+  60% {
+    color: blue;
+  }
+  70% {
+    color: #2980b9;
+  }
+  80% {
+    color: #f1c40f;
+  }
+  90% {
+    color: #2980b9;
+  }
+  100% {
+    color: pink;
+  }
+}
+
 .content {
   padding-top: 20px;
   padding-top: 20px;
@@ -26,8 +67,12 @@
   background-color: #dbdbdb;
 }
 
-.card-header {
-  background-color: rgb(61, 61, 61);
+  .card-header {
+    background-color: rgb(61, 61, 61);
+  }
+
+.picture-header {
+  background-color: #595959;
 }
 
 #container form {
@@ -37,8 +82,8 @@
 .user-container {
   display: grid;
   grid-template-areas:
-    "char feed form"
-    "friends feed form";
+    "left feed form1"
+    "left feed form1";
   grid-template-rows: auto 1fr;
   grid-template-columns: 20% 1fr 30%;
 }
@@ -69,12 +114,37 @@
   margin: 0;
 }
 
+.user-left-section {
+  grid-area: left;
+}
+
+#pictureOutput {
+  display: none;
+}
+
+#pictureSubmit {
+  display: none;
+}
+
 .user-form {
-  grid-area: form;
+  grid-area: form1;
+}
+
+.picture-form {
+  margin-top: 1em;
+}
+
+.image-form {
+  grid-area: form2;
 }
 
 .user-characters {
   grid-area: char;
+}
+
+#profilePicture {
+  width: 100%;
+  height: 100%;
 }
 
 .user-feed {
@@ -83,6 +153,7 @@
 
 .user-friend {
   grid-area: friends;
+  margin-top: 1em;
 }
 .overlay {
   top: 0px;
@@ -140,6 +211,12 @@
 
 #friendsForm {
   grid-area: form;
+}
+
+.friendsPictures {
+  width: 64px;
+  height: 64px;
+  float: right;
 }
 
 .statsContainer {

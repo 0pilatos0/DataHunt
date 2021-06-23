@@ -1,0 +1,132 @@
+.nk-image-slider {
+  position: relative;
+  max-height: 360px;
+  overflow: hidden;
+  background-color: #232930;
+  border-bottom: 3px solid #3d3d3d;
+  z-index: 0;
+  padding: 10px;
+}
+
+.nk-image-slider .nk-image-slider-item {
+  width: 100%;
+  overflow: hidden;
+}
+.nk-image-slider .nk-image-slider-item img {
+  width: 100%;
+}
+.nk-feature-1,
+.nk-feature-2 {
+  position: relative;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  width: 100%;
+  min-height: 50px;
+  padding: 10px;
+  background-color: #232930;
+  border: 1px solid #293139;
+  border-radius: 4px;
+}
+
+.nk-feature-1 .nk-feature-icon,
+.nk-feature-2 .nk-feature-icon {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  -webkit-box-pack: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  width: 116px;
+  height: 50px;
+  padding-left: 10px;
+  font-size: 3rem;
+  line-height: 50px;
+  color: #fff;
+  text-align: center;
+  border-right: 1px solid #293139;
+  border-radius: 3px;
+}
+
+.nk-feature-1 .nk-feature-cont,
+.nk-feature-2 .nk-feature-cont {
+  padding-top: 8px;
+}
+
+/* Titles */
+.nk-feature-title {
+  margin-bottom: 0.5rem;
+  font-size: 1.25rem;
+}
+
+.nk-feature-title a {
+  color: inherit;
+  text-decoration: none;
+}
+.text-main-1 {
+  font-size: 15px;
+}
+
+.waw a {
+  text-decoration: none;
+  color: inherit;
+}
+.waw li {
+  list-style-type: none;
+}
+.waw ul {
+  margin: 0;
+  padding: 0;
+}
+.waw img {
+  max-width: 100%;
+  height: 80%;
+}
+.cta {
+  background: #232930;
+  color: white;
+  position: relative;
+  overflow: hidden;
+  text-align: center;
+  padding: 40px 0px;
+}
+.cta:after {
+  content: "";
+  display: block;
+  position: absolute;
+  top: -40px;
+  right: -40px;
+  bottom: -40px;
+  left: -40px;
+  background: rgba(255, 255, 255, 0.1);
+  transform: rotate(30deg);
+}
+.cta .container {
+  position: relative;
+  z-index: 10;
+}
+.cta h2 {
+  margin-bottom: 40px;
+  font-size: 15px;
+}
+.cta h1 {
+  font-size: 30px;
+}
+.btn {
+  display: inline-block;
+  padding: 15px 30px;
+  border-radius: 50px;
+  color: #fff;
+  border: 1px solid #fff;
+  transition: 200ms;
+  cursor: pointer;
+}
+.btn .fa {
+  margin-left: 10px;
+}

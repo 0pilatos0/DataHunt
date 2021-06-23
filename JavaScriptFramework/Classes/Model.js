@@ -59,21 +59,23 @@ module.exports = class Model{
         else return false
     }
 
-    static async find({where, joins, select}){
+    static async find({where, joins, select, orderBy}){
         let data = await this.select({
             where, 
             joins,
-            select
+            select,
+            orderBy
         })
         if(data.length > 0) return data[0]
         else return false
     }
 
-    static async findId({where, joins}){
+    static async findId({where, joins, orderBy}){
         let data = await this.select({
             where,
             joins,
-            select:['id']
+            select:['id'],
+            orderBy
         })
         if(data.length > 0) return data[0]
         else return false

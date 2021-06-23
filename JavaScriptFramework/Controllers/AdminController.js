@@ -17,13 +17,17 @@ module.exports = class AdminController extends Controller {
       res.redirect("/");
       return;
     }
-    let ad = await Ad.last();
+    let ad = await Ad.last({
+      where:{
+        active: 1
+      }
+    });
     let showHTML = req.session.show || "";
     delete req.session.show;
     let adImgUrl = "";
     let fillFormHTML = "";
     let specmess = "";
-    if (ad.active == 1) {
+    if (ad) {
       fillFormHTML = `
       <script>
           document.getElementById('adTitleForm1').value = "${ad.title}";

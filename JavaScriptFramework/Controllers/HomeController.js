@@ -8,6 +8,8 @@ const Logintoken = require("../Models/Logintoken");
 const Role = require("../Models/Role");
 const Mailer = require("../Helpers/Mailer");
 const HTMLFileLoader = require("../Classes/HTMLFileLoader");
+const Ad = require('../Models/Ad');
+const AdView = require("../Helpers/AdView");
 
 module.exports = class HomeController extends Controller {
   constructor() {
@@ -20,6 +22,27 @@ module.exports = class HomeController extends Controller {
         deleted: 0,
       },
     });
+    let ad = await Ad.last({
+      where:{
+        active: 1
+      }
+    })
+    if(req.cookies.seenAd){
+      let date = new Date(Date.now())
+      if(date.getDay() == 0){
+        res.deleteCookie('seenAd')
+      }
+    }
+    else{
+      new AdView({
+        title: 'Ad of the week',
+        body: `<img style="max-width: 100%" src="${ad.image}"></img>`,
+        confirm: `<a class="btn btn-primary" href="${ad.redirectURL}">Read More</a>`,
+        session: req.session
+      })
+      res.cookie('seenAd', true)
+    }
+    
     let parsedDate = new Date(patchnote.date_created);
     res.render("index", {
       PATCHTITLE: `Patch: ${patchnote.title}`,

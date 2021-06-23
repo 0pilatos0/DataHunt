@@ -125,7 +125,6 @@
   color: #fff;
   border: 1px solid #fff;
   transition: 200ms;
-  background: transparent;
   cursor: pointer;
 }
 .btn .fa {

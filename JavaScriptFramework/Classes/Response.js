@@ -33,6 +33,9 @@ module.exports = class Response{
         templatePage.vars.ALERT = global.alert || ""
         templatePage.vars.CHATWINDOW = global.chatwindow || ""
         templatePage.vars.DYNAMICHEADER = global.dynamicheader || ""
+        delete global.alert
+        delete global.chatwindow
+        delete global.dynamicheader
         if(!path.extname(pageName)) this.send(templatePage.data)
         else console.error("Please don't provide an extension")
     }

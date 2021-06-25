@@ -3,7 +3,7 @@
 
 name: Server
 env:
-  ENV_FILE: |
+  ENV_FILE: |-
     ${{ secrets.SERVER_ENV }}
 
 on:

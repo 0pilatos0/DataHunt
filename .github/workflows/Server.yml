@@ -5,9 +5,11 @@ name: Server
 
 on:
   push:
-    branches: [ Server ]
+    branches:
+    - Server
   pull_request:
-    branches: [ Server ]
+    branches: 
+    - Server
 
 jobs:
   build:

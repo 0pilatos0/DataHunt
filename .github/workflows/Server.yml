@@ -3,7 +3,8 @@
 
 name: Server
 env:
-  ENV_FILE: ${{ secrets.SERVER_ENV }}
+  ENV_FILE: |
+    ${{ secrets.SERVER_ENV }}
 
 on:
   push:
@@ -12,10 +13,6 @@ on:
   pull_request:
     branches: 
       - Server
-  workflow_dispatch:
-    branches: 
-      - Server
-
 jobs:
   build:
     runs-on: self-hosted
@@ -25,4 +22,4 @@ jobs:
       with:
         token: ${{ secrets.PAT }}
     - run: npm i
-    - run: echo -en $ENV_FILE > Server2.0/.env
+    - run: echo $ENV_FILE > Server2.0/.env

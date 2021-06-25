@@ -11,6 +11,8 @@ on:
     branches: 
       - Server
   workflow_dispatch:
+    branches: 
+      - Server
 
 jobs:
   build:

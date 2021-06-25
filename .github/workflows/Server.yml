@@ -22,14 +22,4 @@ jobs:
     - uses: actions/checkout@v2
       with:
         token: ${{ secrets.PAT }}
-      env:
-        MYSQLHOST: datahunt.duckdns.org
-        MYSQLUSER: datahunt
-        MYSQLPASSWORD: CqgHmAKPq3475Imr^M1KQldz25krZ$5RrTxLl3q27c$x0^xb3&87$FJ3b*mFcEY$YfkXBQs0uMxUzh9#FH3*^WV&mD#igy&yUBq
-        MYSQLDATABASE: datahunttest
-        GMAILUSER: datahuntrpg@gmail.com
-        GMAILPASS: oReYXGh#3KkK&skkdnA2X$$L27rmQ3nVrxXHLXaGFiUVwGX$SMl077vCbuSdKNF7Ww5v@LrpnoGUfhS5d*MD2hCRnWKbNN3eupw
-        REDISHOST: localhost
-        REDISPORT: 6379
-        DISCORDAPIPATH: /api/webhooks/837248158031544331/ilRp0oZiaVy5sZD7saHrNX88F2dEhq2ATOyxFCCwm4hMlrA5wHFfHXP7DI0Q7K6f9uyP
     - run: npm i

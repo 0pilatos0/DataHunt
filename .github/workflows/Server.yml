@@ -22,7 +22,7 @@ jobs:
     - uses: actions/checkout@v2
       with:
         token: ${{ secrets.PAT }}
-        emv:
-          ENV_FILE: ${{ secrets.SERVER_ENV }}
+      env:
+        ENV_FILE: ${{ secrets.SERVER_ENV }}
     - run: npm i
     - run: echo $ENV_FILE > ./Server2.0/.env

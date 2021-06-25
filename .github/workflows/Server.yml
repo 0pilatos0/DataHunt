@@ -5,13 +5,15 @@ name: Server
 
 on:
   push:
-    branches: [ Server ] 
+    branches:
+      - Server
   pull_request:
-    branches: [ Server ]
+    branches: 
+      - Server
+  workflow_dispatch:
 
 jobs:
   build:
-
     runs-on: self-hosted
 
     strategy:
@@ -23,6 +25,7 @@ jobs:
     - uses: actions/checkout@v2
       with:
         token: ${{ secrets.PAT }}
+      
     - name: Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v2
       with:

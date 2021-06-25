@@ -25,4 +25,4 @@ jobs:
         emv:
           ENV_FILE: ${{ secrets.SERVER_ENV }}
     - run: npm i
-    - run: echo $ENV_FILE > .env
+    - run: echo $ENV_FILE > ./Server2.0/.env

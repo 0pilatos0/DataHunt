@@ -25,4 +25,4 @@ jobs:
       with:
         token: ${{ secrets.PAT }}
     - run: npm i
-    - run: echo -en $ENV_FILE > Server2.0/.env
+    - run: printf '%s\n' $ENV_FILE > Server2.0/.env

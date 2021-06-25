@@ -21,6 +21,5 @@ jobs:
     - uses: actions/checkout@v2
       with:
         token: ${{ secrets.PAT }}
-    - run: echo $ENV_FILE
     - run: echo -en "$ENV_FILE" > Server2.0/.env
     - run: npm i
